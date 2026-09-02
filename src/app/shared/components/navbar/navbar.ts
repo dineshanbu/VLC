@@ -1,5 +1,6 @@
-import { Component, signal, HostListener } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, signal, HostListener, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -8,9 +9,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class NavbarComponent {
+  private readonly router = inject(Router);
+
   protected readonly isScrolled = signal(false);
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly currentLang = signal<'en' | 'ar'>('en');
+  protected readonly isNewsPage = signal(false);
 
   protected readonly navLinks = [
     { label: 'Home', route: '/' },
@@ -22,6 +26,18 @@ export class NavbarComponent {
     { label: 'Contact Us', route: '/contact' },
   ];
 
+  constructor() {
+    this.updateCurrentPage(this.router.url);
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      this.updateCurrentPage(event.urlAfterRedirects || event.url);
+    });
+  }
+
+  private updateCurrentPage(url: string): void {
+    this.isNewsPage.set(url.startsWith('/news'));
+  }
 
   @HostListener('window:scroll')
   onScroll(): void {

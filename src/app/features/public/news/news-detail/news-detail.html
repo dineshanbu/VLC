@@ -1,0 +1,199 @@
+<article class="news-detail" *ngIf="article() as currentArticle">
+
+  <!-- ====================================================
+       1. BREADCRUMBS & TOP NAVIGATION
+       ==================================================== -->
+  <nav class="news-detail-nav" aria-label="Breadcrumb">
+    <div class="news-detail-reading-container">
+      <ol class="news-detail-breadcrumbs">
+        <li>
+          <a routerLink="/" class="breadcrumb-home-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="breadcrumb-separator">/</li>
+        <li><a routerLink="/news">News &amp; Media</a></li>
+        <li class="breadcrumb-separator">/</li>
+        <li><span class="breadcrumb-category">{{ currentArticle.category }}</span></li>
+        <li class="breadcrumb-separator">/</li>
+        <li class="breadcrumb-active" aria-current="page">{{ currentArticle.title }}</li>
+      </ol>
+    </div>
+  </nav>
+
+
+  <!-- ====================================================
+       2. ARTICLE HEADER
+       ==================================================== -->
+  <header class="news-detail-header">
+    <div class="news-detail-reading-container">
+
+      <!-- Back Link -->
+      <a routerLink="/news" class="news-detail-back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to News &amp; Media</span>
+      </a>
+
+      <!-- Meta Bar: Category + Date + Read Time -->
+      <div class="news-detail-meta">
+        <span class="news-detail-badge">{{ currentArticle.badge || currentArticle.category }}</span>
+        <time class="news-detail-date" [attr.datetime]="currentArticle.date">{{ currentArticle.formattedDate }}</time>
+        <span class="news-detail-meta-divider">•</span>
+        <span class="news-detail-read-time">{{ currentArticle.readTime }}</span>
+      </div>
+
+      <!-- Main Headline (H1) -->
+      <h1 class="news-detail-title">
+        {{ currentArticle.title }}
+      </h1>
+
+      <!-- Share Action Bar -->
+      <div class="news-detail-actions">
+        <span class="news-detail-share-label">Share article:</span>
+        <div class="news-detail-share-btns">
+          <button
+            type="button"
+            class="news-detail-share-btn"
+            (click)="copyArticleLink()"
+            title="Copy link to clipboard"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span>Copy Link</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ====================================================
+       3. FEATURED HERO IMAGE
+       ==================================================== -->
+  <section class="news-detail-featured-media" *ngIf="currentArticle.image">
+    <div class="news-detail-reading-container">
+      <div class="news-detail-image-card">
+        <img
+          [src]="currentArticle.image"
+          [alt]="currentArticle.title"
+          class="news-detail-hero-img"
+        />
+        <div class="news-detail-image-caption">
+          <span>Vaccine Industrial Company (VIC) • Official Media Release</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ====================================================
+       4. AUTHENTIC ARTICLE CONTENT (EXACT FROM VACCINE.COM.SA)
+       ==================================================== -->
+  <section class="news-detail-body-section">
+    <div class="news-detail-reading-container">
+
+      <div class="news-detail-content">
+
+        <!-- Exact Original Article Content with Images, Videos, Lists & Paragraphs -->
+        <div class="news-detail-editorial-content" [innerHTML]="sanitizedHtml()"></div>
+
+        <!-- Official Publication Source Verification Card -->
+        <div class="news-detail-source-card" *ngIf="currentArticle.officialLink">
+          <div class="source-card-info">
+            <h4 class="source-card-title">Official Verification Source</h4>
+            <p class="source-card-desc">
+              This announcement is published on the official Vaccine Industrial Company portal.
+            </p>
+          </div>
+          <a
+            [href]="currentArticle.officialLink"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-card-link"
+          >
+            <span>View on vaccine.com.sa</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ====================================================
+       5. RELATED NEWS & STORIES
+       ==================================================== -->
+  <section class="news-detail-related-section" *ngIf="relatedArticles().length">
+    <div class="news-detail-container">
+
+      <div class="news-detail-related-header">
+        <div>
+          <span class="related-eyebrow">MORE STORIES</span>
+          <h2 class="related-title">Related News &amp; Announcements</h2>
+        </div>
+        <a routerLink="/news" class="related-view-all">
+          <span>View All News &rarr;</span>
+        </a>
+      </div>
+
+      <div class="news-detail-related-grid">
+        <article
+          class="related-card"
+          *ngFor="let rel of relatedArticles()"
+        >
+          <!-- Thumbnail -->
+          <div class="related-card-img-wrap">
+            <img
+              [src]="rel.image"
+              [alt]="rel.title"
+              class="related-card-img"
+              loading="lazy"
+            />
+            <span class="related-card-badge">{{ rel.badge || rel.category }}</span>
+          </div>
+
+          <!-- Card Body -->
+          <div class="related-card-body">
+            <time class="related-card-date">{{ rel.formattedDate || rel.date }}</time>
+            <h3 class="related-card-title">
+              <a [routerLink]="['/news', rel.slug]">{{ rel.title }}</a>
+            </h3>
+            <p class="related-card-summary">{{ rel.summary }}</p>
+            <a [routerLink]="['/news', rel.slug]" class="related-card-cta">
+              <span>Read Full Story</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+</article>
+
+
+<!-- Floating Link Copied Toast -->
+<div class="news-copied-toast" *ngIf="copiedToast()">
+  <span class="toast-check">&#10003;</span>
+  <span>Article link copied to clipboard!</span>
+</div>

@@ -1,1 +1,328 @@
-﻿<p>news works!</p>
+<!-- ====================================================
+     NEWS & MEDIA PAGE
+     Exact Typography Scale, Styles & Spacing from About Us
+     Vaccine Industrial Company
+     ==================================================== -->
+
+<!-- ====================================================
+     SECTION 1 — HERO BANNER (SPLIT COMPOSITION)
+     ==================================================== -->
+<section class="news-hero">
+
+  <!-- Left Content Container -->
+  <div class="news-hero__container">
+    <div class="news-hero__content">
+
+      <!-- Eyebrow -->
+      <span class="news-hero__eyebrow">NEWS &amp; MEDIA</span>
+
+      <!-- Main Heading (Playfair / DM Serif Display with Teal Accent) -->
+      <h1 class="news-hero__heading">
+        Stories of Innovation.<br />
+        <span class="news-hero__heading-teal">Impacting Lives.</span>
+      </h1>
+
+      <!-- Short Description -->
+      <p class="news-hero__description">
+        Explore the latest news, press releases, and media resources from Vaccine Industrial Company (VIC).
+      </p>
+
+      <!-- Action Button — Smoothly navigates to latest news -->
+      <div class="news-hero__action">
+        <button
+          type="button"
+          class="news-hero__btn-primary"
+          (click)="scrollToSection('latest-news-section')"
+          aria-label="View Press Releases"
+        >
+          <span>View Press Releases</span>
+          <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Headquarters Building Image with Smooth Fade Gradient Overlay -->
+  <div class="news-hero__image-wrapper">
+    <img
+      src="home_banner.png"
+      alt="Vaccine Industrial Company Headquarters and Manufacturing Facility"
+      class="news-hero__image"
+    />
+    <div class="news-hero__overlay" aria-hidden="true"></div>
+  </div>
+
+</section>
+
+
+<!-- ====================================================
+     SECTION 2 — BROWSE BY CATEGORY (IMAGE 1 EXACT DESIGN)
+     With "MOU" Extra Category Added
+     ==================================================== -->
+<section class="news-category-section" id="browse-categories">
+  <div class="news-category-section__container">
+
+    <!-- Category Label -->
+    <h2 class="news-category-section__eyebrow">BROWSE BY CATEGORY</h2>
+
+    <!-- Category Button Pills Row -->
+    <div class="news-category-pills" role="tablist" aria-label="Browse by category">
+      <button
+        type="button"
+        *ngFor="let cat of categories"
+        class="news-category-btn"
+        [class.news-category-btn--active]="selectedCategory() === cat"
+        (click)="setCategory(cat)"
+        role="tab"
+        [attr.aria-selected]="selectedCategory() === cat"
+      >
+        <span>{{ cat }}</span>
+        <span class="news-category-btn__count">({{ getCategoryCount(cat) }})</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 3 — LATEST NEWS (IMAGE 2 TOP SECTION EXACT DESIGN)
+     4-Card Row with Image, Teal Badge, Date, Title, Excerpt, Read More
+     ==================================================== -->
+<section class="latest-news-section" id="latest-news-section">
+  <div class="latest-news-section__container">
+
+    <!-- Header: LATEST NEWS on Left, View All News on Right -->
+    <div class="latest-news-section__header">
+      <h2 class="latest-news-section__label">LATEST NEWS</h2>
+
+      <button
+        type="button"
+        class="latest-news-section__view-all"
+        (click)="toggleViewAllNews()"
+      >
+        <span>{{ showAllNews() ? 'Show Less' : 'View All News' }}</span>
+        <span class="latest-news-section__view-all-arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+
+    <!-- Empty State if filter yields no news -->
+    <div *ngIf="displayedArticles().length === 0" class="news-empty-state">
+      <p class="news-empty-state__text">
+        No news articles currently listed under "{{ selectedCategory() }}".
+      </p>
+      <button
+        type="button"
+        class="news-empty-state__reset-btn"
+        (click)="setCategory('All')"
+      >
+        View All News
+      </button>
+    </div>
+
+    <!-- 4-Card Grid (Exact layout from Image 2) -->
+    <div class="latest-news-grid" *ngIf="displayedArticles().length > 0">
+      <article
+        *ngFor="let article of displayedArticles()"
+        class="latest-news-card"
+      >
+        <!-- Card Image Thumbnail with Teal Badge Overlay -->
+        <a [routerLink]="['/news', article.slug]" class="latest-news-card__image-wrap" [attr.aria-label]="article.title">
+          <img
+            [src]="article.image"
+            [alt]="article.title"
+            class="latest-news-card__image"
+            loading="lazy"
+          />
+          <span class="latest-news-card__badge">{{ article.badge }}</span>
+        </a>
+
+        <!-- Card Body -->
+        <div class="latest-news-card__body">
+          <span class="latest-news-card__date">{{ article.formattedDate || article.date }}</span>
+
+          <h3 class="latest-news-card__title">
+            <a [routerLink]="['/news', article.slug]">{{ article.title }}</a>
+          </h3>
+
+          <p class="latest-news-card__summary">
+            {{ article.summary }}
+          </p>
+
+          <div class="latest-news-card__action">
+            <a [routerLink]="['/news', article.slug]" class="latest-news-card__read-more-link">
+              <span class="latest-news-card__read-more">Read More</span>
+              <span class="latest-news-card__arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+      </article>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 4 — PRESS RELEASES (IMAGE 2 BOTTOM SECTION EXACT DESIGN)
+     4 Horizontal Cards with Date Box, Title, PDF Size & Download Icon
+     ==================================================== -->
+<section class="press-releases-section" id="press-releases">
+  <div class="press-releases-section__container">
+
+    <!-- Header: PRESS RELEASES on Left, View All Press Releases on Right -->
+    <div class="press-releases-section__header">
+      <h2 class="press-releases-section__label">PRESS RELEASES</h2>
+
+      <button
+        type="button"
+        class="press-releases-section__view-all"
+        (click)="toggleViewAllPressReleases()"
+      >
+        <span>{{ showAllPressReleases() ? 'Show Less' : 'View All Press Releases' }}</span>
+        <span class="press-releases-section__view-all-arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+
+    <!-- Empty State if filter yields no press releases -->
+    <div *ngIf="displayedPressReleases().length === 0" class="news-empty-state">
+      <p class="news-empty-state__text">
+        No press releases currently listed under "{{ selectedCategory() }}".
+      </p>
+      <button
+        type="button"
+        class="news-empty-state__reset-btn"
+        (click)="setCategory('All')"
+      >
+        View All Press Releases
+      </button>
+    </div>
+
+    <!-- 4 Horizontal Press Release Cards (Exact layout from Image 2) -->
+    <div class="press-releases-grid" *ngIf="displayedPressReleases().length > 0">
+      <div
+        *ngFor="let pr of displayedPressReleases()"
+        class="press-release-card"
+        (click)="downloadAsset(pr.title + '.pdf', pr.downloadUrl)"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="pr.title"
+      >
+        <!-- Left: Date Box (Teal block with Day, Month, Year) -->
+        <div class="press-release-card__date-box">
+          <span class="press-release-card__day">{{ pr.day }}</span>
+          <span class="press-release-card__month">{{ pr.month }}</span>
+          <span class="press-release-card__year">{{ pr.year }}</span>
+        </div>
+
+        <!-- Middle: Content Body -->
+        <div class="press-release-card__content">
+          <h3 class="press-release-card__title">
+            {{ pr.title }}
+          </h3>
+          <span class="press-release-card__meta">
+            {{ pr.format }} &bull; {{ pr.size }}
+          </span>
+        </div>
+
+        <!-- Right: Download Action Icon -->
+        <button
+          type="button"
+          class="press-release-card__download-btn"
+          (click)="$event.stopPropagation(); downloadAsset(pr.title + '.pdf', pr.downloadUrl)"
+          [attr.aria-label]="'Download ' + pr.title"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 5 — STAY UPDATED (NEWSLETTER BANNER)
+     Exact layout matching user design (media_1788336182183.png)
+     ==================================================== -->
+<section class="stay-updated-section" id="stay-updated">
+  <div class="stay-updated-section__container">
+    <div class="stay-updated-card">
+
+      <!-- Left Group: Circular Icon Badge + Text -->
+      <div class="stay-updated-card__content">
+        <!-- Circular Icon Badge (Teal outlined circle) -->
+        <div class="stay-updated-card__icon-badge" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+            <path d="M18 14h-8"></path>
+            <path d="M15 18h-5"></path>
+            <path d="M10 6h8v4h-8V6Z"></path>
+          </svg>
+        </div>
+
+        <!-- Text Info -->
+        <div class="stay-updated-card__text">
+          <span class="stay-updated-card__eyebrow">STAY UPDATED</span>
+          <p class="stay-updated-card__title">
+            Subscribe to receive the latest news and updates from VIC.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Group: Subscription Form -->
+      <div class="stay-updated-card__form-wrap">
+        <!-- Success State -->
+        <div *ngIf="newsletterSubscribed()" class="stay-updated-success">
+          <span class="stay-updated-success__icon">&#10003;</span>
+          <span class="stay-updated-success__text">Thank you! You have subscribed to VIC updates.</span>
+          <button type="button" class="stay-updated-reset-btn" (click)="resetNewsletter()">Change email</button>
+        </div>
+
+        <!-- Form -->
+        <form
+          *ngIf="!newsletterSubscribed()"
+          (ngSubmit)="submitNewsletter()"
+          class="stay-updated-form"
+        >
+          <div class="stay-updated-input-wrap">
+            <input
+              type="email"
+              name="newsletterEmail"
+              required
+              placeholder="Enter your email"
+              class="stay-updated-input"
+              [(ngModel)]="newsletterEmail"
+              aria-label="Enter your email"
+            />
+          </div>
+          <button
+            type="submit"
+            class="stay-updated-btn"
+            aria-label="Subscribe to newsletter"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>Subscribe</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Floating Download Toast Notice -->
+<div *ngIf="downloadNotice()" class="news-download-toast" role="alert">
+  <div class="news-download-toast__icon">&#10003;</div>
+  <span>{{ downloadNotice() }}</span>
+</div>
