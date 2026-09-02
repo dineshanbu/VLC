@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================
+   VIC — GLOBAL STYLESHEET
+   Vaccine Industrial Company
+   ============================================
+   Import order matters:
+   1. Variables (tokens)
+   2. Reset (base normalization)
+   3. Typography
+   4. Layout (containers, grid)
+   5. Components (buttons, cards)
+   6. Utilities (overrides, helpers)
+   ============================================ */
+
+@import url('./styles/_variables.css');
+@import url('./styles/_reset.css');
+@import url('./styles/_typography.css');
+@import url('./styles/_layout.css');
+@import url('./styles/_buttons.css');
+@import url('./styles/_cards.css');
+@import url('./styles/_utilities.css');

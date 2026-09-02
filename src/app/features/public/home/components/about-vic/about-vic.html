@@ -1,0 +1,54 @@
+<section class="about-vic" id="about-vic">
+  <div class="about-vic__container">
+
+    <div class="about-vic__card">
+
+      <!-- Left Content Column (43%) -->
+      <div class="about-vic__content">
+        <span class="about-vic__eyebrow">ABOUT VIC</span>
+
+        <h2 class="about-vic__heading">
+          Driven by Science.<br>Inspired by Humanity.
+        </h2>
+
+        <p class="about-vic__desc">
+          Vaccine Industrial Holding LLC (VIC), founded in 2022 in Riyadh by Dr. Khaled Almosa, a national biotech leader, is Saudi Arabia’s first company dedicated to establishing an advanced vaccine biomanufacturing facility. VIC aims to position the Kingdom as a regional and global vaccine hub by adopting advanced technologies, meeting global manufacturing standards, and strengthening national healthcare self-sufficiency.
+        </p>
+
+        <div class="about-vic__action">
+          <a routerLink="/about" class="btn btn-primary about-vic__btn">
+            <span>Learn More About Us</span>
+            <svg class="about-vic__btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <polyline points="13 5 20 12 13 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Media Column (57%) — Real Autoplaying YouTube Video -->
+      <div class="about-vic__media">
+        <div class="about-vic__video-wrapper">
+          <iframe
+            [src]="bgVideoUrl"
+            title="VIC Corporate Video"
+            class="about-vic__iframe"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            (load)="onIframeLoad($event)"
+          ></iframe>
+        </div>
+
+        <!-- Visual Play Button Overlay (Matching Reference Design) -->
+        <div class="about-vic__play" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="7 4 19 12 7 20 7 4"></polygon>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

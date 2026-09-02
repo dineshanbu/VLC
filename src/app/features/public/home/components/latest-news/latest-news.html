@@ -1,0 +1,47 @@
+<section class="news" id="latest-news">
+  <div class="news__container">
+
+    <!-- Header: Section Label on Left, View All News Link on Right -->
+    <div class="news__header">
+      <span class="news__label">LATEST NEWS</span>
+
+      <a routerLink="/news" class="news__view-all">
+        <span>View All News</span>
+        <svg class="news__view-all-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <polyline points="13 5 20 12 13 19"></polyline>
+        </svg>
+      </a>
+    </div>
+
+    <!-- 4 News Cards Grid (Desktop: 4 in one row) -->
+    <div class="news__grid">
+      @for (item of news; track item.title) {
+        <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="news__card">
+
+          <!-- Image at Top -->
+          <div class="news__image-wrap">
+            <img [src]="item.image" [alt]="item.title" class="news__image" />
+          </div>
+
+          <!-- Content Body -->
+          <div class="news__body">
+            <span class="news__date">{{ item.date }}</span>
+
+            <h3 class="news__title">{{ item.title }}</h3>
+
+            <div class="news__action">
+              <span class="news__read-more">Read More</span>
+              <svg class="news__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <polyline points="13 5 20 12 13 19"></polyline>
+              </svg>
+            </div>
+          </div>
+
+        </a>
+      }
+    </div>
+
+  </div>
+</section>

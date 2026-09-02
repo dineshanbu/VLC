@@ -1,0 +1,1268 @@
+/* ====================================================
+   ABOUT US PAGE — STEP 1 DESIGN SYSTEM
+   Exact Home Page Typography Scale, Colors & Spacing
+   Vaccine Industrial Company
+   ==================================================== */
+
+/* ====================================================
+   1. ABOUT HERO BANNER (COMPACT SPLIT COMPOSITION)
+   ==================================================== */
+
+.about-hero {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+.about-hero__container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  padding-top: calc(78px + 20px);
+  padding-bottom: 40px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+
+.about-hero__content {
+  max-width: 450px;
+  z-index: 2;
+}
+
+.about-hero__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin: 0 0 var(--space-16) 0;
+  display: block;
+  line-height: 1.4;
+}
+
+.about-hero__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 2.5vw, 2.65rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-20) 0;
+}
+
+.about-hero__subheading {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.25vw + 0.95rem, 1.125rem);
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  line-height: 1.45;
+  margin: 0 0 var(--space-24) 0;
+  display: block;
+}
+
+.about-hero__description {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  font-weight: var(--weight-regular);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin: 0;
+  max-width: 430px;
+}
+
+.about-hero__action {
+  margin-top: 28px;
+}
+
+
+
+.about-hero__read-more-btn {
+  height: 46px;
+  padding: 0 8px 0 22px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-secondary);
+  background-color: rgba(13, 138, 138, 0.06);
+  border: 1.5px solid var(--color-secondary);
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  box-shadow: 0 2px 10px rgba(13, 138, 138, 0.12);
+}
+
+.about-hero__read-more-btn .btn-arrow {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.22s ease, background-color 0.22s ease;
+}
+
+.about-hero__read-more-btn:hover {
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  box-shadow: 0 6px 22px rgba(13, 138, 138, 0.38);
+  transform: translateY(-1px);
+}
+
+.about-hero__read-more-btn:hover .btn-arrow {
+  background-color: rgba(255, 255, 255, 0.22);
+  transform: translateX(3px);
+}
+
+
+.about-hero__image-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 60%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.about-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
+}
+
+.about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    rgba(255, 255, 255, 0.98) 12%,
+    rgba(255, 255, 255, 0.70) 28%,
+    rgba(255, 255, 255, 0.20) 48%,
+    rgba(255, 255, 255, 0) 62%
+  );
+}
+
+
+/* ====================================================
+   2. OUR VISION + OUR MISSION
+   Premium 2-Column Equal-Height Card Layout
+   ==================================================== */
+
+.about-overview {
+  position: relative;
+  width: 100%;
+  padding: var(--space-64) 0;
+  background-color: #F0F4F8;
+  border-top: 1px solid #D8E2EC;
+}
+
+.about-overview__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Equal-height 2-column grid */
+.about-overview__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-24);
+  align-items: stretch;
+}
+
+/* ---- Vision & Mission Cards ---- */
+.about-vm-card {
+  background-color: #FFFFFF;
+  border: 1px solid #D8E2EC;
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow: 0 2px 16px rgba(11, 42, 74, 0.07), 0 1px 4px rgba(11, 42, 74, 0.04);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.about-vm-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(11, 42, 74, 0.11), 0 3px 8px rgba(11, 42, 74, 0.05);
+  border-color: rgba(13, 138, 138, 0.30);
+}
+
+/* Icon + Label header row */
+.about-vm-card__header-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  margin-bottom: var(--space-20);
+  padding-bottom: var(--space-16);
+  border-bottom: 1px solid #EDF2F7;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Teal circular icon badge */
+.about-vm-card__icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #E8F4F4;
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(13, 138, 138, 0.16);
+}
+
+/* Uppercase teal label */
+.about-vm-card__label {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  display: inline-block;
+  line-height: 1.3;
+}
+
+/* Content body — flex column of paragraphs */
+.about-vm-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Paragraph text */
+.about-vm-card__text {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  line-height: 1.70;
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: left;
+}
+
+/* ---- Line-clamp container ---- */
+/* font-size 0.9063rem × line-height 1.70 = 1.5407rem per line */
+/* 6 lines ≈ 9.24rem   4 lines ≈ 6.16rem  (add paragraph gaps) */
+
+.about-vm-card__clip {
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Vision: 6 lines collapsed */
+.about-vm-card__clip--vision {
+  max-height: 10.2rem; /* 6 lines + small gap allowance */
+}
+
+/* Mission: 4 lines collapsed */
+.about-vm-card__clip--mission {
+  max-height: 6.8rem; /* 4 lines */
+}
+
+/* Expanded: remove height limit */
+.about-vm-card__clip--open {
+  max-height: 600px;
+}
+
+/* Soft fade gradient at bottom in collapsed state */
+.about-vm-card__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Hide the fade when expanded */
+.about-vm-card__clip--open .about-vm-card__fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Action row — Read More / Read Less — sits below the clip */
+.about-vm-card__action {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #EDF2F7;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.about-vm-card__link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.about-vm-card__link-btn:hover {
+  color: var(--color-primary);
+}
+
+
+/* ====================================================
+   COMPANY OVERVIEW MODAL — PERFECTLY CENTERED POPUP
+   ==================================================== */
+
+/* Full-screen overlay — flex centers the modal */
+.about-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background-color: rgba(7, 26, 50, 0.75);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  animation: modalFadeIn 0.20s ease-out forwards;
+}
+
+/* Centered modal panel */
+.about-modal {
+  position: relative;
+  width: 100%;
+  max-width: 950px;
+  max-height: 85vh;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid rgba(11, 42, 74, 0.08);
+  box-shadow:
+    0 40px 80px -20px rgba(7, 26, 50, 0.36),
+    0 0 0 1px rgba(11, 42, 74, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: modalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* X close button — top-right corner */
+.about-modal__close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #F0F4F8;
+  color: var(--color-primary);
+  border: 1.5px solid #D8E2EC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-base), color var(--transition-base), transform 0.2s ease, border-color var(--transition-base);
+}
+
+.about-modal__close-btn:hover {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+  transform: rotate(90deg);
+}
+
+/* Modal header — sticky at top */
+.about-modal__header {
+  padding: 36px 44px 22px;
+  padding-right: 72px;
+  border-bottom: 1px solid #EDF2F7;
+  flex-shrink: 0;
+  background-color: #FFFFFF;
+}
+
+.about-modal__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-8);
+  display: block;
+}
+
+.about-modal__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.55rem, 1.8vw + 0.65rem, 2.05rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Modal scrollable body */
+.about-modal__body {
+  padding: 28px 44px 44px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E0 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.about-modal__body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.about-modal__body::-webkit-scrollbar-thumb {
+  background-color: #CBD5E0;
+  border-radius: 99px;
+}
+
+.about-modal__body p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.74;
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: left;
+}
+
+/* Highlighted concluding paragraph */
+.about-modal__highlight {
+  background-color: #EBF6F6;
+  border-left: 4px solid var(--color-secondary);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+}
+
+.about-modal__highlight p {
+  color: var(--color-primary) !important;
+  font-weight: var(--weight-medium) !important;
+  font-size: 0.9375rem;
+  line-height: 1.72;
+  margin: 0;
+  text-align: left;
+}
+
+/* Animations — fade + scale only, no arrows, no dotted lines */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: scale(0.95) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+
+/* ====================================================
+   3. ALIGNED WITH SAUDI VISION 2030
+   Panoramic Banner with Floating Feature Card
+   ==================================================== */
+
+.about-v2030 {
+  position: relative;
+  width: 100%;
+  padding: var(--space-64) 0;
+  background-color: #FFFFFF;
+}
+
+.about-v2030__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.about-v2030__banner {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 6px 28px rgba(11, 42, 74, 0.07);
+  display: flex;
+  align-items: center;
+}
+
+/* Background image: Flag & Riyadh Skyline */
+.about-v2030__bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+  z-index: 1;
+}
+
+/* Gradient overlay: pure white on left behind text, fading smoothly to reveal flag & skyline */
+.about-v2030__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #FFFFFF 28%,
+    rgba(255, 255, 255, 0.96) 38%,
+    rgba(255, 255, 255, 0.65) 46%,
+    rgba(255, 255, 255, 0) 58%
+  );
+  pointer-events: none;
+}
+
+/* Content layer over background */
+.about-v2030__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 44px 44px;
+  box-sizing: border-box;
+  gap: 36px;
+}
+
+/* Left text block */
+.about-v2030__text {
+  max-width: 420px;
+  flex-shrink: 0;
+}
+
+.about-v2030__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.about-v2030__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 2.2vw + 0.6rem, 2.35rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  margin: 0 0 16px;
+}
+
+.about-v2030__year {
+  color: var(--color-secondary);
+  font-weight: var(--weight-bold);
+}
+
+.about-v2030__desc {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  line-height: 1.70;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Right: Floating 2x2 Feature Card */
+.about-v2030__card {
+  flex-shrink: 0;
+  width: 320px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 36px rgba(11, 42, 74, 0.12), 0 2px 8px rgba(11, 42, 74, 0.04);
+  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.about-v2030__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.about-v2030__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 18px 12px;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.about-v2030__item:hover {
+  background-color: rgba(13, 138, 138, 0.03);
+}
+
+/* Hairline dividers forming cross grid */
+.about-v2030__item--tl {
+  border-right: 1px solid #EDF2F7;
+  border-bottom: 1px solid #EDF2F7;
+}
+
+.about-v2030__item--tr {
+  border-bottom: 1px solid #EDF2F7;
+}
+
+.about-v2030__item--bl {
+  border-right: 1px solid #EDF2F7;
+}
+
+.about-v2030__item--br {
+  /* no extra divider */
+}
+
+/* Circular icon badge */
+.about-v2030__icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #E8F4F4;
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(13, 138, 138, 0.15);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.about-v2030__item:hover .about-v2030__icon-badge {
+  transform: translateY(-2px);
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+}
+
+.about-v2030__item-label {
+  font-family: var(--font-body);
+  font-size: 0.7813rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  line-height: 1.35;
+  text-align: center;
+}
+
+
+
+/* ====================================================
+   4. OUR LEADERSHIP (RESPONSIVE CAROUSEL)
+   ==================================================== */
+
+.about-leadership {
+  position: relative;
+  width: 100%;
+  padding: var(--space-64) 0;
+  background-color: #F4F7FA;
+  border-top: 1px solid var(--color-border);
+}
+
+.about-leadership__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.about-leadership__header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-32);
+  gap: var(--space-24);
+}
+
+.about-leadership__header-text {
+  max-width: 580px;
+}
+
+.about-leadership__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-8);
+  display: block;
+}
+
+.about-leadership__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 1.3vw + 0.85rem, 1.85rem);
+  font-weight: var(--weight-regular);
+  color: var(--color-primary);
+  line-height: 1.22;
+  margin: 0 0 var(--space-6);
+}
+
+.about-leadership__subheading {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.about-leadership__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-shrink: 0;
+}
+
+.about-leadership__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(11, 42, 74, 0.08);
+  transition: all var(--transition-base);
+}
+
+.about-leadership__nav-btn:hover {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(11, 42, 74, 0.20);
+  transform: scale(1.06);
+}
+
+.about-leadership__carousel-window {
+  width: 100%;
+  overflow: hidden;
+  padding: 4px 0 8px;
+}
+
+.about-leadership__track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.about-leadership__slide {
+  flex: 0 0 33.3333%;
+  width: 33.3333%;
+  padding: 0 var(--space-8);
+  box-sizing: border-box;
+}
+
+.about-leader-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(11, 42, 74, 0.06), 0 1px 3px rgba(11, 42, 74, 0.03);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.about-leader-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(11, 42, 74, 0.12), 0 4px 10px rgba(11, 42, 74, 0.05);
+  border-color: rgba(13, 138, 138, 0.35);
+}
+
+.about-leader-card__portrait {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  background: #F0F4F8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #EDF2F7;
+}
+
+.about-leader-card__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 0.35s ease;
+}
+
+.about-leader-card:hover .about-leader-card__photo {
+  transform: scale(1.04);
+}
+
+.about-leader-card__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #0B2A4A 0%, #184A78 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 4px 12px rgba(11, 42, 74, 0.18);
+}
+
+.about-leader-card__initials {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+}
+
+.about-leader-card__badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(13, 138, 138, 0.18);
+  box-shadow: 0 2px 8px rgba(11, 42, 74, 0.10);
+  z-index: 2;
+}
+
+.about-leader-card__body {
+  padding: 24px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.about-leader-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  line-height: 1.3;
+  margin: 0 0 6px;
+}
+
+.about-leader-card__title {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  line-height: 1.45;
+  margin: 0 0 10px;
+  min-height: 2.65rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.about-leader-card__role {
+  font-family: var(--font-body);
+  font-size: 0.8438rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  min-height: 4.8rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.about-leader-card__footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #EDF2F7;
+}
+
+.about-leader-card__link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--transition-base), transform var(--transition-fast);
+}
+
+.about-leader-card__link:hover {
+  color: var(--color-primary);
+  transform: translateX(3px);
+}
+
+
+/* ====================================================
+   LEADER PROFILE MODAL
+   ==================================================== */
+
+.about-leader-modal {
+  max-width: 800px;
+  max-height: 88vh;
+}
+
+.about-leader-modal__header {
+  padding: 32px 36px 20px;
+  padding-right: 68px;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+  background-color: #FFFFFF;
+}
+
+.about-leader-modal__portrait {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(11, 42, 74, 0.10);
+}
+
+.about-leader-modal__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.about-leader-modal__meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-leader-modal__name {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 1.8vw + 0.5rem, 1.85rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  margin: 0 0 6px;
+}
+
+.about-leader-modal__title {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  line-height: 1.35;
+  margin: 0 0 4px;
+}
+
+.about-leader-modal__role-tag {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.about-leader-modal__body {
+  padding: 24px 36px 36px;
+  gap: 20px;
+}
+
+.about-leader-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-leader-modal__section-heading {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 8px 0 2px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #EDF2F7;
+}
+
+.about-leader-modal__text {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  line-height: 1.68;
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: left;
+}
+
+.about-leader-modal__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-leader-modal__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.62;
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.about-leader-modal__list-item::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-secondary);
+}
+
+
+/* Pagination Dots */
+.about-leadership__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-24);
+}
+
+.about-leadership__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-dark);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.about-leadership__dot--active {
+  width: 22px;
+  background-color: var(--color-secondary);
+}
+
+
+/* ====================================================
+   RESPONSIVE BREAKPOINTS
+   ==================================================== */
+
+@media (max-width: 1024px) {
+  .about-hero {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    flex-direction: column;
+    padding-top: 72px;
+    background-color: #FFFFFF;
+  }
+
+  .about-hero__container {
+    order: 1;
+    padding: var(--space-20) var(--container-padding) var(--space-12);
+    height: auto;
+  }
+
+  .about-hero__content { max-width: 100%; }
+
+  .about-hero__heading { font-size: clamp(1.9rem, 7vw, 2.35rem); margin-bottom: var(--space-12); }
+  .about-hero__description { font-size: 0.875rem; max-width: 100%; }
+
+  .about-hero__image-wrapper {
+    position: relative;
+    order: 2;
+    width: calc(100% - 2 * var(--container-padding));
+    margin: 0 auto var(--space-24);
+    height: 230px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .about-hero__overlay { display: none; }
+
+  .about-overview { padding: 48px 0; }
+  .about-overview__grid { grid-template-columns: 1fr; gap: 16px; }
+
+  /* Modal: fit viewport with 16px side margin */
+  .about-modal-backdrop { padding: 16px; }
+  .about-modal { max-width: calc(100% - 32px); }
+
+  /* Vision 2030 Banner tablet */
+  .about-v2030 { padding: 48px 0; }
+  .about-v2030__banner { min-height: auto; }
+  .about-v2030__content { padding: 36px 32px; gap: 24px; }
+  .about-v2030__card { width: 290px; }
+
+  .about-leadership__slide { flex: 0 0 50%; width: 50%; }
+}
+
+@media (max-width: 768px) {
+  .about-hero { padding-top: 64px; }
+  .about-hero__container { padding: 16px var(--container-padding) 12px; }
+  .about-hero__heading { font-size: clamp(1.75rem, 6vw, 2.1rem); margin-bottom: 10px; }
+  .about-hero__subheading { font-size: 0.9375rem; margin-bottom: 14px; }
+  .about-hero__description { font-size: 0.875rem; }
+  .about-hero__image-wrapper { width: calc(100% - 2 * var(--container-padding)); margin: 0 auto 16px; height: 190px; border-radius: 14px; }
+
+  .about-overview { padding: 40px 0; }
+  .about-overview__grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Cards: 22px padding on mobile */
+  .about-vm-card { padding: 22px 20px; border-radius: 14px; }
+  .about-vm-card__header-row { margin-bottom: 14px; padding-bottom: 12px; }
+  .about-vm-card__text { font-size: 0.875rem; line-height: 1.65; }
+
+  /* Modal: 16px margin each side, 90vh height, 20px internal padding */
+  .about-modal-backdrop { padding: 16px; }
+  .about-modal { max-width: calc(100% - 0px); max-height: 90vh; border-radius: 16px; }
+  .about-modal__header { padding: 20px 20px 14px; padding-right: 58px; }
+  .about-modal__close-btn { top: 14px; right: 14px; width: 36px; height: 36px; }
+  .about-modal__heading { font-size: 1.3rem; }
+  .about-modal__body { padding: 20px 20px 28px; gap: 14px; }
+  .about-modal__body p { font-size: 0.875rem; line-height: 1.65; }
+  .about-modal__highlight { padding: 14px 18px; }
+  .about-modal__highlight p { font-size: 0.875rem; }
+
+  /* Vision 2030 Banner mobile */
+  .about-v2030 { padding: 40px 0; }
+  .about-v2030__banner {
+    flex-direction: column;
+    min-height: auto;
+    border-radius: 18px;
+  }
+  .about-v2030__bg-img {
+    height: 100%;
+    object-position: center top;
+  }
+  .about-v2030__overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.95) 50%,
+      rgba(255, 255, 255, 0.88) 100%
+    );
+  }
+  .about-v2030__content {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 32px 20px;
+    gap: 28px;
+  }
+  .about-v2030__text {
+    max-width: 100%;
+  }
+  .about-v2030__card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .about-leadership { padding: var(--space-40) 0; }
+  .about-leadership__header-row { flex-direction: column; align-items: flex-start; gap: var(--space-12); margin-bottom: var(--space-20); }
+  .about-leadership__slide { flex: 0 0 100%; width: 100%; }
+
+  /* Leader Profile Modal mobile */
+  .about-leader-modal__header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 20px 16px;
+    padding-right: 54px;
+    gap: 14px;
+  }
+  .about-leader-modal__portrait {
+    width: 76px;
+    height: 76px;
+    border-radius: 12px;
+  }
+  .about-leader-modal__name {
+    font-size: 1.25rem;
+  }
+  .about-leader-modal__body {
+    padding: 16px 20px 24px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .about-hero__container { padding-left: 20px; padding-right: 20px; }
+  .about-hero__heading { font-size: clamp(1.6rem, 7.5vw, 1.95rem); }
+  .about-hero__read-more-btn { height: 40px; font-size: 0.8125rem; }
+  .about-vm-card { padding: 20px 16px; }
+  .about-vm-card__icon-badge { width: 34px; height: 34px; }
+
+  .about-v2030__content { padding: 24px 16px; }
+  .about-v2030__heading { font-size: clamp(1.45rem, 6.5vw, 1.75rem); }
+  .about-v2030__item { padding: 14px 8px; }
+  .about-v2030__icon-badge { width: 38px; height: 38px; }
+  .about-v2030__item-label { font-size: 0.72rem; }
+}
+

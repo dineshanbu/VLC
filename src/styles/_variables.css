@@ -1,0 +1,193 @@
+/* ============================================
+   VIC DESIGN SYSTEM — CSS VARIABLES
+   Vaccine Industrial Company
+   ============================================
+   Extracted from the reference design image.
+   All tokens are centralized here.
+   ============================================ */
+
+:root {
+
+  /* ==========================================
+     COLOR SYSTEM
+     ========================================== */
+
+  /* --- Primary: Deep Professional Navy --- */
+  --color-primary:            #0B2A4A;
+  --color-primary-dark:       #071E36;
+  --color-primary-light:      #143D66;
+  --color-primary-hover:      #0E3558;
+
+  /* --- Secondary: Professional Medical Teal --- */
+  --color-secondary:          #0D8A8A;
+  --color-secondary-dark:     #0A6E6E;
+  --color-secondary-light:    #10A8A8;
+  --color-secondary-hover:    #0B7A7A;
+
+  /* --- Accent: Soft Teal / Blue-Gray --- */
+  --color-accent:             #E8F4F4;
+  --color-accent-medium:      #D0EAEA;
+  --color-accent-dark:        #B8DEDE;
+
+  /* --- Backgrounds --- */
+  --color-background:         #FFFFFF;
+  --color-background-warm:    #FFFFFF;
+  --color-background-dark:    #0B2A4A;
+  --color-background-hero:    #EEF1F5;
+
+  /* --- Surfaces --- */
+  --color-surface:            #FFFFFF;
+  --color-surface-alt:        #F9FAFB;
+  --color-surface-elevated:   #FFFFFF;
+
+  /* --- Text --- */
+  --color-text-primary:       #0B2A4A;
+  --color-text-secondary:     #3D5A80;
+  --color-text-muted:         #6B7B8D;
+  --color-text-light:         #98A7B5;
+  --color-text-inverse:       #FFFFFF;
+  --color-text-on-dark:       #C8D6E0;
+
+  /* --- Borders --- */
+  --color-border:             #E2E8F0;
+  --color-border-light:       #EDF2F7;
+  --color-border-dark:        #CBD5E0;
+
+  /* --- Semantic --- */
+  --color-success:            #10B981;
+  --color-warning:            #F59E0B;
+  --color-error:              #EF4444;
+  --color-info:               #3B82F6;
+
+
+  /* ==========================================
+     TYPOGRAPHY
+     ========================================== */
+
+  /* --- Font Families --- */
+  --font-heading:             'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:                'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* --- Font Sizes (Responsive with clamp) --- */
+  --text-display:             clamp(2.75rem, 4vw + 1rem, 4rem);        /* 44px → 64px */
+  --text-h1:                  clamp(2.5rem, 3.5vw + 0.75rem, 3.5rem);  /* 40px → 56px */
+  --text-h2:                  clamp(2rem, 2.5vw + 0.5rem, 2.625rem);   /* 32px → 42px */
+  --text-h3:                  clamp(1.5rem, 2vw + 0.25rem, 2rem);      /* 24px → 32px */
+  --text-h4:                  clamp(1.25rem, 1.25vw + 0.25rem, 1.5rem);/* 20px → 24px */
+  --text-h5:                  clamp(1.125rem, 1vw + 0.25rem, 1.25rem); /* 18px → 20px */
+  --text-body-lg:             clamp(1rem, 0.5vw + 0.75rem, 1.125rem);  /* 16px → 18px */
+  --text-body:                clamp(0.875rem, 0.25vw + 0.75rem, 1rem); /* 14px → 16px */
+  --text-small:               clamp(0.75rem, 0.2vw + 0.65rem, 0.875rem);/* 12px → 14px */
+  --text-nav:                 clamp(0.75rem, 0.2vw + 0.65rem, 0.875rem);/* 12px → 14px */
+  --text-caption:             0.75rem;                                   /* 12px */
+
+  /* --- Font Weights --- */
+  --weight-regular:           400;
+  --weight-medium:            500;
+  --weight-semibold:          600;
+  --weight-bold:              700;
+
+  /* --- Line Heights --- */
+  --leading-tight:            1.2;
+  --leading-snug:             1.35;
+  --leading-normal:           1.5;
+  --leading-relaxed:          1.65;
+  --leading-loose:            1.8;
+
+  /* --- Letter Spacing --- */
+  --tracking-tight:           -0.02em;
+  --tracking-normal:          0;
+  --tracking-wide:            0.025em;
+  --tracking-wider:           0.05em;
+  --tracking-widest:          0.1em;
+
+
+  /* ==========================================
+     SPACING SYSTEM
+     ========================================== */
+
+  --space-2:                  0.125rem;   /* 2px  */
+  --space-4:                  0.25rem;    /* 4px  */
+  --space-6:                  0.375rem;   /* 6px  */
+  --space-8:                  0.5rem;     /* 8px  */
+  --space-12:                 0.75rem;    /* 12px */
+  --space-16:                 1rem;       /* 16px */
+  --space-20:                 1.25rem;    /* 20px */
+  --space-24:                 1.5rem;     /* 24px */
+  --space-32:                 2rem;       /* 32px */
+  --space-40:                 2.5rem;     /* 40px */
+  --space-48:                 3rem;       /* 48px */
+  --space-56:                 3.5rem;     /* 56px */
+  --space-64:                 4rem;       /* 64px */
+  --space-80:                 5rem;       /* 80px */
+  --space-96:                 6rem;       /* 96px */
+  --space-120:                7.5rem;     /* 120px */
+
+
+  /* ==========================================
+     BORDER RADIUS
+     ========================================== */
+
+  --radius-sm:                4px;
+  --radius-md:                8px;
+  --radius-lg:                12px;
+  --radius-xl:                16px;
+  --radius-2xl:               24px;
+  --radius-full:              9999px;
+
+
+  /* ==========================================
+     SHADOWS
+     ========================================== */
+
+  --shadow-sm:                0 1px 3px rgba(11, 42, 74, 0.06),
+                              0 1px 2px rgba(11, 42, 74, 0.04);
+
+  --shadow-md:                0 4px 12px rgba(11, 42, 74, 0.08),
+                              0 2px 4px rgba(11, 42, 74, 0.04);
+
+  --shadow-lg:                0 10px 30px rgba(11, 42, 74, 0.10),
+                              0 4px 8px rgba(11, 42, 74, 0.04);
+
+  --shadow-xl:                0 20px 50px rgba(11, 42, 74, 0.12),
+                              0 8px 16px rgba(11, 42, 74, 0.06);
+
+  --shadow-card:              0 2px 8px rgba(11, 42, 74, 0.06),
+                              0 1px 3px rgba(11, 42, 74, 0.03);
+
+  --shadow-card-hover:        0 8px 24px rgba(11, 42, 74, 0.10),
+                              0 4px 8px rgba(11, 42, 74, 0.04);
+
+
+  /* ==========================================
+     TRANSITIONS
+     ========================================== */
+
+  --transition-fast:          150ms ease;
+  --transition-base:          250ms ease;
+  --transition-slow:          350ms ease;
+  --transition-smooth:        400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+
+  /* ==========================================
+     CONTAINERS
+     ========================================== */
+
+  --container-max:            1440px;
+  --container-content:        1280px;
+  --container-narrow:         960px;
+  --container-padding:        clamp(1.25rem, 3vw, 4rem);  /* 20px → 64px */
+
+
+  /* ==========================================
+     Z-INDEX SCALE
+     ========================================== */
+
+  --z-base:                   1;
+  --z-dropdown:               100;
+  --z-sticky:                 200;
+  --z-fixed:                  300;
+  --z-overlay:                400;
+  --z-modal:                  500;
+  --z-toast:                  600;
+}

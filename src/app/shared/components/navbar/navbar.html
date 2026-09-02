@@ -1,0 +1,120 @@
+<nav class="navbar" [class.navbar--scrolled]="isScrolled()">
+  <div class="navbar__container">
+
+    <!-- Brand Logo (Compact & Refined) -->
+    <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
+      <img src="logo_navbar.png" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+    </a>
+
+    <!-- Desktop Nav Links (Centered, Refined Typography) -->
+    <ul class="navbar__links">
+      @for (link of navLinks; track link.route) {
+        <li>
+          <a
+            [routerLink]="link.route"
+            routerLinkActive="navbar__link--active"
+            [routerLinkActiveOptions]="{exact: link.route === '/'}"
+            class="navbar__link"
+          >
+            {{ link.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <!-- Right Side Actions -->
+    <div class="navbar__right">
+      <!-- Language Switcher -->
+      <div class="navbar__lang">
+        <button
+          class="navbar__lang-btn"
+          [class.navbar__lang-btn--active]="currentLang() === 'en'"
+          (click)="switchLanguage('en')"
+        >EN</button>
+        <span class="navbar__lang-separator">|</span>
+        <button
+          class="navbar__lang-btn"
+          [class.navbar__lang-btn--active]="currentLang() === 'ar'"
+          (click)="switchLanguage('ar')"
+        >العربية</button>
+      </div>
+
+      <!-- Compact CTA Button -->
+      <a routerLink="/contact" class="btn btn-primary navbar__cta">
+        Contact Us
+      </a>
+    </div>
+
+    <!-- Mobile Hamburger Button -->
+    <button
+      class="navbar__hamburger"
+      [class.navbar__hamburger--open]="isMobileMenuOpen()"
+      (click)="toggleMobileMenu()"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="navbar__hamburger-line"></span>
+      <span class="navbar__hamburger-line"></span>
+      <span class="navbar__hamburger-line"></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+@if (isMobileMenuOpen()) {
+  <div class="mobile-menu" (click)="closeMobileMenu()">
+    <div class="mobile-menu__panel" (click)="$event.stopPropagation()">
+
+      <!-- Mobile Header -->
+      <div class="mobile-menu__header">
+        <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
+          <img src="logo_navbar.png" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+        </a>
+        <button class="mobile-menu__close" (click)="closeMobileMenu()" aria-label="Close menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Links -->
+      <ul class="mobile-menu__links">
+        @for (link of navLinks; track link.route) {
+          <li>
+            <a
+              [routerLink]="link.route"
+              routerLinkActive="mobile-menu__link--active"
+              [routerLinkActiveOptions]="{exact: link.route === '/'}"
+              class="mobile-menu__link"
+              (click)="closeMobileMenu()"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+
+
+      <!-- Mobile Language -->
+      <div class="mobile-menu__lang">
+        <button
+          class="mobile-menu__lang-btn"
+          [class.mobile-menu__lang-btn--active]="currentLang() === 'en'"
+          (click)="switchLanguage('en')"
+        >EN</button>
+        <span class="mobile-menu__lang-separator">/</span>
+        <button
+          class="mobile-menu__lang-btn"
+          [class.mobile-menu__lang-btn--active]="currentLang() === 'ar'"
+          (click)="switchLanguage('ar')"
+        >العربية</button>
+      </div>
+
+      <!-- Mobile CTA Button -->
+      <a routerLink="/contact" class="btn btn-primary mobile-menu__cta" (click)="closeMobileMenu()">
+        Contact Us
+      </a>
+    </div>
+  </div>
+}

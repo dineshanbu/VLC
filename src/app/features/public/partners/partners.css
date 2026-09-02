@@ -1,0 +1,971 @@
+/* ====================================================
+   PARTNERS PAGE STYLESHEET
+   Design System Consistency (Exact Homepage Scale)
+   Vaccine Industrial Company
+   ==================================================== */
+
+/* ====================================================
+   1. HERO BANNER (MATCHING REFERENCE DESIGN)
+   ==================================================== */
+
+.partner-hero {
+  position: relative;
+  width: 100%;
+  min-height: 490px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+/* Background image: anchored to right side (65% width) to frame the 4 executives and doctors on the right */
+.partner-hero__image-wrapper {
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  right: 0;
+  width: 65%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.partner-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center;
+  display: block;
+}
+
+/* Smooth left-to-right white gradient overlay matching Image 1 */
+.partner-hero__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    rgba(255, 255, 255, 0.98) 12%,
+    rgba(255, 255, 255, 0.70) 25%,
+    rgba(255, 255, 255, 0.20) 44%,
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+/* Hero Content */
+.partner-hero__container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  padding-top: calc(78px + 20px);
+  padding-bottom: 44px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.partner-hero__content {
+  max-width: 480px;
+  z-index: 2;
+}
+
+/* Eyebrow */
+.partner-hero__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin: 0 0 var(--space-16) 0;
+  display: block;
+  line-height: 1.4;
+}
+
+/* Heading: Natural serif weight matching home hero */
+.partner-hero__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.35rem, 2.6vw, 2.75rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-20) 0;
+}
+
+.partner-hero__heading-accent {
+  color: var(--color-secondary);
+}
+
+/* Description: Exactly matching home hero__description */
+.partner-hero__description {
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 0.15vw + 0.9rem, 1rem);
+  font-weight: var(--weight-regular);
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0 0 28px 0;
+  max-width: 450px;
+}
+
+.partner-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Primary Navy "Partner With Us" Button */
+.partner-hero__btn-primary {
+  height: 46px;
+  padding: 0 28px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(11, 42, 74, 0.25);
+  transition: background-color var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+  white-space: nowrap;
+}
+
+.partner-hero__btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 6px 22px rgba(11, 42, 74, 0.35);
+  transform: translateY(-1px);
+}
+
+.partner-hero__btn-arrow {
+  transition: transform 0.2s ease;
+}
+
+.partner-hero__btn-primary:hover .partner-hero__btn-arrow {
+  transform: translateX(4px);
+}
+
+
+/* ====================================================
+   SHARED SECTION HEADERS (Matching Home Scale)
+   ==================================================== */
+
+.partner-section-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 44px;
+}
+
+.partner-section-header__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.partner-section-header__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.85rem, 2.2vw, 2.35rem);
+  font-weight: var(--weight-regular);
+  color: var(--color-primary);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  margin: 0 0 12px;
+}
+
+.partner-section-header__desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.9063rem, 0.15vw + 0.875rem, 0.9688rem);
+  line-height: 1.68;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+
+/* ====================================================
+   2. OUR PARTNERSHIP ECOSYSTEM (EXACT REFERENCE MATCH)
+   ==================================================== */
+
+.partner-ecosystem {
+  position: relative;
+  width: 100%;
+  padding: 44px 0 52px;
+  background-color: #FFFFFF;
+}
+
+.partner-ecosystem__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Header with flanking horizontal rules */
+.partner-ecosystem__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
+.partner-ecosystem__line {
+  flex: 1;
+  height: 1px;
+  background-color: #CBD5E1;
+}
+
+/* Title: Clean, elegant natural Serif without excessive boldness */
+.partner-ecosystem__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 1.65vw, 1.8rem);
+  font-weight: var(--weight-regular);
+  color: var(--color-primary);
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* 5-Column White Card Strip */
+.partner-ecosystem__card {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(11, 42, 74, 0.04);
+  overflow: hidden;
+}
+
+.partner-ecosystem__col {
+  padding: 28px 20px 24px;
+  border-right: 1px solid #EDF2F7;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.partner-ecosystem__col:hover {
+  background-color: rgba(13, 138, 138, 0.02);
+}
+
+.partner-ecosystem__col--last {
+  border-right: none;
+}
+
+.partner-ecosystem__top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.partner-ecosystem__icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #E8F4F4;
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(13, 138, 138, 0.12);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.partner-ecosystem__col:hover .partner-ecosystem__icon-badge {
+  transform: translateY(-2px);
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+}
+
+/* Column Title: Natural Serif weight (400) — delicate, crisp, no faux-bold */
+.partner-ecosystem__col-title {
+  font-family: var(--font-heading);
+  font-size: 1.0313rem;
+  font-weight: var(--weight-regular);
+  color: var(--color-primary);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Column Description: Clean Inter Body font */
+.partner-ecosystem__col-desc {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+
+
+
+
+/* ====================================================
+   3. OUR STRATEGIC PARTNERS (EXACT REFERENCE MATCH)
+   ==================================================== */
+
+.partner-strategic {
+  position: relative;
+  width: 100%;
+  padding: 44px 0 56px;
+  background-color: #FFFFFF;
+}
+
+.partner-strategic__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Header with flanking horizontal rules */
+.partner-strategic__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.partner-strategic__line {
+  flex: 1;
+  height: 1px;
+  background-color: #CBD5E1;
+}
+
+.partner-strategic__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 1.65vw, 1.8rem);
+  font-weight: var(--weight-regular);
+  color: var(--color-primary);
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* Grid of Partner Logo Cards matching media_1788262238049.png */
+.partner-strategic__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px 18px;
+  align-items: start;
+}
+
+.partner-strategic__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.22s ease;
+}
+
+.partner-strategic__item:hover,
+.partner-strategic__item:focus-visible {
+  transform: translateY(-4px);
+}
+
+/* White Card Box for Logo */
+.partner-strategic__logo-card {
+  width: 100%;
+  height: 110px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 3px 14px rgba(11, 42, 74, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.partner-strategic__item:hover .partner-strategic__logo-card {
+  border-color: rgba(13, 138, 138, 0.45);
+  box-shadow: 0 8px 24px rgba(11, 42, 74, 0.09);
+}
+
+.partner-strategic__logo {
+  max-width: 100%;
+  max-height: 52px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.partner-strategic__item:hover .partner-strategic__logo {
+  transform: scale(1.04);
+}
+
+/* Category Label Below Card */
+.partner-strategic__label {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.35;
+  display: block;
+  max-width: 180px;
+}
+
+/* View All Partners Action */
+.partner-strategic__action {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.partner-strategic__view-all-btn {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+
+.partner-strategic__view-all-btn:hover {
+  color: var(--color-primary);
+  background-color: #F1F5F9;
+}
+
+.partner-strategic__btn-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.partner-strategic__view-all-btn:hover .partner-strategic__btn-arrow {
+  transform: translateX(3px);
+}
+
+.partner-strategic__btn-arrow--up {
+  transform: rotate(-90deg) !important;
+}
+
+
+/* ====================================================
+   PARTNER DETAIL MODAL
+   ==================================================== */
+
+.partner-modal--detail {
+  max-width: 580px;
+}
+
+.partner-detail-modal__header {
+  padding: 28px 28px 20px;
+  padding-right: 64px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #EDF2F7;
+  background-color: #FFFFFF;
+}
+
+.partner-detail-modal__logo-wrap {
+  width: 96px;
+  height: 64px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.partner-detail-modal__logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.partner-detail-modal__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-detail-modal__category {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-secondary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.partner-detail-modal__title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.partner-detail-modal__body {
+  padding: 24px 28px;
+  background-color: #FFFFFF;
+}
+
+.partner-detail-modal__scope-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin: 0 0 10px 0;
+}
+
+.partner-detail-modal__desc {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.68;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.partner-detail-modal__footer {
+  padding: 16px 28px 24px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #EDF2F7;
+  background-color: #FFFFFF;
+}
+
+.partner-detail-modal__btn-close {
+  padding: 8px 24px;
+  font-family: var(--font-body);
+  font-size: 0.8438rem;
+  font-weight: 600;
+  border-radius: 100px;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.partner-detail-modal__btn-close:hover {
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  border-color: var(--color-secondary);
+}
+
+
+
+/* Form elements used in modal */
+
+
+/* Form Card */
+.partner-inquiry__form-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 36px 36px;
+  box-shadow: 0 8px 30px rgba(11, 42, 74, 0.08);
+}
+
+.partner-inquiry__form-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--color-primary);
+  margin: 0 0 6px;
+}
+
+.partner-inquiry__form-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin: 0 0 24px;
+}
+
+.partner-inquiry__field-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.partner-inquiry__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.partner-inquiry__field label {
+  font-family: var(--font-body);
+  font-size: 0.7813rem;
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+}
+
+.partner-inquiry__field input,
+.partner-inquiry__field select,
+.partner-inquiry__field textarea {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  background-color: #F8FAFC;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.partner-inquiry__field input:focus,
+.partner-inquiry__field select:focus,
+.partner-inquiry__field textarea:focus {
+  border-color: var(--color-secondary);
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(13, 138, 138, 0.15);
+}
+
+.partner-inquiry__submit-btn {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: var(--weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 3px 12px rgba(13, 138, 138, 0.30);
+  transition: background-color var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+}
+
+.partner-inquiry__submit-btn:hover {
+  background-color: var(--color-secondary-dark);
+  box-shadow: 0 6px 20px rgba(13, 138, 138, 0.40);
+  transform: translateY(-1px);
+}
+
+/* Success Toast */
+.partner-inquiry__success {
+  text-align: center;
+  padding: 36px 20px;
+}
+
+.partner-inquiry__success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #E8F4F4;
+  color: var(--color-secondary);
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.partner-inquiry__success-heading {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--color-primary);
+  margin: 0 0 8px;
+}
+
+.partner-inquiry__success-text {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 20px;
+}
+
+.partner-inquiry__btn-reset {
+  background: none;
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  padding: 8px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.partner-inquiry__btn-reset:hover {
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+}
+
+
+/* ====================================================
+   6. PARTNER WITH US INQUIRY MODAL
+   ==================================================== */
+
+.partner-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background-color: rgba(2, 22, 50, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: partnerFadeIn 0.25s ease-out;
+}
+
+.partner-modal {
+  position: relative;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(2, 22, 50, 0.25);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: partnerModalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes partnerFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes partnerModalScaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.partner-modal__close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #F0F4F8;
+  border: 1px solid #E2E8F0;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.partner-modal__close-btn:hover {
+  background-color: var(--color-secondary);
+  color: #FFFFFF;
+  border-color: var(--color-secondary);
+  transform: rotate(90deg);
+}
+
+.partner-modal__header {
+  padding: 32px 32px 18px;
+  padding-right: 68px;
+  border-bottom: 1px solid #EDF2F7;
+  background-color: #FFFFFF;
+}
+
+.partner-modal__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.partner-modal__title {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  color: var(--color-primary);
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+
+.partner-modal__subtitle {
+  font-family: var(--font-body);
+  font-size: 0.8438rem;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.partner-modal__body {
+  padding: 24px 32px 32px;
+  overflow-y: auto;
+}
+
+
+/* ====================================================
+   RESPONSIVE BREAKPOINTS
+   ==================================================== */
+
+
+@media (max-width: 1024px) {
+  .partner-ecosystem__card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .partner-ecosystem__col:nth-child(3) {
+    border-right: none;
+  }
+
+  .partner-ecosystem__col:nth-child(-n+3) {
+    border-bottom: 1px solid #EDF2F7;
+  }
+
+  .partner-strategic__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .partner-hero {
+    padding-top: 64px;
+    min-height: auto;
+  }
+
+  .partner-hero__image-wrapper {
+    position: relative;
+    order: 2;
+    width: calc(100% - 2 * var(--container-padding));
+    margin: 0 auto 20px;
+    height: 220px;
+    border-radius: 16px;
+  }
+
+  .partner-hero__overlay {
+    display: none;
+  }
+
+  .partner-hero__container {
+    order: 1;
+    padding: 20px var(--container-padding) 16px;
+  }
+
+  .partner-hero__content {
+    max-width: 100%;
+  }
+
+  .partner-hero__heading {
+    font-size: clamp(1.75rem, 6vw, 2.1rem);
+    margin-bottom: 12px;
+  }
+
+  .partner-ecosystem {
+    padding: 32px 0 24px;
+  }
+
+  .partner-ecosystem__header {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .partner-ecosystem__card {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-ecosystem__col {
+    border-right: none;
+    border-bottom: 1px solid #EDF2F7;
+    padding: 20px 18px;
+  }
+
+  .partner-ecosystem__col--last {
+    border-bottom: none;
+  }
+
+  .partner-strategic {
+    padding: 32px 0 36px;
+  }
+
+  .partner-strategic__header {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .partner-strategic__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 14px;
+  }
+
+  .partner-strategic__logo-card {
+    height: 96px;
+    padding: 12px 16px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .partner-hero__container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .partner-hero__heading {
+    font-size: clamp(1.6rem, 7.5vw, 1.95rem);
+  }
+
+  .partner-hero__btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .partner-hero__actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+

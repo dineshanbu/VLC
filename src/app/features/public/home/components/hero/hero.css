@@ -1,0 +1,323 @@
+/* ============================================
+   HERO BANNER — Balanced Reference Proportions
+   Vaccine Industrial Company
+   ============================================ */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 530px;
+  min-height: 490px;
+  max-height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+
+/* ==========================================
+   FULL BACKGROUND MASTER BANNER (home_banner.png)
+   ========================================== */
+
+.hero__image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* height: 100%; */
+  z-index: var(--z-base);
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 80% center;
+  display: block;
+}
+
+/* Subtle, smooth horizontal readability gradient */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(255, 255, 255, 0.80) 24%,
+    rgba(255, 255, 255, 0.38) 38%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+
+/* ==========================================
+   CONTENT (Left Side on Desktop)
+   ========================================== */
+
+.hero__container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  padding-top: calc(78px + 20px);
+  padding-bottom: var(--space-32);
+}
+
+.hero__content {
+  max-width: 460px;
+}
+
+
+/* ==========================================
+   HEADING (Balanced Middle Ground Scale)
+   ========================================== */
+
+.hero__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.45rem, 2.8vw, 2.85rem); /* ~39px–44px */
+  font-weight: var(--weight-regular);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-16);
+}
+
+.hero__heading-line {
+  display: block;
+}
+
+.hero__heading-accent {
+  color: var(--color-secondary);
+}
+
+
+/* ==========================================
+   DESCRIPTION (Subtly Increased for Readability)
+   ========================================== */
+
+.hero__description {
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 0.15vw + 0.9rem, 1rem); /* 15px–16px */
+  font-weight: var(--weight-regular);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-32); /* 32px breathing space above button */
+  max-width: 420px;
+}
+
+
+/* ==========================================
+   CTA BUTTON (Compact Matching Original)
+   ========================================== */
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.hero__btn-video {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 18px;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* 14px */
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.hero__btn-video:hover {
+  background-color: rgba(11, 42, 74, 0.04);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hidden on desktop, visible on mobile */
+.hero__btn-lead-icon {
+  display: none;
+}
+
+.hero__btn-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero__play-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  color: var(--color-secondary);
+  flex-shrink: 0;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    transform var(--transition-base);
+}
+
+.hero__btn-video:hover .hero__play-icon {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  transform: scale(1.08);
+}
+
+
+/* ==========================================
+   RESPONSIVE — Laptop (1025px–1366px)
+   ========================================== */
+
+@media (max-width: 1366px) {
+  .hero {
+    height: 500px;
+  }
+
+  .hero__content {
+    max-width: 420px;
+  }
+}
+
+
+/* ==========================================
+   RESPONSIVE — Tablet & Mobile (≤1024px)
+   KEPT 100% UNCHANGED AS REQUESTED
+   ========================================== */
+
+@media (max-width: 1024px) {
+  .hero {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-top: 60px;
+    background-color: var(--color-surface);
+  }
+
+  /* 1. Building Image */
+  .hero__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 48vh;
+    min-height: 300px;
+    max-height: 400px;
+    order: 1;
+  }
+
+  .hero__image {
+    object-position: 84% center;
+  }
+
+  /* Bottom fade transition into white section */
+  .hero__overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.30) 68%,
+      rgba(255, 255, 255, 0.75) 85%,
+      rgba(255, 255, 255, 0.95) 94%,
+      var(--color-surface) 100%
+    );
+  }
+
+  /* 2. Content below image */
+  .hero__container {
+    order: 2;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-36);
+    padding-left: var(--space-20);
+    padding-right: var(--space-20);
+    background-color: var(--color-surface);
+    margin-top: -24px;
+  }
+
+  .hero__content {
+    max-width: 100%;
+  }
+
+  .hero__heading {
+    font-size: clamp(2rem, 7.5vw, 2.45rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-16);
+  }
+
+  .hero__description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-24);
+    max-width: 100%;
+  }
+
+  /* 3. Full-width action button on mobile */
+  .hero__actions {
+    width: 100%;
+  }
+
+  .hero__btn-video {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-16);
+    border-radius: var(--radius-full);
+  }
+
+  .hero__btn-lead-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+  }
+
+  .hero__play-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+
+/* ==========================================
+   RESPONSIVE — Small Mobile (<480px)
+   KEPT 100% UNCHANGED AS REQUESTED
+   ========================================== */
+
+@media (max-width: 480px) {
+  .hero__image-wrapper {
+    height: 45vh;
+    min-height: 270px;
+    max-height: 330px;
+  }
+
+  .hero__container {
+    padding-left: var(--space-16);
+    padding-right: var(--space-16);
+    padding-bottom: var(--space-32);
+  }
+
+  .hero__heading {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+}

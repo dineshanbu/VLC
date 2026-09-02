@@ -1,0 +1,265 @@
+/* ============================================
+   VIC FOOTER — DESIGN SYSTEM
+   Vaccine Industrial Company
+   ============================================ */
+
+.footer {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #021632;
+  color: var(--color-text-inverse);
+  padding-top: var(--space-64);
+  padding-bottom: var(--space-32);
+}
+
+.footer__container {
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* 3 Columns Balanced Grid (Brand, Quick Links, Contact) */
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1.25fr 1.4fr;
+  gap: var(--space-48);
+  align-items: flex-start;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Column */
+.footer__col--brand {
+  padding-right: var(--space-16);
+}
+
+.footer__logo-link {
+  display: inline-block;
+  margin-bottom: var(--space-16);
+  text-decoration: none;
+}
+
+.footer__logo {
+  height: 42px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+}
+
+.footer__brand-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 var(--space-24) 0;
+}
+
+/* Social Media Icons */
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color var(--transition-base), transform var(--transition-fast);
+}
+
+.footer__social-link:hover {
+  color: #27DBD2;
+  transform: translateY(-2px);
+}
+
+/* Column Heading */
+.footer__heading {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  color: #27DBD2;
+  margin: 0 0 var(--space-16) 0;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation Links List */
+.footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* 2-Column Grid for the 7 Main Page Links */
+.footer__list--nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-12) var(--space-28);
+}
+
+.footer__link {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: color var(--transition-base), transform var(--transition-fast);
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.footer__link:hover {
+  color: #FFFFFF;
+  transform: translateX(2px);
+}
+
+/* Contact Column */
+.footer__col--contact {
+  padding-left: var(--space-8);
+}
+
+.footer__contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.footer__contact-icon {
+  flex-shrink: 0;
+  color: #27DBD2;
+  margin-top: 2px;
+}
+
+.footer__contact-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.footer__contact-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.footer__contact-link:hover {
+  color: #27DBD2;
+}
+
+/* Bottom Bar */
+.footer__bottom {
+  margin-top: var(--space-48);
+  padding-top: var(--space-20);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__copyright {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* ---- Tablet (<= 1024px) ---- */
+@media (max-width: 1024px) {
+  .footer {
+    padding-top: var(--space-48);
+    padding-bottom: var(--space-32);
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-36) var(--space-32);
+  }
+
+  .footer__col--brand {
+    grid-column: span 2;
+    max-width: 500px;
+    padding-right: 0;
+  }
+
+  .footer__col--nav {
+    grid-column: span 1;
+  }
+
+  .footer__col--contact {
+    grid-column: span 1;
+    padding-left: 0;
+  }
+
+  .footer__list--nav {
+    gap: var(--space-12) var(--space-16);
+  }
+}
+
+/* ---- Mobile (<= 640px) ---- */
+@media (max-width: 640px) {
+  .footer {
+    padding-top: var(--space-36);
+    padding-bottom: var(--space-24);
+    overflow-x: hidden;
+  }
+
+  .footer__container {
+    padding: 0 var(--space-20);
+    max-width: 100%;
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+  }
+
+  .footer__col--brand,
+  .footer__col--nav,
+  .footer__col--contact {
+    grid-column: span 1;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* 2-Column Balanced Link Grid on Mobile */
+  .footer__list--nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-12) var(--space-16);
+  }
+
+  .footer__bottom {
+    margin-top: var(--space-24);
+    text-align: center;
+    justify-content: center;
+  }
+}

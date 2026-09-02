@@ -1,0 +1,416 @@
+/* ============================================
+   NAVBAR — Prominent Logo Proportions
+   Vaccine Industrial Company
+   ============================================ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
+  height: 86px;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  transition:
+    background-color var(--transition-base),
+    box-shadow var(--transition-base),
+    height var(--transition-base);
+}
+
+.navbar--scrolled {
+  box-shadow: var(--shadow-sm);
+  height: 72px;
+}
+
+.navbar__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--container-content);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+
+/* ==========================================
+   LOGO (Enhanced Scale for Prominent Visual Presence)
+   ========================================== */
+
+.navbar__logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar__logo-img {
+  height: 66px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: height var(--transition-base);
+}
+
+.navbar--scrolled .navbar__logo-img {
+  height: 54px;
+}
+
+
+
+/* ==========================================
+   DESKTOP NAV LINKS (Refined Typography)
+   ========================================== */
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 var(--space-12);
+}
+
+.navbar__link {
+  font-family: var(--font-body);
+  font-size: var(--text-small); /* 0.875rem / 14px */
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: var(--radius-md);
+  transition:
+    color var(--transition-base),
+    background-color var(--transition-base);
+  white-space: nowrap;
+}
+
+.navbar__link:hover {
+  color: var(--color-secondary);
+  background-color: rgba(13, 138, 138, 0.05);
+}
+
+.navbar__link--active {
+  color: var(--color-secondary);
+  font-weight: var(--weight-semibold);
+}
+
+
+/* ==========================================
+   RIGHT ACTIONS (Language + CTA Button)
+   ========================================== */
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  flex-shrink: 0;
+}
+
+
+/* ==========================================
+   LANGUAGE SWITCHER
+   ========================================== */
+
+.navbar__lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small); /* 0.875rem / 14px */
+}
+
+.navbar__lang-btn {
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-base);
+}
+
+.navbar__lang-btn:hover {
+  color: var(--color-secondary);
+}
+
+.navbar__lang-btn--active {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.navbar__lang-separator {
+  color: var(--color-border-dark);
+  font-size: 0.8125rem;
+  user-select: none;
+}
+
+
+/* ==========================================
+   CTA BUTTON (Compact Navy Pill)
+   ========================================== */
+
+.navbar__cta {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 0.8125rem; /* 13px */
+  letter-spacing: 0.02em;
+}
+
+
+/* ==========================================
+   HAMBURGER (Mobile)
+   ========================================== */
+
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: calc(var(--z-modal) + 1);
+}
+
+.navbar__hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition:
+    transform var(--transition-base),
+    opacity var(--transition-base);
+}
+
+.navbar__hamburger--open .navbar__hamburger-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__hamburger--open .navbar__hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__hamburger--open .navbar__hamburger-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ==========================================
+   MOBILE DRAWER OVERLAY
+   ========================================== */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background-color: rgba(11, 42, 74, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeIn var(--transition-fast) ease forwards;
+}
+
+.mobile-menu__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(85vw, 360px);
+  height: 100%;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: slideInRight var(--transition-base) ease forwards;
+}
+
+.mobile-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-16) var(--space-20);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.mobile-menu__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.mobile-menu__close:hover {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.mobile-menu__links {
+  list-style: none;
+  padding: var(--space-8) 0;
+  margin: 0;
+  flex: 1;
+}
+
+.mobile-menu__link {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: 12px var(--space-20);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.mobile-menu__link:hover {
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+}
+
+.mobile-menu__link--active {
+  color: var(--color-secondary);
+  background-color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.mobile-menu__lang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-12);
+  padding: var(--space-16) var(--space-20);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.mobile-menu__lang-btn {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-md);
+}
+
+.mobile-menu__lang-btn--active {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+  background-color: var(--color-accent);
+}
+
+.mobile-menu__lang-separator {
+  color: var(--color-text-light);
+  user-select: none;
+}
+
+.mobile-menu__cta {
+  margin: var(--space-8) var(--space-20) var(--space-20);
+  height: 40px;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (min-width: 1025px) {
+  .navbar__hamburger { display: none; }
+}
+
+@media (max-width: 1200px) {
+  .navbar__links {
+    gap: 0;
+    padding: 0 var(--space-8);
+  }
+
+  .navbar__link {
+    padding: 5px 9px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    height: 72px;
+  }
+
+  .navbar__logo-img {
+    height: 50px;
+  }
+
+  .navbar__links,
+  .navbar__cta {
+    display: none;
+  }
+
+  .navbar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-left: auto;
+    margin-right: var(--space-12);
+  }
+
+  .navbar__hamburger {
+    display: flex;
+  }
+
+  .mobile-menu__header .navbar__logo-img {
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar__container {
+    padding: 0 var(--space-16);
+  }
+
+  .navbar__logo-img {
+    height: 44px;
+  }
+
+  .navbar__right {
+    gap: var(--space-8);
+    margin-right: var(--space-8);
+  }
+
+  .mobile-menu__panel {
+    width: 100vw;
+  }
+}
+
