@@ -1,0 +1,228 @@
+.login-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 20%, #0B2A4A 0%, #071E36 100%);
+  padding: 1.5rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 2.5rem 2.25rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-brand-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 1rem auto;
+}
+
+.vic-icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0B2A4A;
+  margin: 0 0 0.35rem 0;
+}
+
+.login-subtitle {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.login-alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  color: #DC2626;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #0B2A4A;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.input-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #0B2A4A;
+  outline: none;
+  transition: all 0.2s;
+  background: #F8FAFC;
+}
+
+.form-control:focus {
+  border-color: #0D8A8A;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(13, 138, 138, 0.15);
+}
+
+.btn-toggle-pw {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle-pw:hover {
+  color: #0B2A4A;
+}
+
+.demo-hint-box {
+  background: #F0FDF4;
+  border: 1px dashed #86EFAC;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #166534;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hint-title {
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.btn-login-submit {
+  background: linear-gradient(135deg, #0B2A4A 0%, #0D8A8A 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(11, 42, 74, 0.2);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-login-submit:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(11, 42, 74, 0.28);
+}
+
+.btn-login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.login-footer-links {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.back-link {
+  font-size: 0.825rem;
+  color: #0D8A8A;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+  color: #0B2A4A;
+}

@@ -1,1 +1,245 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard-page">
+  
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">Executive Dashboard</h1>
+      <p class="page-subtitle">Overview of Vaccine Industrial Company platform operations, inquiries & digital assets</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="loadDashboardData()" [disabled]="isLoading()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Refresh Data
+      </button>
+      <a routerLink="/admin/news" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Article
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner-large"></div>
+      <p>Loading analytics and platform telemetry...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="error-banner">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>{{ errorMessage() }}</span>
+      <button class="btn btn-sm btn-outline" (click)="loadDashboardData()">Try Again</button>
+    </div>
+  } @else if (data()) {
+
+    <!-- KPI STATS GRID -->
+    <div class="stats-grid">
+      
+      <!-- Card 1: Contact Inquiries -->
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-content">
+            <span class="stat-label">Contact Inquiries</span>
+            <div class="stat-value-group">
+              <span class="stat-number">{{ data()?.stats?.totalInquiries || 0 }}</span>
+              @if (data()?.stats?.newInquiries && data()?.stats?.newInquiries! > 0) {
+                <span class="stat-badge new-badge">{{ data()?.stats?.newInquiries }} New</span>
+              }
+            </div>
+            <span class="stat-trend text-teal">From public contact portal</span>
+          </div>
+          <div class="stat-icon-wrapper teal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <a routerLink="/admin/contacts" class="stat-footer-link">Manage Inquiries &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 2: News Articles -->
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-content">
+            <span class="stat-label">Published News</span>
+            <div class="stat-value-group">
+              <span class="stat-number">{{ data()?.stats?.totalNews || 0 }}</span>
+              <span class="stat-badge success-badge">{{ data()?.stats?.publishedNews || 0 }} Active</span>
+            </div>
+            <span class="stat-trend text-primary">Biotech press & updates</span>
+          </div>
+          <div class="stat-icon-wrapper navy-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m4 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9"/>
+              <path d="M9 9h4m-4 4h4m-4 4h2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <a routerLink="/admin/news" class="stat-footer-link">Manage Articles &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 3: Media Uploads -->
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-content">
+            <span class="stat-label">Media & Uploads</span>
+            <div class="stat-value-group">
+              <span class="stat-number">{{ data()?.stats?.totalMedia || 0 }}</span>
+            </div>
+            <span class="stat-trend text-muted">Photos, PDFs & Documents</span>
+          </div>
+          <div class="stat-icon-wrapper purple-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <a routerLink="/admin/media" class="stat-footer-link">Asset Library &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 4: Platform Users -->
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-content">
+            <span class="stat-label">Admin Accounts</span>
+            <div class="stat-value-group">
+              <span class="stat-number">{{ data()?.stats?.totalUsers || 0 }}</span>
+            </div>
+            <span class="stat-trend text-success">Active credentials</span>
+          </div>
+          <div class="stat-icon-wrapper green-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <a routerLink="/admin/users" class="stat-footer-link">User Accounts &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAIN TWO COLUMN SECTION -->
+    <div class="dashboard-grid-row">
+      
+      <!-- Recent Contact Inquiries -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-header-titles">
+            <h2 class="card-title">Recent Contact Inquiries</h2>
+            <span class="card-subtitle">Latest messages submitted through the website</span>
+          </div>
+          <a routerLink="/admin/contacts" class="btn btn-sm btn-ghost">View All</a>
+        </div>
+
+        <div class="card-body p-0">
+          @if (data()?.recentInquiries?.length === 0) {
+            <div class="empty-state-card">
+              <p>No contact inquiries submitted yet.</p>
+            </div>
+          } @else {
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Sender</th>
+                    <th>Company / Subject</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (inquiry of data()?.recentInquiries; track inquiry.id) {
+                    <tr>
+                      <td>
+                        <div class="user-meta">
+                          <span class="user-main-name">{{ inquiry.full_name }}</span>
+                          <span class="user-sub-email">{{ inquiry.email }}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="subject-meta">
+                          <span class="subject-title">{{ inquiry.subject }}</span>
+                          @if (inquiry.company) {
+                            <span class="subject-company">{{ inquiry.company }}</span>
+                          }
+                        </div>
+                      </td>
+                      <td>
+                        <span class="status-badge" [class.badge-new]="inquiry.status === 'New'" [class.badge-progress]="inquiry.status === 'In Progress'" [class.badge-resolved]="inquiry.status === 'Resolved'">
+                          {{ inquiry.status }}
+                        </span>
+                      </td>
+                      <td class="text-nowrap text-muted text-small">
+                        {{ inquiry.created_at | date:'mediumDate' }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Recent News & Quick Actions -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-header-titles">
+            <h2 class="card-title">Recent News & Articles</h2>
+            <span class="card-subtitle">Active press releases and announcements</span>
+          </div>
+          <a routerLink="/admin/news" class="btn btn-sm btn-ghost">Manage</a>
+        </div>
+
+        <div class="card-body">
+          <div class="news-mini-list">
+            @for (article of data()?.recentNews; track article.id) {
+              <div class="news-mini-item">
+                <div class="news-mini-badge">{{ article.category }}</div>
+                <div class="news-mini-content">
+                  <h4 class="news-mini-title">{{ article.title }}</h4>
+                  <span class="news-mini-date">{{ article.formatted_date || article.date_str }}</span>
+                </div>
+                <span class="status-pill" [class.published]="article.status === 'Published'">
+                  {{ article.status }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <!-- Quick System Banner -->
+          <div class="quick-system-info">
+            <div class="info-row">
+              <span class="info-key">XAMPP MySQL Status:</span>
+              <span class="info-val text-success">● Connected (vic_db)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">Backend Node API:</span>
+              <span class="info-val">http://localhost:5000/api</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  }
+</div>

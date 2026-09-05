@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -40,12 +40,119 @@ export interface StrategicPartner {
   templateUrl: './partners.html',
   styleUrl: './partners.css'
 })
-export class PartnersComponent {
+export class PartnersComponent implements OnInit, OnDestroy {
   // Partnership Inquiry Modal State
   isInquiryModalOpen = false;
 
   // Active category filter for alliances
   selectedCategory = 'all';
+
+  // Ecosystem Carousel State & 2-Second Autoplay
+  ecosystemIndex = 0;
+  ecosystemCardsPerView = 3;
+  private ecosystemAutoPlayTimer: any = null;
+  private ecosystemTouchStartX = 0;
+  private ecosystemTouchEndX = 0;
+
+  ngOnInit(): void {
+    this.updateEcosystemCardsPerView();
+    this.startEcosystemAutoPlay();
+  }
+
+  ngOnDestroy(): void {
+    this.stopEcosystemAutoPlay();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateEcosystemCardsPerView();
+  }
+
+  private updateEcosystemCardsPerView(): void {
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      if (width <= 640) {
+        this.ecosystemCardsPerView = 1;
+      } else if (width <= 1024) {
+        this.ecosystemCardsPerView = 2;
+      } else {
+        this.ecosystemCardsPerView = 3;
+      }
+      if (this.ecosystemIndex > this.maxEcosystemIndex) {
+        this.ecosystemIndex = this.maxEcosystemIndex;
+      }
+    }
+  }
+
+  get maxEcosystemIndex(): number {
+    return Math.max(0, this.ecosystemItems.length - this.ecosystemCardsPerView);
+  }
+
+  get ecosystemPages(): number[] {
+    return Array.from({ length: this.maxEcosystemIndex + 1 }, (_, i) => i);
+  }
+
+  startEcosystemAutoPlay(): void {
+    this.stopEcosystemAutoPlay();
+    if (typeof window !== 'undefined') {
+      this.ecosystemAutoPlayTimer = setInterval(() => {
+        if (!this.isInquiryModalOpen && !this.isPartnerModalOpen) {
+          this.nextEcosystem();
+        }
+      }, 2000);
+    }
+  }
+
+  stopEcosystemAutoPlay(): void {
+    if (this.ecosystemAutoPlayTimer) {
+      clearInterval(this.ecosystemAutoPlayTimer);
+      this.ecosystemAutoPlayTimer = null;
+    }
+  }
+
+  prevEcosystem(): void {
+    if (this.ecosystemIndex > 0) {
+      this.ecosystemIndex--;
+    } else {
+      this.ecosystemIndex = this.maxEcosystemIndex;
+    }
+    this.startEcosystemAutoPlay();
+  }
+
+  nextEcosystem(): void {
+    if (this.ecosystemIndex < this.maxEcosystemIndex) {
+      this.ecosystemIndex++;
+    } else {
+      this.ecosystemIndex = 0;
+    }
+  }
+
+  goToEcosystem(index: number): void {
+    this.ecosystemIndex = Math.min(Math.max(0, index), this.maxEcosystemIndex);
+    this.startEcosystemAutoPlay();
+  }
+
+  onEcosystemTouchStart(event: TouchEvent): void {
+    this.stopEcosystemAutoPlay();
+    this.ecosystemTouchStartX = event.changedTouches[0].screenX;
+  }
+
+  onEcosystemTouchEnd(event: TouchEvent): void {
+    this.ecosystemTouchEndX = event.changedTouches[0].screenX;
+    const diff = this.ecosystemTouchStartX - this.ecosystemTouchEndX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        this.nextEcosystem();
+      } else {
+        this.prevEcosystem();
+      }
+    }
+    this.startEcosystemAutoPlay();
+  }
+
+  trackByTitle(_: number, item: EcosystemItem): string {
+    return item.titleLine1 + item.titleLine2;
+  }
 
   // Inquiry Form Model
   inquiryForm = {

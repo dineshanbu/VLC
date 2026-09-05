@@ -37,8 +37,14 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+vic.zip
+*.zip
+.env
+*.env
+backend/node_modules/
+backend/uploads/*
+!backend/uploads/.gitkeep
 
 # System files
 .DS_Store
 Thumbs.db
-*.zip

@@ -1,46 +1,182 @@
-<section class="hero">
+<section class="hero-wrapper">
 
-  <!-- Background Master Banner Image (IMAGE 3) -->
-  <div class="hero__image-wrapper">
-    <img
-      src="home_banner.png"
-      alt="VIC Manufacturing Facility — State-of-the-art vaccine production center"
-      class="hero__image"
-    />
-    <div class="hero__overlay"></div>
-  </div>
+  <!-- ============================================
+       HERO BANNER
+       ============================================ -->
+  <div class="hero">
 
-  <!-- Content Section -->
-  <div class="hero__container">
-    <div class="hero__content">
+    <!-- Background Media (Right Video + Atmospheric Left Diffuse Fade) -->
+    <div class="hero__media-wrapper">
+      <video
+        #heroVideo
+        class="hero__video"
+        [class.hero__video--loaded]="isVideoLoaded()"
+        src="banner.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+        (canplay)="onVideoCanPlay()"
+      ></video>
 
-      <h1 class="hero__heading">
-        <span class="hero__heading-line">Protecting Lives.</span>
-        <span class="hero__heading-line">Building</span>
-        <span class="hero__heading-line">Healthier <span class="hero__heading-accent">Futures.</span></span>
-      </h1>
+      <!-- Overall Left Atmospheric Diffuse Fade Overlay (Matching media_1788428963969.png) -->
+      <div class="hero__gradient-overlay" aria-hidden="true"></div>
 
-      <p class="hero__description">
-        Saudi Arabia's next-generation vaccine manufacturing company, advancing innovation, localization and global health.
-      </p>
+      <!-- Soft Cyan/Teal Ambient Glow Aura (Bottom-Left & Behind Text) -->
+      <div class="hero__ambient-glow" aria-hidden="true"></div>
 
-      <div class="hero__actions">
-        <button class="btn btn-secondary hero__btn-video" type="button" (click)="scrollToVideo()">
-          <span class="hero__btn-lead-icon">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="6 4 20 12 6 20 6 4"></polygon>
-            </svg>
-          </span>
-          <span class="hero__btn-label">Watch Corporate Video</span>
-          <span class="hero__play-icon">
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="7 4 19 12 7 20 7 4"></polygon>
-            </svg>
-          </span>
-        </button>
+      <!-- Glowing Arched Optical Curves (Flowing Across Bottom-Left Road) -->
+      <div class="hero__flowing-curves" aria-hidden="true">
+        <svg viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="curveGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#00E5C9" stop-opacity="0.6" />
+              <stop offset="50%" stop-color="#0D8A8A" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#0B2A4A" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path class="hero__curve-path hero__curve-path--1" d="M -60,370 C 140,350 260,270 460,305 C 580,325 680,285 820,245" stroke="url(#curveGlowGrad)" stroke-width="1.8" />
+          <path class="hero__curve-path hero__curve-path--2" d="M -40,395 C 180,375 320,290 540,315 C 660,330 740,300 880,260" stroke="url(#curveGlowGrad)" stroke-width="2.2" />
+          <path class="hero__curve-path hero__curve-path--3" d="M -20,415 C 220,395 380,310 600,325 C 720,340 800,310 940,270" stroke="url(#curveGlowGrad)" stroke-width="1.4" />
+        </svg>
       </div>
 
+      <!-- Floating Glowing Light Sparks/Particles -->
+      <div class="hero__particles" aria-hidden="true">
+        <span class="hero__particle hero__particle--1"></span>
+        <span class="hero__particle hero__particle--2"></span>
+        <span class="hero__particle hero__particle--3"></span>
+        <span class="hero__particle hero__particle--4"></span>
+      </div>
     </div>
+
+    <!-- Main Container: Left Content -->
+    <div class="hero__container">
+      <div class="hero__content">
+
+        <div class="hero__text-box">
+          
+          <!-- Heading in DM Serif Display with Sequential Reveal -->
+          <h1 class="hero__heading">
+            <span class="hero__heading-line hero__heading-line--1">{{ titleLine1 }}</span>
+            <span class="hero__heading-line hero__heading-line--2">{{ titleLine2 }}</span>
+            <span class="hero__heading-line hero__heading-line--3">
+              {{ titleLine3Prefix }}<span class="hero__heading-accent">{{ titleAccent }}</span>
+            </span>
+          </h1>
+
+          <!-- Teal Accent Divider Line Under Heading -->
+          <div class="hero__heading-divider" aria-hidden="true"></div>
+
+          <!-- Description Paragraph -->
+          <p class="hero__description">
+            {{ description }}
+          </p>
+
+          <!-- Watch Corporate Video Pill Button (Circle Play Badge on Right) -->
+          <div class="hero__actions">
+            <button
+              type="button"
+              class="hero__btn-video"
+              (click)="openVideoModal()"
+              aria-label="Watch Corporate Video"
+            >
+              <span class="hero__btn-label">Watch Corporate Video</span>
+              <span class="hero__play-icon-circle">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="7 4 19 12 7 20 7 4"></polygon>
+                </svg>
+                <span class="hero__play-pulse-ring" aria-hidden="true"></span>
+              </span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Fluid Sweeping Curved Teal Wave Ribbon (Mela Poitu Varamathiri Crest) -->
+    <div class="hero__wave-wrapper" aria-hidden="true">
+      <svg
+        class="hero__wave-svg"
+        viewBox="0 0 1440 120"
+        fill="none"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="singleTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00C9A7" />
+            <stop offset="35%" stop-color="#00E5C9" />
+            <stop offset="70%" stop-color="#0D8A8A" />
+            <stop offset="100%" stop-color="#075E60" />
+          </linearGradient>
+        </defs>
+
+        <!-- Wave Ribbon Sweeping Up & Coming Down ("Mela poitu varamathiri") -->
+        <path
+          d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+          fill="url(#singleTealWaveGrad)"
+        />
+
+        <!-- Clean Seamless White Section Base -->
+        <path
+          d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+          fill="#FFFFFF"
+        />
+      </svg>
+    </div>
+
   </div>
+
+  <!-- ============================================
+       CORPORATE VIDEO MODAL
+       ============================================ -->
+  @if (isModalOpen()) {
+    <div
+      class="hero-video-modal"
+      (click)="closeVideoModal()"
+      (keydown)="onModalKeydown($event)"
+      tabindex="0"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Corporate Video Player"
+    >
+      <div class="hero-video-modal__backdrop"></div>
+
+      <div class="hero-video-modal__dialog" (click)="$event.stopPropagation()">
+        <div class="hero-video-modal__header">
+          <div class="hero-video-modal__header-left">
+            <span class="hero-video-modal__tag">VACCINE INDUSTRIAL COMPANY</span>
+            <h2 class="hero-video-modal__title">Corporate Overview</h2>
+          </div>
+          <button
+            type="button"
+            class="hero-video-modal__close-btn"
+            (click)="closeVideoModal()"
+            aria-label="Close video"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="hero-video-modal__player">
+          <video
+            #modalVideo
+            class="hero-video-modal__video"
+            src="banner.mp4"
+            controls
+            playsinline
+            preload="auto"
+          ></video>
+        </div>
+      </div>
+    </div>
+  }
 
 </section>

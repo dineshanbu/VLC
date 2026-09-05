@@ -1,1 +1,1 @@
-// VIC Shared Pipes - barrel export
+export * from './asset-url.pipe';

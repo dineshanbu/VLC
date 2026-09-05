@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminAuthGuard } from './core/guards/admin-auth.guard';
 
 export const routes: Routes = [
   // ==========================================
@@ -63,10 +64,20 @@ export const routes: Routes = [
   },
 
   // ==========================================
-  // ADMIN ROUTES
+  // ADMIN AUTH ROUTE
+  // ==========================================
+  {
+    path: 'admin/login',
+    loadComponent: () =>
+      import('./features/admin/auth/login/login').then(m => m.AdminLoginComponent),
+  },
+
+  // ==========================================
+  // ADMIN PORTAL ROUTES (GUARDED)
   // ==========================================
   {
     path: 'admin',
+    canActivate: [adminAuthGuard],
     loadComponent: () =>
       import('./layouts/admin-layout/admin-layout').then(m => m.AdminLayoutComponent),
     children: [
@@ -81,10 +92,10 @@ export const routes: Routes = [
           import('./features/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent),
       },
       {
-        path: 'content',
+        path: 'users',
         loadComponent: () =>
-          import('./features/admin/content-management/content-management').then(
-            m => m.ContentManagementComponent
+          import('./features/admin/user-management/user-management').then(
+            m => m.UserManagementComponent
           ),
       },
       {
@@ -92,6 +103,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/news-management/news-management').then(
             m => m.NewsManagementComponent
+          ),
+      },
+      {
+        path: 'media',
+        loadComponent: () =>
+          import('./features/admin/media-management/media-management').then(
+            m => m.MediaManagementComponent
+          ),
+      },
+      {
+        path: 'contacts',
+        loadComponent: () =>
+          import('./features/admin/contact-management/contact-management').then(
+            m => m.ContactManagementComponent
           ),
       },
       {

@@ -26,26 +26,17 @@
         </div>
       </div>
 
-      <!-- Right Media Column (57%) — Real Autoplaying YouTube Video -->
+      <!-- Right Media Column (57%) — Pure Native Autoplaying Looping Video -->
       <div class="about-vic__media">
-        <div class="about-vic__video-wrapper">
-          <iframe
-            [src]="bgVideoUrl"
-            title="VIC Corporate Video"
-            class="about-vic__iframe"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            (load)="onIframeLoad($event)"
-          ></iframe>
-        </div>
-
-        <!-- Visual Play Button Overlay (Matching Reference Design) -->
-        <div class="about-vic__play" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="7 4 19 12 7 20 7 4"></polygon>
-          </svg>
-        </div>
+        <video
+          class="about-vic__video"
+          src="about.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+        ></video>
       </div>
 
     </div>

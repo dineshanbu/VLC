@@ -1,1 +1,1 @@
-// VIC Core Guards - barrel export
+export * from './admin-auth.guard';

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,8 @@ import {
   PRESS_RELEASES,
   NEWS_CATEGORIES
 } from '../../../core/data/news-data';
+import { NewsService } from '../../../core/services/news.service';
+import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-news',
@@ -18,34 +20,38 @@ import {
   styleUrl: './news.css'
 })
 export class NewsComponent implements OnInit {
-  // Category Filtering - matching Image 1 + "MOU"
+  private newsService = inject(NewsService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  getImageUrl(url?: string | null): string {
+    return resolveImageUrl(url);
+  }
+
+  // Category Filtering
   selectedCategory = signal<string>('All');
   searchQuery = signal<string>('');
   showAllNews = signal<boolean>(false);
   showAllPressReleases = signal<boolean>(false);
 
-  // Newsletter Subscription state (matching uploaded design)
+  // Newsletter Subscription state
   newsletterEmail = signal<string>('');
   newsletterSubscribed = signal<boolean>(false);
 
   // Download notification toast
   downloadNotice = signal<string | null>(null);
 
-  // Categories matching Image 1 plus "MOU" as requested
   readonly categories = NEWS_CATEGORIES;
 
-  // All 11 Authentic News Articles fetched from https://vaccine.com.sa/news/
-  readonly articles: NewsArticle[] = NEWS_ARTICLES;
+  // Dynamic articles signal with static fallback
+  articlesSignal = signal<NewsArticle[]>(NEWS_ARTICLES);
 
-  // Press Releases Dataset (Matching Image 2 bottom row)
+  // Press Releases Dataset
   readonly pressReleases: PressRelease[] = PRESS_RELEASES;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
-
   ngOnInit(): void {
+    this.fetchDynamicNews();
+
     this.route.fragment.subscribe(fragment => {
       if (fragment === 'press-releases') {
         setTimeout(() => {
@@ -59,12 +65,40 @@ export class NewsComponent implements OnInit {
     });
   }
 
+  fetchDynamicNews(): void {
+    this.newsService.getNews({ status: 'Published' }).subscribe({
+      next: (res) => {
+        if (res.articles && res.articles.length > 0) {
+          const mappedArticles: NewsArticle[] = res.articles.map(a => ({
+            id: a.slug || a.id?.toString() || '',
+            slug: a.slug || a.id?.toString() || '',
+            title: a.title,
+            category: a.category,
+            categories: a.categories || [a.category],
+            date: a.date_str || '2025',
+            formattedDate: a.formatted_date || a.date_str || '2025',
+            readTime: a.read_time || '3 min read',
+            image: a.image || 'news1.jpeg',
+            badge: a.badge || a.category.toUpperCase(),
+            summary: a.summary || '',
+            contentHtml: a.content_html || '',
+            officialLink: a.official_link || ''
+          }));
+          this.articlesSignal.set(mappedArticles);
+        }
+      },
+      error: () => {
+        // Fallback already in articlesSignal
+      }
+    });
+  }
+
   // Filtered Latest News
   filteredArticles = computed(() => {
     const cat = this.selectedCategory();
     const query = this.searchQuery().trim().toLowerCase();
 
-    return this.articles.filter(article => {
+    return this.articlesSignal().filter(article => {
       const matchesCategory =
         cat === 'All' ||
         article.category === cat ||
@@ -80,7 +114,7 @@ export class NewsComponent implements OnInit {
     });
   });
 
-  // Displayed Latest News (4 on default matching Image 2, or all 11 if toggled)
+  // Displayed Latest News (4 on default, or all if toggled)
   displayedArticles = computed(() => {
     const all = this.filteredArticles();
     if (this.showAllNews() || this.selectedCategory() !== 'All' || this.searchQuery()) {
@@ -124,9 +158,9 @@ export class NewsComponent implements OnInit {
 
   getCategoryCount(category: string): number {
     if (category === 'All') {
-      return this.articles.length + this.pressReleases.length;
+      return this.articlesSignal().length + this.pressReleases.length;
     }
-    const articleCount = this.articles.filter(
+    const articleCount = this.articlesSignal().filter(
       a => a.category === category || (a.categories && a.categories.includes(category))
     ).length;
     const prCount = this.pressReleases.filter(
@@ -143,12 +177,10 @@ export class NewsComponent implements OnInit {
     this.showAllPressReleases.update(v => !v);
   }
 
-  // Navigate to dedicated article detail page
   navigateToArticle(slug: string): void {
     this.router.navigate(['/news', slug]);
   }
 
-  // Newsletter Submit handler
   submitNewsletter(): void {
     const email = this.newsletterEmail().trim();
     if (!email || !email.includes('@')) {
@@ -162,7 +194,6 @@ export class NewsComponent implements OnInit {
     this.newsletterSubscribed.set(false);
   }
 
-  // Asset Download simulation / notice
   downloadAsset(fileName: string, downloadUrl: string): void {
     this.downloadNotice.set(`Downloading ${fileName}...`);
     const link = document.createElement('a');
@@ -177,7 +208,6 @@ export class NewsComponent implements OnInit {
     }, 3500);
   }
 
-  // Smooth scroll helper
   scrollToSection(elementId: string): void {
     if (typeof document !== 'undefined') {
       const element = document.getElementById(elementId);

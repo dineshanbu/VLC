@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface LeaderSection {
@@ -24,7 +24,7 @@ export interface Leader {
   templateUrl: './about.html',
   styleUrl: './about.css'
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent implements OnInit, OnDestroy {
   // Section 2: Company Overview Modal State
   isOverviewModalOpen = false;
 
@@ -47,6 +47,7 @@ export class AboutComponent implements OnInit {
   // Section 5: Leadership Carousel State
   leaderIndex = 0;
   cardsPerView = 3;
+  private autoPlayTimer: any = null;
   private touchStartX = 0;
   private touchEndX = 0;
 
@@ -231,6 +232,29 @@ export class AboutComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCardsPerView();
+    this.startAutoPlay();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoPlay();
+  }
+
+  startAutoPlay(): void {
+    this.stopAutoPlay();
+    if (typeof window !== 'undefined') {
+      this.autoPlayTimer = setInterval(() => {
+        if (!this.isLeaderModalOpen && !this.isOverviewModalOpen) {
+          this.nextLeader();
+        }
+      }, 2000);
+    }
+  }
+
+  stopAutoPlay(): void {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer);
+      this.autoPlayTimer = null;
+    }
   }
 
   @HostListener('window:resize')
@@ -325,6 +349,7 @@ export class AboutComponent implements OnInit {
     } else {
       this.leaderIndex = this.maxLeaderIndex;
     }
+    this.startAutoPlay();
   }
 
   nextLeader(): void {
@@ -337,16 +362,19 @@ export class AboutComponent implements OnInit {
 
   goToLeader(index: number): void {
     this.leaderIndex = Math.min(Math.max(0, index), this.maxLeaderIndex);
+    this.startAutoPlay();
   }
 
   // Mobile Touch Swipe Handling
   onTouchStart(event: TouchEvent): void {
+    this.stopAutoPlay();
     this.touchStartX = event.changedTouches[0].screenX;
   }
 
   onTouchEnd(event: TouchEvent): void {
     this.touchEndX = event.changedTouches[0].screenX;
     this.handleSwipe();
+    this.startAutoPlay();
   }
 
   private handleSwipe(): void {

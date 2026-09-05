@@ -1,208 +1,643 @@
 /* ============================================
-   HERO BANNER — Balanced Reference Proportions
-   Vaccine Industrial Company
+   VIC HERO BANNER — PREMIUM BIOTECH DESIGN
+   Matching Exact Reference: media_1788428963969.png
    ============================================ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #FFFFFF;
+}
 
 .hero {
   position: relative;
   width: 100%;
-  height: 530px;
-  min-height: 490px;
-  max-height: 560px;
+  height: 575px;
+  min-height: 520px;
+  max-height: 620px;
+  background-color: #FFFFFF;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  overflow: hidden;
-  background-color: var(--color-surface);
 }
 
 
-/* ==========================================
-   FULL BACKGROUND MASTER BANNER (home_banner.png)
-   ========================================== */
+/* ============================================
+   BACKGROUND MEDIA & ATMOSPHERIC DIFFUSE FADE
+   ============================================ */
 
-.hero__image-wrapper {
+.hero__media-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  /* height: 100%; */
-  z-index: var(--z-base);
-}
-
-.hero__image {
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 80% center;
-  display: block;
+  overflow: hidden;
+  z-index: 1;
 }
 
-/* Subtle, smooth horizontal readability gradient */
-.hero__overlay {
+/* Facility Video playing smoothly on the right - Crisp & Clear */
+.hero__video {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0;
+  transform: scale(1.01);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero__video--loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Smooth, Soft Luminous White Gradient Overlay */
+.hero__gradient-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.88) 0%,
-    rgba(255, 255, 255, 0.80) 24%,
-    rgba(255, 255, 255, 0.38) 38%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0) 60%
+    #FFFFFF 0%,
+    #FFFFFF 24%,
+    rgba(255, 255, 255, 0.97) 32%,
+    rgba(255, 255, 255, 0.84) 40%,
+    rgba(255, 255, 255, 0.52) 48%,
+    rgba(255, 255, 255, 0.2) 56%,
+    rgba(255, 255, 255, 0.04) 62%,
+    transparent 68%
   );
 }
 
+/* Subtle, localized accent glow (No heavy fog) */
+.hero__ambient-glow {
+  display: none;
+}
 
-/* ==========================================
-   CONTENT (Left Side on Desktop)
-   ========================================== */
+/* Glowing Arched Optical Curves (Flowing Across Bottom-Left Road) */
+.hero__flowing-curves {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  width: 720px;
+  height: 360px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+}
+
+.hero__flowing-curves svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero__curve-path {
+  animation: curveFlowGlow 6s ease-in-out infinite alternate;
+}
+
+.hero__curve-path--1 {
+  animation-delay: 0s;
+}
+
+.hero__curve-path--2 {
+  animation-delay: 1.5s;
+}
+
+.hero__curve-path--3 {
+  animation-delay: 3s;
+}
+
+/* Floating Glowing Light Sparks */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #00E5C9;
+  box-shadow: 0 0 10px #00E5C9, 0 0 20px rgba(0, 229, 201, 0.6);
+  pointer-events: none;
+}
+
+.hero__particle--1 {
+  top: 55%;
+  left: 20%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.8;
+  animation: particleDrift 8s ease-in-out infinite alternate;
+}
+
+.hero__particle--2 {
+  top: 72%;
+  left: 14%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.65;
+  animation: particleDrift 10s ease-in-out 1s infinite alternate-reverse;
+}
+
+.hero__particle--3 {
+  top: 62%;
+  left: 32%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.75;
+  animation: particleDrift 9s ease-in-out 2s infinite alternate;
+}
+
+.hero__particle--4 {
+  top: 80%;
+  left: 26%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.6;
+  animation: particleDrift 11s ease-in-out 0.5s infinite alternate-reverse;
+}
+
+
+/* ============================================
+   HERO CONTENT CONTAINER (Typography & Button)
+   ============================================ */
 
 .hero__container {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
-  max-width: var(--container-content);
+  max-width: var(--container-content, 1280px);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
-  padding-top: calc(78px + 20px);
-  padding-bottom: var(--space-32);
+  padding: 0 var(--container-padding, 36px);
+  padding-top: calc(78px + 12px);
+  box-sizing: border-box;
 }
 
 .hero__content {
-  max-width: 460px;
+  max-width: 510px;
+}
+
+.hero__text-box {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 
-/* ==========================================
-   HEADING (Balanced Middle Ground Scale)
-   ========================================== */
+/* ============================================
+   HEADING (DM Serif Display with Sequential Reveal)
+   ============================================ */
 
 .hero__heading {
-  font-family: var(--font-heading);
-  font-size: clamp(2.45rem, 2.8vw, 2.85rem); /* ~39px–44px */
-  font-weight: var(--weight-regular);
-  line-height: 1.18;
+  font-family: var(--font-heading, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2.35rem, 3vw, 3.15rem);
+  font-weight: 400;
+  line-height: 1.15;
   letter-spacing: -0.015em;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-16);
+  color: #0B2A4A;
+  margin: 0 0 10px 0;
 }
 
 .hero__heading-line {
   display: block;
+  animation: heroTitleSequential 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.hero__heading-line--1 {
+  animation-delay: 0.08s;
+}
+
+.hero__heading-line--2 {
+  animation-delay: 0.2s;
+}
+
+.hero__heading-line--3 {
+  animation-delay: 0.32s;
+}
+
+/* "Futures." Teal Accent with Glow & Subtle Shimmer */
 .hero__heading-accent {
-  color: var(--color-secondary);
+  display: inline-block;
+  color: #0D8A8A;
+  background: linear-gradient(135deg, #00C9A7 0%, #00E5C9 35%, #0D8A8A 70%, #00E5C9 100%);
+  background-size: 240% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: tealAccentGlow 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(0, 229, 201, 0.45));
+  font-style: normal;
+}
+
+/* Teal Accent Divider Line Under Heading */
+.hero__heading-divider {
+  width: 44px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: #0D8A8A;
+  margin-bottom: 22px;
+  animation: heroDividerExpand 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
 }
 
 
-/* ==========================================
-   DESCRIPTION (Subtly Increased for Readability)
-   ========================================== */
+/* ============================================
+   DESCRIPTION PARAGRAPH
+   ============================================ */
 
 .hero__description {
-  font-family: var(--font-body);
-  font-size: clamp(0.9375rem, 0.15vw + 0.9rem, 1rem); /* 15px–16px */
-  font-weight: var(--weight-regular);
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-32); /* 32px breathing space above button */
-  max-width: 420px;
+  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: clamp(0.925rem, 0.15vw + 0.9rem, 1rem);
+  font-weight: 400;
+  line-height: 1.62;
+  color: #3D5A80;
+  margin: 0 0 32px 0;
+  max-width: 440px;
+  animation: heroFadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
 }
 
 
-/* ==========================================
-   CTA BUTTON (Compact Matching Original)
-   ========================================== */
+/* ============================================
+   "WATCH CORPORATE VIDEO" PILL BUTTON
+   (Circle Play Icon on the RIGHT with Pulse Ring)
+   ============================================ */
 
 .hero__actions {
   display: flex;
   align-items: center;
-  gap: var(--space-16);
+  animation: heroFadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
 }
 
 .hero__btn-video {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 40px;
-  padding: 0 18px;
-  background-color: var(--color-surface);
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
-  font-family: var(--font-body);
-  font-size: 0.875rem; /* 14px */
-  font-weight: var(--weight-semibold);
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-full);
+  gap: 14px;
+  height: 46px;
+  padding: 0 6px 0 22px;
+  background-color: #FFFFFF;
+  color: #0B2A4A;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  border: 1.6px solid #0D8A8A;
   cursor: pointer;
-  white-space: nowrap;
+  box-shadow:
+    0 4px 18px rgba(13, 138, 138, 0.15),
+    0 1px 3px rgba(11, 42, 74, 0.05);
   transition:
-    background-color var(--transition-base),
-    border-color var(--transition-base),
-    box-shadow var(--transition-base);
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    background-color 0.22s ease;
 }
 
 .hero__btn-video:hover {
-  background-color: rgba(11, 42, 74, 0.04);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  background-color: #F4FBFA;
+  border-color: #00C9A7;
+  box-shadow:
+    0 8px 28px rgba(13, 138, 138, 0.28),
+    0 2px 6px rgba(11, 42, 74, 0.08);
 }
 
-/* Hidden on desktop, visible on mobile */
-.hero__btn-lead-icon {
-  display: none;
+.hero__btn-video:active {
+  transform: translateY(0);
 }
 
 .hero__btn-label {
-  display: inline-flex;
-  align-items: center;
+  color: #0B2A4A;
+  white-space: nowrap;
 }
 
-.hero__play-icon {
+/* Circular Play Icon Badge on the RIGHT */
+.hero__play-icon-circle {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-accent);
-  color: var(--color-secondary);
-  flex-shrink: 0;
-  transition:
-    background-color var(--transition-base),
-    color var(--transition-base),
-    transform var(--transition-base);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00C9A7 0%, #0D8A8A 100%);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(13, 138, 138, 0.35);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
 }
 
-.hero__btn-video:hover .hero__play-icon {
-  background-color: var(--color-secondary);
-  color: var(--color-text-inverse);
+.hero__play-icon-circle svg {
+  margin-left: 2px;
+  transition: transform 0.25s ease;
+}
+
+.hero__btn-video:hover .hero__play-icon-circle {
   transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(0, 201, 167, 0.6);
+}
+
+.hero__btn-video:hover .hero__play-icon-circle svg {
+  transform: scale(1.1);
+}
+
+/* Gentle Pulse Ring on the Play Badge */
+.hero__play-pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 201, 167, 0.6);
+  opacity: 0;
+  animation: playPulseRing 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
 }
 
 
-/* ==========================================
-   RESPONSIVE — Laptop (1025px–1366px)
-   ========================================== */
+/* ============================================
+   BOTTOM SWEEPING WAVE RIBBON
+   (Clean - Dots and Arrows Removed)
+   ============================================ */
 
-@media (max-width: 1366px) {
+.hero__wave-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero__wave-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
+/* ============================================
+   CORPORATE VIDEO MODAL
+   ============================================ */
+
+.hero-video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  outline: none;
+}
+
+.hero-video-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 30, 54, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: heroFadeIn 0.25s ease-out;
+}
+
+.hero-video-modal__dialog {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 920px;
+  background: #071E36;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 208, 184, 0.35);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(13, 138, 138, 0.3);
+  overflow: hidden;
+  animation: heroModalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-video-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-video-modal__tag {
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00D0B8;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.hero-video-modal__title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.hero-video-modal__close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.hero-video-modal__close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #EF4444;
+  transform: rotate(90deg);
+}
+
+.hero-video-modal__player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+}
+
+.hero-video-modal__video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* ============================================
+   KEYFRAME ANIMATIONS (Smooth, Slow, Elegant)
+   ============================================ */
+
+@keyframes heroTitleSequential {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroDividerExpand {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+  100% {
+    opacity: 1;
+    width: 44px;
+  }
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tealAccentGlow {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 10px rgba(0, 229, 201, 0.3));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 18px rgba(0, 229, 201, 0.6));
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 10px rgba(0, 229, 201, 0.3));
+  }
+}
+
+@keyframes playPulseRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes ambientAuraPulse {
+  0% {
+    transform: scale(0.95) translate(0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.08) translate(12px, -8px);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(0.95) translate(-8px, 6px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes curveFlowGlow {
+  0% {
+    opacity: 0.65;
+    stroke-width: 1.6;
+  }
+  50% {
+    opacity: 0.95;
+    stroke-width: 2.2;
+  }
+  100% {
+    opacity: 0.65;
+    stroke-width: 1.6;
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-14px) translateX(6px);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(3px) translateX(-5px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes heroModalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+/* ============================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ============================================ */
+
+/* Laptop / Desktop (1024px – 1280px) */
+@media (max-width: 1280px) {
   .hero {
-    height: 500px;
+    height: 530px;
   }
 
-  .hero__content {
-    max-width: 420px;
+  .hero__heading {
+    font-size: clamp(2.1rem, 2.7vw, 2.75rem);
+  }
+
+  .hero__video {
+    width: 68%;
   }
 }
 
-
-/* ==========================================
-   RESPONSIVE — Tablet & Mobile (≤1024px)
-   KEPT 100% UNCHANGED AS REQUESTED
-   ========================================== */
-
-@media (max-width: 1024px) {
+/* Tablet & Mobile (≤ 1023px) — Clean Stacked Layout */
+@media (max-width: 1023px) {
   .hero {
     height: auto;
     min-height: auto;
@@ -210,46 +645,57 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    padding-top: 60px;
-    background-color: var(--color-surface);
+    padding-top: 65px;
+    background-color: #FFFFFF;
   }
 
-  /* 1. Building Image */
-  .hero__image-wrapper {
+  /* 1. Facility Video: Full Width at Top, Crystal Clear */
+  .hero__media-wrapper {
     position: relative;
     width: 100%;
-    height: 48vh;
-    min-height: 300px;
-    max-height: 400px;
+    height: clamp(260px, 46vh, 400px);
     order: 1;
+    overflow: hidden;
+    background-color: #07192C;
   }
 
-  .hero__image {
-    object-position: 84% center;
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    opacity: 1 !important;
+    display: block;
+    transform: none;
   }
 
-  /* Bottom fade transition into white section */
-  .hero__overlay {
+  .hero__gradient-overlay {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.12) 0%,
       rgba(255, 255, 255, 0) 50%,
-      rgba(255, 255, 255, 0.30) 68%,
       rgba(255, 255, 255, 0.75) 85%,
-      rgba(255, 255, 255, 0.95) 94%,
-      var(--color-surface) 100%
+      #FFFFFF 100%
     );
   }
 
-  /* 2. Content below image */
+  .hero__ambient-glow,
+  .hero__molecular-mesh,
+  .hero__flowing-curves,
+  .hero__particles {
+    display: none;
+  }
+
   .hero__container {
     order: 2;
-    padding-top: var(--space-8);
-    padding-bottom: var(--space-36);
-    padding-left: var(--space-20);
-    padding-right: var(--space-20);
-    background-color: var(--color-surface);
-    margin-top: -24px;
+    position: relative;
+    width: 100%;
+    padding: 24px 28px 36px 28px;
+    background-color: #FFFFFF;
+    margin-top: -16px;
+    z-index: 3;
   }
 
   .hero__content {
@@ -257,67 +703,60 @@
   }
 
   .hero__heading {
-    font-size: clamp(2rem, 7.5vw, 2.45rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-16);
+    font-size: clamp(1.8rem, 5vw, 2.35rem);
+    line-height: 1.18;
+    margin-bottom: 12px;
   }
 
   .hero__description {
-    font-size: 0.9375rem;
+    font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: var(--space-24);
+    margin-bottom: 24px;
     max-width: 100%;
   }
 
-  /* 3. Full-width action button on mobile */
   .hero__actions {
     width: 100%;
   }
 
   .hero__btn-video {
-    width: 100%;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--space-16);
-    border-radius: var(--radius-full);
+    width: auto;
+    min-width: 250px;
+    height: 46px;
   }
 
-  .hero__btn-lead-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-primary);
-  }
-
-  .hero__play-icon {
-    width: 24px;
-    height: 24px;
+  /* Wave Ribbon Completely Removed in Mobile View */
+  .hero__wave-wrapper {
+    display: none !important;
   }
 }
 
+/* Small Mobile (< 640px) */
+@media (max-width: 639px) {
+  .hero {
+    padding-top: 60px;
+  }
 
-/* ==========================================
-   RESPONSIVE — Small Mobile (<480px)
-   KEPT 100% UNCHANGED AS REQUESTED
-   ========================================== */
-
-@media (max-width: 480px) {
-  .hero__image-wrapper {
-    height: 45vh;
-    min-height: 270px;
-    max-height: 330px;
+  .hero__media-wrapper {
+    height: clamp(220px, 42vh, 300px);
   }
 
   .hero__container {
-    padding-left: var(--space-16);
-    padding-right: var(--space-16);
-    padding-bottom: var(--space-32);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 28px;
   }
 
   .hero__heading {
-    font-size: clamp(1.8rem, 8vw, 2.2rem);
+    font-size: clamp(1.6rem, 7.5vw, 1.95rem);
+  }
+
+  .hero__description {
+    font-size: 0.9rem;
+  }
+
+  .hero__btn-video {
+    width: 100%;
+    justify-content: space-between;
   }
 }

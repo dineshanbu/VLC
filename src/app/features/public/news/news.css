@@ -150,6 +150,34 @@
   );
 }
 
+/* Fluid Sweeping Curved Teal Wave Ribbon at Hero Bottom */
+.news-hero__wave-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.news-hero__wave-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hidden ONLY on Mobile Phone Viewports (< 768px) */
+@media (max-width: 767px) {
+  .news-hero__wave-wrapper {
+    display: none !important;
+  }
+}
+
 
 /* ====================================================
    2. BROWSE BY CATEGORY

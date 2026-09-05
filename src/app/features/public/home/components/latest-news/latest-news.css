@@ -179,6 +179,11 @@
   transform: translateX(3px);
 }
 
+/* Mobile-Only Carousel Controls (Hidden on Desktop) */
+.news__mobile-controls {
+  display: none;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .news {
@@ -196,10 +201,12 @@
   }
 }
 
-@media (max-width: 640px) {
+/* Mobile-Only Carousel (< 768px) */
+@media (max-width: 767px) {
   .news {
     padding-top: var(--space-24);
     padding-bottom: var(--space-40);
+    overflow: hidden;
   }
 
   .news__header {
@@ -207,15 +214,102 @@
   }
 
   .news__grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-16);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 14px;
+    padding: 6px 4px 12px 4px;
+  }
+
+  .news__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .news__card {
+    flex: 0 0 85%;
+    min-width: 85%;
+    scroll-snap-align: center;
   }
 
   .news__image-wrap {
-    height: 170px;
+    height: 180px;
   }
 
   .news__body {
-    padding: var(--space-16) var(--space-12) var(--space-16);
+    padding: var(--space-16);
+  }
+
+  /* Mobile-Only Editorial Navigation Bar */
+  .news__mobile-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding: 0 4px;
+  }
+
+  /* Slide Counter Badge (01 / 04) */
+  .news__counter-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    background: #EBF8F7;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #D2EFEB;
+  }
+
+  .news__counter-current {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-secondary, #0D8A8A);
+  }
+
+  .news__counter-divider {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #94A3B8;
+  }
+
+  .news__counter-total {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #64748B;
+  }
+
+  /* Button Group */
+  .news__btn-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Distinct Square-Pill Arrow Buttons with Long-Stem Arrows */
+  .news__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 38px;
+    border-radius: 10px;
+    background-color: #07192C;
+    border: 1px solid #07192C;
+    color: #FFFFFF;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(7, 25, 44, 0.15);
+    transition: all 0.22s ease;
+  }
+
+  .news__nav-btn:hover,
+  .news__nav-btn:active {
+    background-color: var(--color-secondary, #0D8A8A);
+    border-color: var(--color-secondary, #0D8A8A);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13, 138, 138, 0.35);
   }
 }

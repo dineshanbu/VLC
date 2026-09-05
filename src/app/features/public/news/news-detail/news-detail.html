@@ -84,7 +84,7 @@
     <div class="news-detail-reading-container">
       <div class="news-detail-image-card">
         <img
-          [src]="currentArticle.image"
+          [src]="getImageUrl(currentArticle.image)"
           [alt]="currentArticle.title"
           class="news-detail-hero-img"
         />
@@ -160,7 +160,7 @@
           <!-- Thumbnail -->
           <div class="related-card-img-wrap">
             <img
-              [src]="rel.image"
+              [src]="getImageUrl(rel.image)"
               [alt]="rel.title"
               class="related-card-img"
               loading="lazy"

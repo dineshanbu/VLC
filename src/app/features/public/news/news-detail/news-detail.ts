@@ -9,6 +9,8 @@ import {
   getRelatedArticles,
   NEWS_ARTICLES
 } from '../../../../core/data/news-data';
+import { NewsService } from '../../../../core/services/news.service';
+import { resolveImageUrl } from '../../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-news-detail',
@@ -21,6 +23,11 @@ import {
 export class NewsDetailComponent implements OnInit, OnDestroy {
   private routeSub?: Subscription;
   private sanitizer = inject(DomSanitizer);
+  private newsService = inject(NewsService);
+
+  getImageUrl(url?: string | null): string {
+    return resolveImageUrl(url);
+  }
 
   slug = signal<string>('');
   article = signal<NewsArticle | undefined>(undefined);
@@ -51,17 +58,42 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadArticle(slug: string): void {
-    const found = getArticleBySlug(slug);
-    if (found) {
-      this.article.set(found);
-      this.relatedArticles.set(getRelatedArticles(slug, 3));
-    } else {
-      // Fallback: If slug not found, load first article or leave undefined
-      if (NEWS_ARTICLES.length > 0) {
-        this.article.set(NEWS_ARTICLES[0]);
-        this.relatedArticles.set(getRelatedArticles(NEWS_ARTICLES[0].slug, 3));
+    // Try fetching from database first
+    this.newsService.getNewsBySlugOrId(slug).subscribe({
+      next: (res) => {
+        if (res.article) {
+          const a = res.article;
+          const mapped: NewsArticle = {
+            id: a.slug || a.id?.toString() || '',
+            slug: a.slug || a.id?.toString() || '',
+            title: a.title,
+            category: a.category,
+            categories: a.categories || [a.category],
+            date: a.date_str || '2025',
+            formattedDate: a.formatted_date || a.date_str || '2025',
+            readTime: a.read_time || '3 min read',
+            image: a.image || 'news1.jpeg',
+            badge: a.badge || a.category.toUpperCase(),
+            summary: a.summary || '',
+            contentHtml: a.content_html || '',
+            officialLink: a.official_link || ''
+          };
+          this.article.set(mapped);
+          this.relatedArticles.set(getRelatedArticles(slug, 3));
+        }
+      },
+      error: () => {
+        // Fallback to static articles
+        const found = getArticleBySlug(slug);
+        if (found) {
+          this.article.set(found);
+          this.relatedArticles.set(getRelatedArticles(slug, 3));
+        } else if (NEWS_ARTICLES.length > 0) {
+          this.article.set(NEWS_ARTICLES[0]);
+          this.relatedArticles.set(getRelatedArticles(NEWS_ARTICLES[0].slug, 3));
+        }
       }
-    }
+    });
   }
 
   copyArticleLink(): void {

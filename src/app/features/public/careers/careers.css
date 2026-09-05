@@ -174,6 +174,34 @@
   background: linear-gradient(90deg, #FFF 0%, rgba(255,255,255,0.96) 15%, rgba(255,255,255,0.65) 32%, rgba(255,255,255,0.15) 52%, rgba(255,255,255,0) 68%);
 }
 
+/* Fluid Sweeping Curved Teal Wave Ribbon at Hero Bottom */
+.careers-hero__wave-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.careers-hero__wave-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hidden ONLY on Mobile Phone Viewports (< 768px) */
+@media (max-width: 767px) {
+  .careers-hero__wave-wrapper {
+    display: none !important;
+  }
+}
+
 .careers-positions-section { padding: 56px 0 64px; }
 .careers-culture-section { padding: 40px 0 60px; }
 .careers-talent-network-section { padding: 10px 0 80px; }

@@ -34,109 +34,153 @@
 
     </div>
   </div>
+
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
+    <svg
+      class="products-hero__wave-svg"
+      viewBox="0 0 1440 120"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="productsTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C9A7" />
+          <stop offset="35%" stop-color="#00E5C9" />
+          <stop offset="70%" stop-color="#0D8A8A" />
+          <stop offset="100%" stop-color="#075E60" />
+        </linearGradient>
+      </defs>
+
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
+      <path
+        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        fill="url(#productsTealWaveGrad)"
+      />
+
+      <!-- Clean Seamless Base Matching Products Section -->
+      <path
+        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+        fill="#F8FAFC"
+      />
+    </svg>
+  </div>
 </section>
 
 <!-- ============================================
-     OUR PRODUCTS SECTION (Carousel)
+     OUR PRODUCTS SECTION (Featured Showcase Carousel)
+     Matching User Attached Reference
      ============================================ -->
 <section class="products-section" id="our-products">
   <div class="products-section__container">
 
-    <!-- Section Header -->
+    <!-- Section Header — Matching Home Page (OUR PLATFORM / LATEST NEWS) -->
     <div class="products-section__header">
-      <h2 class="products-section__title">Our Products</h2>
-      <div class="products-section__title-bar">
-        <span class="products-section__title-dot"></span>
-      </div>
+      <span class="products-section__label">OUR PRODUCTS</span>
     </div>
 
-    <!-- Carousel Container with Navigation Buttons -->
-    <div class="carousel">
-
-      <!-- Left Arrow Button -->
+    <!-- Main Showcase Carousel Frame -->
+    <div
+      class="showcase-carousel"
+      (mouseenter)="pauseAutoplay()"
+      (mouseleave)="resumeAutoplay()"
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
+      
+      <!-- Left Carousel Arrow -->
       <button
         type="button"
-        class="carousel__arrow carousel__arrow--prev"
-        (click)="prevSlide()"
-        aria-label="Previous Products"
+        class="showcase-carousel__arrow showcase-carousel__arrow--prev"
+        (click)="prevProduct()"
+        aria-label="Previous Product"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
       </button>
 
-      <!-- Carousel Viewport & Track with Mobile Touch/Swipe -->
-      <div
-        class="carousel__viewport"
-        (touchstart)="onTouchStart($event)"
-        (touchend)="onTouchEnd($event)"
-      >
-        <div
-          class="carousel__track"
-          [style.transform]="'translateX(calc(-' + currentIndex() + ' * ((100% + var(--space-20)) / ' + itemsPerView() + ')))'"
-        >
-          @for (product of products; track product.id; let i = $index) {
-            <div class="carousel__slide">
-              <div
-                class="product-card"
-                [class.product-card--active]="product.name === 'Flucelvax®' && i === 0"
-                (click)="openProductModal(product)"
-              >
-                <!-- Card Image -->
-                <div class="product-card__image-wrap">
-                  <img
-                    [src]="product.image"
-                    [alt]="product.name"
-                    class="product-card__image"
-                  />
-                </div>
+      <!-- Featured Product Card (Left Content + Right Image) -->
+      <div class="showcase-card">
+        
+        <!-- Left Column: Content -->
+        <div class="showcase-card__content">
+          <h2 class="showcase-card__title">{{ currentProduct.name }}</h2>
+          <h3 class="showcase-card__subtitle">{{ currentProduct.subtitle }}</h3>
 
-                <!-- Card Body -->
-                <div class="product-card__body">
-                  <h3 class="product-card__title">{{ product.name }}</h3>
-                  <p class="product-card__subtitle">{{ product.subtitle }}</p>
+          <p class="showcase-card__description">
+            {{ currentProduct.description }}
+          </p>
 
-                  <button
-                    type="button"
-                    class="product-card__btn"
-                    (click)="openProductModal(product); $event.stopPropagation()"
-                  >
-                    <span>View Product</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          }
+          <!-- Key Features Bullet List with Teal Checkmarks -->
+          <ul class="showcase-card__features">
+            @for (feature of currentProduct.features; track feature) {
+              <li class="showcase-card__feature-item">
+                <svg class="showcase-card__check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>{{ feature }}</span>
+              </li>
+            }
+          </ul>
+
+          <!-- View Product Details Button (Opens Existing Modal) -->
+          <button
+            type="button"
+            class="showcase-card__btn"
+            (click)="openProductModal(currentProduct)"
+          >
+            <span>View Product Details</span>
+            <svg class="showcase-card__btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
         </div>
+
+        <!-- Right Column: Product Image in Studio Frame -->
+        <div
+          class="showcase-card__media"
+          (click)="openProductModal(currentProduct)"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="'View details for ' + currentProduct.name"
+        >
+          <div class="showcase-card__image-wrap">
+            <img
+              [src]="currentProduct.featuredImage || currentProduct.image"
+              [alt]="currentProduct.name + ' — ' + currentProduct.subtitle"
+              class="showcase-card__image"
+            />
+          </div>
+        </div>
+
       </div>
 
-      <!-- Right Arrow Button -->
+      <!-- Right Carousel Arrow -->
       <button
         type="button"
-        class="carousel__arrow carousel__arrow--next"
-        (click)="nextSlide()"
-        aria-label="Next Products"
+        class="showcase-carousel__arrow showcase-carousel__arrow--next"
+        (click)="nextProduct()"
+        aria-label="Next Product"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
       </button>
 
     </div>
 
-    <!-- Pagination Dots -->
-    <div class="carousel__dots" role="tablist" aria-label="Products Carousel Pagination">
-      @for (dotIndex of totalDots; track dotIndex) {
+    <!-- Carousel Indicator Dots -->
+    <div class="showcase-carousel__dots" role="tablist" aria-label="Products Carousel Pagination">
+      @for (product of currentProductList; track product.id; let idx = $index) {
         <button
           type="button"
-          class="carousel__dot"
-          [class.carousel__dot--active]="dotIndex === currentIndex()"
-          (click)="goToSlide(dotIndex)"
-          [attr.aria-label]="'Go to slide ' + (dotIndex + 1)"
+          class="showcase-carousel__dot"
+          [class.showcase-carousel__dot--active]="activeProductIndex() === idx"
+          (click)="goToProduct(idx)"
+          [attr.aria-label]="'Go to product ' + product.name"
           role="tab"
         ></button>
       }
@@ -199,18 +243,24 @@
 
           <!-- Resource Info -->
           <div class="resource-card__info">
-            <span class="resource-card__name">{{ resource.name }}</span>
-            <span class="resource-card__meta">{{ resource.type }} • {{ resource.size }}</span>
+            <h3 class="resource-card__name">{{ resource.name }}</h3>
+            <p class="resource-card__meta">{{ resource.type }} &bull; {{ resource.size }}</p>
           </div>
 
-          <!-- Download Button -->
-          <button type="button" class="resource-card__download" [attr.aria-label]="'Download ' + resource.name">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </button>
+          <!-- Download Action -->
+          <div class="resource-card__action">
+            <button
+              type="button"
+              class="resource-card__download-btn"
+              [attr.aria-label]="'Download ' + resource.name"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
+          </div>
         </div>
       }
     </div>
@@ -219,60 +269,64 @@
 </section>
 
 <!-- ============================================
-     CTA BANNER — Partner With Us
+     PARTNERS BANNER / CTA SECTION
      ============================================ -->
-<section class="cta-banner-section" id="partner-cta">
+<section class="cta-banner-section" aria-label="Strategic Partnerships">
   <div class="cta-banner-section__container">
     <div class="cta-banner-card">
-      <!-- Background Image & Seamless Gradient Overlay -->
+      
+      <!-- Background Collaboration Photography with Smooth Fade -->
       <div class="cta-banner-card__bg">
         <img
-          src="home_banner.png"
-          alt="Vaccine Industrial Company facility"
+          src="partner_banner.jpg"
+          alt="VIC Strategic Global Partnerships"
           class="cta-banner-card__img"
         />
         <div class="cta-banner-card__overlay"></div>
       </div>
 
-      <!-- Card Foreground Content -->
+      <!-- Foreground Content: Badge, Heading, Tagline & Action Button -->
       <div class="cta-banner-card__content">
-        <!-- Circular Handshake Icon on Left -->
-        <div class="cta-banner-card__icon-wrap">
-          <div class="cta-banner-card__icon" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2a1 1 0 0 0-1.4 0l-1.3 1.3"></path>
-              <path d="m13 7.1-2-2a1 1 0 0 0-1.4 0L5.3 9.4a1 1 0 0 0 0 1.4l2 2a1 1 0 0 0 1.4 0l1.3-1.3"></path>
-              <path d="M2 13.7 6.3 18a1 1 0 0 0 1.4 0l3.3-3.3"></path>
-              <path d="m22 10.3-4.3-4.3a1 1 0 0 0-1.4 0L13 9.3"></path>
-              <path d="m8 10 2-2"></path>
-              <path d="m14 16 2-2"></path>
-              <line x1="3" y1="16" x2="6" y2="13"></line>
-              <line x1="4.5" y1="18.5" x2="7.5" y2="15.5"></line>
+        
+        <div class="cta-banner-card__left">
+          <div class="cta-banner-card__badge">
+            <svg class="cta-banner-card__badge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
+              <path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l2.8-2.8a1 1 0 0 0 0-1.4l-2.8-2.8a1 1 0 0 0-1.4 0L14 12"></path>
+              <path d="M7 11 4.7 8.7a1 1 0 0 1 0-1.4l2.8-2.8a1 1 0 0 1 1.4 0L11.4 7"></path>
+              <path d="M2 13.5V19a2 2 0 0 0 2 2h3.5a1 1 0 0 0 .7-.3L13 16"></path>
+              <path d="M16 2h3.5a2 2 0 0 1 2 2v5.5a1 1 0 0 1-.3.7L16 15"></path>
             </svg>
+            <span>STRATEGIC COLLABORATION</span>
           </div>
+
+          <h2 class="cta-banner-card__heading">
+            Building a Healthier Future, <span class="cta-banner-card__heading-accent">Together.</span>
+          </h2>
+
+          <p class="cta-banner-card__desc">
+            Partnering with global biotechnology leaders, research institutes, and healthcare organizations to localize advanced vaccine manufacturing and safeguard public health.
+          </p>
         </div>
 
-        <!-- Content Body on Right: Partners Button & Text Perfectly Aligned -->
-        <div class="cta-banner-card__body">
+        <div class="cta-banner-card__right">
           <a routerLink="/partners" class="cta-banner-card__btn">
-            <span>Partners</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <span>Explore Partnerships</span>
+            <svg class="cta-banner-card__btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </a>
-
-          <p class="cta-banner-card__desc">
-            Together, we are building a healthier future for generations to come.
-          </p>
         </div>
+
       </div>
+
     </div>
   </div>
 </section>
 
 <!-- ============================================
-     PRODUCT DETAIL MODAL (Matching Reference Image)
+     PRODUCT DETAIL MODAL (100% PRESERVED)
      ============================================ -->
 @if (isModalOpen() && selectedProduct(); as product) {
   <div class="modal-backdrop" (click)="closeModal()" role="dialog" aria-modal="true" [attr.aria-label]="product.name + ' Details'">
@@ -311,7 +365,7 @@
         <span class="modal-breadcrumb__current">{{ product.name }}</span>
       </div>
 
-      <!-- Modal Top Section: Two Columns (Image Gallery + Info) -->
+      <!-- Modal Top Section: Two Columns (Image Gallery + Summary) -->
       <div class="modal-hero">
 
         <!-- Left: Image Preview & Thumbnails -->
@@ -324,59 +378,38 @@
             />
           </div>
 
-          <!-- Thumbnails Strip with Prev/Next Controls -->
-          <div class="modal-gallery__thumbs">
-            <button
-              type="button"
-              class="modal-gallery__nav"
-              (click)="activeThumbnailIndex.set((activeThumbnailIndex() - 1 + product.gallery.length) % product.gallery.length)"
-              aria-label="Previous thumbnail"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-
-            <div class="modal-gallery__strip">
-              @for (thumb of product.gallery; track thumb; let idx = $index) {
-                <button
-                  type="button"
-                  class="modal-gallery__thumb"
-                  [class.modal-gallery__thumb--active]="idx === activeThumbnailIndex()"
-                  (click)="selectThumbnail(idx)"
-                  [attr.aria-label]="'Select image ' + (idx + 1)"
-                >
-                  <img [src]="thumb" [alt]="product.name + ' preview ' + (idx + 1)" />
-                </button>
-              }
+          <!-- Thumbnail Strip -->
+          @if (product.gallery.length > 1) {
+            <div class="modal-gallery__thumbs">
+              <div class="modal-gallery__strip">
+                @for (thumb of product.gallery; track thumb; let idx = $index) {
+                  <div
+                    class="modal-gallery__thumb"
+                    [class.modal-gallery__thumb--active]="idx === activeThumbnailIndex()"
+                    (click)="selectThumbnail(idx)"
+                    role="button"
+                    tabindex="0"
+                    [attr.aria-label]="'View image ' + (idx + 1)"
+                  >
+                    <img [src]="thumb" [alt]="product.name + ' thumbnail ' + (idx + 1)" />
+                  </div>
+                }
+              </div>
             </div>
-
-            <button
-              type="button"
-              class="modal-gallery__nav"
-              (click)="activeThumbnailIndex.set((activeThumbnailIndex() + 1) % product.gallery.length)"
-              aria-label="Next thumbnail"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
-          </div>
+          }
         </div>
 
-        <!-- Right: Title, Subtitle, Features & Action -->
+        <!-- Right: Modal Summary with Features & Action -->
         <div class="modal-summary">
           <h2 class="modal-summary__title">{{ product.name }}</h2>
-          <h3 class="modal-summary__subtitle">{{ product.subtitle }}</h3>
-
+          <p class="modal-summary__subtitle">{{ product.subtitle }}</p>
           <p class="modal-summary__desc">{{ product.description }}</p>
 
-          <!-- Key Features Checklist with SVG checkmarks -->
           <ul class="modal-summary__features">
             @for (feature of product.features; track feature) {
               <li class="modal-summary__feature">
                 <span class="modal-summary__check">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
                 </span>
@@ -385,23 +418,22 @@
             }
           </ul>
 
-          <!-- Download Brochure Button -->
           <div class="modal-summary__actions">
-            <a href="javascript:void(0)" class="btn-download" (click)="$event.preventDefault()">
-              <span>Download Brochure</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="product_brochure.pdf" download class="btn-download">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
+              <span>Download Brochure</span>
             </a>
           </div>
         </div>
 
       </div>
 
-      <!-- Navigation Tabs -->
-      <div class="modal-tabs" role="tablist">
+      <!-- Modal Tabbed Content Navigation -->
+      <div class="modal-tabs" role="tablist" aria-label="Product Information Tabs">
         @for (tab of tabs; track tab) {
           <button
             type="button"
@@ -416,80 +448,110 @@
         }
       </div>
 
-      <!-- Tab Content Area -->
+      <!-- Modal Tab Body Panels -->
       <div class="modal-tab-content">
-        <div class="modal-details-grid">
 
-          <!-- Left Column: Product Information Table & Quality Standards -->
-          <div class="modal-details-col">
-            <h4 class="modal-details-heading">Product Information</h4>
+        <!-- Tab 1: Overview (2-Column Grid Layout) -->
+        @if (activeTab() === 'Overview') {
+          <div class="modal-details-grid">
+            <!-- Left Column: Description + Plant Banner + Quality Standards -->
+            <div class="modal-details-col">
+              <h4 class="modal-details-heading">Product Overview</h4>
+              <p class="modal-desc-paragraph">{{ product.description }}</p>
 
-            <table class="modal-table">
-              <tbody>
-                @for (spec of product.specs; track spec.label) {
-                  <tr>
-                    <td class="modal-table__label">{{ spec.label }}</td>
-                    <td class="modal-table__value">{{ spec.value }}</td>
-                  </tr>
+              <h4 class="modal-details-heading modal-details-heading--spaced">Quality Standards</h4>
+              <ul class="modal-checklist">
+                @for (feat of product.features; track feat) {
+                  <li>
+                    <span class="modal-checklist__icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                    <span>{{ feat }}</span>
+                  </li>
                 }
-              </tbody>
-            </table>
-
-            <h4 class="modal-details-heading modal-details-heading--spaced">Quality Standards</h4>
-            <ul class="modal-checklist">
-              <li>
-                <span class="modal-checklist__icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span>Manufactured to stringent international quality standards</span>
-              </li>
-              <li>
-                <span class="modal-checklist__icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span>Compliant with WHO and ICH guidelines</span>
-              </li>
-              <li>
-                <span class="modal-checklist__icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span>Batch tested for safety, potency, and purity</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Right Column: Product Description, Inline Banner & Storage Conditions -->
-          <div class="modal-details-col">
-            <h4 class="modal-details-heading">Product Description</h4>
-            <p class="modal-desc-paragraph">
-              {{ product.name }} is an inactivated influenza vaccine produced using MDCK cell culture technology. It is designed to provide protection against seasonal influenza strains.
-            </p>
-
-            <!-- Inline Facility Image Banner -->
-            <div class="modal-facility-banner">
-              <img src="modal_vials_banner.jpg" alt="Vaccine manufacturing facility" class="modal-facility-banner__img" />
+              </ul>
             </div>
 
-            <h4 class="modal-details-heading modal-details-heading--spaced">Storage Conditions</h4>
-            <table class="modal-table">
-              <tbody>
-                @for (item of product.storage; track item.label) {
-                  <tr>
-                    <td class="modal-table__label">{{ item.label }}</td>
-                    <td class="modal-table__value">{{ item.value }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+            <!-- Right Column: Technical Specifications Table -->
+            <div class="modal-details-col">
+              <h4 class="modal-details-heading">Specifications</h4>
+              <table class="modal-table">
+                <tbody>
+                  @for (spec of product.specs; track spec.label) {
+                    <tr>
+                      <td class="modal-table__label">{{ spec.label }}</td>
+                      <td class="modal-table__value">{{ spec.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
+        }
 
-        </div>
+        <!-- Tab 2: Specification -->
+        @if (activeTab() === 'Specification') {
+          <table class="modal-table">
+            <tbody>
+              @for (spec of product.specs; track spec.label) {
+                <tr>
+                  <td class="modal-table__label">{{ spec.label }}</td>
+                  <td class="modal-table__value">{{ spec.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 3: Indication -->
+        @if (activeTab() === 'Indication') {
+          <p class="modal-desc-paragraph">
+            {{ product.name }} is indicated for active immunization against seasonal and epidemic pathogens targeted by this vaccine. Administration must comply with official national health authority vaccination guidelines.
+          </p>
+          <table class="modal-table">
+            <tbody>
+              <tr>
+                <td class="modal-table__label">Target Population</td>
+                <td class="modal-table__value">Individuals 6 months and older / High-risk and general population cohorts</td>
+              </tr>
+              <tr>
+                <td class="modal-table__label">Administration Route</td>
+                <td class="modal-table__value">Administered via intramuscular injection by qualified healthcare professionals</td>
+              </tr>
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 4: Storage & Handling -->
+        @if (activeTab() === 'Storage & Handling') {
+          <table class="modal-table">
+            <tbody>
+              @for (item of product.storage; track item.label) {
+                <tr>
+                  <td class="modal-table__label">{{ item.label }}</td>
+                  <td class="modal-table__value">{{ item.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 5: Documents -->
+        @if (activeTab() === 'Documents') {
+          <table class="modal-table">
+            <tbody>
+              @for (res of product.resources; track res.name) {
+                <tr>
+                  <td class="modal-table__label">{{ res.name }}</td>
+                  <td class="modal-table__value">{{ res.type }} ({{ res.size }}) &mdash; Available upon official medical request</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
       </div>
 
     </div>

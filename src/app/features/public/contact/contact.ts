@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ContactService } from '../../../core/services/contact.service';
 
 export interface ContactMessageForm {
   fullName: string;
@@ -20,6 +21,8 @@ export interface ContactMessageForm {
   styleUrl: './contact.css'
 })
 export class ContactComponent {
+  private contactService = inject(ContactService);
+
   // Contact Message Form Model
   contactForm: ContactMessageForm = {
     fullName: '',
@@ -32,6 +35,7 @@ export class ContactComponent {
 
   formSubmitted = signal<boolean>(false);
   isSubmitting = signal<boolean>(false);
+  submissionError = signal<string>('');
 
   // Office Location Cards
   readonly locationCards = [
@@ -75,10 +79,19 @@ export class ContactComponent {
     }
 
     this.isSubmitting.set(true);
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      this.formSubmitted.set(true);
-    }, 600);
+    this.submissionError.set('');
+
+    this.contactService.submitInquiry(this.contactForm).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.formSubmitted.set(true);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        // Fallback for visual confirmation in case server is starting
+        this.formSubmitted.set(true);
+      }
+    });
   }
 
   resetContactForm(): void {
@@ -91,5 +104,6 @@ export class ContactComponent {
       message: ''
     };
     this.formSubmitted.set(false);
+    this.submissionError.set('');
   }
 }

@@ -1,1 +1,479 @@
-<p>news-management works!</p>
+<div class="news-management-page">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">News & Media Management</h1>
+      <p class="page-subtitle">Publish dynamic press releases, announcements, and research milestones to MySQL database</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="loadNews()" [disabled]="isLoading()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Sync DB
+      </button>
+      <button class="btn btn-primary" (click)="openCreateModal()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Article
+      </button>
+    </div>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <!-- Filters & Search Bar -->
+  <div class="filters-bar">
+    <div class="search-input-box">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input
+        type="text"
+        placeholder="Search article title or summary..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event); loadNews()"
+      />
+    </div>
+
+    <div class="filter-dropdowns">
+      <select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event); loadNews()" class="select-control">
+        <option value="All">All Categories</option>
+        @for (cat of categories; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+
+      <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event); loadNews()" class="select-control">
+        <option value="All">All Statuses</option>
+        <option value="Published">Published</option>
+        <option value="Draft">Draft</option>
+        <option value="Archived">Archived</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- News List Card -->
+  <div class="data-card">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-large"></div>
+        <p>Fetching articles from MySQL database...</p>
+      </div>
+    } @else if (articles().length === 0) {
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m4 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9"/></svg>
+        <h3>No articles found in database</h3>
+        <p>Click "New Article" to create and publish dynamic content.</p>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Views</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (article of articles(); track article.id) {
+              <tr>
+                <td>
+                  <div class="news-article-cell">
+                    @if (article.image) {
+                      <img [src]="getImageUrl(article.image)" alt="" class="article-thumb" />
+                    } @else {
+                      <div class="article-thumb-placeholder">VIC</div>
+                    }
+                    <div class="article-info">
+                      <span class="article-title">{{ article.title }}</span>
+                      <span class="article-slug text-muted">/news/{{ article.slug }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="category-badge">{{ article.category }}</span>
+                </td>
+                <td class="text-muted text-small">{{ article.formatted_date || article.date_str }}</td>
+                <td>
+                  <span class="status-badge" [class.badge-resolved]="article.status === 'Published'" [class.badge-new]="article.status === 'Draft'">
+                    {{ article.status }}
+                  </span>
+                </td>
+                <td class="text-muted text-small">{{ article.views || 0 }}</td>
+                <td class="text-right">
+                  <div class="action-buttons">
+                    <!-- Quick Live Preview Button -->
+                    <button class="btn-icon text-teal" (click)="openQuickPreview(article)" title="Live Web Preview">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                    <!-- Edit Button -->
+                    <button class="btn-icon" (click)="openEditModal(article)" title="Edit Article">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <!-- Delete Button -->
+                    <button class="btn-icon text-danger" (click)="confirmDelete(article)" title="Delete Article">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- ADD / EDIT ARTICLE MODAL (WITH LIVE PREVIEW TAB & RICH EDITOR) -->
+  @if (isModalOpen()) {
+    <div class="modal-backdrop">
+      <div class="modal-card modal-xl">
+        <div class="modal-header">
+          <div class="modal-title-tabs">
+            <button
+              class="modal-tab-btn"
+              [class.active]="activeModalTab() === 'editor'"
+              (click)="activeModalTab.set('editor')"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              {{ isEditing() ? 'Edit Content' : 'Create Article' }}
+            </button>
+            <button
+              class="modal-tab-btn"
+              [class.active]="activeModalTab() === 'preview'"
+              (click)="activeModalTab.set('preview'); syncHtmlFromVisualEditor()"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Live Website Preview
+            </button>
+          </div>
+          <button class="modal-close" (click)="closeModal()">&times;</button>
+        </div>
+
+        <div class="modal-body p-0">
+          
+          <!-- TAB 1: EDITOR -->
+          @if (activeModalTab() === 'editor') {
+            <div class="modal-editor-content">
+              <div class="form-grid">
+                
+                <div class="form-group col-span-2">
+                  <label class="form-label">Article Headline / Title *</label>
+                  <input type="text" class="form-control form-control-lg" [(ngModel)]="currentArticle().title" placeholder="e.g. VIC Signs Strategic MoU with CSL Seqirus..." />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Category</label>
+                  <select class="form-control" [(ngModel)]="currentArticle().category">
+                    @for (cat of categories; track cat) {
+                      <option [value]="cat">{{ cat }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Publish Status</label>
+                  <select class="form-control" [(ngModel)]="currentArticle().status">
+                    <option value="Published">Published (Public on Website)</option>
+                    <option value="Draft">Draft (Internal Only)</option>
+                    <option value="Archived">Archived</option>
+                  </select>
+                </div>
+
+                <!-- Featured Image Upload -->
+                <div class="form-group col-span-2">
+                  <label class="form-label">Cover / Featured Image</label>
+                  <div class="upload-dropzone">
+                    <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input" id="article-img-file" />
+                    <label for="article-img-file" class="dropzone-label">
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#0D8A8A" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                      <span>Click or drag image file here (JPG, PNG, WEBP)</span>
+                    </label>
+                  </div>
+
+                  @if (imagePreviewUrl()) {
+                    <div class="image-preview-box">
+                      <img [src]="imagePreviewUrl()" alt="Preview" />
+                      <div class="preview-text-info">
+                        <span class="preview-text">Cover Image Loaded</span>
+                        <span class="text-small text-muted">Ready for database upload</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <!-- Summary / Lead -->
+                <div class="form-group col-span-2">
+                  <label class="form-label">Brief Summary (Appears on card listing)</label>
+                  <textarea rows="2" class="form-control" [(ngModel)]="currentArticle().summary" placeholder="Brief summary of the announcement..."></textarea>
+                </div>
+
+                <!-- RICH UI WYSIWYG EDITOR -->
+                <div class="form-group col-span-2">
+                  <div class="editor-header-bar">
+                    <label class="form-label m-0">Article Body Content (Rich UI Editor)</label>
+                    <div class="editor-mode-toggle">
+                      <button
+                        type="button"
+                        class="btn-mode-pill"
+                        [class.active]="editorMode() === 'visual'"
+                        (click)="toggleEditorMode('visual')"
+                      >
+                        Visual Editor
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-mode-pill"
+                        [class.active]="editorMode() === 'html'"
+                        (click)="toggleEditorMode('html')"
+                      >
+                        &lt;/&gt; HTML Source
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- WYSIWYG Toolbar -->
+                  @if (editorMode() === 'visual') {
+                    <div class="editor-toolbar">
+                      <!-- Headings -->
+                      <select class="toolbar-select" (change)="formatBlock($any($event.target).value); $any($event.target).value=''">
+                        <option value="" disabled selected>Formatting</option>
+                        <option value="p">Normal Text (Paragraph)</option>
+                        <option value="h2">Heading 2 (Section Title)</option>
+                        <option value="h3">Heading 3 (Sub-heading)</option>
+                        <option value="h4">Heading 4 (Minor Title)</option>
+                      </select>
+
+                      <div class="toolbar-divider"></div>
+
+                      <!-- Inline styles -->
+                      <button type="button" class="toolbar-btn" (click)="execCmd('bold')" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                      <button type="button" class="toolbar-btn" (click)="execCmd('italic')" title="Italic (Ctrl+I)"><em>I</em></button>
+                      <button type="button" class="toolbar-btn" (click)="execCmd('underline')" title="Underline (Ctrl+U)"><u>U</u></button>
+                      <button type="button" class="toolbar-btn" (click)="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+
+                      <div class="toolbar-divider"></div>
+
+                      <!-- Lists -->
+                      <button type="button" class="toolbar-btn" (click)="execCmd('insertUnorderedList')" title="Bullet List">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                      </button>
+                      <button type="button" class="toolbar-btn" (click)="execCmd('insertOrderedList')" title="Numbered List">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+                      </button>
+
+                      <div class="toolbar-divider"></div>
+
+                      <!-- Insert helpers -->
+                      <button type="button" class="toolbar-btn" (click)="insertCallout()" title="Insert Callout Quote">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+                      </button>
+                      <button type="button" class="toolbar-btn" (click)="insertLink()" title="Insert Link">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                      </button>
+                      <button type="button" class="toolbar-btn" (click)="insertImagePrompt()" title="Insert Inline Image URL">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                      </button>
+                      <button type="button" class="toolbar-btn" (click)="execCmd('removeFormat')" title="Clear Formatting">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                      </button>
+                    </div>
+
+                    <!-- Editable Contentarea -->
+                    <div
+                      #visualEditor
+                      class="visual-editor-canvas"
+                      contenteditable="true"
+                      (input)="onVisualEditorInput()"
+                    ></div>
+                  } @else {
+                    <!-- Raw HTML textarea -->
+                    <textarea
+                      rows="12"
+                      class="form-control font-mono raw-html-area"
+                      [(ngModel)]="currentArticle().content_html"
+                      placeholder="<p>Enter raw HTML content here...</p>"
+                    ></textarea>
+                  }
+                </div>
+
+                <div class="form-group col-span-2">
+                  <label class="form-label">Official Press Reference Link (Optional)</label>
+                  <input type="url" class="form-control" [(ngModel)]="currentArticle().official_link" placeholder="https://vaccine.com.sa/press-release" />
+                </div>
+
+              </div>
+            </div>
+          }
+
+          <!-- TAB 2: LIVE PREVIEW (MATCHING PUBLIC ARTICLE DETAILS) -->
+          @if (activeModalTab() === 'preview') {
+            <div class="modal-preview-wrapper">
+              
+              <!-- Device Switcher Bar -->
+              <div class="preview-device-bar">
+                <span class="preview-label">Live Display Mode:</span>
+                <div class="device-buttons">
+                  <button
+                    type="button"
+                    class="btn-device"
+                    [class.active]="previewDevice() === 'desktop'"
+                    (click)="previewDevice.set('desktop')"
+                  >
+                    Desktop
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-device"
+                    [class.active]="previewDevice() === 'tablet'"
+                    (click)="previewDevice.set('tablet')"
+                  >
+                    Tablet
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-device"
+                    [class.active]="previewDevice() === 'mobile'"
+                    (click)="previewDevice.set('mobile')"
+                  >
+                    Mobile
+                  </button>
+                </div>
+              </div>
+
+              <!-- Preview Frame Container -->
+              <div class="preview-frame-container" [class]="'preview-' + previewDevice()">
+                <div class="public-article-preview">
+                  
+                  <!-- Meta Header -->
+                  <div class="preview-meta-row">
+                    <span class="preview-cat-badge">{{ currentArticle().category }}</span>
+                    <span class="preview-date-str">{{ currentArticle().formatted_date || 'Today' }}</span>
+                    <span class="preview-read-time">{{ currentArticle().read_time || '3 min read' }}</span>
+                  </div>
+
+                  <!-- Headline -->
+                  <h1 class="preview-headline">{{ currentArticle().title || 'Untitled Article Headline' }}</h1>
+
+                  <!-- Cover Photo -->
+                  @if (imagePreviewUrl()) {
+                    <div class="preview-hero-image">
+                      <img [src]="imagePreviewUrl()" alt="Cover" />
+                    </div>
+                  }
+
+                  <!-- Lead Summary -->
+                  @if (currentArticle().summary) {
+                    <div class="preview-lead-box">
+                      <p>{{ currentArticle().summary }}</p>
+                    </div>
+                  }
+
+                  <!-- Formatted Body HTML -->
+                  <div class="preview-rendered-body" [innerHTML]="getSafeHtml(currentArticle().content_html)"></div>
+
+                  <!-- Official Link -->
+                  @if (currentArticle().official_link) {
+                    <div class="preview-link-box">
+                      <span class="link-label">Official Press Reference:</span>
+                      <a [href]="currentArticle().official_link" target="_blank">{{ currentArticle().official_link }}</a>
+                    </div>
+                  }
+
+                </div>
+              </div>
+
+            </div>
+          }
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+          @if (activeModalTab() === 'editor') {
+            <button class="btn btn-outline" (click)="activeModalTab.set('preview'); syncHtmlFromVisualEditor()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Check Live Preview
+            </button>
+          } @else {
+            <button class="btn btn-outline" (click)="activeModalTab.set('editor')">
+              &larr; Back to Editor
+            </button>
+          }
+          <button class="btn btn-primary" (click)="saveArticle()" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? 'Saving to Database...' : (isEditing() ? 'Update & Save' : 'Publish to Database') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- QUICK STANDALONE PREVIEW MODAL -->
+  @if (isPreviewModalOpen() && previewArticle()) {
+    <div class="modal-backdrop">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="preview-kicker">Live Database Preview</span>
+            <h3 class="modal-title">{{ previewArticle()?.title }}</h3>
+          </div>
+          <button class="modal-close" (click)="closeQuickPreview()">&times;</button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="public-article-preview p-4">
+            <div class="preview-meta-row">
+              <span class="preview-cat-badge">{{ previewArticle()?.category }}</span>
+              <span class="preview-date-str">{{ previewArticle()?.formatted_date || previewArticle()?.date_str }}</span>
+              <span class="preview-read-time">{{ previewArticle()?.read_time }}</span>
+            </div>
+
+            @if (previewArticle()?.image) {
+              <div class="preview-hero-image">
+                <img [src]="getImageUrl(previewArticle()?.image)" alt="" />
+              </div>
+            }
+
+            <div class="preview-rendered-body" [innerHTML]="getSafeHtml(previewArticle()?.content_html)"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeQuickPreview()">Close Preview</button>
+          <button class="btn btn-primary" (click)="closeQuickPreview(); openEditModal(previewArticle()!)">
+            Edit Article
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- DELETE MODAL -->
+  @if (isDeleteModalOpen()) {
+    <div class="modal-backdrop">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h3 class="modal-title text-danger">Delete News Article</h3>
+          <button class="modal-close" (click)="closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Permanently remove article <strong>"{{ articleToDelete()?.title }}"</strong> from MySQL database?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteArticle()">Delete Article</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

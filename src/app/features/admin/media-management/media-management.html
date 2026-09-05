@@ -1,0 +1,319 @@
+<div class="media-management-page">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">Media & Asset Library</h1>
+      <p class="page-subtitle">Upload and manage high-resolution photos, videos, brand logos, PDF reports, and press kits</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="loadMedia()" [disabled]="isLoading()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Sync DB
+      </button>
+      <button class="btn btn-primary" (click)="openUploadModal()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Upload New Asset
+      </button>
+    </div>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <!-- Filters & Search Bar -->
+  <div class="filters-bar">
+    <div class="search-input-box">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input
+        type="text"
+        placeholder="Search files by title or name..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event); loadMedia()"
+      />
+    </div>
+
+    <div class="filter-dropdowns">
+      <select [ngModel]="selectedFormat()" (ngModelChange)="selectedFormat.set($event); loadMedia()" class="select-control">
+        <option value="All">All Formats</option>
+        <option value="IMAGE">Images (JPG, PNG, WEBP)</option>
+        <option value="PDF">PDF Documents</option>
+        <option value="DOC">Word Documents</option>
+        <option value="VIDEO">Videos</option>
+      </select>
+
+      <select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event); loadMedia()" class="select-control">
+        <option value="All">All Categories</option>
+        <option value="Brand Assets">Brand Assets</option>
+        <option value="Facility & Campus">Facility & Campus</option>
+        <option value="Press Kit">Press Kit</option>
+        <option value="General">General</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Media Grid -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner-large"></div>
+      <p>Loading media asset vault from MySQL...</p>
+    </div>
+  } @else if (mediaList().length === 0) {
+    <div class="empty-state-card">
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <h3>No media assets found in database</h3>
+      <p>Upload brand assets, photos or press materials to get started.</p>
+    </div>
+  } @else {
+    <div class="media-grid">
+      @for (item of mediaList(); track item.id) {
+        <div class="media-card" (click)="openPreview(item)">
+          
+          <!-- Thumbnail / Preview Box -->
+          <div class="media-preview-box">
+            @if (item.format === 'IMAGE') {
+              <img [src]="getImageUrl(item.file_url)" alt="" class="media-image" />
+            } @else if (item.format === 'PDF') {
+              <div class="file-icon-box pdf-box">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <span class="file-format-tag">PDF</span>
+              </div>
+            } @else if (item.format === 'VIDEO') {
+              <div class="file-icon-box video-box">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                <span class="file-format-tag">VIDEO</span>
+              </div>
+            } @else {
+              <div class="file-icon-box doc-box">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                <span class="file-format-tag">{{ item.format }}</span>
+              </div>
+            }
+
+            <span class="media-category-pill">{{ item.category }}</span>
+
+            <div class="preview-hover-overlay">
+              <span class="overlay-text">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Click to Preview
+              </span>
+            </div>
+          </div>
+
+          <!-- Info Details -->
+          <div class="media-info">
+            <h4 class="media-title" [title]="item.title">{{ item.title }}</h4>
+            <p class="media-filename text-muted text-small">{{ item.file_name }}</p>
+            <div class="media-meta-row">
+              <span class="meta-tag">{{ item.file_size }}</span>
+              <span class="meta-tag">{{ item.format }}</span>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="media-actions">
+            <button class="btn-copy-url" (click)="copyLink(item, $event)" title="Copy direct public link">
+              @if (copiedUrlId() === item.id) {
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10B981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span class="text-success">Copied!</span>
+              } @else {
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copy Link</span>
+              }
+            </button>
+            <button class="btn-delete-asset text-danger" (click)="confirmDelete(item, $event)" title="Delete File">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- HIGH-RES PREVIEW MODAL -->
+  @if (isPreviewModalOpen() && previewItem()) {
+    <div class="modal-backdrop">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="preview-kicker">{{ previewItem()?.format }} Asset Preview</span>
+            <h3 class="modal-title">{{ previewItem()?.title }}</h3>
+          </div>
+          <button class="modal-close" (click)="closePreview()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="preview-modal-body">
+            
+            <!-- Asset Display Box -->
+            <div class="asset-viewer-window">
+              @if (previewItem()?.format === 'IMAGE') {
+                <img
+                  [src]="getImageUrl(previewItem()?.file_url)"
+                  alt=""
+                  class="lightbox-img"
+                />
+              } @else if (previewItem()?.format === 'VIDEO') {
+                <video controls autoplay class="lightbox-video">
+                  <source [src]="getImageUrl(previewItem()?.file_url)" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              } @else {
+                <div class="document-preview-card">
+                  <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#0D8A8A" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <h4>{{ previewItem()?.file_name }}</h4>
+                  <p class="text-muted">{{ previewItem()?.description || 'No description provided' }}</p>
+                </div>
+              }
+            </div>
+
+            <!-- Metadata info grid -->
+            <div class="asset-meta-grid">
+              <div class="meta-item">
+                <span class="meta-key">File Name:</span>
+                <span class="meta-val font-mono">{{ previewItem()?.file_name }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-key">Category:</span>
+                <span class="meta-val">{{ previewItem()?.category }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-key">Format:</span>
+                <span class="meta-val">{{ previewItem()?.format }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-key">File Size:</span>
+                <span class="meta-val">{{ previewItem()?.file_size }}</span>
+              </div>
+              <div class="meta-item col-span-2">
+                <span class="meta-key">Direct Link:</span>
+                <div class="direct-link-bar">
+                  <input type="text" class="form-control font-mono text-small" [value]="previewItem()?.file_url?.startsWith('http') ? previewItem()?.file_url : 'http://localhost:5000' + previewItem()?.file_url" readonly />
+                  <button class="btn btn-sm btn-outline" (click)="copyLink(previewItem()!)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closePreview()">Close</button>
+          <a
+            [href]="previewItem()?.file_url?.startsWith('http') ? previewItem()?.file_url : (previewItem()?.file_url?.startsWith('/uploads') ? 'http://localhost:5000' + previewItem()?.file_url : previewItem()?.file_url)"
+            target="_blank"
+            download
+            class="btn btn-primary"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download File
+          </a>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- UPLOAD MODAL WITH DRAG & DROP -->
+  @if (isUploadModalOpen()) {
+    <div class="modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">Upload Asset to Library & DB</h3>
+          <button class="modal-close" (click)="closeUploadModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid">
+            
+            <div class="form-group col-span-2">
+              <label class="form-label">Select File *</label>
+              
+              <!-- Drag and drop zone -->
+              <div
+                class="upload-dropzone"
+                [class.drag-over]="isDragOver()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onFileDropped($event)"
+              >
+                <input type="file" (change)="onFileSelected($event)" class="file-input" id="asset-upload-file" />
+                <label for="asset-upload-file" class="dropzone-label">
+                  <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#0D8A8A" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span class="font-bold">{{ selectedFile ? selectedFile.name : 'Drag & Drop file here, or click to browse' }}</span>
+                  <span class="text-small text-muted">Supports Images (JPG, PNG, WEBP), PDF, Word Docs & Videos (Max 50MB)</span>
+                </label>
+              </div>
+
+              <!-- Instant Preview before Upload -->
+              @if (filePreviewUrl()) {
+                <div class="image-preview-box mt-2">
+                  <img [src]="filePreviewUrl()" alt="Preview" />
+                  <div class="preview-text-info">
+                    <span class="preview-text">Previewing selected image</span>
+                    <span class="text-small text-muted">{{ selectedFile?.size | number }} bytes</span>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="form-group col-span-2">
+              <label class="form-label">Asset Title *</label>
+              <input type="text" class="form-control" [ngModel]="uploadTitle()" (ngModelChange)="uploadTitle.set($event)" placeholder="e.g. Sudair Facility Aerial Render" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-control" [ngModel]="uploadCategory()" (ngModelChange)="uploadCategory.set($event)">
+                <option value="Brand Assets">Brand Assets</option>
+                <option value="Facility & Campus">Facility & Campus</option>
+                <option value="Press Kit">Press Kit</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div class="form-group col-span-2">
+              <label class="form-label">Description (Optional)</label>
+              <textarea rows="2" class="form-control" [ngModel]="uploadDescription()" (ngModelChange)="uploadDescription.set($event)" placeholder="Additional notes or specifications..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeUploadModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="submitUpload()" [disabled]="isUploading()">
+            {{ isUploading() ? 'Uploading to Server...' : 'Save & Push to DB' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- DELETE MODAL -->
+  @if (isDeleteModalOpen()) {
+    <div class="modal-backdrop">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h3 class="modal-title text-danger">Delete Media Asset</h3>
+          <button class="modal-close" (click)="closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to remove <strong>"{{ itemToDelete()?.title }}"</strong>?</p>
+          <p class="text-muted text-small">This will delete the asset record from MySQL and disk storage.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteItem()">Delete Asset</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

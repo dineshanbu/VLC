@@ -53,6 +53,36 @@
     <div class="news-hero__overlay" aria-hidden="true"></div>
   </div>
 
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
+  <div class="news-hero__wave-wrapper" aria-hidden="true">
+    <svg
+      class="news-hero__wave-svg"
+      viewBox="0 0 1440 120"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="newsTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C9A7" />
+          <stop offset="35%" stop-color="#00E5C9" />
+          <stop offset="70%" stop-color="#0D8A8A" />
+          <stop offset="100%" stop-color="#075E60" />
+        </linearGradient>
+      </defs>
+
+      <path
+        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        fill="url(#newsTealWaveGrad)"
+      />
+
+      <path
+        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+        fill="#F8FAFC"
+      />
+    </svg>
+  </div>
+
 </section>
 
 
@@ -130,7 +160,7 @@
         <!-- Card Image Thumbnail with Teal Badge Overlay -->
         <a [routerLink]="['/news', article.slug]" class="latest-news-card__image-wrap" [attr.aria-label]="article.title">
           <img
-            [src]="article.image"
+            [src]="getImageUrl(article.image)"
             [alt]="article.title"
             class="latest-news-card__image"
             loading="lazy"

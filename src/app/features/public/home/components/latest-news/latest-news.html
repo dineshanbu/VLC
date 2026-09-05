@@ -14,14 +14,22 @@
       </a>
     </div>
 
-    <!-- 4 News Cards Grid (Desktop: 4 in one row) -->
-    <div class="news__grid">
+    <!-- 4 News Cards Grid (Desktop: 4 in one row | Mobile: Carousel) -->
+    <div
+      #carouselTrack
+      class="news__grid"
+      (scroll)="onScroll($event)"
+      (touchstart)="pauseAutoplay()"
+      (touchend)="resumeAutoplay()"
+      (mouseenter)="pauseAutoplay()"
+      (mouseleave)="resumeAutoplay()"
+    >
       @for (item of news; track item.title) {
         <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="news__card">
 
           <!-- Image at Top -->
           <div class="news__image-wrap">
-            <img [src]="item.image" [alt]="item.title" class="news__image" />
+            <img [src]="getImageUrl(item.image)" [alt]="item.title" class="news__image" />
           </div>
 
           <!-- Content Body -->
@@ -41,6 +49,45 @@
 
         </a>
       }
+    </div>
+
+    <!-- Mobile-Only Editorial Pagination Bar: Slide Counter + Distinct Square-Pill Arrow Buttons -->
+    <div class="news__mobile-controls" aria-label="Latest News Carousel Navigation">
+      
+      <!-- Slide Counter Badge (e.g. 01 / 04) -->
+      <div class="news__counter-badge">
+        <span class="news__counter-current">0{{ activeIndex() + 1 }}</span>
+        <span class="news__counter-divider">/</span>
+        <span class="news__counter-total">0{{ news.length }}</span>
+      </div>
+
+      <!-- Segmented Button Group with Long Stem Arrows -->
+      <div class="news__btn-group">
+        <button
+          type="button"
+          class="news__nav-btn news__nav-btn--prev"
+          (click)="prevSlide()"
+          aria-label="Previous news item"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="news__nav-btn news__nav-btn--next"
+          (click)="nextSlide()"
+          aria-label="Next news item"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
     </div>
 
   </div>

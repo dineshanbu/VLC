@@ -1,1 +1,1 @@
-// VIC Core Interceptors - barrel export
+export * from './auth.interceptor';
