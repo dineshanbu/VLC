@@ -183,3 +183,37 @@
     min-height: 200px;
   }
 }
+
+/* ============================================
+   ARABIC (RTL) ABOUT VIC STYLING
+   ============================================ */
+:host-context(html[dir="rtl"]) .about-vic__content,
+:host-context(.lang-ar) .about-vic__content {
+  text-align: right;
+  align-items: flex-start;
+  padding: var(--space-32) var(--space-40) var(--space-32) var(--space-32);
+}
+
+:host-context(html[dir="rtl"]) .about-vic__heading,
+:host-context(.lang-ar) .about-vic__heading {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+:host-context(html[dir="rtl"]) .about-vic__desc,
+:host-context(.lang-ar) .about-vic__desc {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  line-height: 1.7;
+}
+
+:host-context(html[dir="rtl"]) .about-vic__btn,
+:host-context(.lang-ar) .about-vic__btn {
+  flex-direction: row;
+}
+
+:host-context(html[dir="rtl"]) .about-vic__btn-arrow,
+:host-context(.lang-ar) .about-vic__btn-arrow {
+  transform: scaleX(-1);
+}
+

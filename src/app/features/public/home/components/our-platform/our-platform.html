@@ -3,7 +3,7 @@
 
     <!-- Centered Eyebrow Heading -->
     <div class="platform__label-wrap">
-      <span class="platform__label">OUR PLATFORM</span>
+      <span class="platform__label">{{ translationService.translate('platform.eyebrow') }}</span>
     </div>
 
     <!-- Carousel Outer Wrapper for Floating Side Arrows -->
@@ -31,7 +31,7 @@
         (mouseenter)="pauseAutoplay()"
         (mouseleave)="resumeAutoplay()"
       >
-        @for (card of cards; track card.title) {
+        @for (card of cards(); track card.title) {
           <a [routerLink]="card.route" class="platform__card">
 
             <!-- Card Full Background Image -->
@@ -90,7 +90,7 @@
 
     <!-- Mobile Indicator Dots Underneath -->
     <div class="platform__mobile-dots" aria-hidden="true">
-      @for (card of cards; track card.number; let idx = $index) {
+      @for (card of cards(); track card.number; let idx = $index) {
         <button
           type="button"
           class="platform__dot"

@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslationService } from '../../../../../core/services/translation.service';
 
 interface PlatformCard {
   number: string;
@@ -22,45 +23,46 @@ interface PlatformCard {
 export class OurPlatformComponent implements OnInit, OnDestroy {
   @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLDivElement>;
 
+  readonly translationService = inject(TranslationService);
   readonly activeIndex = signal(0);
   private autoplayTimer?: ReturnType<typeof setInterval>;
   private isUserInteracting = false;
 
-  cards: PlatformCard[] = [
+  readonly cards = computed<PlatformCard[]>(() => [
     {
-      number: '01',
-      tag: 'LOCALIZE',
+      number: this.translationService.translate('platform.card1.number'),
+      tag: this.translationService.translate('platform.card1.tag'),
       tagColor: '#00E5C9',
-      title: 'Biomanufacturing',
-      description: 'Empowering communities through localizing the manufacturing of vaccines in Saudi Arabia.',
+      title: this.translationService.translate('platform.card1.title'),
+      description: this.translationService.translate('platform.card1.desc'),
       image: 'vicbirdview.png',
       alt: 'Biomanufacturing — VIC Facility Aerial View',
       route: '/platform',
       imagePosition: 'right 45%'
     },
     {
-      number: '02',
-      tag: 'INNOVATE',
+      number: this.translationService.translate('platform.card2.number'),
+      tag: this.translationService.translate('platform.card2.tag'),
       tagColor: '#3B82F6',
-      title: 'Research & Development',
-      description: 'Advancing science through research, development and innovation in vaccine technologies.',
+      title: this.translationService.translate('platform.card2.title'),
+      description: this.translationService.translate('platform.card2.desc'),
       image: 'purple_glove_vial_needle_macro.jpg',
       alt: 'Research & Development — Vaccine Innovations',
       route: '/platform',
       imagePosition: 'right center'
     },
     {
-      number: '03',
-      tag: 'SCALE',
+      number: this.translationService.translate('platform.card3.number'),
+      tag: this.translationService.translate('platform.card3.tag'),
       tagColor: '#00E5C9',
-      title: 'Targeted Products',
-      description: 'Building world-class manufacturing capabilities to deliver vaccines at scale.',
+      title: this.translationService.translate('platform.card3.title'),
+      description: this.translationService.translate('platform.card3.desc'),
       image: 'p4.png',
       alt: 'Targeted Products — Industrial Vaccine Solutions',
       route: '/products',
       imagePosition: '85% center'
     }
-  ];
+  ]);
 
   ngOnInit(): void {
     this.startAutoplay();
@@ -79,7 +81,7 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
 
       const isMobile = track.scrollWidth > track.clientWidth + 10;
       if (isMobile) {
-        const next = (this.activeIndex() + 1) % this.cards.length;
+        const next = (this.activeIndex() + 1) % this.cards().length;
         this.scrollToIndex(next);
       }
     }, 4000);
@@ -101,13 +103,13 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
   }
 
   nextSlide(): void {
-    const next = (this.activeIndex() + 1) % this.cards.length;
+    const next = (this.activeIndex() + 1) % this.cards().length;
     this.scrollToIndex(next);
     this.startAutoplay(); // Reset timer on manual action
   }
 
   prevSlide(): void {
-    const prev = (this.activeIndex() - 1 + this.cards.length) % this.cards.length;
+    const prev = (this.activeIndex() - 1 + this.cards().length) % this.cards().length;
     this.scrollToIndex(prev);
     this.startAutoplay(); // Reset timer on manual action
   }
@@ -115,9 +117,9 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
   onScroll(event: Event): void {
     const el = event.target as HTMLElement;
     if (!el) return;
-    const cardWidth = el.scrollWidth / this.cards.length;
+    const cardWidth = el.scrollWidth / this.cards().length;
     const index = Math.round(el.scrollLeft / cardWidth);
-    if (index !== this.activeIndex() && index >= 0 && index < this.cards.length) {
+    if (index !== this.activeIndex() && index >= 0 && index < this.cards().length) {
       this.activeIndex.set(index);
     }
   }
@@ -125,7 +127,7 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
   scrollToIndex(index: number): void {
     const track = this.carouselTrack?.nativeElement;
     if (!track) return;
-    const cardWidth = track.scrollWidth / this.cards.length;
+    const cardWidth = track.scrollWidth / this.cards().length;
     track.scrollTo({
       left: cardWidth * index,
       behavior: 'smooth'

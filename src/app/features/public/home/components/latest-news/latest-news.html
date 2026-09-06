@@ -3,10 +3,10 @@
 
     <!-- Header: Section Label on Left, View All News Link on Right -->
     <div class="news__header">
-      <span class="news__label">LATEST NEWS</span>
+      <span class="news__label">{{ translationService.translate('news.eyebrow') }}</span>
 
       <a routerLink="/news" class="news__view-all">
-        <span>View All News</span>
+        <span>{{ translationService.translate('news.viewAll') }}</span>
         <svg class="news__view-all-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="4" y1="12" x2="20" y2="12"></line>
           <polyline points="13 5 20 12 13 19"></polyline>
@@ -24,7 +24,7 @@
       (mouseenter)="pauseAutoplay()"
       (mouseleave)="resumeAutoplay()"
     >
-      @for (item of news; track item.title) {
+      @for (item of news(); track item.title) {
         <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="news__card">
 
           <!-- Image at Top -->
@@ -39,7 +39,7 @@
             <h3 class="news__title">{{ item.title }}</h3>
 
             <div class="news__action">
-              <span class="news__read-more">Read More</span>
+              <span class="news__read-more">{{ translationService.translate('news.readMore') }}</span>
               <svg class="news__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="4" y1="12" x2="20" y2="12"></line>
                 <polyline points="13 5 20 12 13 19"></polyline>
@@ -58,7 +58,7 @@
       <div class="news__counter-badge">
         <span class="news__counter-current">0{{ activeIndex() + 1 }}</span>
         <span class="news__counter-divider">/</span>
-        <span class="news__counter-total">0{{ news.length }}</span>
+        <span class="news__counter-total">0{{ news().length }}</span>
       </div>
 
       <!-- Segmented Button Group with Long Stem Arrows -->

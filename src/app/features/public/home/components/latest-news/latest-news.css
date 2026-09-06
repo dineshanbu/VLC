@@ -313,3 +313,46 @@
     box-shadow: 0 6px 16px rgba(13, 138, 138, 0.35);
   }
 }
+
+/* ============================================
+   ARABIC (RTL) LATEST NEWS STYLING
+   ============================================ */
+:host-context(html[dir="rtl"]) .news__header,
+:host-context(.lang-ar) .news__header {
+  flex-direction: row-reverse;
+}
+
+:host-context(html[dir="rtl"]) .news__body,
+:host-context(.lang-ar) .news__body {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .news__title,
+:host-context(.lang-ar) .news__title {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+:host-context(html[dir="rtl"]) .news__date,
+:host-context(.lang-ar) .news__date {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+:host-context(html[dir="rtl"]) .news__action,
+:host-context(.lang-ar) .news__action {
+  flex-direction: row;
+}
+
+:host-context(html[dir="rtl"]) .news__arrow,
+:host-context(.lang-ar) .news__arrow,
+:host-context(html[dir="rtl"]) .news__view-all-arrow,
+:host-context(.lang-ar) .news__view-all-arrow {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .news__nav-btn svg,
+:host-context(.lang-ar) .news__nav-btn svg {
+  transform: scaleX(-1);
+}
+

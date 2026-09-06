@@ -80,9 +80,9 @@
               type="button"
               class="hero__btn-video"
               (click)="openVideoModal()"
-              aria-label="Watch Corporate Video"
+              [attr.aria-label]="translationService.translate('hero.watchVideo')"
             >
-              <span class="hero__btn-label">Watch Corporate Video</span>
+              <span class="hero__btn-label">{{ translationService.translate('hero.watchVideo') }}</span>
               <span class="hero__play-icon-circle">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="7 4 19 12 7 20 7 4"></polygon>
@@ -149,8 +149,8 @@
       <div class="hero-video-modal__dialog" (click)="$event.stopPropagation()">
         <div class="hero-video-modal__header">
           <div class="hero-video-modal__header-left">
-            <span class="hero-video-modal__tag">VACCINE INDUSTRIAL COMPANY</span>
-            <h2 class="hero-video-modal__title">Corporate Overview</h2>
+            <span class="hero-video-modal__tag">{{ translationService.translate('hero.videoModalTag') }}</span>
+            <h2 class="hero-video-modal__title">{{ translationService.translate('hero.videoModalTitle') }}</h2>
           </div>
           <button
             type="button"

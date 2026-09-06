@@ -8,7 +8,7 @@
 
     <!-- Desktop Nav Links (Centered, Refined Typography) -->
     <ul class="navbar__links">
-      @for (link of navLinks; track link.route) {
+      @for (link of navLinks(); track link.route) {
         <li>
           <a
             [routerLink]="link.route"
@@ -41,7 +41,7 @@
 
       <!-- Compact CTA Button -->
       <a routerLink="/contact" class="btn btn-primary navbar__cta">
-        Contact Us
+        {{ translationService.translate('nav.contactUsBtn') }}
       </a>
     </div>
 
@@ -80,7 +80,7 @@
 
       <!-- Mobile Links -->
       <ul class="mobile-menu__links">
-        @for (link of navLinks; track link.route) {
+        @for (link of navLinks(); track link.route) {
           <li>
             <a
               [routerLink]="link.route"
@@ -94,7 +94,6 @@
           </li>
         }
       </ul>
-
 
       <!-- Mobile Language -->
       <div class="mobile-menu__lang">
@@ -113,7 +112,7 @@
 
       <!-- Mobile CTA Button -->
       <a routerLink="/contact" class="btn btn-primary mobile-menu__cta" (click)="closeMobileMenu()">
-        Contact Us
+        {{ translationService.translate('nav.contactUsBtn') }}
       </a>
     </div>
   </div>

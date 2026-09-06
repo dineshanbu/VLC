@@ -5,19 +5,19 @@
 
       <!-- Left Content Column (43%) -->
       <div class="about-vic__content">
-        <span class="about-vic__eyebrow">ABOUT VIC</span>
+        <span class="about-vic__eyebrow">{{ translationService.translate('aboutVic.eyebrow') }}</span>
 
         <h2 class="about-vic__heading">
-          Driven by Science.<br>Inspired by Humanity.
+          {{ translationService.translate('aboutVic.headingLine1') }}<br>{{ translationService.translate('aboutVic.headingLine2') }}
         </h2>
 
         <p class="about-vic__desc">
-          Vaccine Industrial Holding LLC (VIC), founded in 2022 in Riyadh by Dr. Khaled Almosa, a national biotech leader, is Saudi Arabia’s first company dedicated to establishing an advanced vaccine biomanufacturing facility. VIC aims to position the Kingdom as a regional and global vaccine hub by adopting advanced technologies, meeting global manufacturing standards, and strengthening national healthcare self-sufficiency.
+          {{ translationService.translate('aboutVic.desc') }}
         </p>
 
         <div class="about-vic__action">
           <a routerLink="/about" class="btn btn-primary about-vic__btn">
-            <span>Learn More About Us</span>
+            <span>{{ translationService.translate('aboutVic.btn') }}</span>
             <svg class="about-vic__btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="4" y1="12" x2="20" y2="12"></line>
               <polyline points="13 5 20 12 13 19"></polyline>

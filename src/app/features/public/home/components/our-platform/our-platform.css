@@ -391,3 +391,73 @@
     box-shadow: 0 0 8px rgba(13, 138, 138, 0.4);
   }
 }
+
+/* ============================================
+   ARABIC (RTL) OUR PLATFORM STYLING
+   ============================================ */
+:host-context(html[dir="rtl"]) .platform__card,
+:host-context(.lang-ar) .platform__card {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .platform__overlay,
+:host-context(.lang-ar) .platform__overlay {
+  background: linear-gradient(
+    270deg,
+    rgba(7, 25, 44, 0.94) 0%,
+    rgba(7, 25, 44, 0.88) 32%,
+    rgba(7, 25, 44, 0.72) 55%,
+    rgba(7, 25, 44, 0.35) 78%,
+    rgba(7, 25, 44, 0.08) 100%
+  );
+}
+
+:host-context(html[dir="rtl"]) .platform__card-header,
+:host-context(.lang-ar) .platform__card-header {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-title,
+:host-context(.lang-ar) .platform__card-title {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-desc,
+:host-context(.lang-ar) .platform__card-desc {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  line-height: 1.6;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-arrow,
+:host-context(.lang-ar) .platform__card-arrow {
+  right: auto;
+  left: 18px;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-arrow svg,
+:host-context(.lang-ar) .platform__card-arrow svg {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .platform__card:hover .platform__card-arrow svg,
+:host-context(.lang-ar) .platform__card:hover .platform__card-arrow svg {
+  transform: scaleX(-1) translateX(2px);
+}
+
+:host-context(html[dir="rtl"]) .platform__floating-btn--prev,
+:host-context(.lang-ar) .platform__floating-btn--prev {
+  left: auto;
+  right: -4px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .platform__floating-btn--next,
+:host-context(.lang-ar) .platform__floating-btn--next {
+  right: auto;
+  left: -4px;
+  transform: translateY(-50%) scaleX(-1);
+}
+

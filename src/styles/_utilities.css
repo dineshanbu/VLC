@@ -132,3 +132,29 @@
 @media (max-width: 1024px) {
   .hide-tablet { display: none !important; }
 }
+
+/* ==========================================
+   RTL SYSTEM UTILITIES
+   ========================================== */
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+html[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* RTL Arrow Flipping */
+html[dir="rtl"] .rtl-flip,
+html[dir="rtl"] .about-vic__btn-arrow,
+html[dir="rtl"] .news__arrow,
+html[dir="rtl"] .news__view-all-arrow,
+html[dir="rtl"] .platform__card-arrow svg {
+  transform: scaleX(-1);
+}
+

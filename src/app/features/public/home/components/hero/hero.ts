@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { TranslationService } from '../../../../../core/services/translation.service';
 
 @Component({
   selector: 'app-hero',
@@ -10,12 +11,31 @@ export class HeroComponent implements OnInit {
   @ViewChild('heroVideo') heroVideoRef?: ElementRef<HTMLVideoElement>;
   @ViewChild('modalVideo') modalVideoRef?: ElementRef<HTMLVideoElement>;
 
-  // Static content matching the exact attached design
-  readonly titleLine1 = 'Protecting Lives.';
-  readonly titleLine2 = 'Building';
-  readonly titleLine3Prefix = 'Healthier ';
-  readonly titleAccent = 'Futures.';
-  readonly description = "Saudi Arabia's next-generation vaccine manufacturing company, advancing innovation, localization and global health.";
+  readonly translationService = inject(TranslationService);
+
+  get titleLine1(): string {
+    return this.translationService.translate('hero.titleLine1');
+  }
+
+  get titleLine2(): string {
+    return this.translationService.translate('hero.titleLine2');
+  }
+
+  get titleLine3Prefix(): string {
+    return this.translationService.translate('hero.titleLine3Prefix');
+  }
+
+  get titleAccent(): string {
+    return this.translationService.translate('hero.titleAccent');
+  }
+
+  get description(): string {
+    return this.translationService.translate('hero.description');
+  }
+
+  get isRtl(): boolean {
+    return this.translationService.isRtl();
+  }
 
   readonly isVideoLoaded = signal(false);
   readonly isModalOpen = signal(false);

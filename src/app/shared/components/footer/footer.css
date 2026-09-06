@@ -290,3 +290,46 @@
     line-height: 1.6;
   }
 }
+
+/* ============================================
+   ARABIC (RTL) FOOTER STYLING
+   ============================================ */
+:host-context(html[dir="rtl"]) .footer,
+:host-context(.lang-ar) .footer {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .footer__heading,
+:host-context(.lang-ar) .footer__heading {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 700;
+}
+
+:host-context(html[dir="rtl"]) .footer__brand-text,
+:host-context(.lang-ar) .footer__brand-text,
+:host-context(html[dir="rtl"]) .footer__link,
+:host-context(.lang-ar) .footer__link,
+:host-context(html[dir="rtl"]) .footer__contact-text,
+:host-context(.lang-ar) .footer__contact-text,
+:host-context(html[dir="rtl"]) .footer__copyright,
+:host-context(.lang-ar) .footer__copyright {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  letter-spacing: 0;
+}
+
+:host-context(html[dir="rtl"]) .footer__link:hover,
+:host-context(.lang-ar) .footer__link:hover {
+  transform: translateX(-2px);
+}
+
+:host-context(html[dir="rtl"]) .footer__contact-item,
+:host-context(.lang-ar) .footer__contact-item {
+  flex-direction: row;
+}
+
+:host-context(html[dir="rtl"]) .footer__col--contact,
+:host-context(.lang-ar) .footer__col--contact {
+  padding-left: 0;
+  padding-right: var(--space-8);
+}
+

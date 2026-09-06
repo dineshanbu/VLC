@@ -112,3 +112,45 @@ h6, .text-h6 {
 .text-highlight {
   color: var(--color-secondary);
 }
+
+/* ============================================
+   ARABIC TYPOGRAPHY & RTL ENHANCEMENTS
+   ============================================ */
+html[lang="ar"],
+.lang-ar {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0 !important;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6,
+.lang-ar h1,
+.lang-ar h2,
+.lang-ar h3,
+.lang-ar h4,
+.lang-ar h5,
+.lang-ar h6,
+.lang-ar .hero__heading,
+.lang-ar .about-vic__heading,
+.lang-ar .platform__card-title,
+.lang-ar .news__title {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.35 !important;
+}
+
+html[lang="ar"] body,
+.lang-ar body,
+.lang-ar p,
+.lang-ar span,
+.lang-ar a,
+.lang-ar button {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  letter-spacing: 0 !important;
+}
+
