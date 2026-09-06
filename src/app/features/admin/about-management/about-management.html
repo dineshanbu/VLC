@@ -362,27 +362,63 @@
           <p class="panel-subtitle">Controls the banner title, badge, and hero facility backdrop.</p>
         </div>
 
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="heroEditLang() === 'en'" (click)="heroEditLang.set('en')">
+            <span>🇬🇧</span> English Content
+          </button>
+          <button type="button" class="pill-btn" [class.active]="heroEditLang() === 'ar'" (click)="heroEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
         <form (ngSubmit)="saveHeroSection()" class="form-body">
-          <div class="form-row">
-            <div class="form-group col-4">
-              <label>Eyebrow Badge</label>
-              <input type="text" [(ngModel)]="heroForm.badge" name="hero_badge" class="form-input" />
+          <!-- ENGLISH CONTENT -->
+          <ng-container *ngIf="heroEditLang() === 'en'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>Eyebrow Badge (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.badge" name="hero_badge" class="form-input" placeholder="e.g. ABOUT VIC" />
+              </div>
+              <div class="form-group col-8">
+                <label>Main Heading (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.title" name="hero_title" class="form-input" placeholder="e.g. Vaccine Industrial Holding LLC" required />
+              </div>
             </div>
-            <div class="form-group col-8">
-              <label>Main Heading</label>
-              <input type="text" [(ngModel)]="heroForm.title" name="hero_title" class="form-input" required />
+
+            <div class="form-group">
+              <label>Subheading (EN)</label>
+              <input type="text" [(ngModel)]="heroForm.subtitle" name="hero_subtitle" class="form-input" placeholder="e.g. Leading the Charge in Vaccine Innovation..." />
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>Subheading</label>
-            <input type="text" [(ngModel)]="heroForm.subtitle" name="hero_subtitle" class="form-input" />
-          </div>
+            <div class="form-group">
+              <label>Short Description Paragraph (EN)</label>
+              <textarea [(ngModel)]="heroForm.description" name="hero_desc" rows="3" class="form-textarea" placeholder="Optional short summary..."></textarea>
+            </div>
+          </ng-container>
 
-          <div class="form-group">
-            <label>Short Description Paragraph</label>
-            <textarea [(ngModel)]="heroForm.description" name="hero_desc" rows="3" class="form-textarea"></textarea>
-          </div>
+          <!-- ARABIC CONTENT -->
+          <ng-container *ngIf="heroEditLang() === 'ar'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>العنوان الترويجي (Badge AR)</label>
+                <input type="text" [(ngModel)]="heroForm.badge_ar" name="hero_badge_ar" class="form-input rtl-input" placeholder="مثال: عن الشركة" />
+              </div>
+              <div class="form-group col-8">
+                <label>العنوان الرئيسي (Heading AR)</label>
+                <input type="text" [(ngModel)]="heroForm.title_ar" name="hero_title_ar" class="form-input rtl-input" placeholder="مثال: شركة اللقاحات الصناعية القابضة" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>العنوان الفرعي (Subheading AR)</label>
+              <input type="text" [(ngModel)]="heroForm.subtitle_ar" name="hero_subtitle_ar" class="form-input rtl-input" placeholder="مثال: ريادة الابتكار وتوطين صناعة اللقاحات..." />
+            </div>
+
+            <div class="form-group">
+              <label>الوصف الموجز (Short Description AR)</label>
+              <textarea [(ngModel)]="heroForm.description_ar" name="hero_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="الوصف باللغة العربية..."></textarea>
+            </div>
+          </ng-container>
 
           <div class="form-group">
             <label>Hero Facility Image</label>
@@ -409,21 +445,26 @@
 
       <!-- RIGHT: Hero Live Visual Preview -->
       <div class="panel-card preview-card">
-        <div class="panel-header">
-          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
-          <h2 class="panel-title">Hero Banner Preview</h2>
-          <p class="panel-subtitle">Real-time simulation of public hero scale.</p>
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+            <h2 class="panel-title">Hero Banner Preview</h2>
+          </div>
+          <div class="lang-switch-pills" style="margin-bottom: 0;">
+            <button type="button" class="pill-btn" [class.active]="heroPreviewLang() === 'en'" (click)="heroPreviewLang.set('en')">🇬🇧 EN</button>
+            <button type="button" class="pill-btn" [class.active]="heroPreviewLang() === 'ar'" (click)="heroPreviewLang.set('ar')">🇸🇦 AR</button>
+          </div>
         </div>
 
         <div class="hero-live-preview-box">
-          <div class="preview-hero-left">
-            <span class="preview-eyebrow">{{ heroForm.badge || 'ABOUT VIC' }}</span>
-            <h2 class="preview-heading">{{ heroForm.title || 'Vaccine Industrial Holding LLC' }}</h2>
-            <p class="preview-subheading">{{ heroForm.subtitle || 'Leading the Charge in Vaccine Innovation' }}</p>
-            <p class="preview-desc">{{ heroForm.description }}</p>
+          <div class="preview-hero-left" [class.rtl-preview]="heroPreviewLang() === 'ar'">
+            <span class="preview-eyebrow">{{ (heroPreviewLang() === 'ar' ? (heroForm.badge_ar || heroForm.badge) : heroForm.badge) || 'ABOUT VIC' }}</span>
+            <h2 class="preview-heading">{{ (heroPreviewLang() === 'ar' ? (heroForm.title_ar || heroForm.title) : heroForm.title) || 'Vaccine Industrial Holding LLC' }}</h2>
+            <p class="preview-subheading">{{ (heroPreviewLang() === 'ar' ? (heroForm.subtitle_ar || heroForm.subtitle) : heroForm.subtitle) || 'Leading the Charge in Vaccine Innovation' }}</p>
+            <p class="preview-desc">{{ (heroPreviewLang() === 'ar' ? (heroForm.description_ar || heroForm.description) : heroForm.description) }}</p>
             <button type="button" class="preview-btn-mock" (click)="openOverviewPreview()">
-              <span>Read More</span>
-              <span>&rarr;</span>
+              <span>{{ heroPreviewLang() === 'ar' ? 'اقرأ المزيد' : 'Read More' }}</span>
+              <span>{{ heroPreviewLang() === 'ar' ? '&larr;' : '&rarr;' }}</span>
             </button>
           </div>
           <div class="preview-hero-right">
@@ -455,60 +496,129 @@
         </button>
       </div>
 
-      <form (ngSubmit)="saveOverviewModal()" class="form-body">
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label>Modal Eyebrow</label>
-            <input type="text" [(ngModel)]="overviewForm.badge" name="ov_badge" class="form-input" />
-          </div>
-          <div class="form-group col-8">
-            <label>Modal Heading</label>
-            <input type="text" [(ngModel)]="overviewForm.title" name="ov_title" class="form-input" required />
-          </div>
-        </div>
+      <div class="lang-switch-pills">
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'en'" (click)="overviewEditLang.set('en')">
+          <span>🇬🇧</span> English Story
+        </button>
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'ar'" (click)="overviewEditLang.set('ar')">
+          <span>🇸🇦</span> Saudi Arabic Story (العربية)
+        </button>
+      </div>
 
-        <div class="form-group">
-          <label class="section-subheading-label">Story Narrative Paragraphs ({{ overviewForm.paragraphs.length }})</label>
-          
-          <div class="paragraph-list">
-            <div *ngFor="let p of overviewForm.paragraphs; let pIdx = index" class="paragraph-item-row">
-              <div class="p-index-num">#{{ pIdx + 1 }}</div>
-              <textarea
-                [(ngModel)]="overviewForm.paragraphs[pIdx]"
-                [name]="'ov_p_' + pIdx"
-                rows="3"
-                class="form-textarea flex-1"
-              ></textarea>
-              <button
-                type="button"
-                class="btn-delete-circle"
-                (click)="removeOverviewParagraph(pIdx)"
-                title="Remove paragraph"
-              >
-                &times;
-              </button>
+      <form (ngSubmit)="saveOverviewModal()" class="form-body">
+        <!-- ENGLISH OVERVIEW -->
+        <ng-container *ngIf="overviewEditLang() === 'en'">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label>Modal Eyebrow (EN)</label>
+              <input type="text" [(ngModel)]="overviewForm.badge" name="ov_badge" class="form-input" placeholder="e.g. COMPANY OVERVIEW" />
+            </div>
+            <div class="form-group col-8">
+              <label>Modal Heading (EN)</label>
+              <input type="text" [(ngModel)]="overviewForm.title" name="ov_title" class="form-input" required />
             </div>
           </div>
 
-          <!-- Add new paragraph -->
-          <div class="add-paragraph-box">
-            <textarea
-              [(ngModel)]="overviewForm.newParagraphText"
-              name="ov_new_p"
-              rows="2"
-              placeholder="Type new story paragraph and click 'Add Paragraph'..."
-              class="form-textarea"
-            ></textarea>
-            <button
-              type="button"
-              class="btn btn-secondary mt-2"
-              (click)="addOverviewParagraph()"
-              [disabled]="!overviewForm.newParagraphText.trim()"
-            >
-              + Add Paragraph
-            </button>
+          <div class="form-group">
+            <label class="section-subheading-label">Story Narrative Paragraphs (EN: {{ overviewForm.paragraphs.length }})</label>
+            
+            <div class="paragraph-list">
+              <div *ngFor="let p of overviewForm.paragraphs; let pIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                <div class="p-index-num">#{{ pIdx + 1 }}</div>
+                <textarea
+                  [(ngModel)]="overviewForm.paragraphs[pIdx]"
+                  [name]="'ov_p_' + pIdx"
+                  rows="3"
+                  class="form-textarea flex-1"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-circle"
+                  (click)="removeOverviewParagraph(pIdx)"
+                  title="Remove paragraph"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Add new paragraph -->
+            <div class="add-paragraph-box">
+              <textarea
+                [(ngModel)]="overviewForm.newParagraphText"
+                name="ov_new_p"
+                rows="2"
+                placeholder="Type new English story paragraph and click 'Add Paragraph'..."
+                class="form-textarea"
+              ></textarea>
+              <button
+                type="button"
+                class="btn btn-secondary mt-2"
+                (click)="addOverviewParagraph()"
+                [disabled]="!overviewForm.newParagraphText.trim()"
+              >
+                + Add Paragraph
+              </button>
+            </div>
           </div>
-        </div>
+        </ng-container>
+
+        <!-- ARABIC OVERVIEW -->
+        <ng-container *ngIf="overviewEditLang() === 'ar'">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label>العنوان الترويجي (Eyebrow AR)</label>
+              <input type="text" [(ngModel)]="overviewForm.badge_ar" name="ov_badge_ar" class="form-input rtl-input" placeholder="مثال: نظرة عامة على الشركة" />
+            </div>
+            <div class="form-group col-8">
+              <label>عنوان النافذة (Modal Heading AR)</label>
+              <input type="text" [(ngModel)]="overviewForm.title_ar" name="ov_title_ar" class="form-input rtl-input" placeholder="مثال: ريادة التقنية الحيوية وصناعة اللقاحات في المملكة" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="section-subheading-label">فقرات القصة التعريفية (AR: {{ overviewForm.paragraphs_ar.length }})</label>
+            
+            <div class="paragraph-list">
+              <div *ngFor="let p of overviewForm.paragraphs_ar; let pIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                <div class="p-index-num">#{{ pIdx + 1 }}</div>
+                <textarea
+                  [(ngModel)]="overviewForm.paragraphs_ar[pIdx]"
+                  [name]="'ov_par_' + pIdx"
+                  rows="3"
+                  class="form-textarea flex-1 rtl-input"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-circle"
+                  (click)="removeOverviewParagraphAr(pIdx)"
+                  title="Remove paragraph"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Add new Arabic paragraph -->
+            <div class="add-paragraph-box">
+              <textarea
+                [(ngModel)]="overviewForm.newParagraphTextAr"
+                name="ov_new_par"
+                rows="2"
+                placeholder="اكتب فقرة جديدة باللغة العربية واضغط 'إضافة فقرة'..."
+                class="form-textarea rtl-input"
+              ></textarea>
+              <button
+                type="button"
+                class="btn btn-secondary mt-2"
+                (click)="addOverviewParagraphAr()"
+                [disabled]="!overviewForm.newParagraphTextAr.trim()"
+              >
+                + إضافة فقرة (Add Arabic Paragraph)
+              </button>
+            </div>
+          </div>
+        </ng-container>
 
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
@@ -535,90 +645,188 @@
           <p class="panel-subtitle">Edit the two cards rendered below the hero section on the public About page.</p>
         </div>
 
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'en'" (click)="vmEditLang.set('en')">
+            <span>🇬🇧</span> English Statements
+          </button>
+          <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'ar'" (click)="vmEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
         <form (ngSubmit)="saveVisionMission()" class="form-body">
-          <!-- VISION SECTION -->
-          <div class="form-section-box">
-            <h3 class="box-title">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              <span>Our Vision</span>
-            </h3>
+          <!-- ENGLISH CONTENT -->
+          <ng-container *ngIf="vmEditLang() === 'en'">
+            <!-- VISION SECTION EN -->
+            <div class="form-section-box">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>Our Vision (EN)</span>
+              </h3>
 
-            <div class="form-group">
-              <label>Vision Card Title</label>
-              <input type="text" [(ngModel)]="vmForm.vision_title" name="vision_title" class="form-input" />
-            </div>
-
-            <div class="form-group">
-              <label>Vision Paragraphs ({{ vmForm.vision_paragraphs.length }})</label>
-              <div *ngFor="let vp of vmForm.vision_paragraphs; let vIdx = index" class="paragraph-item-row">
-                <div class="p-index-num">#{{ vIdx + 1 }}</div>
-                <textarea
-                  [(ngModel)]="vmForm.vision_paragraphs[vIdx]"
-                  [name]="'vp_' + vIdx"
-                  rows="2"
-                  class="form-textarea flex-1"
-                ></textarea>
-                <button
-                  type="button"
-                  class="btn-delete-circle"
-                  (click)="removeVisionParagraph(vIdx)"
-                  title="Remove"
-                >
-                  &times;
-                </button>
+              <div class="form-group">
+                <label>Vision Card Title</label>
+                <input type="text" [(ngModel)]="vmForm.vision_title" name="vision_title" class="form-input" />
               </div>
 
-              <!-- Add vision p -->
-              <div class="add-sub-box">
+              <div class="form-group">
+                <label>Vision Paragraphs ({{ vmForm.vision_paragraphs.length }})</label>
+                <div *ngFor="let vp of vmForm.vision_paragraphs; let vIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                  <div class="p-index-num">#{{ vIdx + 1 }}</div>
+                  <textarea
+                    [(ngModel)]="vmForm.vision_paragraphs[vIdx]"
+                    [name]="'vp_' + vIdx"
+                    rows="2"
+                    class="form-textarea flex-1"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-circle"
+                    (click)="removeVisionParagraph(vIdx)"
+                    title="Remove"
+                  >
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Add vision p -->
+                <div class="add-sub-box">
+                  <textarea
+                    [(ngModel)]="vmForm.newVisionText"
+                    name="new_vp"
+                    rows="2"
+                    placeholder="Add additional vision paragraph..."
+                    class="form-textarea"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary mt-1"
+                    (click)="addVisionParagraph()"
+                    [disabled]="!vmForm.newVisionText.trim()"
+                  >
+                    + Add Vision Paragraph
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- MISSION SECTION EN -->
+            <div class="form-section-box mt-4">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>Our Mission (EN)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>Mission Card Title</label>
+                <input type="text" [(ngModel)]="vmForm.mission_title" name="mission_title" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label>Mission Statement Text</label>
                 <textarea
-                  [(ngModel)]="vmForm.newVisionText"
-                  name="new_vp"
-                  rows="2"
-                  placeholder="Add additional vision paragraph..."
+                  [(ngModel)]="vmForm.mission_text"
+                  name="mission_text"
+                  rows="4"
                   class="form-textarea"
                 ></textarea>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-secondary mt-1"
-                  (click)="addVisionParagraph()"
-                  [disabled]="!vmForm.newVisionText.trim()"
-                >
-                  + Add Vision Paragraph
-                </button>
               </div>
             </div>
-          </div>
+          </ng-container>
 
-          <!-- MISSION SECTION -->
-          <div class="form-section-box mt-4">
-            <h3 class="box-title">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
-              </svg>
-              <span>Our Mission</span>
-            </h3>
+          <!-- ARABIC CONTENT -->
+          <ng-container *ngIf="vmEditLang() === 'ar'">
+            <!-- VISION SECTION AR -->
+            <div class="form-section-box">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>رؤيتنا (Vision AR)</span>
+              </h3>
 
-            <div class="form-group">
-              <label>Mission Card Title</label>
-              <input type="text" [(ngModel)]="vmForm.mission_title" name="mission_title" class="form-input" />
+              <div class="form-group">
+                <label>عنوان بطاقة الرؤية (Vision Title AR)</label>
+                <input type="text" [(ngModel)]="vmForm.vision_title_ar" name="vision_title_ar" class="form-input rtl-input" placeholder="مثال: رؤيتنا" />
+              </div>
+
+              <div class="form-group">
+                <label>فقرات الرؤية ({{ vmForm.vision_paragraphs_ar.length }})</label>
+                <div *ngFor="let vp of vmForm.vision_paragraphs_ar; let vIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                  <div class="p-index-num">#{{ vIdx + 1 }}</div>
+                  <textarea
+                    [(ngModel)]="vmForm.vision_paragraphs_ar[vIdx]"
+                    [name]="'vpar_' + vIdx"
+                    rows="2"
+                    class="form-textarea flex-1 rtl-input"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-circle"
+                    (click)="removeVisionParagraphAr(vIdx)"
+                    title="Remove"
+                  >
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Add vision p AR -->
+                <div class="add-sub-box">
+                  <textarea
+                    [(ngModel)]="vmForm.newVisionTextAr"
+                    name="new_vpar"
+                    rows="2"
+                    placeholder="أضف فقرة جديدة للرؤية باللغة العربية..."
+                    class="form-textarea rtl-input"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary mt-1"
+                    (click)="addVisionParagraphAr()"
+                    [disabled]="!vmForm.newVisionTextAr.trim()"
+                  >
+                    + إضافة فقرة رؤية بالعربية
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label>Mission Statement Text</label>
-              <textarea
-                [(ngModel)]="vmForm.mission_text"
-                name="mission_text"
-                rows="4"
-                class="form-textarea"
-                required
-              ></textarea>
+            <!-- MISSION SECTION AR -->
+            <div class="form-section-box mt-4">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>رسالتنا (Mission AR)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>عنوان بطاقة الرسالة (Mission Title AR)</label>
+                <input type="text" [(ngModel)]="vmForm.mission_title_ar" name="mission_title_ar" class="form-input rtl-input" placeholder="مثال: رسالتنا" />
+              </div>
+
+              <div class="form-group">
+                <label>نص بيان الرسالة (Mission Statement AR)</label>
+                <textarea
+                  [(ngModel)]="vmForm.mission_text_ar"
+                  name="mission_text_ar"
+                  rows="4"
+                  class="form-textarea rtl-input"
+                  placeholder="اكتب بيان رسالة الشركة باللغة العربية..."
+                ></textarea>
+              </div>
             </div>
-          </div>
+          </ng-container>
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
@@ -630,13 +838,18 @@
 
       <!-- RIGHT: Live Visual Preview -->
       <div class="panel-card preview-card">
-        <div class="panel-header">
-          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
-          <h2 class="panel-title">Public Card Layout</h2>
-          <p class="panel-subtitle">Visual replica of the 2-column cards.</p>
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+            <h2 class="panel-title">Public Card Layout</h2>
+          </div>
+          <div class="lang-switch-pills" style="margin-bottom: 0;">
+            <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'en'" (click)="vmEditLang.set('en')">🇬🇧 EN</button>
+            <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'ar'" (click)="vmEditLang.set('ar')">🇸🇦 AR</button>
+          </div>
         </div>
 
-        <div class="vm-live-preview-grid">
+        <div class="vm-live-preview-grid" [class.rtl-preview]="vmEditLang() === 'ar'">
           <!-- Vision Card Preview -->
           <div class="vm-preview-card vm-preview-vision">
             <div class="vm-preview-header">
@@ -646,10 +859,10 @@
                   <circle cx="12" cy="12" r="3"></circle>
                 </svg>
               </div>
-              <span class="vm-preview-label">{{ vmForm.vision_title || 'OUR VISION' }}</span>
+              <span class="vm-preview-label">{{ (vmEditLang() === 'ar' ? (vmForm.vision_title_ar || vmForm.vision_title) : vmForm.vision_title) || 'OUR VISION' }}</span>
             </div>
             <div class="vm-preview-content">
-              <p *ngFor="let p of vmForm.vision_paragraphs">{{ p }}</p>
+              <p *ngFor="let p of (vmEditLang() === 'ar' && vmForm.vision_paragraphs_ar.length ? vmForm.vision_paragraphs_ar : vmForm.vision_paragraphs)">{{ p }}</p>
             </div>
           </div>
 
@@ -663,10 +876,10 @@
                   <circle cx="12" cy="12" r="2"></circle>
                 </svg>
               </div>
-              <span class="vm-preview-label">{{ vmForm.mission_title || 'OUR MISSION' }}</span>
+              <span class="vm-preview-label">{{ (vmEditLang() === 'ar' ? (vmForm.mission_title_ar || vmForm.mission_title) : vmForm.mission_title) || 'OUR MISSION' }}</span>
             </div>
             <div class="vm-preview-content">
-              <p>{{ vmForm.mission_text }}</p>
+              <p>{{ (vmEditLang() === 'ar' ? (vmForm.mission_text_ar || vmForm.mission_text) : vmForm.mission_text) }}</p>
             </div>
           </div>
         </div>
@@ -691,22 +904,123 @@
           <p class="panel-subtitle">Configure the banner background, national pledge, and 4 pillar badges.</p>
         </div>
 
-        <form (ngSubmit)="saveVision2030()" class="form-body">
-          <div class="form-row">
-            <div class="form-group col-4">
-              <label>Eyebrow Badge</label>
-              <input type="text" [(ngModel)]="v2030Form.badge" name="v2030_badge" class="form-input" />
-            </div>
-            <div class="form-group col-8">
-              <label>Section Heading</label>
-              <input type="text" [(ngModel)]="v2030Form.title" name="v2030_title" class="form-input" required />
-            </div>
-          </div>
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="v2030EditLang() === 'en'" (click)="v2030EditLang.set('en')">
+            <span>🇬🇧</span> English Section
+          </button>
+          <button type="button" class="pill-btn" [class.active]="v2030EditLang() === 'ar'" (click)="v2030EditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
 
-          <div class="form-group">
-            <label>Pledge Description</label>
-            <textarea [(ngModel)]="v2030Form.description" name="v2030_desc" rows="3" class="form-textarea"></textarea>
-          </div>
+        <form (ngSubmit)="saveVision2030()" class="form-body">
+          <!-- ENGLISH VISION 2030 -->
+          <ng-container *ngIf="v2030EditLang() === 'en'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>Eyebrow Badge (EN)</label>
+                <input type="text" [(ngModel)]="v2030Form.badge" name="v2030_badge" class="form-input" />
+              </div>
+              <div class="form-group col-8">
+                <label>Section Heading (EN)</label>
+                <input type="text" [(ngModel)]="v2030Form.title" name="v2030_title" class="form-input" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Pledge Description (EN)</label>
+              <textarea [(ngModel)]="v2030Form.description" name="v2030_desc" rows="3" class="form-textarea"></textarea>
+            </div>
+
+            <!-- Feature Badges EN -->
+            <div class="form-group mt-3">
+              <div class="d-flex justify-between align-center mb-2">
+                <label class="mb-0">Transformation Pillars (EN: {{ v2030Form.features.length }})</label>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="addV2030Feature()">
+                  + Add Pillar
+                </button>
+              </div>
+
+              <div class="features-edit-grid">
+                <div *ngFor="let feat of v2030Form.features; let fIdx = index; trackBy: trackByIndex" class="feature-edit-item">
+                  <div class="feature-item-header">
+                    <span class="pillar-label">Pillar #{{ fIdx + 1 }}</span>
+                    <button type="button" class="btn-delete-tiny" (click)="removeV2030Feature(fIdx)">
+                      &times;
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    [(ngModel)]="feat.title"
+                    [name]="'feat_t_' + fIdx"
+                    placeholder="Pillar Title (e.g. Health Sector Transformation)"
+                    class="form-input mb-1"
+                  />
+                  <input
+                    type="text"
+                    [(ngModel)]="feat.desc"
+                    [name]="'feat_d_' + fIdx"
+                    placeholder="Short description (optional)"
+                    class="form-input text-xs"
+                  />
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- ARABIC VISION 2030 -->
+          <ng-container *ngIf="v2030EditLang() === 'ar'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>الشعار الترويجي (Badge AR)</label>
+                <input type="text" [(ngModel)]="v2030Form.badge_ar" name="v2030_badge_ar" class="form-input rtl-input" placeholder="مثال: الاستراتيجية الوطنية" />
+              </div>
+              <div class="form-group col-8">
+                <label>عنوان القسم (Heading AR)</label>
+                <input type="text" [(ngModel)]="v2030Form.title_ar" name="v2030_title_ar" class="form-input rtl-input" placeholder="مثال: متوافقون مع رؤية السعودية 2030" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>نص الالتزام والرؤية (Pledge Description AR)</label>
+              <textarea [(ngModel)]="v2030Form.description_ar" name="v2030_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="اكتب وصف التوافق مع الرؤية بالعربية..."></textarea>
+            </div>
+
+            <!-- Feature Badges AR -->
+            <div class="form-group mt-3">
+              <div class="d-flex justify-between align-center mb-2">
+                <label class="mb-0">ركائز التحول الوطني (AR: {{ v2030Form.features_ar.length }})</label>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="addV2030Feature()">
+                  + إضافة ركيزة
+                </button>
+              </div>
+
+              <div class="features-edit-grid">
+                <div *ngFor="let feat of v2030Form.features_ar; let fIdx = index; trackBy: trackByIndex" class="feature-edit-item">
+                  <div class="feature-item-header">
+                    <span class="pillar-label">الركيزة #{{ fIdx + 1 }}</span>
+                    <button type="button" class="btn-delete-tiny" (click)="removeV2030Feature(fIdx)">
+                      &times;
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    [(ngModel)]="feat.title"
+                    [name]="'feat_ar_t_' + fIdx"
+                    placeholder="عنوان الركيزة (مثال: برنامج تحول القطاع الصحي)"
+                    class="form-input mb-1 rtl-input"
+                  />
+                  <input
+                    type="text"
+                    [(ngModel)]="feat.desc"
+                    [name]="'feat_ar_d_' + fIdx"
+                    placeholder="وصف مختصر (اختياري)"
+                    class="form-input text-xs rtl-input"
+                  />
+                </div>
+              </div>
+            </div>
+          </ng-container>
 
           <div class="form-group">
             <label>Background Skyline Image</label>
@@ -723,41 +1037,6 @@
             </div>
           </div>
 
-          <!-- Feature Badges -->
-          <div class="form-group mt-3">
-            <div class="d-flex justify-between align-center mb-2">
-              <label class="mb-0">Transformation Pillars ({{ v2030Form.features.length }})</label>
-              <button type="button" class="btn btn-sm btn-secondary" (click)="addV2030Feature()">
-                + Add Pillar
-              </button>
-            </div>
-
-            <div class="features-edit-grid">
-              <div *ngFor="let feat of v2030Form.features; let fIdx = index" class="feature-edit-item">
-                <div class="feature-item-header">
-                  <span class="pillar-label">Pillar #{{ fIdx + 1 }}</span>
-                  <button type="button" class="btn-delete-tiny" (click)="removeV2030Feature(fIdx)">
-                    &times;
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  [(ngModel)]="feat.title"
-                  [name]="'feat_t_' + fIdx"
-                  placeholder="Pillar Title (e.g. Health Sector Transformation)"
-                  class="form-input mb-1"
-                />
-                <input
-                  type="text"
-                  [(ngModel)]="feat.desc"
-                  [name]="'feat_d_' + fIdx"
-                  placeholder="Short description (optional)"
-                  class="form-input text-xs"
-                />
-              </div>
-            </div>
-          </div>
-
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
               {{ isSaving() ? 'Saving Vision 2030...' : 'Save Vision 2030 Section' }}
@@ -768,10 +1047,15 @@
 
       <!-- RIGHT: Live Visual Preview -->
       <div class="panel-card preview-card">
-        <div class="panel-header">
-          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
-          <h2 class="panel-title">Vision 2030 Banner Preview</h2>
-          <p class="panel-subtitle">Visual replica of the panoramic banner.</p>
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+            <h2 class="panel-title">Vision 2030 Banner Preview</h2>
+          </div>
+          <div class="lang-switch-pills" style="margin-bottom: 0;">
+            <button type="button" class="pill-btn" [class.active]="v2030EditLang() === 'en'" (click)="v2030EditLang.set('en')">🇬🇧 EN</button>
+            <button type="button" class="pill-btn" [class.active]="v2030EditLang() === 'ar'" (click)="v2030EditLang.set('ar')">🇸🇦 AR</button>
+          </div>
         </div>
 
         <div class="v2030-live-preview-box">
@@ -782,16 +1066,16 @@
           />
           <div class="v2030-preview-overlay"></div>
 
-          <div class="v2030-preview-content">
+          <div class="v2030-preview-content" [class.rtl-preview]="v2030EditLang() === 'ar'">
             <div class="v2030-text-col">
-              <span class="v2030-eyebrow">{{ v2030Form.badge || 'NATIONALITY' }}</span>
-              <h3 class="v2030-title">{{ v2030Form.title || 'Aligned with Saudi Vision 2030' }}</h3>
-              <p class="v2030-desc">{{ v2030Form.description }}</p>
+              <span class="v2030-eyebrow">{{ (v2030EditLang() === 'ar' ? (v2030Form.badge_ar || v2030Form.badge) : v2030Form.badge) || 'NATIONALITY' }}</span>
+              <h3 class="v2030-title">{{ (v2030EditLang() === 'ar' ? (v2030Form.title_ar || v2030Form.title) : v2030Form.title) || 'Aligned with Saudi Vision 2030' }}</h3>
+              <p class="v2030-desc">{{ (v2030EditLang() === 'ar' ? (v2030Form.description_ar || v2030Form.description) : v2030Form.description) }}</p>
             </div>
 
             <div class="v2030-card-col">
               <div class="v2030-preview-grid">
-                <div *ngFor="let feat of v2030Form.features" class="v2030-preview-item">
+                <div *ngFor="let feat of (v2030EditLang() === 'ar' && v2030Form.features_ar.length ? v2030Form.features_ar : v2030Form.features)" class="v2030-preview-item">
                   <div class="v2030-item-icon">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -833,71 +1117,324 @@
 
       <form (ngSubmit)="saveLeader()" class="modal-body-scroll">
         
-        <!-- ROW 1: Name & Initials -->
-        <div class="form-row">
-          <div class="form-group col-8">
-            <label>Full Name *</label>
-            <input
-              type="text"
-              [(ngModel)]="leaderForm.name"
-              name="l_name"
-              placeholder="e.g. Dr. Khaled Almosa"
-              class="form-input"
-              required
-            />
-          </div>
-          <div class="form-group col-4">
-            <label>Initials / Avatar Code</label>
-            <input
-              type="text"
-              [(ngModel)]="leaderForm.initials"
-              name="l_initials"
-              placeholder="e.g. KA"
-              class="form-input"
-              maxlength="4"
-            />
-          </div>
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'en'" (click)="leaderEditLang.set('en')">
+            <span>🇬🇧</span> English Profile
+          </button>
+          <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'ar'" (click)="leaderEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic Profile (العربية)
+          </button>
         </div>
 
-        <!-- ROW 2: Title & Board -->
-        <div class="form-row">
-          <div class="form-group col-8">
-            <label>Executive Title *</label>
+        <!-- ENGLISH PROFILE FIELDS -->
+        <ng-container *ngIf="leaderEditLang() === 'en'">
+          <!-- ROW 1: Name & Initials -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>Full Name (EN) *</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.name"
+                name="l_name"
+                placeholder="e.g. Dr. Khaled Almosa"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>Initials / Avatar Code</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.initials"
+                name="l_initials"
+                placeholder="e.g. KA"
+                class="form-input"
+                maxlength="4"
+              />
+            </div>
+          </div>
+
+          <!-- ROW 2: Title & Board -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>Executive Title (EN) *</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.title"
+                name="l_title"
+                placeholder="e.g. Founder and Chairman of Vaccine Industrial Company"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>Board / Committee Badge</label>
+              <select [(ngModel)]="leaderForm.badge" name="l_badge" class="form-select">
+                <option value="Founder & Chairman">Founder &amp; Chairman</option>
+                <option value="Executive Board">Executive Board</option>
+                <option value="Advisory Board">Advisory Board</option>
+                <option value="Scientific Board">Scientific Board</option>
+                <option value="Medical Board">Medical Board</option>
+                <option value="Board Member">Board Member</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ROW 3: Role Summary -->
+          <div class="form-group">
+            <label>Role Summary (EN - Displayed on Card)</label>
+            <textarea
+              [(ngModel)]="leaderForm.role"
+              name="l_role"
+              rows="2"
+              placeholder="Brief 1-2 sentence overview of professional leadership"
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <!-- SECTION: Comprehensive Bio Sections (Modal Content) EN -->
+          <div class="bio-builder-section">
+            <div class="bio-builder-header">
+              <div>
+                <h3 class="bio-title">Detailed Profile Biography &amp; Credentials (EN)</h3>
+                <p class="bio-subtitle">Configure structured sections (paragraphs or bullet points) shown in the full profile modal.</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSection()">
+                + Add Bio Section
+              </button>
+            </div>
+
+            <div *ngFor="let sec of leaderForm.bio_sections; let sIdx = index; trackBy: trackByIndex" class="bio-section-box">
+              <div class="bio-sec-header">
+                <input
+                  type="text"
+                  [(ngModel)]="sec.heading"
+                  [name]="'sec_h_' + sIdx"
+                  placeholder="Section Heading (e.g. Government Policy & Innovation Leadership)"
+                  class="form-input bio-heading-input"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioSection(sIdx)"
+                  title="Remove Section"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Paragraphs -->
+              <div class="bio-paragraphs-block">
+                <label class="sub-label">Paragraphs:</label>
+                <div *ngFor="let p of sec.paragraphs; let pIdx = index; trackBy: trackByIndex" class="bio-p-row">
+                  <textarea
+                    [(ngModel)]="sec.paragraphs![pIdx]"
+                    [name]="'sec_p_' + sIdx + '_' + pIdx"
+                    rows="2"
+                    class="form-textarea flex-1"
+                    placeholder="Enter paragraph text..."
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioParagraph(sec, pIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <button type="button" class="btn-link-sm" (click)="addBioParagraph(sec)">
+                  + Add Paragraph
+                </button>
+              </div>
+
+              <!-- Bullet Items -->
+              <div class="bio-items-block mt-2">
+                <label class="sub-label">Bullet Items / Key Achievements:</label>
+                <div *ngFor="let itm of sec.items; let iIdx = index; trackBy: trackByIndex" class="bio-item-row">
+                  <input
+                    type="text"
+                    [(ngModel)]="sec.items![iIdx]"
+                    [name]="'sec_i_' + sIdx + '_' + iIdx"
+                    class="form-input flex-1 text-sm"
+                    placeholder="Achievement or credential bullet..."
+                  />
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioItem(sec, iIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div class="d-flex align-center gap-2 mt-1">
+                  <input
+                    #newItemInput
+                    type="text"
+                    placeholder="Type new bullet item..."
+                    class="form-input flex-1 text-sm"
+                    (keyup.enter)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    (click)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                  >
+                    Add Item
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- ARABIC PROFILE FIELDS -->
+        <ng-container *ngIf="leaderEditLang() === 'ar'">
+          <!-- ROW 1: Name & Badge AR -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>الاسم الكامل (Full Name AR)</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.name_ar"
+                name="l_name_ar"
+                placeholder="مثال: د. خالد الموسى"
+                class="form-input rtl-input"
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>شارة المجلس بالعربية (Badge AR)</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.badge_ar"
+                name="l_badge_ar"
+                placeholder="مثال: المؤسس ورئيس مجلس الإدارة"
+                class="form-input rtl-input"
+              />
+            </div>
+          </div>
+
+          <!-- ROW 2: Title AR -->
+          <div class="form-group">
+            <label>المسمى التنفيذي (Executive Title AR)</label>
             <input
               type="text"
-              [(ngModel)]="leaderForm.title"
-              name="l_title"
-              placeholder="e.g. Founder and Chairman of Vaccine Industrial Company"
-              class="form-input"
-              required
+              [(ngModel)]="leaderForm.title_ar"
+              name="l_title_ar"
+              placeholder="مثال: المؤسس ورئيس مجلس إدارة شركة اللقاحات الصناعية"
+              class="form-input rtl-input"
             />
           </div>
-          <div class="form-group col-4">
-            <label>Board / Committee Badge</label>
-            <select [(ngModel)]="leaderForm.badge" name="l_badge" class="form-select">
-              <option value="Founder & Chairman">Founder &amp; Chairman</option>
-              <option value="Executive Board">Executive Board</option>
-              <option value="Advisory Board">Advisory Board</option>
-              <option value="Scientific Board">Scientific Board</option>
-              <option value="Medical Board">Medical Board</option>
-              <option value="Board Member">Board Member</option>
-            </select>
+
+          <!-- ROW 3: Role Summary AR -->
+          <div class="form-group">
+            <label>ملخص الدور القيادي (Role Summary AR - بطاقة العرض)</label>
+            <textarea
+              [(ngModel)]="leaderForm.role_ar"
+              name="l_role_ar"
+              rows="2"
+              placeholder="نبذة موجزة عن الدور القيادي باللغة العربية..."
+              class="form-textarea rtl-input"
+            ></textarea>
           </div>
-        </div>
 
-        <!-- ROW 3: Role Summary -->
-        <div class="form-group">
-          <label>Role Summary (Displayed on Card)</label>
-          <textarea
-            [(ngModel)]="leaderForm.role"
-            name="l_role"
-            rows="2"
-            placeholder="Brief 1-2 sentence overview of professional leadership"
-            class="form-textarea"
-          ></textarea>
-        </div>
+          <!-- SECTION: Comprehensive Bio Sections (Modal Content) AR -->
+          <div class="bio-builder-section">
+            <div class="bio-builder-header">
+              <div>
+                <h3 class="bio-title">السيرة الذاتية المفصلة والمؤهلات (AR)</h3>
+                <p class="bio-subtitle">الأقسام والفقرات المعروضة داخل النافذة المنبثقة بالعربية.</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSectionAr()">
+                + إضافة قسم جديد
+              </button>
+            </div>
 
-        <!-- ROW 4: Photo Upload -->
+            <div *ngFor="let sec of leaderForm.bio_sections_ar; let sIdx = index; trackBy: trackByIndex" class="bio-section-box">
+              <div class="bio-sec-header">
+                <input
+                  type="text"
+                  [(ngModel)]="sec.heading"
+                  [name]="'sec_ar_h_' + sIdx"
+                  placeholder="عنوان القسم (مثال: القيادة والسياسات الصحية والابتكار)"
+                  class="form-input bio-heading-input rtl-input"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioSectionAr(sIdx)"
+                  title="حذف القسم"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Paragraphs AR -->
+              <div class="bio-paragraphs-block">
+                <label class="sub-label">الفقرات:</label>
+                <div *ngFor="let p of sec.paragraphs; let pIdx = index; trackBy: trackByIndex" class="bio-p-row">
+                  <textarea
+                    [(ngModel)]="sec.paragraphs![pIdx]"
+                    [name]="'sec_ar_p_' + sIdx + '_' + pIdx"
+                    rows="2"
+                    class="form-textarea flex-1 rtl-input"
+                    placeholder="نص الفقرة بالعربية..."
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioParagraphAr(sec, pIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <button type="button" class="btn-link-sm" (click)="addBioParagraphAr(sec)">
+                  + إضافة فقرة
+                </button>
+              </div>
+
+              <!-- Bullet Items AR -->
+              <div class="bio-items-block mt-2">
+                <label class="sub-label">النقاط والإنجازات الرئيسية:</label>
+                <div *ngFor="let itm of sec.items; let iIdx = index; trackBy: trackByIndex" class="bio-item-row">
+                  <input
+                    type="text"
+                    [(ngModel)]="sec.items![iIdx]"
+                    [name]="'sec_ar_i_' + sIdx + '_' + iIdx"
+                    class="form-input flex-1 text-sm rtl-input"
+                    placeholder="إنجاز أو مؤهل..."
+                  />
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioItemAr(sec, iIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div class="d-flex align-center gap-2 mt-1">
+                  <input
+                    #newItemInputAr
+                    type="text"
+                    placeholder="اكتب نقطة جديدة..."
+                    class="form-input flex-1 text-sm rtl-input"
+                    (keyup.enter)="addBioItemAr(sec, newItemInputAr.value); newItemInputAr.value = ''"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    (click)="addBioItemAr(sec, newItemInputAr.value); newItemInputAr.value = ''"
+                  >
+                    إضافة
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- SHARED: Photo Upload -->
         <div class="form-row align-center">
           <div class="form-group col-4">
             <div class="leader-upload-preview">
@@ -919,7 +1456,7 @@
           </div>
         </div>
 
-        <!-- ROW 5: Status & Order -->
+        <!-- SHARED: Status & Order -->
         <div class="form-row">
           <div class="form-group col-6">
             <label>Display Status</label>
@@ -936,101 +1473,6 @@
               name="l_order"
               class="form-input"
             />
-          </div>
-        </div>
-
-        <!-- SECTION: Comprehensive Bio Sections (Modal Content) -->
-        <div class="bio-builder-section">
-          <div class="bio-builder-header">
-            <div>
-              <h3 class="bio-title">Detailed Profile Biography &amp; Credentials</h3>
-              <p class="bio-subtitle">Configure structured sections (paragraphs or bullet points) shown in the full profile modal.</p>
-            </div>
-            <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSection()">
-              + Add Bio Section
-            </button>
-          </div>
-
-          <div *ngFor="let sec of leaderForm.bio_sections; let sIdx = index" class="bio-section-box">
-            <div class="bio-sec-header">
-              <input
-                type="text"
-                [(ngModel)]="sec.heading"
-                [name]="'sec_h_' + sIdx"
-                placeholder="Section Heading (e.g. Government Policy & Innovation Leadership)"
-                class="form-input bio-heading-input"
-              />
-              <button
-                type="button"
-                class="btn-delete-tiny"
-                (click)="removeBioSection(sIdx)"
-                title="Remove Section"
-              >
-                &times;
-              </button>
-            </div>
-
-            <!-- Paragraphs -->
-            <div class="bio-paragraphs-block">
-              <label class="sub-label">Paragraphs:</label>
-              <div *ngFor="let p of sec.paragraphs; let pIdx = index" class="bio-p-row">
-                <textarea
-                  [(ngModel)]="sec.paragraphs![pIdx]"
-                  [name]="'sec_p_' + sIdx + '_' + pIdx"
-                  rows="2"
-                  class="form-textarea flex-1"
-                  placeholder="Enter paragraph text..."
-                ></textarea>
-                <button
-                  type="button"
-                  class="btn-delete-tiny"
-                  (click)="removeBioParagraph(sec, pIdx)"
-                >
-                  &times;
-                </button>
-              </div>
-              <button type="button" class="btn-link-sm" (click)="addBioParagraph(sec)">
-                + Add Paragraph
-              </button>
-            </div>
-
-            <!-- Bullet Items -->
-            <div class="bio-items-block mt-2">
-              <label class="sub-label">Bullet Items / Key Achievements:</label>
-              <div *ngFor="let itm of sec.items; let iIdx = index" class="bio-item-row">
-                <input
-                  type="text"
-                  [(ngModel)]="sec.items![iIdx]"
-                  [name]="'sec_i_' + sIdx + '_' + iIdx"
-                  class="form-input flex-1 text-sm"
-                  placeholder="Achievement or credential bullet..."
-                />
-                <button
-                  type="button"
-                  class="btn-delete-tiny"
-                  (click)="removeBioItem(sec, iIdx)"
-                >
-                  &times;
-                </button>
-              </div>
-              <div class="d-flex align-center gap-2 mt-1">
-                <input
-                  #newItemInput
-                  type="text"
-                  placeholder="Type new bullet item..."
-                  class="form-input flex-1 text-sm"
-                  (keyup.enter)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
-                />
-                <button
-                  type="button"
-                  class="btn btn-sm btn-secondary"
-                  (click)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
-                >
-                  Add Item
-                </button>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -1069,8 +1511,13 @@
         </svg>
       </button>
 
+      <div class="lang-switch-pills" style="margin: 0.5rem 1.5rem 0;">
+        <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'en'" (click)="leaderEditLang.set('en')">🇬🇧 English</button>
+        <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'ar'" (click)="leaderEditLang.set('ar')">🇸🇦 Saudi Arabic</button>
+      </div>
+
       <!-- Leader Modal Header: Photo + Name + Title -->
-      <div class="about-leader-modal__header">
+      <div class="about-leader-modal__header" [class.rtl-preview]="leaderEditLang() === 'ar'">
         <div class="about-leader-modal__portrait">
           <img
             *ngIf="previewLeader()?.image"
@@ -1083,19 +1530,19 @@
           </div>
         </div>
         <div class="about-leader-modal__meta">
-          <span class="about-modal__eyebrow">{{ previewLeader()?.badge || 'LEADERSHIP' }}</span>
+          <span class="about-modal__eyebrow">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.badge_ar || previewLeader()?.badge) : previewLeader()?.badge) || 'LEADERSHIP' }}</span>
           <h2 class="about-leader-modal__name">
-            {{ previewLeader()?.name }}
+            {{ (leaderEditLang() === 'ar' ? (previewLeader()?.name_ar || previewLeader()?.name) : previewLeader()?.name) }}
           </h2>
-          <p class="about-leader-modal__title">{{ previewLeader()?.title }}</p>
-          <p class="about-leader-modal__role-tag">{{ previewLeader()?.role }}</p>
+          <p class="about-leader-modal__title">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.title_ar || previewLeader()?.title) : previewLeader()?.title) }}</p>
+          <p class="about-leader-modal__role-tag">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.role_ar || previewLeader()?.role) : previewLeader()?.role) }}</p>
         </div>
       </div>
 
       <!-- Leader Modal Body: Detailed Bio Sections -->
-      <div class="about-modal__body about-leader-modal__body">
+      <div class="about-modal__body about-leader-modal__body" [class.rtl-preview]="leaderEditLang() === 'ar'">
         <div
-          *ngFor="let section of previewLeader()?.bio_sections"
+          *ngFor="let section of (leaderEditLang() === 'ar' && previewLeader()?.bio_sections_ar && previewLeader()!.bio_sections_ar!.length > 0 ? previewLeader()?.bio_sections_ar : previewLeader()?.bio_sections)"
           class="about-leader-modal__section"
         >
           <h3 class="about-leader-modal__section-heading">{{ section.heading }}</h3>
@@ -1137,15 +1584,25 @@
         </svg>
       </button>
 
-      <div class="about-modal__header">
-        <span class="about-modal__eyebrow">{{ overviewForm.badge || 'COMPANY OVERVIEW' }}</span>
+      <div class="lang-switch-pills" style="margin: 0.5rem 1.5rem 0;">
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'en'" (click)="overviewEditLang.set('en')">🇬🇧 English</button>
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'ar'" (click)="overviewEditLang.set('ar')">🇸🇦 Saudi Arabic</button>
+      </div>
+
+      <div class="about-modal__header" [class.rtl-preview]="overviewEditLang() === 'ar'">
+        <span class="about-modal__eyebrow">{{ (overviewEditLang() === 'ar' ? (overviewForm.badge_ar || overviewForm.badge) : overviewForm.badge) || 'COMPANY OVERVIEW' }}</span>
         <h2 class="about-modal__heading">
-          {{ overviewForm.title || 'Pioneering Biotechnology in Saudi Arabia' }}
+          {{ (overviewEditLang() === 'ar' ? (overviewForm.title_ar || overviewForm.title) : overviewForm.title) || 'Pioneering Biotechnology in Saudi Arabia' }}
         </h2>
       </div>
 
-      <div class="about-modal__body">
-        <p *ngFor="let p of overviewForm.paragraphs">{{ p }}</p>
+      <div class="about-modal__body" [class.rtl-preview]="overviewEditLang() === 'ar'">
+        <ng-container *ngIf="overviewEditLang() === 'ar'">
+          <p *ngFor="let p of (overviewForm.paragraphs_ar.length ? overviewForm.paragraphs_ar : overviewForm.paragraphs)">{{ p }}</p>
+        </ng-container>
+        <ng-container *ngIf="overviewEditLang() === 'en'">
+          <p *ngFor="let p of overviewForm.paragraphs">{{ p }}</p>
+        </ng-container>
       </div>
     </div>
   </div>

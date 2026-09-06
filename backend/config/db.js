@@ -98,6 +98,53 @@ async function createTables(db) {
       console.log('[DB Migration Notice]', migErr.message);
     }
 
+    // Ensure about_page_content and about_leaders have Arabic localization fields
+    try {
+      const [contentColsRaw] = await db.query("SHOW COLUMNS FROM about_page_content");
+      const contentCols = contentColsRaw.map(c => c.Field);
+      if (!contentCols.includes('title_ar')) {
+        await db.query("ALTER TABLE about_page_content ADD COLUMN title_ar VARCHAR(255) NULL AFTER title");
+      }
+      if (!contentCols.includes('subtitle_ar')) {
+        await db.query("ALTER TABLE about_page_content ADD COLUMN subtitle_ar VARCHAR(255) NULL AFTER subtitle");
+      }
+      if (!contentCols.includes('badge_ar')) {
+        await db.query("ALTER TABLE about_page_content ADD COLUMN badge_ar VARCHAR(100) NULL AFTER badge");
+      }
+      if (!contentCols.includes('description_ar')) {
+        await db.query("ALTER TABLE about_page_content ADD COLUMN description_ar TEXT NULL AFTER description");
+      }
+      if (!contentCols.includes('content_json_ar')) {
+        await db.query("ALTER TABLE about_page_content ADD COLUMN content_json_ar JSON NULL AFTER content_json");
+      }
+
+      const [leaderColsRaw] = await db.query("SHOW COLUMNS FROM about_leaders");
+      const leaderCols = leaderColsRaw.map(c => c.Field);
+      if (!leaderCols.includes('name_ar')) {
+        await db.query("ALTER TABLE about_leaders ADD COLUMN name_ar VARCHAR(150) NULL AFTER name");
+      }
+      if (!leaderCols.includes('title_ar')) {
+        await db.query("ALTER TABLE about_leaders ADD COLUMN title_ar VARCHAR(255) NULL AFTER title");
+      }
+      if (!leaderCols.includes('role_ar')) {
+        await db.query("ALTER TABLE about_leaders ADD COLUMN role_ar TEXT NULL AFTER role");
+      }
+      if (!leaderCols.includes('badge_ar')) {
+        await db.query("ALTER TABLE about_leaders ADD COLUMN badge_ar VARCHAR(100) NULL AFTER badge");
+      }
+      if (!leaderCols.includes('bio_sections_ar')) {
+        await db.query("ALTER TABLE about_leaders ADD COLUMN bio_sections_ar JSON NULL AFTER bio_sections");
+      }
+      
+      // Ensure utf8mb4 collation for all Arabic text storage
+      await db.query("ALTER TABLE about_page_content CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+      await db.query("ALTER TABLE about_leaders CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+
+      console.log('[DB Migration] About tables verified with Arabic columns and utf8mb4 charset.');
+    } catch (aboutMigErr) {
+      console.log('[DB Migration Notice - About]', aboutMigErr.message);
+    }
+
     console.log('[DB] Database tables checked/created successfully.');
   }
 }
@@ -812,16 +859,23 @@ const defaultAboutContent = {
   hero: {
     section_key: 'hero',
     badge: 'ABOUT VIC',
+    badge_ar: 'عن الشركة',
     title: 'Vaccine Industrial Holding LLC',
+    title_ar: 'شركة اللقاحات الصناعية القابضة',
     subtitle: 'Leading the Charge in Vaccine Innovation in Saudi Arabia',
+    subtitle_ar: 'ريادة الابتكار وتوطين صناعة اللقاحات في المملكة العربية السعودية',
     description: 'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia, dedicated to advancing vaccine innovation, manufacturing excellence, and national healthcare resilience.',
+    description_ar: 'تعد شركة اللقاحات الصناعية القابضة (VIC) شركة رائدة في مجال التقنية الحيوية ومقرها الرياض، المملكة العربية السعودية، وتكرس جهودها لتعزيز الابتكار في اللقاحات، والتميز في التصنيع، ودعم منظومة الأمن الصحي الوطني.',
     image_url: 'home_banner.png'
   },
   overview_modal: {
     section_key: 'overview_modal',
     badge: 'COMPANY OVERVIEW',
+    badge_ar: 'نظرة عامة على الشركة',
     title: 'Pioneering Biotechnology in Saudi Arabia',
+    title_ar: 'ريادة التقنية الحيوية وصناعة اللقاحات في المملكة',
     description: 'The historic journey, strategic three-phase manufacturing facility, and national mission of Vaccine Industrial Holding LLC.',
+    description_ar: 'المسيرة التاريخية، والمجمع الصناعي الاستراتيجي ثلاثي المراحل، والرسالة الوطنية لشركة اللقاحات الصناعية القابضة.',
     content_json: [
       'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia. Established in January 2022, VIC was conceived by Dr. Khaled Almosa, a distinguished healthcare management consultant and a visionary in the biotechnology sector. With an illustrious career as the Founder, Vice Chairman, and Managing Director of the Saudi Biotechnology Manufacturing Company for Insulin and Biologics from 2010 to 2020, Dr. Almosa has significantly advanced the biotechnology industry within the Kingdom.',
       'Dr. Almosa is a multifaceted entrepreneur, having founded numerous companies across various industries. He is also the founder of the Biotechnology Innovation Company for R&D in collaboration with King Abdulaziz City for Science and Technology (KACST) and the Center for Vaccine Development at Baylor College of Medicine, Houston, USA. Additionally, he established the Biotechnology Training Institute in Saudi Arabia and Bioera Industrial Engineering Company to construct biotech facilities in the GCC region.',
@@ -829,12 +883,22 @@ const defaultAboutContent = {
       'Vaccine Industrial Holding LLC is the first and only company in Saudi Arabia committed to establishing a state-of-the-art vaccine biomanufacturing facility. This ambitious project aims to transform the Kingdom into a global hub for vaccine production, enhancing self-reliance and advancing the nation’s healthcare infrastructure.',
       'The development of this groundbreaking facility will occur in three strategic phases over seven years. Each phase is meticulously planned to build cutting-edge capabilities, utilizing the latest technologies and innovations to produce high-quality vaccines that meet global standards. VIC’s initiative reflects its commitment to supporting Saudi Arabia’s healthcare needs while contributing to global efforts in vaccine accessibility and sustainability.',
       'Through this transformative journey, VIC addresses regional healthcare demands and positions Saudi Arabia as a global leader in vaccine manufacturing. With visionary leadership, technological excellence, and an unwavering commitment to innovation, Vaccine Industrial Holding LLC is paving the way for a healthier and more resilient future.'
+    ],
+    content_json_ar: [
+      'تعد شركة اللقاحات الصناعية القابضة (VIC) شركة وطنية رائدة في مجال التقنية الحيوية، تتخذ من العاصمة الرياض مقراً رئيسياً لها. تأسست في يناير 2022 بمبادرة من الدكتور خالد الموسى، الخبير الاستشاري الرائد في إدارة الرعاية الصحية والتقنية الحيوية ومؤسس الشركة السعودية للصناعات الحيوية المتقدمة للإنسولين والمستحضرات الحيوية (2010–2020).',
+      'أسس الدكتور الموسى العديد من المشاريع الرائدة، من بينها شركة الابتكار للتقنية الحيوية للأبحاث والتطوير بالتعاون مع مدينة الملك عبدالعزيز للعلوم والتقنية (KACST) ومركز أبحاث اللقاحات في كلية بايلور للطب بالولايات المتحدة، إضافة إلى معهد تدريب التقنية الحيوية وشركة بيوإيرا للهندسة الصناعية.',
+      'يحظى الدكتور الموسى بعضوية اللجنة العليا للبحث والتطوير والابتكار برئاسة صاحب السمو الملكي ولي العهد رئيس مجلس الوزراء الأمير محمد بن سلمان، والمنبثقة عن مجلس الشؤون الاقتصادية والتنمية، تقديراً لمساهماته النوعية في توطين الصناعات المعرفية والطبية.',
+      'تعد شركة اللقاحات الصناعية أول شركة سعودية متخصصة في تأسيس منشأة متكاملة للتصنيع الحيوي للقاحات، بهدف تحويل المملكة إلى مركز إقليمي ودولي لصناعة اللقاحات وتعزيز الاكتفاء الذاتي لمنظومة الرعاية الصحية.',
+      'يجري تطوير المنشأة الصناعية عبر ثلاث مراحل استراتيجية متتالية على مدى سبع سنوات، لتأهيل قدرات تصنيعية متقدمة وفق أرقى معايير ممارسات التصنيع الجيد العالمية (GMP)، والمساهمة في استدامة سلاسل الإمداد الطبية الدولية.',
+      'تواصل شركة اللقاحات الصناعية مسيرتها بخطى واثقة لتلبية الاحتياجات الصحية الوطنية وترسيخ مكانة المملكة الرائدة عالمياً في تصنيع اللقاحات والتقنيات الحيوية، لبناء غدٍ أكثر صحة وأماناً.'
     ]
   },
   vision_mission: {
     section_key: 'vision_mission',
     badge: 'FOUNDATIONAL PILLARS',
+    badge_ar: 'الركائز التأسيسية',
     title: 'Our Vision & Mission',
+    title_ar: 'رؤيتنا ورسالتنا',
     content_json: {
       vision_title: 'OUR VISION',
       vision_paragraphs: [
@@ -846,19 +910,40 @@ const defaultAboutContent = {
       mission_paragraphs: [
         'Vaccine Industrial Holding LLC is dedicated to advancing vaccine innovation and manufacturing excellence in Saudi Arabia. We are committed to establishing a state-of-the-art biomanufacturing facility that produces high-quality vaccines using advanced technologies, builds a self-sustaining biotechnology ecosystem, and safeguards national healthcare resilience to shape a healthier future.'
       ]
+    },
+    content_json_ar: {
+      vision_title: 'رؤيتنا',
+      vision_paragraphs: [
+        'نلتزم بالمساهمة الفاعلة في تحقيق مستهدفات الاستراتيجية الوطنية للتقنية الحيوية ومواءمة جهودنا مع الطموحات الرائدة لرؤية السعودية 2030.',
+        'بعد نجاحنا في توطين صناعة الإنسولين والمنتجات الحيوية المتقدمة داخل المملكة، نركز جهودنا اليوم على تسريع توطين صناعة اللقاحات البشرية وفق أعلى المعايير العالمية.',
+        'تجسد هذه المبادرة مسؤوليتنا الوطنية الراسخة والتزامنا الثابت بازدهار وطننا الغالي المملكة العربية السعودية. دافعنا هو الشغف بالابتكار وبناء قطاع حيوي مستدام يعزز صحة ورفاه أجيال الحاضر والمستقبل.'
+      ],
+      mission_title: 'رسالتنا',
+      mission_paragraphs: [
+        'تكرس شركة اللقاحات الصناعية القابضة جهودها للارتقاء بابتكار اللقاحات والتميز التصنيعي في المملكة العربية السعودية. ونلتزم بإنشاء منشأة تصنيع حيوي متطورة لإنتاج لقاحات عالية الجودة باستخدام أحدث التقنيات، وبناء منظومة تقنية حيوية مكتفية ذاتياً لحماية الصحة العامة وتعزيز الأمن الدوائي الوطني.'
+      ]
     }
   },
   vision_2030: {
     section_key: 'vision_2030',
     badge: 'NATIONALITY',
+    badge_ar: 'الاستراتيجية الوطنية',
     title: 'Aligned with Saudi Vision 2030',
+    title_ar: 'متوافقون مع رؤية السعودية 2030',
     description: "VIC is proud to support the Kingdom's Vision 2030 by localizing advanced vaccine manufacturing, strengthening health security, creating high-value jobs, and driving innovation for a resilient and sustainable healthcare ecosystem.",
+    description_ar: 'تفخر شركة اللقاحات الصناعية بدعم رؤية المملكة 2030 من خلال توطين التصنيع المتقدم للقاحات، وتعزيز الأمن الصحي، وتوليد وظائف نوعية عالية القيمة، ودفع عجلة الابتكار لمنظومة صحية مستدامة وقادرة على الصمود.',
     image_url: 'saudi_biotech_strategy.jpg',
     content_json: [
       { title: 'Health Sector Transformation', icon: 'heart', desc: 'Advancing healthcare security and life-saving immunization' },
       { title: 'Economic Diversification', icon: 'trending-up', desc: 'Building non-oil GDP through high-tech biomanufacturing' },
       { title: 'Local Content Development', icon: 'award', desc: 'Maximizing Saudi talent, workforce training, and supply chains' },
       { title: 'Innovation & Sustainability', icon: 'sun', desc: 'State-of-the-art green facilities and sustainable vaccine platforms' }
+    ],
+    content_json_ar: [
+      { title: 'برنامج تحول القطاع الصحي', icon: 'heart', desc: 'تعزيز الأمن الصحي الوطني وتأمين اللقاحات الحيوية المنقذة للحياة' },
+      { title: 'التنويع الاقتصادي المستدام', icon: 'trending-up', desc: 'بناء ناتج محلي غير نفطي عبر التصنيع الحيوي عالي التقنية' },
+      { title: 'تنمية وتوطين المحتوى المحلي', icon: 'award', desc: 'تمكين الكفاءات الوطنية السعودية وتأهيل سلاسل الإمداد الطبية' },
+      { title: 'الابتكار والاستدامة الحيوية', icon: 'sun', desc: 'مرافق تصنيع بيئية متطورة ومنصات لقاحات مستدامة' }
     ]
   }
 };
@@ -1066,26 +1151,58 @@ async function seedAboutData(db, force = false) {
       for (const key of Object.keys(defaultAboutContent)) {
         const item = defaultAboutContent[key];
         await db.query(`
-          INSERT INTO about_page_content (section_key, title, subtitle, badge, description, image_url, content_json)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO about_page_content (section_key, title, title_ar, subtitle, subtitle_ar, badge, badge_ar, description, description_ar, image_url, content_json, content_json_ar)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           ON DUPLICATE KEY UPDATE
             title = VALUES(title),
+            title_ar = VALUES(title_ar),
             subtitle = VALUES(subtitle),
+            subtitle_ar = VALUES(subtitle_ar),
             badge = VALUES(badge),
+            badge_ar = VALUES(badge_ar),
             description = VALUES(description),
+            description_ar = VALUES(description_ar),
             image_url = VALUES(image_url),
-            content_json = VALUES(content_json)
+            content_json = VALUES(content_json),
+            content_json_ar = VALUES(content_json_ar)
         `, [
           item.section_key,
           item.title || '',
+          item.title_ar || '',
           item.subtitle || '',
+          item.subtitle_ar || '',
           item.badge || '',
+          item.badge_ar || '',
           item.description || '',
+          item.description_ar || '',
           item.image_url || '',
-          item.content_json ? JSON.stringify(item.content_json) : null
+          item.content_json ? JSON.stringify(item.content_json) : null,
+          item.content_json_ar ? JSON.stringify(item.content_json_ar) : null
         ]);
       }
-      console.log('[DB Seed] Seeded default about page sections.');
+      console.log('[DB Seed] Seeded default about page sections with Arabic support.');
+    }
+
+    // Auto-fill Arabic defaults for any section where Arabic fields are NULL or empty
+    for (const key of Object.keys(defaultAboutContent)) {
+      const item = defaultAboutContent[key];
+      await db.query(`
+        UPDATE about_page_content 
+        SET 
+          title_ar = COALESCE(NULLIF(title_ar, ''), ?),
+          subtitle_ar = COALESCE(NULLIF(subtitle_ar, ''), ?),
+          badge_ar = COALESCE(NULLIF(badge_ar, ''), ?),
+          description_ar = COALESCE(NULLIF(description_ar, ''), ?),
+          content_json_ar = COALESCE(content_json_ar, ?)
+        WHERE section_key = ?
+      `, [
+        item.title_ar || '',
+        item.subtitle_ar || '',
+        item.badge_ar || '',
+        item.description_ar || '',
+        item.content_json_ar ? JSON.stringify(item.content_json_ar) : null,
+        key
+      ]);
     }
 
     // 2. Seed About Leaders

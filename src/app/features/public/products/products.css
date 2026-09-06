@@ -23,18 +23,17 @@
   height: 100%;
   z-index: 1;
   background-color: #021632;
-  display: flex;
-  justify-content: flex-end;
   overflow: hidden;
 }
 
 .products-hero__image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 65%;
   height: 100%;
-  width: auto;
-  min-width: 65%;
-  max-width: none;
   object-fit: cover;
-  object-position: right top;
+  object-position: center top;
   display: block;
 }
 
@@ -44,11 +43,11 @@
   background: linear-gradient(
     90deg,
     #021632 0%,
-    #021632 38%,
-    rgba(2, 22, 50, 0.92) 48%,
-    rgba(2, 22, 50, 0.65) 60%,
-    rgba(2, 22, 50, 0.15) 75%,
-    transparent 88%
+    #021632 35%,
+    rgba(2, 22, 50, 0.95) 45%,
+    rgba(2, 22, 50, 0.7) 58%,
+    rgba(2, 22, 50, 0.2) 72%,
+    transparent 85%
   );
   pointer-events: none;
 }
@@ -1572,4 +1571,146 @@
     );
   }
 }
+
+/* ============================================
+   ARABIC (RTL) PRODUCTS PAGE STYLING
+   ============================================ */
+
+:host-context(html[dir="rtl"]) .products-hero,
+:host-context(.lang-ar) .products-hero {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .products-hero__image,
+:host-context(.lang-ar) .products-hero__image {
+  right: auto;
+  left: 0;
+  transform: none;
+  object-position: right top;
+}
+
+:host-context(html[dir="rtl"]) .products-hero__overlay,
+:host-context(.lang-ar) .products-hero__overlay {
+  background: linear-gradient(
+    270deg,
+    #021632 0%,
+    #021632 35%,
+    rgba(2, 22, 50, 0.95) 45%,
+    rgba(2, 22, 50, 0.7) 58%,
+    rgba(2, 22, 50, 0.2) 72%,
+    transparent 85%
+  );
+}
+
+:host-context(html[dir="rtl"]) .products-hero__heading,
+:host-context(.lang-ar) .products-hero__heading {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.28;
+}
+
+:host-context(html[dir="rtl"]) .products-hero__description,
+:host-context(.lang-ar) .products-hero__description {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  letter-spacing: 0;
+  line-height: 1.7;
+}
+
+:host-context(html[dir="rtl"]) .products-hero__wave-svg,
+:host-context(.lang-ar) .products-hero__wave-svg {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .products-hero__breadcrumb-separator,
+:host-context(.lang-ar) .products-hero__breadcrumb-separator {
+  transform: scaleX(-1);
+  display: inline-block;
+}
+
+:host-context(html[dir="rtl"]) .showcase-card__content,
+:host-context(.lang-ar) .showcase-card__content {
+  align-items: flex-start;
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .showcase-card__btn-arrow,
+:host-context(.lang-ar) .showcase-card__btn-arrow,
+:host-context(html[dir="rtl"]) .cta-banner-card__btn-icon,
+:host-context(.lang-ar) .cta-banner-card__btn-icon {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .showcase-card__btn:hover .showcase-card__btn-arrow,
+:host-context(.lang-ar) .showcase-card__btn:hover .showcase-card__btn-arrow,
+:host-context(html[dir="rtl"]) .cta-banner-card__btn:hover .cta-banner-card__btn-icon,
+:host-context(.lang-ar) .cta-banner-card__btn:hover .cta-banner-card__btn-icon {
+  transform: scaleX(-1) translateX(4px);
+}
+
+:host-context(html[dir="rtl"]) .showcase-carousel__arrow svg,
+:host-context(.lang-ar) .showcase-carousel__arrow svg {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .cta-banner-card,
+:host-context(.lang-ar) .cta-banner-card {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .cta-banner-card__left,
+:host-context(.lang-ar) .cta-banner-card__left {
+  align-items: flex-start;
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .cta-banner-card__img,
+:host-context(.lang-ar) .cta-banner-card__img {
+  right: auto;
+  left: 0;
+  object-position: center left;
+}
+
+:host-context(html[dir="rtl"]) .cta-banner-card__overlay,
+:host-context(.lang-ar) .cta-banner-card__overlay {
+  background: linear-gradient(
+    270deg,
+    #031428 0%,
+    #031428 38%,
+    rgba(3, 20, 40, 0.94) 52%,
+    rgba(3, 20, 40, 0.65) 68%,
+    rgba(3, 20, 40, 0.25) 85%,
+    rgba(3, 20, 40, 0.1) 100%
+  );
+}
+
+@media (max-width: 900px) {
+  :host-context(html[dir="rtl"]) .cta-banner-card__overlay,
+  :host-context(.lang-ar) .cta-banner-card__overlay {
+    background: linear-gradient(
+      180deg,
+      #031428 0%,
+      rgba(3, 20, 40, 0.95) 60%,
+      rgba(3, 20, 40, 0.8) 100%
+    );
+  }
+}
+
+:host-context(html[dir="rtl"]) .modal-card,
+:host-context(.lang-ar) .modal-card {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .modal-summary,
+:host-context(.lang-ar) .modal-summary {
+  align-items: flex-start;
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .modal-breadcrumb__separator,
+:host-context(.lang-ar) .modal-breadcrumb__separator {
+  transform: scaleX(-1);
+  display: inline-block;
+}
+
 

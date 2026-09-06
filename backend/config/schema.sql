@@ -173,11 +173,16 @@ CREATE TABLE IF NOT EXISTS about_page_content (
   id INT AUTO_INCREMENT PRIMARY KEY,
   section_key VARCHAR(80) NOT NULL UNIQUE,
   title VARCHAR(255) NULL,
+  title_ar VARCHAR(255) NULL,
   subtitle VARCHAR(255) NULL,
+  subtitle_ar VARCHAR(255) NULL,
   badge VARCHAR(100) NULL,
+  badge_ar VARCHAR(100) NULL,
   description TEXT NULL,
+  description_ar TEXT NULL,
   image_url VARCHAR(500) NULL,
   content_json JSON NULL,
+  content_json_ar JSON NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -185,16 +190,22 @@ CREATE TABLE IF NOT EXISTS about_page_content (
 CREATE TABLE IF NOT EXISTS about_leaders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
+  name_ar VARCHAR(150) NULL,
   title VARCHAR(255) NOT NULL,
+  title_ar VARCHAR(255) NULL,
   role TEXT NOT NULL,
+  role_ar TEXT NULL,
   badge VARCHAR(100) NOT NULL DEFAULT 'Executive Board',
+  badge_ar VARCHAR(100) NULL,
   initials VARCHAR(10) NULL,
   image VARCHAR(500) NULL,
   bio_sections JSON NULL,
+  bio_sections_ar JSON NULL,
   order_index INT DEFAULT 0,
   status ENUM('Active', 'Inactive') DEFAULT 'Active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 

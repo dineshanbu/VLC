@@ -18,9 +18,17 @@ exports.getAboutContent = async (req, res, next) => {
         content_json = null;
       }
 
+      let content_json_ar = null;
+      try {
+        content_json_ar = typeof row.content_json_ar === 'string' ? JSON.parse(row.content_json_ar) : row.content_json_ar;
+      } catch (e) {
+        content_json_ar = null;
+      }
+
       contentMap[row.section_key] = {
         ...row,
-        content_json
+        content_json,
+        content_json_ar
       };
     }
 
@@ -44,7 +52,13 @@ exports.updateAboutSection = async (req, res, next) => {
   try {
     const pool = getPool();
     const section_key = req.params.section_key;
-    const { title, subtitle, badge, description, content_json } = req.body;
+    const {
+      title, title_ar,
+      subtitle, subtitle_ar,
+      badge, badge_ar,
+      description, description_ar,
+      content_json, content_json_ar
+    } = req.body;
 
     let image_url = req.body.image_url;
     if (req.file) {
@@ -56,24 +70,41 @@ exports.updateAboutSection = async (req, res, next) => {
       parsedContent = JSON.stringify(content_json);
     }
 
+    let parsedContentAr = content_json_ar;
+    if (typeof content_json_ar === 'object') {
+      parsedContentAr = JSON.stringify(content_json_ar);
+    }
+
     await pool.query(`
-      INSERT INTO about_page_content (section_key, title, subtitle, badge, description, image_url, content_json)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO about_page_content (
+        section_key, title, title_ar, subtitle, subtitle_ar, badge, badge_ar, description, description_ar, image_url, content_json, content_json_ar
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
-        title = COALESCE(VALUES(title), title),
-        subtitle = COALESCE(VALUES(subtitle), subtitle),
-        badge = COALESCE(VALUES(badge), badge),
-        description = COALESCE(VALUES(description), description),
+        title = VALUES(title),
+        title_ar = VALUES(title_ar),
+        subtitle = VALUES(subtitle),
+        subtitle_ar = VALUES(subtitle_ar),
+        badge = VALUES(badge),
+        badge_ar = VALUES(badge_ar),
+        description = VALUES(description),
+        description_ar = VALUES(description_ar),
         image_url = COALESCE(VALUES(image_url), image_url),
-        content_json = COALESCE(VALUES(content_json), content_json)
+        content_json = VALUES(content_json),
+        content_json_ar = VALUES(content_json_ar)
     `, [
       section_key,
       title || '',
+      title_ar || '',
       subtitle || '',
+      subtitle_ar || '',
       badge || '',
+      badge_ar || '',
       description || '',
+      description_ar || '',
       image_url || null,
-      parsedContent || null
+      parsedContent || null,
+      parsedContentAr || null
     ]);
 
     const [updated] = await pool.query('SELECT * FROM about_page_content WHERE section_key = ?', [section_key]);
@@ -85,18 +116,27 @@ exports.updateAboutSection = async (req, res, next) => {
       formattedJson = null;
     }
 
+    let formattedJsonAr = null;
+    try {
+      formattedJsonAr = typeof updated[0].content_json_ar === 'string' ? JSON.parse(updated[0].content_json_ar) : updated[0].content_json_ar;
+    } catch (e) {
+      formattedJsonAr = null;
+    }
+
     res.json({
       success: true,
       message: `Section "${section_key}" updated successfully.`,
       section: {
         ...updated[0],
-        content_json: formattedJson
+        content_json: formattedJson,
+        content_json_ar: formattedJsonAr
       }
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 // ==========================================
 // 2. LEADERS & FOUNDING PARTNERS CRUD
@@ -136,9 +176,16 @@ exports.getAllLeaders = async (req, res, next) => {
       } catch (e) {
         bio_sections = [];
       }
+      let bio_sections_ar = [];
+      try {
+        bio_sections_ar = typeof l.bio_sections_ar === 'string' ? JSON.parse(l.bio_sections_ar) : (l.bio_sections_ar || []);
+      } catch (e) {
+        bio_sections_ar = [];
+      }
       return {
         ...l,
-        bio_sections
+        bio_sections,
+        bio_sections_ar
       };
     });
 
@@ -170,11 +217,19 @@ exports.getLeaderById = async (req, res, next) => {
       bio_sections = [];
     }
 
+    let bio_sections_ar = [];
+    try {
+      bio_sections_ar = typeof rows[0].bio_sections_ar === 'string' ? JSON.parse(rows[0].bio_sections_ar) : (rows[0].bio_sections_ar || []);
+    } catch (e) {
+      bio_sections_ar = [];
+    }
+
     res.json({
       success: true,
       leader: {
         ...rows[0],
-        bio_sections
+        bio_sections,
+        bio_sections_ar
       }
     });
   } catch (error) {
@@ -185,7 +240,14 @@ exports.getLeaderById = async (req, res, next) => {
 exports.createLeader = async (req, res, next) => {
   try {
     const pool = getPool();
-    const { name, title, role, badge, initials, order_index, status, bio_sections } = req.body;
+    const {
+      name, name_ar,
+      title, title_ar,
+      role, role_ar,
+      badge, badge_ar,
+      initials, order_index, status,
+      bio_sections, bio_sections_ar
+    } = req.body;
 
     if (!name || !title) {
       return res.status(400).json({ success: false, message: 'Name and Title are required.' });
@@ -201,19 +263,31 @@ exports.createLeader = async (req, res, next) => {
       parsedBio = JSON.stringify(bio_sections);
     }
 
+    let parsedBioAr = bio_sections_ar;
+    if (typeof bio_sections_ar === 'object') {
+      parsedBioAr = JSON.stringify(bio_sections_ar);
+    }
+
     const calculatedInitials = initials || name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
     const [result] = await pool.query(`
-      INSERT INTO about_leaders (name, title, role, badge, initials, image, bio_sections, order_index, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO about_leaders (
+        name, name_ar, title, title_ar, role, role_ar, badge, badge_ar, initials, image, bio_sections, bio_sections_ar, order_index, status
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       name,
+      name_ar || null,
       title,
+      title_ar || null,
       role || '',
+      role_ar || null,
       badge || 'Executive Board',
+      badge_ar || null,
       calculatedInitials,
       image,
       parsedBio || null,
+      parsedBioAr || null,
       parseInt(order_index) || 0,
       status || 'Active'
     ]);
@@ -234,7 +308,14 @@ exports.updateLeader = async (req, res, next) => {
   try {
     const pool = getPool();
     const id = req.params.id;
-    const { name, title, role, badge, initials, order_index, status, bio_sections } = req.body;
+    const {
+      name, name_ar,
+      title, title_ar,
+      role, role_ar,
+      badge, badge_ar,
+      initials, order_index, status,
+      bio_sections, bio_sections_ar
+    } = req.body;
 
     const [existing] = await pool.query('SELECT * FROM about_leaders WHERE id = ?', [id]);
     if (existing.length === 0) {
@@ -253,26 +334,41 @@ exports.updateLeader = async (req, res, next) => {
       parsedBio = typeof bio_sections === 'object' ? JSON.stringify(bio_sections) : bio_sections;
     }
 
+    let parsedBioAr = existing[0].bio_sections_ar;
+    if (bio_sections_ar !== undefined) {
+      parsedBioAr = typeof bio_sections_ar === 'object' ? JSON.stringify(bio_sections_ar) : bio_sections_ar;
+    }
+
     await pool.query(`
       UPDATE about_leaders SET
         name = ?,
+        name_ar = ?,
         title = ?,
+        title_ar = ?,
         role = ?,
+        role_ar = ?,
         badge = ?,
+        badge_ar = ?,
         initials = ?,
         image = ?,
         bio_sections = ?,
+        bio_sections_ar = ?,
         order_index = ?,
         status = ?
       WHERE id = ?
     `, [
       name !== undefined ? name : existing[0].name,
+      name_ar !== undefined ? name_ar : existing[0].name_ar,
       title !== undefined ? title : existing[0].title,
+      title_ar !== undefined ? title_ar : existing[0].title_ar,
       role !== undefined ? role : existing[0].role,
+      role_ar !== undefined ? role_ar : existing[0].role_ar,
       badge !== undefined ? badge : existing[0].badge,
+      badge_ar !== undefined ? badge_ar : existing[0].badge_ar,
       initials !== undefined ? initials : existing[0].initials,
       image,
       parsedBio,
+      parsedBioAr,
       order_index !== undefined ? parseInt(order_index) : existing[0].order_index,
       status !== undefined ? status : existing[0].status,
       id
@@ -289,6 +385,7 @@ exports.updateLeader = async (req, res, next) => {
     next(error);
   }
 };
+
 
 exports.deleteLeader = async (req, res, next) => {
   try {

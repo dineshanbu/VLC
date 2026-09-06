@@ -14,21 +14,21 @@
     <div class="about-hero__content">
 
       <!-- Eyebrow -->
-      <span class="about-hero__eyebrow">{{ pageContent().hero?.badge || 'ABOUT VIC' }}</span>
+      <span class="about-hero__eyebrow">{{ translationService.currentLang() === 'ar' ? (pageContent().hero?.badge_ar || translationService.translate('about.hero.badge')) : (pageContent().hero?.badge || translationService.translate('about.hero.badge')) }}</span>
 
       <!-- Main Heading -->
       <h1 class="about-hero__heading">
-        {{ pageContent().hero?.title || 'Vaccine Industrial Holding LLC' }}
+        {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.title_ar || translationService.translate('about.hero.title')) : (pageContent().hero?.title || translationService.translate('about.hero.title')) }}
       </h1>
 
       <!-- Subheading -->
       <p class="about-hero__subheading">
-        {{ pageContent().hero?.subtitle || 'Leading the Charge in Vaccine Innovation in Saudi Arabia' }}
+        {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.subtitle_ar || translationService.translate('about.hero.subtitle')) : (pageContent().hero?.subtitle || translationService.translate('about.hero.subtitle')) }}
       </p>
 
       <!-- Short Description -->
       <p class="about-hero__description">
-        {{ pageContent().hero?.description || 'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia, dedicated to advancing vaccine innovation, manufacturing excellence, and national healthcare resilience.' }}
+        {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.description_ar || translationService.translate('about.hero.desc')) : (pageContent().hero?.description || translationService.translate('about.hero.desc')) }}
       </p>
 
       <!-- Read More Button — Opens Company Overview Modal -->
@@ -40,7 +40,7 @@
           aria-haspopup="dialog"
           aria-label="Read full company overview story in modal popup"
         >
-          <span>Read More</span>
+          <span>{{ translationService.translate('about.hero.readMore') }}</span>
           <span class="btn-arrow" aria-hidden="true">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
@@ -114,7 +114,7 @@
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
           </div>
-          <span class="about-vm-card__label">{{ pageContent().vision_mission?.content_json?.vision_title || 'OUR VISION' }}</span>
+          <span class="about-vm-card__label">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.vision_title || translationService.translate('about.vision.title')) : (pageContent().vision_mission?.content_json?.vision_title || translationService.translate('about.vision.title')) }}</span>
         </div>
 
         <!-- Vision body clipped to 6 lines, expands on toggle -->
@@ -123,21 +123,33 @@
           [class.about-vm-card__clip--open]="isVisionExpanded"
         >
           <div class="about-vm-card__body">
-            <ng-container *ngIf="pageContent().vision_mission?.content_json?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
-              <p *ngFor="let p of pageContent().vision_mission?.content_json?.vision_paragraphs" class="about-vm-card__text">
-                {{ p }}
-              </p>
+            <!-- Arabic Paragraphs -->
+            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishVisionParagraphs">
+              <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
+                <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.vision_paragraphs" class="about-vm-card__text">
+                  {{ p }}
+                </p>
+              </ng-container>
             </ng-container>
+
+            <!-- English Paragraphs -->
+            <ng-template #englishVisionParagraphs>
+              <ng-container *ngIf="pageContent().vision_mission?.content_json?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
+                <p *ngFor="let p of pageContent().vision_mission?.content_json?.vision_paragraphs" class="about-vm-card__text">
+                  {{ p }}
+                </p>
+              </ng-container>
+            </ng-template>
 
             <ng-template #defaultVisionParagraphs>
               <p class="about-vm-card__text">
-                We are committed to contributing to the realization of the National Biotechnology Strategy and aligning our efforts with the ambitious goals of Saudi Arabia's Vision 2030.
+                {{ translationService.translate('about.vision.p1') }}
               </p>
               <p class="about-vm-card__text">
-                Having successfully pioneered the localization of the insulin and biotechnology industries within the Kingdom, we are now focused on advancing the localization of the vaccine industry.
+                {{ translationService.translate('about.vision.p2') }}
               </p>
               <p class="about-vm-card__text">
-                This initiative reflects our deep sense of responsibility and unwavering dedication to the growth and prosperity of our beloved nation, Saudi Arabia. Our mission is driven by a passion for innovation and a commitment to building a self-sustaining biotechnology sector that supports the health and well-being of future generations.
+                {{ translationService.translate('about.vision.p3') }}
               </p>
             </ng-template>
           </div>
@@ -153,7 +165,7 @@
             (click)="toggleVision()"
             [attr.aria-expanded]="isVisionExpanded"
           >
-            <span>{{ isVisionExpanded ? 'Read Less ↑' : 'Read More →' }}</span>
+            <span>{{ isVisionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore') }}</span>
           </button>
         </div>
 
@@ -171,7 +183,7 @@
               <circle cx="12" cy="12" r="2"></circle>
             </svg>
           </div>
-          <span class="about-vm-card__label">{{ pageContent().vision_mission?.content_json?.mission_title || 'OUR MISSION' }}</span>
+          <span class="about-vm-card__label">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.mission_title || translationService.translate('about.mission.title')) : (pageContent().vision_mission?.content_json?.mission_title || translationService.translate('about.mission.title')) }}</span>
         </div>
 
         <!-- Mission body clipped to 4 lines, expands on toggle -->
@@ -180,15 +192,27 @@
           [class.about-vm-card__clip--open]="isMissionExpanded"
         >
           <div class="about-vm-card__body">
-            <ng-container *ngIf="pageContent().vision_mission?.content_json?.mission_paragraphs?.length > 0; else defaultMissionText">
-              <p *ngFor="let p of pageContent().vision_mission?.content_json?.mission_paragraphs" class="about-vm-card__text">
-                {{ p }}
-              </p>
+            <!-- Arabic Mission Text -->
+            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishMissionParagraphs">
+              <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.mission_paragraphs?.length > 0; else defaultMissionText">
+                <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.mission_paragraphs" class="about-vm-card__text">
+                  {{ p }}
+                </p>
+              </ng-container>
             </ng-container>
+
+            <!-- English Mission Text -->
+            <ng-template #englishMissionParagraphs>
+              <ng-container *ngIf="pageContent().vision_mission?.content_json?.mission_paragraphs?.length > 0; else defaultMissionText">
+                <p *ngFor="let p of pageContent().vision_mission?.content_json?.mission_paragraphs" class="about-vm-card__text">
+                  {{ p }}
+                </p>
+              </ng-container>
+            </ng-template>
 
             <ng-template #defaultMissionText>
               <p class="about-vm-card__text">
-                Vaccine Industrial Holding LLC is dedicated to advancing vaccine innovation and manufacturing excellence in Saudi Arabia. We are committed to establishing a state-of-the-art biomanufacturing facility that produces high-quality vaccines using advanced technologies, builds a self-sustaining biotechnology ecosystem, and safeguards national healthcare resilience to shape a healthier future.
+                {{ translationService.translate('about.mission.p1') }}
               </p>
             </ng-template>
           </div>
@@ -204,7 +228,7 @@
             (click)="toggleMission()"
             [attr.aria-expanded]="isMissionExpanded"
           >
-            <span>{{ isMissionExpanded ? 'Read Less ↑' : 'Read More →' }}</span>
+            <span>{{ isMissionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore') }}</span>
           </button>
         </div>
 
@@ -247,47 +271,58 @@
 
     <!-- Modal Header -->
     <div class="about-modal__header">
-      <span class="about-modal__eyebrow">{{ pageContent().overview_modal?.badge || 'COMPANY OVERVIEW' }}</span>
+      <span class="about-modal__eyebrow">{{ translationService.currentLang() === 'ar' ? (pageContent().overview_modal?.badge_ar || pageContent().overview_modal?.badge || translationService.translate('about.overview.badge')) : (pageContent().overview_modal?.badge || translationService.translate('about.overview.badge')) }}</span>
       <h2 id="overview-modal-heading" class="about-modal__heading">
-        {{ pageContent().overview_modal?.title || 'Pioneering Biotechnology in Saudi Arabia' }}
+        {{ translationService.currentLang() === 'ar' ? (pageContent().overview_modal?.title_ar || pageContent().overview_modal?.title || translationService.translate('about.overview.title')) : (pageContent().overview_modal?.title || translationService.translate('about.overview.title')) }}
       </h2>
     </div>
 
     <!-- Modal Body with Smooth Independent Scroll -->
     <div class="about-modal__body">
       
-      <!-- Dynamic Paragraphs if available from backend -->
-      <ng-container *ngIf="pageContent().overview_modal?.content_json && pageContent().overview_modal?.content_json.length > 0; else defaultOverviewText">
-        <p *ngFor="let p of pageContent().overview_modal?.content_json">
-          {{ p }}
-        </p>
+      <!-- Arabic Dynamic Paragraphs -->
+      <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishOverviewText">
+        <ng-container *ngIf="pageContent().overview_modal?.content_json_ar && pageContent().overview_modal?.content_json_ar.length > 0; else defaultOverviewText">
+          <p *ngFor="let p of pageContent().overview_modal?.content_json_ar">
+            {{ p }}
+          </p>
+        </ng-container>
       </ng-container>
+
+      <!-- English Dynamic Paragraphs -->
+      <ng-template #englishOverviewText>
+        <ng-container *ngIf="pageContent().overview_modal?.content_json && pageContent().overview_modal?.content_json.length > 0; else defaultOverviewText">
+          <p *ngFor="let p of pageContent().overview_modal?.content_json">
+            {{ p }}
+          </p>
+        </ng-container>
+      </ng-template>
 
       <!-- Default Official Story Fallback -->
       <ng-template #defaultOverviewText>
         <p>
-          Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia. Established in January 2022, VIC was conceived by Dr. Khaled Almosa, a distinguished healthcare management consultant and a visionary in the biotechnology sector. With an illustrious career as the Founder, Vice Chairman, and Managing Director of the Saudi Biotechnology Manufacturing Company for Insulin and Biologics from 2010 to 2020, Dr. Almosa has significantly advanced the biotechnology industry within the Kingdom.
+          {{ translationService.translate('about.overview.p1') }}
         </p>
 
         <p>
-          Dr. Almosa is a multifaceted entrepreneur, having founded numerous companies across various industries. He is also the founder of the Biotechnology Innovation Company for R&amp;D in collaboration with King Abdulaziz City for Science and Technology (KACST) and the Center for Vaccine Development at Baylor College of Medicine, Houston, USA. Additionally, he established the Biotechnology Training Institute in Saudi Arabia and Bioera Industrial Engineering Company to construct biotech facilities in the GCC region.
+          {{ translationService.translate('about.overview.p2') }}
         </p>
 
         <p>
-          Beyond his contributions to VIC, Dr. Almosa is a respected member of the KSA Supreme Committee for Research, Development, and Innovation, chaired by HRH Crown Prince and Prime Minister Mohammed bin Salman. This committee operates under the Council of Economic and Development Affairs and the Council of Ministers (2021–2024), emphasizing Dr. Almosa’s dedication to fostering innovation and driving progress in biotechnology and healthcare.
+          {{ translationService.translate('about.overview.p3') }}
         </p>
 
         <p>
-          Vaccine Industrial Holding LLC is the first and only company in Saudi Arabia committed to establishing a state-of-the-art vaccine biomanufacturing facility. This ambitious project aims to transform the Kingdom into a global hub for vaccine production, enhancing self-reliance and advancing the nation’s healthcare infrastructure.
+          {{ translationService.translate('about.overview.p4') }}
         </p>
 
         <p>
-          The development of this groundbreaking facility will occur in three strategic phases over seven years. Each phase is meticulously planned to build cutting-edge capabilities, utilizing the latest technologies and innovations to produce high-quality vaccines that meet global standards. VIC’s initiative reflects its commitment to supporting Saudi Arabia’s healthcare needs while contributing to global efforts in vaccine accessibility and sustainability.
+          {{ translationService.translate('about.overview.p5') }}
         </p>
 
         <div class="about-modal__highlight">
           <p>
-            Through this transformative journey, VIC addresses regional healthcare demands and positions Saudi Arabia as a global leader in vaccine manufacturing. With visionary leadership, technological excellence, and an unwavering commitment to innovation, Vaccine Industrial Holding LLC is paving the way for a healthier and more resilient future.
+            {{ translationService.translate('about.overview.highlight') }}
           </p>
         </div>
       </ng-template>
@@ -325,12 +360,12 @@
 
         <!-- Left: Text Content -->
         <div class="about-v2030__text">
-          <span class="about-v2030__eyebrow">{{ pageContent().vision_2030?.badge || 'NATIONALITY' }}</span>
+          <span class="about-v2030__eyebrow">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.badge_ar || pageContent().vision_2030?.badge || translationService.translate('about.v2030.badge')) : (pageContent().vision_2030?.badge || translationService.translate('about.v2030.badge')) }}</span>
           <h2 class="about-v2030__heading">
-            {{ pageContent().vision_2030?.title || 'Aligned with Saudi Vision 2030' }}
+            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.title_ar || pageContent().vision_2030?.title || translationService.translate('about.v2030.title')) : (pageContent().vision_2030?.title || translationService.translate('about.v2030.title')) }}
           </h2>
           <p class="about-v2030__desc">
-            {{ pageContent().vision_2030?.description || "VIC is proud to support the Kingdom's Vision 2030 by localizing advanced vaccine manufacturing, strengthening health security, creating high-value jobs, and driving innovation for a resilient and sustainable healthcare ecosystem." }}
+            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.description_ar || pageContent().vision_2030?.description || translationService.translate('about.v2030.desc')) : (pageContent().vision_2030?.description || translationService.translate('about.v2030.desc')) }}
           </p>
         </div>
 
@@ -338,25 +373,49 @@
         <div class="about-v2030__card">
           <div class="about-v2030__grid">
 
-            <!-- If dynamic features exist -->
-            <ng-container *ngIf="pageContent().vision_2030?.content_json && pageContent().vision_2030?.content_json.length > 0; else defaultFeatures">
-              <div
-                *ngFor="let feat of pageContent().vision_2030?.content_json; let idx = index"
-                class="about-v2030__item"
-                [class.about-v2030__item--tl]="idx === 0"
-                [class.about-v2030__item--tr]="idx === 1"
-                [class.about-v2030__item--bl]="idx === 2"
-                [class.about-v2030__item--br]="idx === 3"
-              >
-                <div class="about-v2030__icon-badge" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
-                  </svg>
+            <!-- Arabic dynamic features -->
+            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishFeatures">
+              <ng-container *ngIf="pageContent().vision_2030?.content_json_ar && pageContent().vision_2030?.content_json_ar.length > 0; else defaultFeatures">
+                <div
+                  *ngFor="let feat of pageContent().vision_2030?.content_json_ar; let idx = index"
+                  class="about-v2030__item"
+                  [class.about-v2030__item--tl]="idx === 0"
+                  [class.about-v2030__item--tr]="idx === 1"
+                  [class.about-v2030__item--bl]="idx === 2"
+                  [class.about-v2030__item--br]="idx === 3"
+                >
+                  <div class="about-v2030__icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
+                    </svg>
+                  </div>
+                  <span class="about-v2030__item-label">{{ feat.title }}</span>
                 </div>
-                <span class="about-v2030__item-label">{{ feat.title }}</span>
-              </div>
+              </ng-container>
             </ng-container>
+
+            <!-- English dynamic features -->
+            <ng-template #englishFeatures>
+              <ng-container *ngIf="pageContent().vision_2030?.content_json && pageContent().vision_2030?.content_json.length > 0; else defaultFeatures">
+                <div
+                  *ngFor="let feat of pageContent().vision_2030?.content_json; let idx = index"
+                  class="about-v2030__item"
+                  [class.about-v2030__item--tl]="idx === 0"
+                  [class.about-v2030__item--tr]="idx === 1"
+                  [class.about-v2030__item--bl]="idx === 2"
+                  [class.about-v2030__item--br]="idx === 3"
+                >
+                  <div class="about-v2030__icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
+                    </svg>
+                  </div>
+                  <span class="about-v2030__item-label">{{ feat.title }}</span>
+                </div>
+              </ng-container>
+            </ng-template>
 
             <!-- Default 4 Pillars Fallback -->
             <ng-template #defaultFeatures>
@@ -368,7 +427,7 @@
                     <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
                   </svg>
                 </div>
-                <span class="about-v2030__item-label">Health Sector<br>Transformation</span>
+                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar1') }}</span>
               </div>
 
               <!-- Item 2: Economic Diversification -->
@@ -383,7 +442,7 @@
                     <circle cx="6" cy="11" r="2"></circle>
                   </svg>
                 </div>
-                <span class="about-v2030__item-label">Economic<br>Diversification</span>
+                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar2') }}</span>
               </div>
 
               <!-- Item 3: Local Content Development -->
@@ -394,7 +453,7 @@
                     <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
                   </svg>
                 </div>
-                <span class="about-v2030__item-label">Local Content<br>Development</span>
+                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar3') }}</span>
               </div>
 
               <!-- Item 4: Innovation & Sustainability -->
@@ -406,7 +465,7 @@
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                   </svg>
                 </div>
-                <span class="about-v2030__item-label">Innovation &amp;<br>Sustainability</span>
+                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar4') }}</span>
               </div>
             </ng-template>
 
@@ -429,10 +488,10 @@
     <!-- Header with Controls -->
     <div class="about-leadership__header-row">
       <div class="about-leadership__header-text">
-        <span class="about-leadership__eyebrow">LEADERSHIP &amp; FOUNDING TEAM</span>
-        <h2 class="about-leadership__heading">Founding Partners</h2>
+        <span class="about-leadership__eyebrow">{{ translationService.translate('about.leadership.badge') }}</span>
+        <h2 class="about-leadership__heading">{{ translationService.translate('about.leadership.title') }}</h2>
         <p class="about-leadership__subheading">
-          Distinguished medical leaders, biotechnology visionaries, and executive pioneers steering VIC's mission.
+          {{ translationService.translate('about.leadership.subtitle') }}
         </p>
       </div>
 
@@ -471,7 +530,7 @@
     >
       <div
         class="about-leadership__track"
-        [style.transform]="'translateX(-' + (leaderIndex * (100 / cardsPerView)) + '%)'"
+        [style.transform]="'translateX(' + (translationService.currentLang() === 'ar' ? '' : '-') + (leaderIndex * (100 / cardsPerView)) + '%)'"
       >
         <div
           class="about-leadership__slide"
@@ -484,31 +543,31 @@
               <img
                 *ngIf="leader.image"
                 [src]="leader.image"
-                [alt]="leader.name"
+                [alt]="getLeaderName(leader)"
                 class="about-leader-card__photo"
                 loading="lazy"
               />
               <div *ngIf="!leader.image" class="about-leader-card__avatar">
                 <span class="about-leader-card__initials">{{ leader.initials }}</span>
               </div>
-              <span class="about-leader-card__badge">{{ leader.badge }}</span>
+              <span class="about-leader-card__badge">{{ getLeaderBadge(leader) }}</span>
             </div>
 
             <!-- Leader Details -->
             <div class="about-leader-card__body">
-              <h3 class="about-leader-card__name">{{ leader.name }}</h3>
-              <p class="about-leader-card__title">{{ leader.title }}</p>
-              <p class="about-leader-card__role">{{ leader.role }}</p>
+              <h3 class="about-leader-card__name">{{ getLeaderName(leader) }}</h3>
+              <p class="about-leader-card__title">{{ getLeaderTitle(leader) }}</p>
+              <p class="about-leader-card__role">{{ getLeaderRole(leader) }}</p>
 
               <div class="about-leader-card__footer">
                 <button
                   type="button"
                   class="about-leader-card__link"
                   (click)="openLeaderModal(leader)"
-                  [attr.aria-label]="'View profile of ' + leader.name"
+                  [attr.aria-label]="'View profile of ' + getLeaderName(leader)"
                 >
-                  <span>View Profile</span>
-                  <span aria-hidden="true">&rarr;</span>
+                  <span>{{ translationService.translate('about.leadership.viewProfile') }}</span>
+                  <span class="about-leader-card__arrow" aria-hidden="true">&rarr;</span>
                 </button>
               </div>
             </div>
@@ -570,24 +629,24 @@
       <div class="about-leader-modal__portrait">
         <img
           [src]="selectedLeader.image"
-          [alt]="selectedLeader.name"
+          [alt]="getLeaderName(selectedLeader)"
           class="about-leader-modal__photo"
         />
       </div>
       <div class="about-leader-modal__meta">
-        <span class="about-modal__eyebrow">{{ selectedLeader.badge }}</span>
+        <span class="about-modal__eyebrow">{{ getLeaderBadge(selectedLeader) }}</span>
         <h2 [id]="'leader-heading-' + selectedLeader.initials" class="about-leader-modal__name">
-          {{ selectedLeader.name }}
+          {{ getLeaderName(selectedLeader) }}
         </h2>
-        <p class="about-leader-modal__title">{{ selectedLeader.title }}</p>
-        <p class="about-leader-modal__role-tag">{{ selectedLeader.role }}</p>
+        <p class="about-leader-modal__title">{{ getLeaderTitle(selectedLeader) }}</p>
+        <p class="about-leader-modal__role-tag">{{ getLeaderRole(selectedLeader) }}</p>
       </div>
     </div>
 
     <!-- Leader Modal Body: Detailed Bio Sections -->
     <div class="about-modal__body about-leader-modal__body">
       <div
-        *ngFor="let section of selectedLeader.bioSections"
+        *ngFor="let section of getLeaderBioSections(selectedLeader)"
         class="about-leader-modal__section"
       >
         <h3 class="about-leader-modal__section-heading">{{ section.heading }}</h3>

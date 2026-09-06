@@ -1,5 +1,6 @@
-import { Component, signal, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, HostListener, OnInit, OnDestroy, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslationService } from '../../../core/services/translation.service';
 
 export interface ProductResource {
   name: string;
@@ -29,6 +30,8 @@ export interface Product {
   styleUrl: './products.css'
 })
 export class ProductsComponent implements OnInit, OnDestroy {
+  readonly translationService = inject(TranslationService);
+
   // Top Section Tabs: 'Our Products' vs 'Future Portfolio'
   readonly activeSectionTab = signal<'our-products' | 'future-portfolio'>('our-products');
 
@@ -47,35 +50,35 @@ export class ProductsComponent implements OnInit, OnDestroy {
   readonly activeThumbnailIndex = signal(0);
   readonly activeTab = signal('Overview');
 
-  readonly tabs = [
-    'Overview',
-    'Specification',
-    'Indication',
-    'Storage & Handling',
-    'Documents'
-  ];
+  readonly tabs = computed(() => [
+    this.translationService.translate('products.modal.tab.overview'),
+    this.translationService.translate('products.modal.tab.specification'),
+    this.translationService.translate('products.modal.tab.indication'),
+    this.translationService.translate('products.modal.tab.storage'),
+    this.translationService.translate('products.modal.tab.documents')
+  ]);
 
   // Page-level Resources & Downloads
-  readonly pageResources: ProductResource[] = [
-    { name: 'Product Information', type: 'PDF', size: '1.2 MB', icon: 'document' },
-    { name: 'Prescribing Information', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
-    { name: 'Patient Information Leaflet', type: 'PDF', size: '0.8 MB', icon: 'patient' },
-    { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
-  ];
+  readonly pageResources = computed<ProductResource[]>(() => [
+    { name: this.translationService.translate('products.resources.item1'), type: 'PDF', size: '1.2 MB', icon: 'document' },
+    { name: this.translationService.translate('products.resources.item2'), type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+    { name: this.translationService.translate('products.resources.item3'), type: 'PDF', size: '0.8 MB', icon: 'patient' },
+    { name: this.translationService.translate('products.resources.item4'), type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+  ]);
 
   // Commercial Products List
-  readonly products: Product[] = [
+  readonly products = computed<Product[]>(() => [
     {
       id: 'flucelvax',
-      name: 'Flucelvax®',
-      subtitle: 'Seasonal Influenza Vaccine',
+      name: this.translationService.translate('products.flucelvax.name'),
+      subtitle: this.translationService.translate('products.flucelvax.subtitle'),
       image: 'flucelvax_featured.png',
       featuredImage: 'flucelvax_featured.png',
-      description: 'Flucelvax® is a next-generation, cell culture-based influenza vaccine designed to help protect against seasonal flu.',
+      description: this.translationService.translate('products.flucelvax.desc'),
       features: [
-        'Produced in MDCK cell culture',
-        'Egg-free manufacturing process',
-        'High purity and consistent quality'
+        this.translationService.translate('products.flucelvax.feat1'),
+        this.translationService.translate('products.flucelvax.feat2'),
+        this.translationService.translate('products.flucelvax.feat3')
       ],
       specs: [
         { label: 'Product Name', value: 'Flucelvax®' },
@@ -107,15 +110,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
     },
     {
       id: 'vaxigrip',
-      name: 'Vaxigrip®',
-      subtitle: 'Influenza Vaccine (Split Virion)',
+      name: this.translationService.translate('products.vaxigrip.name'),
+      subtitle: this.translationService.translate('products.vaxigrip.subtitle'),
       image: 'p3.jpg',
       featuredImage: 'p3.jpg',
-      description: 'Vaxigrip® is formulated to provide robust seasonal protection against circulating influenza viruses, backed by proven clinical efficacy.',
+      description: this.translationService.translate('products.vaxigrip.desc'),
       features: [
-        'Quadrivalent broad protection against circulating flu strains',
-        'High batch-to-batch consistency and purity',
-        'Compliant with international WHO recommendations'
+        this.translationService.translate('products.vaxigrip.feat1'),
+        this.translationService.translate('products.vaxigrip.feat2'),
+        this.translationService.translate('products.vaxigrip.feat3')
       ],
       specs: [
         { label: 'Product Name', value: 'Vaxigrip®' },
@@ -147,15 +150,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
     },
     {
       id: 'pneumovax',
-      name: 'Pneumovax®',
-      subtitle: 'Pneumococcal Polyvalent Vaccine',
+      name: this.translationService.translate('products.pneumovax.name'),
+      subtitle: this.translationService.translate('products.pneumovax.subtitle'),
       image: 'p2.jpg',
       featuredImage: 'p2.jpg',
-      description: 'Pneumovax® is a polyvalent vaccine formulated to protect against invasive pneumococcal infections in vulnerable and high-risk populations.',
+      description: this.translationService.translate('products.pneumovax.desc'),
       features: [
-        'Broad 23-serotype pneumococcal coverage',
-        'Elevated and durable immune response',
-        'Produced under strict GMP quality standards'
+        this.translationService.translate('products.pneumovax.feat1'),
+        this.translationService.translate('products.pneumovax.feat2'),
+        this.translationService.translate('products.pneumovax.feat3')
       ],
       specs: [
         { label: 'Product Name', value: 'Pneumovax®' },
@@ -187,15 +190,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
     },
     {
       id: 'rotarix',
-      name: 'Rotarix®',
-      subtitle: 'Rotavirus Oral Vaccine',
+      name: this.translationService.translate('products.rotarix.name'),
+      subtitle: this.translationService.translate('products.rotarix.subtitle'),
       image: 'p1.jpg',
       featuredImage: 'p1.jpg',
-      description: 'Rotarix® is an oral vaccine offering early and robust protection against severe rotavirus gastroenteritis in infants.',
+      description: this.translationService.translate('products.rotarix.desc'),
       features: [
-        'Gentle oral drop administration for infants',
-        'High clinical efficacy against severe rotavirus diarrhea',
-        'Extensively validated across global clinical trials'
+        this.translationService.translate('products.rotarix.feat1'),
+        this.translationService.translate('products.rotarix.feat2'),
+        this.translationService.translate('products.rotarix.feat3')
       ],
       specs: [
         { label: 'Product Name', value: 'Rotarix®' },
@@ -225,7 +228,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
       ]
     }
-  ];
+  ]);
 
   // Future Portfolio Pipeline
   readonly futureProducts: Product[] = [
@@ -286,7 +289,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ];
 
   get currentProductList(): Product[] {
-    return this.activeSectionTab() === 'our-products' ? this.products : this.futureProducts;
+    return this.activeSectionTab() === 'our-products' ? this.products() : this.futureProducts;
   }
 
   get currentProduct(): Product {

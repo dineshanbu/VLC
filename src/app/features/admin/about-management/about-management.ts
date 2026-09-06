@@ -40,17 +40,23 @@ export class AboutManagementComponent implements OnInit {
   isLeaderModalOpen = signal<boolean>(false);
   isEditingLeader = signal<boolean>(false);
   currentLeaderId = signal<number | null>(null);
+  leaderEditLang = signal<'en' | 'ar'>('en');
 
   leaderForm = {
     name: '',
+    name_ar: '',
     title: '',
+    title_ar: '',
     role: '',
+    role_ar: '',
     badge: 'Executive Board',
+    badge_ar: 'مجلس الإدارة التنفيذي',
     initials: '',
     image: '',
     order_index: 0,
     status: 'Active' as 'Active' | 'Inactive',
-    bio_sections: [] as LeaderSection[]
+    bio_sections: [] as LeaderSection[],
+    bio_sections_ar: [] as LeaderSection[]
   };
   leaderPhotoFile: File | null = null;
   leaderPhotoPreview: string | null = null;
@@ -68,45 +74,69 @@ export class AboutManagementComponent implements OnInit {
   contentMap = signal<Partial<AboutPageContentMap>>({});
 
   // Hero Edit Form State
+  heroEditLang = signal<'en' | 'ar'>('en');
+  heroPreviewLang = signal<'en' | 'ar'>('en');
   heroForm = {
     badge: 'ABOUT VIC',
+    badge_ar: 'عن الشركة',
     title: 'Vaccine Industrial Holding LLC',
+    title_ar: 'شركة اللقاحات الصناعية القابضة',
     subtitle: 'Leading the Charge in Vaccine Innovation in Saudi Arabia',
+    subtitle_ar: 'ريادة الابتكار وتوطين صناعة اللقاحات في المملكة العربية السعودية',
     description: '',
+    description_ar: '',
     image_url: 'home_banner.png'
   };
   heroImageFile: File | null = null;
   heroImagePreview: string | null = null;
 
   // Overview Modal Story Form
+  overviewEditLang = signal<'en' | 'ar'>('en');
   overviewForm = {
     badge: 'COMPANY OVERVIEW',
+    badge_ar: 'نظرة عامة على الشركة',
     title: 'Pioneering Biotechnology in Saudi Arabia',
+    title_ar: 'ريادة التقنية الحيوية وصناعة اللقاحات في المملكة',
     description: '',
+    description_ar: '',
     paragraphs: [] as string[],
-    newParagraphText: ''
+    paragraphs_ar: [] as string[],
+    newParagraphText: '',
+    newParagraphTextAr: ''
   };
   isOverviewPreviewModalOpen = signal<boolean>(false);
 
   // Vision & Mission Form State
+  vmEditLang = signal<'en' | 'ar'>('en');
   vmForm = {
     vision_title: 'OUR VISION',
+    vision_title_ar: 'رؤيتنا',
     vision_paragraphs: [] as string[],
+    vision_paragraphs_ar: [] as string[],
     newVisionText: '',
+    newVisionTextAr: '',
     mission_title: 'OUR MISSION',
-    mission_text: ''
+    mission_title_ar: 'رسالتنا',
+    mission_text: '',
+    mission_text_ar: ''
   };
 
   // Vision 2030 Form State
+  v2030EditLang = signal<'en' | 'ar'>('en');
   v2030Form = {
     badge: 'NATIONALITY',
+    badge_ar: 'الاستراتيجية الوطنية',
     title: 'Aligned with Saudi Vision 2030',
+    title_ar: 'متوافقون مع رؤية السعودية 2030',
     description: '',
+    description_ar: '',
     image_url: 'saudi_biotech_strategy.jpg',
-    features: [] as Array<{ title: string; desc?: string; icon?: string }>
+    features: [] as Array<{ title: string; desc?: string; icon?: string }>,
+    features_ar: [] as Array<{ title: string; desc?: string; icon?: string }>
   };
   v2030ImageFile: File | null = null;
   v2030ImagePreview: string | null = null;
+
 
   // Computed Values
   filteredLeaders = computed(() => {
@@ -174,9 +204,13 @@ export class AboutManagementComponent implements OnInit {
     if (content.hero) {
       this.heroForm = {
         badge: content.hero.badge || 'ABOUT VIC',
+        badge_ar: content.hero.badge_ar || 'عن الشركة',
         title: content.hero.title || 'Vaccine Industrial Holding LLC',
-        subtitle: content.hero.subtitle || '',
-        description: content.hero.description || '',
+        title_ar: content.hero.title_ar || 'شركة اللقاحات الصناعية القابضة',
+        subtitle: content.hero.subtitle || 'Pioneering Biotechnology & Vaccine Manufacturing in Saudi Arabia',
+        subtitle_ar: content.hero.subtitle_ar || 'ريادة التقنية الحيوية وصناعة اللقاحات في المملكة العربية السعودية',
+        description: content.hero.description || 'Dedicated to advancing healthcare resilience and biomanufacturing excellence in the Kingdom and beyond.',
+        description_ar: content.hero.description_ar || 'ملتزمون بتعزيز مرونة الرعاية الصحية والتميز في التصنيع الحيوي في المملكة وخارجها.',
         image_url: content.hero.image_url || 'home_banner.png'
       };
       this.heroImagePreview = this.resolveImg(content.hero.image_url);
@@ -186,22 +220,33 @@ export class AboutManagementComponent implements OnInit {
     if (content.overview_modal) {
       this.overviewForm = {
         badge: content.overview_modal.badge || 'COMPANY OVERVIEW',
+        badge_ar: content.overview_modal.badge_ar || 'نظرة عامة على الشركة',
         title: content.overview_modal.title || 'Pioneering Biotechnology in Saudi Arabia',
-        description: content.overview_modal.description || '',
+        title_ar: content.overview_modal.title_ar || 'ريادة التقنية الحيوية وصناعة اللقاحات في المملكة',
+        description: content.overview_modal.description || 'Dedicated to healthcare resilience, self-reliance, and biomanufacturing excellence.',
+        description_ar: content.overview_modal.description_ar || 'ملتزمون بتعزيز مرونة الرعاية الصحية والاكتفاء الذاتي والتميز في التصنيع الحيوي.',
         paragraphs: Array.isArray(content.overview_modal.content_json) ? [...content.overview_modal.content_json] : [],
-        newParagraphText: ''
+        paragraphs_ar: Array.isArray(content.overview_modal.content_json_ar) ? [...content.overview_modal.content_json_ar] : [],
+        newParagraphText: '',
+        newParagraphTextAr: ''
       };
     }
 
     // Vision & Mission Form
-    if (content.vision_mission && content.vision_mission.content_json) {
-      const vm = content.vision_mission.content_json;
+    if (content.vision_mission) {
+      const vm = content.vision_mission.content_json || {};
+      const vmAr = content.vision_mission.content_json_ar || {};
       this.vmForm = {
         vision_title: vm.vision_title || 'OUR VISION',
+        vision_title_ar: vmAr.vision_title || 'رؤيتنا',
         vision_paragraphs: Array.isArray(vm.vision_paragraphs) ? [...vm.vision_paragraphs] : [],
+        vision_paragraphs_ar: Array.isArray(vmAr.vision_paragraphs) ? [...vmAr.vision_paragraphs] : [],
         newVisionText: '',
+        newVisionTextAr: '',
         mission_title: vm.mission_title || 'OUR MISSION',
-        mission_text: Array.isArray(vm.mission_paragraphs) ? vm.mission_paragraphs.join('\n') : (vm.mission_paragraphs || '')
+        mission_title_ar: vmAr.mission_title || 'رسالتنا',
+        mission_text: Array.isArray(vm.mission_paragraphs) ? vm.mission_paragraphs.join('\n') : (vm.mission_paragraphs || ''),
+        mission_text_ar: Array.isArray(vmAr.mission_paragraphs) ? vmAr.mission_paragraphs.join('\n') : (vmAr.mission_paragraphs || '')
       };
     }
 
@@ -209,10 +254,14 @@ export class AboutManagementComponent implements OnInit {
     if (content.vision_2030) {
       this.v2030Form = {
         badge: content.vision_2030.badge || 'NATIONALITY',
+        badge_ar: content.vision_2030.badge_ar || 'الاستراتيجية الوطنية',
         title: content.vision_2030.title || 'Aligned with Saudi Vision 2030',
-        description: content.vision_2030.description || '',
+        title_ar: content.vision_2030.title_ar || 'متوافقون مع رؤية السعودية 2030',
+        description: content.vision_2030.description || 'Contributing to national biotechnology and healthcare self-sufficiency goals.',
+        description_ar: content.vision_2030.description_ar || 'المساهمة في تحقيق أهداف التقنية الحيوية الوطنية والاكتفاء الذاتي الصحي.',
         image_url: content.vision_2030.image_url || 'saudi_biotech_strategy.jpg',
-        features: Array.isArray(content.vision_2030.content_json) ? [...content.vision_2030.content_json] : []
+        features: Array.isArray(content.vision_2030.content_json) ? [...content.vision_2030.content_json] : [],
+        features_ar: Array.isArray(content.vision_2030.content_json_ar) ? [...content.vision_2030.content_json_ar] : []
       };
       this.v2030ImagePreview = this.resolveImg(content.vision_2030.image_url);
     }
@@ -241,17 +290,25 @@ export class AboutManagementComponent implements OnInit {
   openAddLeaderModal(): void {
     this.isEditingLeader.set(false);
     this.currentLeaderId.set(null);
+    this.leaderEditLang.set('en');
     this.leaderForm = {
       name: '',
+      name_ar: '',
       title: '',
+      title_ar: '',
       role: '',
+      role_ar: '',
       badge: 'Executive Board',
+      badge_ar: 'مجلس الإدارة التنفيذي',
       initials: '',
       image: '',
       order_index: this.leaders().length + 1,
       status: 'Active',
       bio_sections: [
         { heading: 'Executive Summary', paragraphs: [''] }
+      ],
+      bio_sections_ar: [
+        { heading: 'نبذة تنفيذية', paragraphs: [''] }
       ]
     };
     this.leaderPhotoFile = null;
@@ -262,18 +319,26 @@ export class AboutManagementComponent implements OnInit {
   openEditLeaderModal(leader: AboutLeader): void {
     this.isEditingLeader.set(true);
     this.currentLeaderId.set(leader.id || null);
+    this.leaderEditLang.set('en');
     this.leaderForm = {
       name: leader.name,
+      name_ar: leader.name_ar || '',
       title: leader.title,
+      title_ar: leader.title_ar || '',
       role: leader.role,
+      role_ar: leader.role_ar || '',
       badge: leader.badge || 'Executive Board',
+      badge_ar: leader.badge_ar || '',
       initials: leader.initials || '',
       image: leader.image || '',
       order_index: leader.order_index || 0,
       status: leader.status,
       bio_sections: leader.bio_sections && leader.bio_sections.length > 0
         ? JSON.parse(JSON.stringify(leader.bio_sections))
-        : [{ heading: 'Executive Summary', paragraphs: [''] }]
+        : [{ heading: 'Executive Summary', paragraphs: [''] }],
+      bio_sections_ar: leader.bio_sections_ar && leader.bio_sections_ar.length > 0
+        ? JSON.parse(JSON.stringify(leader.bio_sections_ar))
+        : [{ heading: 'نبذة تنفيذية', paragraphs: [''] }]
     };
     this.leaderPhotoFile = null;
     this.leaderPhotoPreview = this.resolveImg(leader.image);
@@ -328,6 +393,37 @@ export class AboutManagementComponent implements OnInit {
     section.items?.splice(iIndex, 1);
   }
 
+  addBioSectionAr(): void {
+    this.leaderForm.bio_sections_ar.push({
+      heading: 'قسم جديد',
+      paragraphs: ['']
+    });
+  }
+
+  removeBioSectionAr(index: number): void {
+    this.leaderForm.bio_sections_ar.splice(index, 1);
+  }
+
+  addBioParagraphAr(section: LeaderSection): void {
+    if (!section.paragraphs) section.paragraphs = [];
+    section.paragraphs.push('');
+  }
+
+  removeBioParagraphAr(section: LeaderSection, pIndex: number): void {
+    section.paragraphs?.splice(pIndex, 1);
+  }
+
+  addBioItemAr(section: LeaderSection, itemText: string): void {
+    if (!section.items) section.items = [];
+    if (itemText.trim()) {
+      section.items.push(itemText.trim());
+    }
+  }
+
+  removeBioItemAr(section: LeaderSection, iIndex: number): void {
+    section.items?.splice(iIndex, 1);
+  }
+
   saveLeader(): void {
     if (!this.leaderForm.name || !this.leaderForm.title) {
       this.errorMessage.set('Name and Title are required.');
@@ -339,13 +435,18 @@ export class AboutManagementComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('name', this.leaderForm.name);
+    formData.append('name_ar', this.leaderForm.name_ar || '');
     formData.append('title', this.leaderForm.title);
+    formData.append('title_ar', this.leaderForm.title_ar || '');
     formData.append('role', this.leaderForm.role || '');
+    formData.append('role_ar', this.leaderForm.role_ar || '');
     formData.append('badge', this.leaderForm.badge || 'Executive Board');
+    formData.append('badge_ar', this.leaderForm.badge_ar || '');
     formData.append('initials', this.leaderForm.initials || '');
     formData.append('order_index', String(this.leaderForm.order_index || 0));
     formData.append('status', this.leaderForm.status);
     formData.append('bio_sections', JSON.stringify(this.leaderForm.bio_sections));
+    formData.append('bio_sections_ar', JSON.stringify(this.leaderForm.bio_sections_ar));
 
     if (this.leaderPhotoFile) {
       formData.append('image', this.leaderPhotoFile);
@@ -489,9 +590,13 @@ export class AboutManagementComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('badge', this.heroForm.badge || 'ABOUT VIC');
+    formData.append('badge_ar', this.heroForm.badge_ar || '');
     formData.append('title', this.heroForm.title || '');
+    formData.append('title_ar', this.heroForm.title_ar || '');
     formData.append('subtitle', this.heroForm.subtitle || '');
+    formData.append('subtitle_ar', this.heroForm.subtitle_ar || '');
     formData.append('description', this.heroForm.description || '');
+    formData.append('description_ar', this.heroForm.description_ar || '');
 
     if (this.heroImageFile) {
       formData.append('image', this.heroImageFile);
@@ -525,15 +630,31 @@ export class AboutManagementComponent implements OnInit {
     this.overviewForm.paragraphs.splice(index, 1);
   }
 
+  addOverviewParagraphAr(): void {
+    const text = this.overviewForm.newParagraphTextAr.trim();
+    if (text) {
+      this.overviewForm.paragraphs_ar.push(text);
+      this.overviewForm.newParagraphTextAr = '';
+    }
+  }
+
+  removeOverviewParagraphAr(index: number): void {
+    this.overviewForm.paragraphs_ar.splice(index, 1);
+  }
+
   saveOverviewModal(): void {
     this.isSaving.set(true);
     this.clearAlerts();
 
     const formData = new FormData();
     formData.append('badge', this.overviewForm.badge || 'COMPANY OVERVIEW');
+    formData.append('badge_ar', this.overviewForm.badge_ar || '');
     formData.append('title', this.overviewForm.title || '');
+    formData.append('title_ar', this.overviewForm.title_ar || '');
     formData.append('description', this.overviewForm.description || '');
+    formData.append('description_ar', this.overviewForm.description_ar || '');
     formData.append('content_json', JSON.stringify(this.overviewForm.paragraphs));
+    formData.append('content_json_ar', JSON.stringify(this.overviewForm.paragraphs_ar));
 
     this.aboutService.updateAboutSection('overview_modal', formData).subscribe({
       next: () => {
@@ -555,6 +676,10 @@ export class AboutManagementComponent implements OnInit {
     this.isOverviewPreviewModalOpen.set(false);
   }
 
+  trackByIndex(index: number, item: any): number {
+    return index;
+  }
+
   // ==========================================
   // SECTION 3: VISION & MISSION
   // ==========================================
@@ -570,6 +695,18 @@ export class AboutManagementComponent implements OnInit {
     this.vmForm.vision_paragraphs.splice(index, 1);
   }
 
+  addVisionParagraphAr(): void {
+    const text = this.vmForm.newVisionTextAr.trim();
+    if (text) {
+      this.vmForm.vision_paragraphs_ar.push(text);
+      this.vmForm.newVisionTextAr = '';
+    }
+  }
+
+  removeVisionParagraphAr(index: number): void {
+    this.vmForm.vision_paragraphs_ar.splice(index, 1);
+  }
+
   saveVisionMission(): void {
     this.isSaving.set(true);
     this.clearAlerts();
@@ -581,10 +718,20 @@ export class AboutManagementComponent implements OnInit {
       mission_paragraphs: [this.vmForm.mission_text]
     };
 
+    const payloadAr = {
+      vision_title: this.vmForm.vision_title_ar || 'رؤيتنا',
+      vision_paragraphs: this.vmForm.vision_paragraphs_ar,
+      mission_title: this.vmForm.mission_title_ar || 'رسالتنا',
+      mission_paragraphs: [this.vmForm.mission_text_ar]
+    };
+
     const formData = new FormData();
     formData.append('badge', 'FOUNDATIONAL PILLARS');
+    formData.append('badge_ar', 'الركائز التأسيسية');
     formData.append('title', 'Our Vision & Mission');
+    formData.append('title_ar', 'رؤيتنا ورسالتنا');
     formData.append('content_json', JSON.stringify(payload));
+    formData.append('content_json_ar', JSON.stringify(payloadAr));
 
     this.aboutService.updateAboutSection('vision_mission', formData).subscribe({
       next: () => {
@@ -620,10 +767,18 @@ export class AboutManagementComponent implements OnInit {
       desc: 'Advancing healthcare security and life-saving immunization',
       icon: 'heart'
     });
+    this.v2030Form.features_ar.push({
+      title: 'ركيزة تحول جديدة',
+      desc: 'تعزيز الأمن الصحي الوطني وتأمين اللقاحات الحيوية',
+      icon: 'heart'
+    });
   }
 
   removeV2030Feature(index: number): void {
     this.v2030Form.features.splice(index, 1);
+    if (this.v2030Form.features_ar && this.v2030Form.features_ar.length > index) {
+      this.v2030Form.features_ar.splice(index, 1);
+    }
   }
 
   saveVision2030(): void {
@@ -632,9 +787,13 @@ export class AboutManagementComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('badge', this.v2030Form.badge || 'NATIONALITY');
+    formData.append('badge_ar', this.v2030Form.badge_ar || '');
     formData.append('title', this.v2030Form.title || 'Aligned with Saudi Vision 2030');
+    formData.append('title_ar', this.v2030Form.title_ar || '');
     formData.append('description', this.v2030Form.description || '');
+    formData.append('description_ar', this.v2030Form.description_ar || '');
     formData.append('content_json', JSON.stringify(this.v2030Form.features));
+    formData.append('content_json_ar', JSON.stringify(this.v2030Form.features_ar));
 
     if (this.v2030ImageFile) {
       formData.append('image', this.v2030ImageFile);
