@@ -289,6 +289,9 @@ async function seedDefaultData(db) {
 
   // Seed default partners data if empty
   await seedPartnersData(db);
+
+  // Seed default about us content & leaders if empty
+  await seedAboutData(db);
 }
 
 const defaultJobPositions = [
@@ -801,6 +804,320 @@ async function seedPartnersData(db, force = false) {
   }
 }
 
+// ==========================================
+// ABOUT US SEED DATA & FUNCTIONS
+// ==========================================
+
+const defaultAboutContent = {
+  hero: {
+    section_key: 'hero',
+    badge: 'ABOUT VIC',
+    title: 'Vaccine Industrial Holding LLC',
+    subtitle: 'Leading the Charge in Vaccine Innovation in Saudi Arabia',
+    description: 'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia, dedicated to advancing vaccine innovation, manufacturing excellence, and national healthcare resilience.',
+    image_url: 'home_banner.png'
+  },
+  overview_modal: {
+    section_key: 'overview_modal',
+    badge: 'COMPANY OVERVIEW',
+    title: 'Pioneering Biotechnology in Saudi Arabia',
+    description: 'The historic journey, strategic three-phase manufacturing facility, and national mission of Vaccine Industrial Holding LLC.',
+    content_json: [
+      'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia. Established in January 2022, VIC was conceived by Dr. Khaled Almosa, a distinguished healthcare management consultant and a visionary in the biotechnology sector. With an illustrious career as the Founder, Vice Chairman, and Managing Director of the Saudi Biotechnology Manufacturing Company for Insulin and Biologics from 2010 to 2020, Dr. Almosa has significantly advanced the biotechnology industry within the Kingdom.',
+      'Dr. Almosa is a multifaceted entrepreneur, having founded numerous companies across various industries. He is also the founder of the Biotechnology Innovation Company for R&D in collaboration with King Abdulaziz City for Science and Technology (KACST) and the Center for Vaccine Development at Baylor College of Medicine, Houston, USA. Additionally, he established the Biotechnology Training Institute in Saudi Arabia and Bioera Industrial Engineering Company to construct biotech facilities in the GCC region.',
+      'Beyond his contributions to VIC, Dr. Almosa is a respected member of the KSA Supreme Committee for Research, Development, and Innovation, chaired by HRH Crown Prince and Prime Minister Mohammed bin Salman. This committee operates under the Council of Economic and Development Affairs and the Council of Ministers (2021–2024), emphasizing Dr. Almosa’s dedication to fostering innovation and driving progress in biotechnology and healthcare.',
+      'Vaccine Industrial Holding LLC is the first and only company in Saudi Arabia committed to establishing a state-of-the-art vaccine biomanufacturing facility. This ambitious project aims to transform the Kingdom into a global hub for vaccine production, enhancing self-reliance and advancing the nation’s healthcare infrastructure.',
+      'The development of this groundbreaking facility will occur in three strategic phases over seven years. Each phase is meticulously planned to build cutting-edge capabilities, utilizing the latest technologies and innovations to produce high-quality vaccines that meet global standards. VIC’s initiative reflects its commitment to supporting Saudi Arabia’s healthcare needs while contributing to global efforts in vaccine accessibility and sustainability.',
+      'Through this transformative journey, VIC addresses regional healthcare demands and positions Saudi Arabia as a global leader in vaccine manufacturing. With visionary leadership, technological excellence, and an unwavering commitment to innovation, Vaccine Industrial Holding LLC is paving the way for a healthier and more resilient future.'
+    ]
+  },
+  vision_mission: {
+    section_key: 'vision_mission',
+    badge: 'FOUNDATIONAL PILLARS',
+    title: 'Our Vision & Mission',
+    content_json: {
+      vision_title: 'OUR VISION',
+      vision_paragraphs: [
+        "We are committed to contributing to the realization of the National Biotechnology Strategy and aligning our efforts with the ambitious goals of Saudi Arabia's Vision 2030.",
+        'Having successfully pioneered the localization of the insulin and biotechnology industries within the Kingdom, we are now focused on advancing the localization of the vaccine industry.',
+        'This initiative reflects our deep sense of responsibility and unwavering dedication to the growth and prosperity of our beloved nation, Saudi Arabia. Our mission is driven by a passion for innovation and a commitment to building a self-sustaining biotechnology sector that supports the health and well-being of future generations.'
+      ],
+      mission_title: 'OUR MISSION',
+      mission_paragraphs: [
+        'Vaccine Industrial Holding LLC is dedicated to advancing vaccine innovation and manufacturing excellence in Saudi Arabia. We are committed to establishing a state-of-the-art biomanufacturing facility that produces high-quality vaccines using advanced technologies, builds a self-sustaining biotechnology ecosystem, and safeguards national healthcare resilience to shape a healthier future.'
+      ]
+    }
+  },
+  vision_2030: {
+    section_key: 'vision_2030',
+    badge: 'NATIONALITY',
+    title: 'Aligned with Saudi Vision 2030',
+    description: "VIC is proud to support the Kingdom's Vision 2030 by localizing advanced vaccine manufacturing, strengthening health security, creating high-value jobs, and driving innovation for a resilient and sustainable healthcare ecosystem.",
+    image_url: 'saudi_biotech_strategy.jpg',
+    content_json: [
+      { title: 'Health Sector Transformation', icon: 'heart', desc: 'Advancing healthcare security and life-saving immunization' },
+      { title: 'Economic Diversification', icon: 'trending-up', desc: 'Building non-oil GDP through high-tech biomanufacturing' },
+      { title: 'Local Content Development', icon: 'award', desc: 'Maximizing Saudi talent, workforce training, and supply chains' },
+      { title: 'Innovation & Sustainability', icon: 'sun', desc: 'State-of-the-art green facilities and sustainable vaccine platforms' }
+    ]
+  }
+};
+
+const defaultLeadersList = [
+  {
+    name: 'Dr. Khaled Almosa',
+    title: 'Founder and Chairman of Vaccine Industrial Company',
+    role: 'Leading Saudi biotechnology pioneer & senior management consultant. Recognized as the “Godfather of Biotechnology Manufacturing in Saudi Arabia”.',
+    badge: 'Founder & Chairman',
+    initials: 'KA',
+    image: 'Dr.Khaled-Almosa.jpeg',
+    order_index: 1,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Executive Summary',
+        paragraphs: [
+          'Dr. Khaled Almosa is a leading Saudi biotechnology pioneer and senior management consultant. Recognized as the “Godfather of Biotechnology Manufacturing in Saudi Arabia” by H.E. Dr. Hussein A. Gezairy (former WHO Regional Director and former Saudi Minister of Health), he has shaped the Kingdom’s life sciences and healthcare industries for more than three decades.'
+        ]
+      },
+      {
+        heading: 'Government, Policy & Innovation Leadership',
+        paragraphs: [
+          'He served as a member of the Supreme Committee for Research, Development & Innovation (2021–2024), chaired by HRH the Crown Prince at the Council of Economic and Development Affairs. His contributions helped shape national strategies in biotechnology, healthcare, and R&D.'
+        ]
+      },
+      {
+        heading: 'Executive Profile',
+        paragraphs: [
+          'Dr. Almosa is the first Saudi national to invest in and establish biotechnology manufacturing industries, founding companies across insulin and biologics production, human and animal vaccines, biomedical engineering, medical services, consulting, and R&D. His work directly advances Saudi Vision 2030 through healthcare localization, innovation, and workforce development.'
+        ]
+      },
+      {
+        heading: 'Pioneering Biotech Enterprises',
+        items: [
+          'SAUDI BIO (2010–2020) — Founder & Chairman: First and only Saudi manufacturer of insulin and biologics, in partnership with Novo Nordisk and Sandoz. Acquired in 2023 by Lifera (PIF-owned).',
+          'Vaccine Industrial Holding Company (VIC) — Founder & Chairman: Home to Saudi Arabia’s first and the Middle East’s largest human vaccine manufacturing facility, partnering with CSL Seqirus and other global biotech leaders.',
+          'Biotech Innovation Company for R&D — Founder & Chairman: Established with Baylor College of Medicine; collaborates with KACST; funded by Saudi NIH to conduct MERS clinical trials.',
+          'Anivax — Founder & Chairman: A dedicated animal vaccine R&D and manufacturing company in partnership with Boehringer Ingelheim, positioning Saudi Arabia as a regional veterinary biotech hub.',
+          'Bioera — Industrial Engineering & Project Management — Founder & Chairman: International engineering firm operating across the GCC, USA, Europe, and India with partners including KeyPlants, Zyme Biotech, Shahin Engineering, Podtech, and Jadwa Contractors.',
+          'MedTech Group of Companies — Founder & Chairman: Operates day surgery centers, medical facilities, and medical supplies services in Riyadh.',
+          'Biotechnology Training Institute — Founder: Being established with NIBRT, the first institute of its kind in the Middle East to train the region’s biotechnology workforce.'
+        ]
+      },
+      {
+        heading: 'Consulting & Strategic Advisory',
+        items: [
+          'Dr. Khaled Almosa Consulting Firm (Riyadh) — Chairman: Licensed by the Saudi Ministry of Commerce; specializes in biotech, R&D, investment, and business development.',
+          'Averon Consulting (Dubai) — Chairman: Provides strategic advisory in healthcare and biotechnology, including regulatory strategy, market entry, partnerships, and innovation planning.'
+        ]
+      },
+      {
+        heading: 'Research & Publications',
+        items: [
+          '“Investigating Factors That Impede Successful Vaccine Manufacturing Business in the Kingdom of Saudi Arabia: Imperatives for Healthcare Sustainability.”',
+          '“My Mission to Save Lives in Saudi Arabia: Empowering 2030 Through Local Manufacturing of Insulin, Vaccines, Cancer Therapeutics, and Gene Editing Technologies.”'
+        ]
+      },
+      {
+        heading: 'Legacy',
+        paragraphs: [
+          'Dr. Almosa’s legacy is the biotechnology ecosystem he built — from the first insulin factory to the first human vaccine plant, from pioneering R&D to training the next generation of biotech professionals. His career represents a mission to save lives, strengthen national health security, and secure the Kingdom’s biotechnological future.'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'H.E. Dr. Hussein AlGazairy',
+    title: 'Founder of College of Medicine at King Saud University',
+    role: 'Ex-Saudi Minister of Health & Ex-Regional Director of WHO, Eastern Mediterranean Region.',
+    badge: 'Advisory Board',
+    initials: 'HA',
+    image: 'H.E-Dr.-Hussein-AlGazairy-1-1.jpg',
+    order_index: 2,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Distinguished Leadership',
+        items: [
+          'Founder of the College of Medicine at King Saud University',
+          'Ex-Saudi Minister of Health',
+          'Ex-Regional Director of World Health Organization (WHO), Eastern Mediterranean Region'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Professor Aws Alshamsan',
+    title: 'Secretary-General of the Saudi Commission for Health',
+    role: 'Ex-Consultant for Biological Products at SFDA & Former Dean of the College of Pharmacy at King Saud University.',
+    badge: 'Scientific Board',
+    initials: 'AA',
+    image: 'Professor-Aws-Alshamsan-1-1.jpg',
+    order_index: 3,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Scientific & Academic Background',
+        items: [
+          'The Secretary-General of the Saudi Commission for Health Specialties',
+          'Ex-Consultant for biological products at the Saudi Food and Drug Authority (SFDA) for five years',
+          'Co-director of the Joint Center of Excellence in Nanomedicine at KACST between 2013 and 2015',
+          'Director of King Abdullah Institute for Nanotechnology between 2014 and 2017',
+          'Dean of the College of Pharmacy at King Saud University between 2017–2022'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Dr. Abdulrazak AlGazairy',
+    title: 'Senior Medical Surgeon & Researcher',
+    role: 'Head of Ophthalmology Division at PSBAHC, Co-founder of Saudi Biotechnology Manufacturing Co. & Chairman of Meditech Group.',
+    badge: 'Medical Board',
+    initials: 'AG',
+    image: 'drabdul.jpg',
+    order_index: 4,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Medical & Executive Experience',
+        items: [
+          'Senior Medical Surgeon and Researcher',
+          'Head of Ophthalmology division, Prince Sultan Bin Abdulaziz Humanitarian City',
+          'Co-founder, Saudi Biotechnology Manufacturing Co.',
+          'Chairman, Meditech Group'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Mr. Turki Al-Dayel',
+    title: 'Co-Head of Middle East & CEO of Ninety One Private Equity',
+    role: 'Ex-Director & Head of Private Equity at Raidah Investment Company (GOSI), Board Member of Arabian Centers & SBMC.',
+    badge: 'Executive Board',
+    initials: 'TD',
+    image: 'Mr.-Turki-Al-Dayel-Director-1.jpg',
+    order_index: 5,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Investment Leadership',
+        items: [
+          'Co-Head of the Middle East & CEO of Ninety One Private Equity, Saudi Arabia',
+          'Ex-Director & Head of Private Equity at Raidah Investment Company (GOSI)',
+          'Board member of Arabian Centers Co. and Saudi Biotechnology Manufacturing Co.'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Mr. Abdulrahman AlMalik',
+    title: 'Executive Director of Investments - PIF Portfolio Company',
+    role: 'Private Equity in Real-estate. Ex Advisor to the Minister of Economy & Planning and Financial Advisor at Ernst & Young.',
+    badge: 'Executive Board',
+    initials: 'AM',
+    image: 'Mr.-Abdulrahman-AlMalik-1.jpg',
+    order_index: 6,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Corporate Strategy & Governance',
+        items: [
+          'Executive Director of Investments - PIF portfolio Company, Private Equity in Real-estate',
+          'Ex Advisor to the Minister of Economy & Planning and Financial Advisor at Ernst & Young',
+          'Holds an MBA from ESADE Business School'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Professor Abdullah Alotaibi',
+    title: 'Senior Consultant for Education & Training Affairs',
+    role: 'Consultant for University Certificates Equalization at Ministry of Education, Former Member of Consultative (SHOURA) Council.',
+    badge: 'Advisory Board',
+    initials: 'AO',
+    image: 'prof-abdullah-alotaibi.png',
+    order_index: 7,
+    status: 'Active',
+    bio_sections: [
+      {
+        heading: 'Public Service & Academic Leadership',
+        items: [
+          'Senior Consultant for Education and Training Affairs',
+          'Consultant for University Certificates Equalization at Ministry of Education (2016 – Present)',
+          'Member of Consultative (SHOURA) Council (2009 – 2021)',
+          'Professor of Clinical Low Vision and Rehabilitation at King Saud University (KSU)',
+          'Dean of College of Applied Medical Sciences at KSU (2008)',
+          'Consultant for Low Vision & Rehabilitation at Ministry of Health (MOH) for 10 years',
+          'Member of different Committees at the Saudi Commission for Health Specialties (SCFHS) and Saudi Food and Drug Authority (SFDA)'
+        ]
+      }
+    ]
+  }
+];
+
+async function seedAboutData(db, force = false) {
+  try {
+    // 1. Seed About Page Content
+    const [existingContent] = await db.query('SELECT COUNT(*) as count FROM about_page_content');
+    if (existingContent[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM about_page_content');
+      }
+      for (const key of Object.keys(defaultAboutContent)) {
+        const item = defaultAboutContent[key];
+        await db.query(`
+          INSERT INTO about_page_content (section_key, title, subtitle, badge, description, image_url, content_json)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+          ON DUPLICATE KEY UPDATE
+            title = VALUES(title),
+            subtitle = VALUES(subtitle),
+            badge = VALUES(badge),
+            description = VALUES(description),
+            image_url = VALUES(image_url),
+            content_json = VALUES(content_json)
+        `, [
+          item.section_key,
+          item.title || '',
+          item.subtitle || '',
+          item.badge || '',
+          item.description || '',
+          item.image_url || '',
+          item.content_json ? JSON.stringify(item.content_json) : null
+        ]);
+      }
+      console.log('[DB Seed] Seeded default about page sections.');
+    }
+
+    // 2. Seed About Leaders
+    const [existingLeaders] = await db.query('SELECT COUNT(*) as count FROM about_leaders');
+    if (existingLeaders[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM about_leaders');
+      }
+      for (const leader of defaultLeadersList) {
+        await db.query(`
+          INSERT INTO about_leaders (name, title, role, badge, initials, image, bio_sections, order_index, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          leader.name,
+          leader.title,
+          leader.role,
+          leader.badge,
+          leader.initials || '',
+          leader.image || '',
+          leader.bio_sections ? JSON.stringify(leader.bio_sections) : null,
+          leader.order_index || 0,
+          leader.status || 'Active'
+        ]);
+      }
+      console.log(`[DB Seed] Seeded ${defaultLeadersList.length} founding leaders.`);
+    }
+
+  } catch (err) {
+    console.error('[DB Seed About Error]', err.message);
+  }
+}
+
 // Getter for pool
 function getPool() {
   if (!pool) {
@@ -819,6 +1136,10 @@ module.exports = {
   defaultJobPositions,
   seedPartnersData,
   defaultPartnersList,
-  defaultPartnershipSections
+  defaultPartnershipSections,
+  seedAboutData,
+  defaultAboutContent,
+  defaultLeadersList
 };
+
 

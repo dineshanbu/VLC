@@ -14,21 +14,21 @@
     <div class="about-hero__content">
 
       <!-- Eyebrow -->
-      <span class="about-hero__eyebrow">ABOUT VIC</span>
+      <span class="about-hero__eyebrow">{{ pageContent().hero?.badge || 'ABOUT VIC' }}</span>
 
       <!-- Main Heading -->
       <h1 class="about-hero__heading">
-        Vaccine Industrial<br />Holding LLC
+        {{ pageContent().hero?.title || 'Vaccine Industrial Holding LLC' }}
       </h1>
 
       <!-- Subheading -->
       <p class="about-hero__subheading">
-        Leading the Charge in Vaccine Innovation<br class="about-hero__subheading-br" />in Saudi Arabia
+        {{ pageContent().hero?.subtitle || 'Leading the Charge in Vaccine Innovation in Saudi Arabia' }}
       </p>
 
       <!-- Short Description -->
       <p class="about-hero__description">
-        Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia, dedicated to advancing vaccine innovation, manufacturing excellence, and national healthcare resilience.
+        {{ pageContent().hero?.description || 'Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia, dedicated to advancing vaccine innovation, manufacturing excellence, and national healthcare resilience.' }}
       </p>
 
       <!-- Read More Button — Opens Company Overview Modal -->
@@ -49,14 +49,13 @@
         </button>
       </div>
 
-
     </div>
   </div>
 
   <!-- Headquarters Building Image (Right Split on Desktop, Bottom on Mobile) -->
   <div class="about-hero__image-wrapper">
     <img
-      src="home_banner.png"
+      [src]="resolveImg(pageContent().hero?.image_url, 'home_banner.png')"
       alt="Vaccine Industrial Holding LLC Headquarters and Manufacturing Facility"
       class="about-hero__image"
     />
@@ -104,7 +103,7 @@
   <div class="about-overview__container">
     <div class="about-overview__grid">
 
-      <!-- Column 1 (Left): Our Vision Card — 6 lines visible -->
+      <!-- Column 1 (Left): Our Vision Card -->
       <div class="about-vm-card about-vm-card--vision">
 
         <!-- Card Header: Icon + Label -->
@@ -115,7 +114,7 @@
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
           </div>
-          <span class="about-vm-card__label">OUR VISION</span>
+          <span class="about-vm-card__label">{{ pageContent().vision_mission?.content_json?.vision_title || 'OUR VISION' }}</span>
         </div>
 
         <!-- Vision body clipped to 6 lines, expands on toggle -->
@@ -124,15 +123,23 @@
           [class.about-vm-card__clip--open]="isVisionExpanded"
         >
           <div class="about-vm-card__body">
-            <p class="about-vm-card__text">
-              We are committed to contributing to the realization of the National Biotechnology Strategy and aligning our efforts with the ambitious goals of Saudi Arabia's Vision 2030.
-            </p>
-            <p class="about-vm-card__text">
-              Having successfully pioneered the localization of the insulin and biotechnology industries within the Kingdom, we are now focused on advancing the localization of the vaccine industry.
-            </p>
-            <p class="about-vm-card__text">
-              This initiative reflects our deep sense of responsibility and unwavering dedication to the growth and prosperity of our beloved nation, Saudi Arabia. Our mission is driven by a passion for innovation and a commitment to building a self-sustaining biotechnology sector that supports the health and well-being of future generations.
-            </p>
+            <ng-container *ngIf="pageContent().vision_mission?.content_json?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
+              <p *ngFor="let p of pageContent().vision_mission?.content_json?.vision_paragraphs" class="about-vm-card__text">
+                {{ p }}
+              </p>
+            </ng-container>
+
+            <ng-template #defaultVisionParagraphs>
+              <p class="about-vm-card__text">
+                We are committed to contributing to the realization of the National Biotechnology Strategy and aligning our efforts with the ambitious goals of Saudi Arabia's Vision 2030.
+              </p>
+              <p class="about-vm-card__text">
+                Having successfully pioneered the localization of the insulin and biotechnology industries within the Kingdom, we are now focused on advancing the localization of the vaccine industry.
+              </p>
+              <p class="about-vm-card__text">
+                This initiative reflects our deep sense of responsibility and unwavering dedication to the growth and prosperity of our beloved nation, Saudi Arabia. Our mission is driven by a passion for innovation and a commitment to building a self-sustaining biotechnology sector that supports the health and well-being of future generations.
+              </p>
+            </ng-template>
           </div>
           <!-- Soft fade gradient — hidden when expanded -->
           <div class="about-vm-card__fade" aria-hidden="true"></div>
@@ -152,7 +159,7 @@
 
       </div>
 
-      <!-- Column 2 (Right): Our Mission Card — 4 lines visible -->
+      <!-- Column 2 (Right): Our Mission Card -->
       <div class="about-vm-card about-vm-card--mission">
 
         <!-- Card Header: Icon + Label -->
@@ -164,7 +171,7 @@
               <circle cx="12" cy="12" r="2"></circle>
             </svg>
           </div>
-          <span class="about-vm-card__label">OUR MISSION</span>
+          <span class="about-vm-card__label">{{ pageContent().vision_mission?.content_json?.mission_title || 'OUR MISSION' }}</span>
         </div>
 
         <!-- Mission body clipped to 4 lines, expands on toggle -->
@@ -173,9 +180,17 @@
           [class.about-vm-card__clip--open]="isMissionExpanded"
         >
           <div class="about-vm-card__body">
-            <p class="about-vm-card__text">
-              Vaccine Industrial Holding LLC is dedicated to advancing vaccine innovation and manufacturing excellence in Saudi Arabia. We are committed to establishing a state-of-the-art biomanufacturing facility that produces high-quality vaccines using advanced technologies, builds a self-sustaining biotechnology ecosystem, and safeguards national healthcare resilience to shape a healthier future.
-            </p>
+            <ng-container *ngIf="pageContent().vision_mission?.content_json?.mission_paragraphs?.length > 0; else defaultMissionText">
+              <p *ngFor="let p of pageContent().vision_mission?.content_json?.mission_paragraphs" class="about-vm-card__text">
+                {{ p }}
+              </p>
+            </ng-container>
+
+            <ng-template #defaultMissionText>
+              <p class="about-vm-card__text">
+                Vaccine Industrial Holding LLC is dedicated to advancing vaccine innovation and manufacturing excellence in Saudi Arabia. We are committed to establishing a state-of-the-art biomanufacturing facility that produces high-quality vaccines using advanced technologies, builds a self-sustaining biotechnology ecosystem, and safeguards national healthcare resilience to shape a healthier future.
+              </p>
+            </ng-template>
           </div>
           <!-- Soft fade gradient — hidden when expanded -->
           <div class="about-vm-card__fade" aria-hidden="true"></div>
@@ -232,46 +247,50 @@
 
     <!-- Modal Header -->
     <div class="about-modal__header">
-      <span class="about-modal__eyebrow">COMPANY OVERVIEW</span>
+      <span class="about-modal__eyebrow">{{ pageContent().overview_modal?.badge || 'COMPANY OVERVIEW' }}</span>
       <h2 id="overview-modal-heading" class="about-modal__heading">
-        Pioneering Biotechnology in Saudi Arabia
+        {{ pageContent().overview_modal?.title || 'Pioneering Biotechnology in Saudi Arabia' }}
       </h2>
     </div>
 
     <!-- Modal Body with Smooth Independent Scroll -->
     <div class="about-modal__body">
       
-      <!-- Paragraph 1 -->
-      <p>
-        Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia. Established in January 2022, VIC was conceived by Dr. Khaled Almosa, a distinguished healthcare management consultant and a visionary in the biotechnology sector. With an illustrious career as the Founder, Vice Chairman, and Managing Director of the Saudi Biotechnology Manufacturing Company for Insulin and Biologics from 2010 to 2020, Dr. Almosa has significantly advanced the biotechnology industry within the Kingdom.
-      </p>
-
-      <!-- Paragraph 2 -->
-      <p>
-        Dr. Almosa is a multifaceted entrepreneur, having founded numerous companies across various industries. He is also the founder of the Biotechnology Innovation Company for R&amp;D in collaboration with King Abdulaziz City for Science and Technology (KACST) and the Center for Vaccine Development at Baylor College of Medicine, Houston, USA. Additionally, he established the Biotechnology Training Institute in Saudi Arabia and Bioera Industrial Engineering Company to construct biotech facilities in the GCC region.
-      </p>
-
-      <!-- Paragraph 3 -->
-      <p>
-        Beyond his contributions to VIC, Dr. Almosa is a respected member of the KSA Supreme Committee for Research, Development, and Innovation, chaired by HRH Crown Prince and Prime Minister Mohammed bin Salman. This committee operates under the Council of Economic and Development Affairs and the Council of Ministers (2021–2024), emphasizing Dr. Almosa’s dedication to fostering innovation and driving progress in biotechnology and healthcare.
-      </p>
-
-      <!-- Paragraph 4 -->
-      <p>
-        Vaccine Industrial Holding LLC is the first and only company in Saudi Arabia committed to establishing a state-of-the-art vaccine biomanufacturing facility. This ambitious project aims to transform the Kingdom into a global hub for vaccine production, enhancing self-reliance and advancing the nation’s healthcare infrastructure.
-      </p>
-
-      <!-- Paragraph 5 -->
-      <p>
-        The development of this groundbreaking facility will occur in three strategic phases over seven years. Each phase is meticulously planned to build cutting-edge capabilities, utilizing the latest technologies and innovations to produce high-quality vaccines that meet global standards. VIC’s initiative reflects its commitment to supporting Saudi Arabia’s healthcare needs while contributing to global efforts in vaccine accessibility and sustainability.
-      </p>
-
-      <!-- Paragraph 6 (Subtly Highlighted Concluding Statement) -->
-      <div class="about-modal__highlight">
-        <p>
-          Through this transformative journey, VIC addresses regional healthcare demands and positions Saudi Arabia as a global leader in vaccine manufacturing. With visionary leadership, technological excellence, and an unwavering commitment to innovation, Vaccine Industrial Holding LLC is paving the way for a healthier and more resilient future.
+      <!-- Dynamic Paragraphs if available from backend -->
+      <ng-container *ngIf="pageContent().overview_modal?.content_json && pageContent().overview_modal?.content_json.length > 0; else defaultOverviewText">
+        <p *ngFor="let p of pageContent().overview_modal?.content_json">
+          {{ p }}
         </p>
-      </div>
+      </ng-container>
+
+      <!-- Default Official Story Fallback -->
+      <ng-template #defaultOverviewText>
+        <p>
+          Vaccine Industrial Holding LLC (VIC) stands as a pioneering biotechnology firm headquartered in Riyadh, Saudi Arabia. Established in January 2022, VIC was conceived by Dr. Khaled Almosa, a distinguished healthcare management consultant and a visionary in the biotechnology sector. With an illustrious career as the Founder, Vice Chairman, and Managing Director of the Saudi Biotechnology Manufacturing Company for Insulin and Biologics from 2010 to 2020, Dr. Almosa has significantly advanced the biotechnology industry within the Kingdom.
+        </p>
+
+        <p>
+          Dr. Almosa is a multifaceted entrepreneur, having founded numerous companies across various industries. He is also the founder of the Biotechnology Innovation Company for R&amp;D in collaboration with King Abdulaziz City for Science and Technology (KACST) and the Center for Vaccine Development at Baylor College of Medicine, Houston, USA. Additionally, he established the Biotechnology Training Institute in Saudi Arabia and Bioera Industrial Engineering Company to construct biotech facilities in the GCC region.
+        </p>
+
+        <p>
+          Beyond his contributions to VIC, Dr. Almosa is a respected member of the KSA Supreme Committee for Research, Development, and Innovation, chaired by HRH Crown Prince and Prime Minister Mohammed bin Salman. This committee operates under the Council of Economic and Development Affairs and the Council of Ministers (2021–2024), emphasizing Dr. Almosa’s dedication to fostering innovation and driving progress in biotechnology and healthcare.
+        </p>
+
+        <p>
+          Vaccine Industrial Holding LLC is the first and only company in Saudi Arabia committed to establishing a state-of-the-art vaccine biomanufacturing facility. This ambitious project aims to transform the Kingdom into a global hub for vaccine production, enhancing self-reliance and advancing the nation’s healthcare infrastructure.
+        </p>
+
+        <p>
+          The development of this groundbreaking facility will occur in three strategic phases over seven years. Each phase is meticulously planned to build cutting-edge capabilities, utilizing the latest technologies and innovations to produce high-quality vaccines that meet global standards. VIC’s initiative reflects its commitment to supporting Saudi Arabia’s healthcare needs while contributing to global efforts in vaccine accessibility and sustainability.
+        </p>
+
+        <div class="about-modal__highlight">
+          <p>
+            Through this transformative journey, VIC addresses regional healthcare demands and positions Saudi Arabia as a global leader in vaccine manufacturing. With visionary leadership, technological excellence, and an unwavering commitment to innovation, Vaccine Industrial Holding LLC is paving the way for a healthier and more resilient future.
+          </p>
+        </div>
+      </ng-template>
 
     </div>
 
@@ -293,7 +312,7 @@
 
       <!-- Background Image: Flag & Riyadh Skyline -->
       <img
-        src="saudi_biotech_strategy.jpg"
+        [src]="resolveImg(pageContent().vision_2030?.image_url, 'saudi_biotech_strategy.jpg')"
         alt="Saudi Arabia Flag with Riyadh skyline — Vision 2030"
         class="about-v2030__bg-img"
       />
@@ -306,12 +325,12 @@
 
         <!-- Left: Text Content -->
         <div class="about-v2030__text">
-          <span class="about-v2030__eyebrow">NATIONALITY</span>
+          <span class="about-v2030__eyebrow">{{ pageContent().vision_2030?.badge || 'NATIONALITY' }}</span>
           <h2 class="about-v2030__heading">
-            Aligned with Saudi Vision <span class="about-v2030__year">2030</span>
+            {{ pageContent().vision_2030?.title || 'Aligned with Saudi Vision 2030' }}
           </h2>
           <p class="about-v2030__desc">
-            VIC is proud to support the Kingdom's Vision 2030 by localizing advanced vaccine manufacturing, strengthening health security, creating high-value jobs, and driving innovation for a resilient and sustainable healthcare ecosystem.
+            {{ pageContent().vision_2030?.description || "VIC is proud to support the Kingdom's Vision 2030 by localizing advanced vaccine manufacturing, strengthening health security, creating high-value jobs, and driving innovation for a resilient and sustainable healthcare ecosystem." }}
           </p>
         </div>
 
@@ -319,54 +338,77 @@
         <div class="about-v2030__card">
           <div class="about-v2030__grid">
 
-            <!-- Item 1: Health Sector Transformation -->
-            <div class="about-v2030__item about-v2030__item--tl">
-              <div class="about-v2030__icon-badge" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                  <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
-                </svg>
+            <!-- If dynamic features exist -->
+            <ng-container *ngIf="pageContent().vision_2030?.content_json && pageContent().vision_2030?.content_json.length > 0; else defaultFeatures">
+              <div
+                *ngFor="let feat of pageContent().vision_2030?.content_json; let idx = index"
+                class="about-v2030__item"
+                [class.about-v2030__item--tl]="idx === 0"
+                [class.about-v2030__item--tr]="idx === 1"
+                [class.about-v2030__item--bl]="idx === 2"
+                [class.about-v2030__item--br]="idx === 3"
+              >
+                <div class="about-v2030__icon-badge" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
+                  </svg>
+                </div>
+                <span class="about-v2030__item-label">{{ feat.title }}</span>
               </div>
-              <span class="about-v2030__item-label">Health Sector<br>Transformation</span>
-            </div>
+            </ng-container>
 
-            <!-- Item 2: Economic Diversification -->
-            <div class="about-v2030__item about-v2030__item--tr">
-              <div class="about-v2030__icon-badge" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="20" x2="18" y2="10"></line>
-                  <line x1="12" y1="20" x2="12" y2="4"></line>
-                  <line x1="6" y1="20" x2="6" y2="14"></line>
-                  <circle cx="18" cy="7" r="2"></circle>
-                  <circle cx="12" cy="2" r="2"></circle>
-                  <circle cx="6" cy="11" r="2"></circle>
-                </svg>
+            <!-- Default 4 Pillars Fallback -->
+            <ng-template #defaultFeatures>
+              <!-- Item 1: Health Sector Transformation -->
+              <div class="about-v2030__item about-v2030__item--tl">
+                <div class="about-v2030__icon-badge" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
+                  </svg>
+                </div>
+                <span class="about-v2030__item-label">Health Sector<br>Transformation</span>
               </div>
-              <span class="about-v2030__item-label">Economic<br>Diversification</span>
-            </div>
 
-            <!-- Item 3: Local Content Development -->
-            <div class="about-v2030__item about-v2030__item--bl">
-              <div class="about-v2030__icon-badge" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-                </svg>
+              <!-- Item 2: Economic Diversification -->
+              <div class="about-v2030__item about-v2030__item--tr">
+                <div class="about-v2030__icon-badge" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                    <circle cx="18" cy="7" r="2"></circle>
+                    <circle cx="12" cy="2" r="2"></circle>
+                    <circle cx="6" cy="11" r="2"></circle>
+                  </svg>
+                </div>
+                <span class="about-v2030__item-label">Economic<br>Diversification</span>
               </div>
-              <span class="about-v2030__item-label">Local Content<br>Development</span>
-            </div>
 
-            <!-- Item 4: Innovation & Sustainability -->
-            <div class="about-v2030__item about-v2030__item--br">
-              <div class="about-v2030__icon-badge" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.05-6.95l-1.41 1.41m-9.08 9.08l-1.41 1.41m0-11.9l1.41 1.41m9.08 9.08l1.41 1.41"></path>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
+              <!-- Item 3: Local Content Development -->
+              <div class="about-v2030__item about-v2030__item--bl">
+                <div class="about-v2030__icon-badge" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                  </svg>
+                </div>
+                <span class="about-v2030__item-label">Local Content<br>Development</span>
               </div>
-              <span class="about-v2030__item-label">Innovation &amp;<br>Sustainability</span>
-            </div>
+
+              <!-- Item 4: Innovation & Sustainability -->
+              <div class="about-v2030__item about-v2030__item--br">
+                <div class="about-v2030__icon-badge" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.05-6.95l-1.41 1.41m-9.08 9.08l-1.41 1.41m0-11.9l1.41 1.41m9.08 9.08l1.41 1.41"></path>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                </div>
+                <span class="about-v2030__item-label">Innovation &amp;<br>Sustainability</span>
+              </div>
+            </ng-template>
 
           </div>
         </div>

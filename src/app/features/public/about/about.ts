@@ -1,5 +1,7 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AboutService } from '../../../core/services/about.service';
+import { AboutPageContentMap } from '../../../core/models/about.model';
 
 export interface LeaderSection {
   heading: string;
@@ -8,6 +10,7 @@ export interface LeaderSection {
 }
 
 export interface Leader {
+  id?: number;
   name: string;
   title: string;
   role: string;
@@ -25,6 +28,11 @@ export interface Leader {
   styleUrl: './about.css'
 })
 export class AboutComponent implements OnInit, OnDestroy {
+  private aboutService = inject(AboutService);
+
+  // Dynamic Content Signals
+  pageContent = signal<Partial<AboutPageContentMap>>({});
+
   // Section 2: Company Overview Modal State
   isOverviewModalOpen = false;
 
@@ -232,7 +240,51 @@ export class AboutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateCardsPerView();
+    this.loadDynamicData();
     this.startAutoPlay();
+  }
+
+  loadDynamicData(): void {
+    // 1. Fetch Dynamic Content Sections
+    this.aboutService.getAboutContent().subscribe({
+      next: (res) => {
+        if (res.success && res.content) {
+          this.pageContent.set(res.content);
+        }
+      },
+      error: () => {
+        // Fallback to static values seamlessly
+      }
+    });
+
+    // 2. Fetch Dynamic Leaders
+    this.aboutService.getLeaders({ status: 'Active' }).subscribe({
+      next: (res) => {
+        if (res.success && res.leaders && res.leaders.length > 0) {
+          this.leaders = res.leaders.map(l => ({
+            id: l.id,
+            name: l.name,
+            title: l.title,
+            role: l.role,
+            badge: l.badge || 'Executive Board',
+            initials: l.initials || l.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase(),
+            image: this.resolveImg(l.image),
+            bioSections: l.bio_sections
+          }));
+          this.updateCardsPerView();
+        }
+      },
+      error: () => {
+        // Keeps official hardcoded fallback leaders
+      }
+    });
+  }
+
+  resolveImg(path: string | undefined | null, fallback = 'home_banner.png'): string {
+    if (!path) return fallback;
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
+    return path;
   }
 
   ngOnDestroy(): void {

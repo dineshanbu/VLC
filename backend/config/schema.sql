@@ -168,3 +168,33 @@ CREATE TABLE IF NOT EXISTS partnership_inquiries (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- About Us Page Content (Hero, Overview modal, Vision & Mission, Vision 2030)
+CREATE TABLE IF NOT EXISTS about_page_content (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  section_key VARCHAR(80) NOT NULL UNIQUE,
+  title VARCHAR(255) NULL,
+  subtitle VARCHAR(255) NULL,
+  badge VARCHAR(100) NULL,
+  description TEXT NULL,
+  image_url VARCHAR(500) NULL,
+  content_json JSON NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- About Us Leaders & Founding Partners
+CREATE TABLE IF NOT EXISTS about_leaders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  role TEXT NOT NULL,
+  badge VARCHAR(100) NOT NULL DEFAULT 'Executive Board',
+  initials VARCHAR(10) NULL,
+  image VARCHAR(500) NULL,
+  bio_sections JSON NULL,
+  order_index INT DEFAULT 0,
+  status ENUM('Active', 'Inactive') DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+

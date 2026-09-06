@@ -134,6 +134,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'about',
+        loadComponent: () =>
+          import('./features/admin/about-management/about-management').then(
+            m => m.AboutManagementComponent
+          ),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./features/admin/settings/settings').then(m => m.SettingsComponent),

@@ -1,0 +1,1179 @@
+<div class="about-mgmt-wrapper">
+
+  <!-- ====================================================
+       PAGE HEADER & NAVIGATION ACTIONS
+       ==================================================== -->
+  <div class="about-header-card">
+    <div class="header-left">
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>CONTENT MANAGEMENT</span>
+      </div>
+      <h1 class="header-title">About Us Management</h1>
+      <p class="header-subtitle">
+        Manage founding leadership, executive bios, hero banner, company overview story, and national vision pillars with live preview.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="restoreDefaults()"
+        [disabled]="isSyncing()"
+        title="Restore official default content and leadership team"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <polyline points="23 20 23 14 17 14"></polyline>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+        </svg>
+        <span>{{ isSyncing() ? 'Restoring Defaults...' : 'Restore Defaults' }}</span>
+      </button>
+
+      <a
+        routerLink="/about"
+        target="_blank"
+        class="btn btn-outline"
+        title="View live public about page in new tab"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Live Page</span>
+      </a>
+
+      <button
+        *ngIf="activeTab() === 'leaders'"
+        type="button"
+        class="btn btn-primary"
+        (click)="openAddLeaderModal()"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Leader</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div *ngIf="successMessage()" class="alert alert-success">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <div class="alert-text">{{ successMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <div *ngIf="errorMessage()" class="alert alert-danger">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <div class="alert-text">{{ errorMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <!-- ====================================================
+       SECTION NAVIGATION TABS
+       ==================================================== -->
+  <div class="section-tabs-bar">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'leaders'"
+      (click)="switchTab('leaders')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Founding Leadership</span>
+      <span class="tab-badge">{{ totalLeadersCount() }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'hero'"
+      (click)="switchTab('hero')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+      <span>Hero Banner &amp; Story Modal</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'vision_mission'"
+      (click)="switchTab('vision_mission')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      <span>Vision &amp; Mission</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'vision_2030'"
+      (click)="switchTab('vision_2030')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span>Saudi Vision 2030</span>
+    </button>
+  </div>
+
+  <!-- LOADING SPINNER -->
+  <div *ngIf="isLoading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading About Us content and leadership profiles...</p>
+  </div>
+
+  <!-- ====================================================
+       TAB 1: FOUNDING LEADERSHIP PROFILES
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'leaders'" class="tab-content-panel">
+    
+    <!-- Filter & Search Toolbar -->
+    <div class="toolbar-card">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search leaders by name, title, board or specialty..."
+          [ngModel]="leaderSearch()"
+          (ngModelChange)="leaderSearch.set($event)"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Board / Badge:</label>
+        <select [ngModel]="selectedBadgeFilter()" (ngModelChange)="selectedBadgeFilter.set($event)">
+          <option value="All">All Boards</option>
+          <option *ngFor="let badge of uniqueBadges()" [value]="badge">{{ badge }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select [ngModel]="selectedStatusFilter()" (ngModelChange)="selectedStatusFilter.set($event)">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active Only</option>
+          <option value="Inactive">Inactive Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Leaders Table / Grid -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 70px;">Order</th>
+            <th style="width: 80px;">Photo</th>
+            <th>Name &amp; Executive Title</th>
+            <th>Role &amp; Background</th>
+            <th>Board Badge</th>
+            <th style="width: 100px;">Status</th>
+            <th style="width: 180px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leader of filteredLeaders(); let i = index">
+            <!-- Order Buttons -->
+            <td>
+              <div class="order-reorder-btns">
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveLeader(leader, 'up')"
+                  title="Move Up"
+                >
+                  ▲
+                </button>
+                <span class="order-index-pill">{{ leader.order_index }}</span>
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveLeader(leader, 'down')"
+                  title="Move Down"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+
+            <!-- Portrait / Avatar -->
+            <td>
+              <div class="table-portrait">
+                <img
+                  *ngIf="leader.image"
+                  [src]="resolveImg(leader.image)"
+                  [alt]="leader.name"
+                  class="portrait-img"
+                  (error)="leader.image = ''"
+                />
+                <div *ngIf="!leader.image" class="avatar-fallback">
+                  {{ leader.initials || 'VP' }}
+                </div>
+              </div>
+            </td>
+
+            <!-- Name & Title -->
+            <td>
+              <div class="leader-name-cell">
+                <div class="name-text">{{ leader.name }}</div>
+                <div class="title-text">{{ leader.title }}</div>
+              </div>
+            </td>
+
+            <!-- Role Summary -->
+            <td>
+              <div class="role-desc-cell" [title]="leader.role">
+                {{ leader.role || '—' }}
+              </div>
+            </td>
+
+            <!-- Board Badge -->
+            <td>
+              <span class="badge-chip">{{ leader.badge || 'Executive' }}</span>
+            </td>
+
+            <!-- Status Switch -->
+            <td>
+              <button
+                type="button"
+                class="status-toggle-pill"
+                [class.active]="leader.status === 'Active'"
+                (click)="toggleLeaderStatus(leader)"
+                title="Click to toggle status"
+              >
+                <span class="status-indicator"></span>
+                <span>{{ leader.status }}</span>
+              </button>
+            </td>
+
+            <!-- Action Buttons -->
+            <td>
+              <div class="table-actions">
+                <!-- Live Preview Modal -->
+                <button
+                  type="button"
+                  class="action-btn btn-view"
+                  (click)="openPreviewLeader(leader)"
+                  title="Live Preview Profile Modal"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <span>Preview</span>
+                </button>
+
+                <!-- Edit Profile -->
+                <button
+                  type="button"
+                  class="action-btn btn-edit"
+                  (click)="openEditLeaderModal(leader)"
+                  title="Edit Leader Details"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  <span>Edit</span>
+                </button>
+
+                <!-- Delete -->
+                <button
+                  type="button"
+                  class="action-btn btn-delete"
+                  (click)="confirmDeleteLeader(leader.id!, leader.name)"
+                  title="Delete Leader Profile"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="filteredLeaders().length === 0">
+            <td colspan="7" class="empty-cell">
+              <div class="empty-box">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <h3>No Leaders Found</h3>
+                <p>No founding leaders match your search or filter criteria.</p>
+                <button type="button" class="btn btn-primary btn-sm" (click)="openAddLeaderModal()">
+                  Add New Leader
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       TAB 2: HERO BANNER & COMPANY OVERVIEW MODAL
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'hero'" class="tab-content-panel">
+    
+    <!-- 2-COL GRID: Left Form, Right Live Preview -->
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Hero Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">HERO BANNER</div>
+          <h2 class="panel-title">Top Header Section</h2>
+          <p class="panel-subtitle">Controls the banner title, badge, and hero facility backdrop.</p>
+        </div>
+
+        <form (ngSubmit)="saveHeroSection()" class="form-body">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label>Eyebrow Badge</label>
+              <input type="text" [(ngModel)]="heroForm.badge" name="hero_badge" class="form-input" />
+            </div>
+            <div class="form-group col-8">
+              <label>Main Heading</label>
+              <input type="text" [(ngModel)]="heroForm.title" name="hero_title" class="form-input" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Subheading</label>
+            <input type="text" [(ngModel)]="heroForm.subtitle" name="hero_subtitle" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label>Short Description Paragraph</label>
+            <textarea [(ngModel)]="heroForm.description" name="hero_desc" rows="3" class="form-textarea"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Hero Facility Image</label>
+            <div class="file-upload-box">
+              <input type="file" (change)="onHeroImageSelected($event)" accept="image/*" id="heroImgInput" />
+              <label for="heroImgInput" class="file-upload-label">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span>Upload New Hero Image</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving Banner...' : 'Save Hero Banner' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Hero Live Visual Preview -->
+      <div class="panel-card preview-card">
+        <div class="panel-header">
+          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+          <h2 class="panel-title">Hero Banner Preview</h2>
+          <p class="panel-subtitle">Real-time simulation of public hero scale.</p>
+        </div>
+
+        <div class="hero-live-preview-box">
+          <div class="preview-hero-left">
+            <span class="preview-eyebrow">{{ heroForm.badge || 'ABOUT VIC' }}</span>
+            <h2 class="preview-heading">{{ heroForm.title || 'Vaccine Industrial Holding LLC' }}</h2>
+            <p class="preview-subheading">{{ heroForm.subtitle || 'Leading the Charge in Vaccine Innovation' }}</p>
+            <p class="preview-desc">{{ heroForm.description }}</p>
+            <button type="button" class="preview-btn-mock" (click)="openOverviewPreview()">
+              <span>Read More</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+          <div class="preview-hero-right">
+            <img
+              [src]="heroImagePreview || resolveImg(heroForm.image_url, 'home_banner.png')"
+              alt="Preview Hero Facility"
+              class="preview-hero-img"
+            />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOWER SECTION: Company Overview Story Modal Editor -->
+    <div class="panel-card mt-4">
+      <div class="panel-header-with-actions">
+        <div>
+          <div class="panel-badge">POPUP MODAL CONTENT</div>
+          <h2 class="panel-title">Company Overview Modal Story ("Read More")</h2>
+          <p class="panel-subtitle">Full biography and historical narrative shown when clicking "Read More".</p>
+        </div>
+        <button type="button" class="btn btn-outline" (click)="openOverviewPreview()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Preview Popup Modal</span>
+        </button>
+      </div>
+
+      <form (ngSubmit)="saveOverviewModal()" class="form-body">
+        <div class="form-row">
+          <div class="form-group col-4">
+            <label>Modal Eyebrow</label>
+            <input type="text" [(ngModel)]="overviewForm.badge" name="ov_badge" class="form-input" />
+          </div>
+          <div class="form-group col-8">
+            <label>Modal Heading</label>
+            <input type="text" [(ngModel)]="overviewForm.title" name="ov_title" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="section-subheading-label">Story Narrative Paragraphs ({{ overviewForm.paragraphs.length }})</label>
+          
+          <div class="paragraph-list">
+            <div *ngFor="let p of overviewForm.paragraphs; let pIdx = index" class="paragraph-item-row">
+              <div class="p-index-num">#{{ pIdx + 1 }}</div>
+              <textarea
+                [(ngModel)]="overviewForm.paragraphs[pIdx]"
+                [name]="'ov_p_' + pIdx"
+                rows="3"
+                class="form-textarea flex-1"
+              ></textarea>
+              <button
+                type="button"
+                class="btn-delete-circle"
+                (click)="removeOverviewParagraph(pIdx)"
+                title="Remove paragraph"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Add new paragraph -->
+          <div class="add-paragraph-box">
+            <textarea
+              [(ngModel)]="overviewForm.newParagraphText"
+              name="ov_new_p"
+              rows="2"
+              placeholder="Type new story paragraph and click 'Add Paragraph'..."
+              class="form-textarea"
+            ></textarea>
+            <button
+              type="button"
+              class="btn btn-secondary mt-2"
+              (click)="addOverviewParagraph()"
+              [disabled]="!overviewForm.newParagraphText.trim()"
+            >
+              + Add Paragraph
+            </button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Saving Overview...' : 'Save Overview Modal Story' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ====================================================
+       TAB 3: VISION & MISSION
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'vision_mission'" class="tab-content-panel">
+    
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Vision & Mission Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">FOUNDATIONAL PILLARS</div>
+          <h2 class="panel-title">Vision &amp; Mission Statements</h2>
+          <p class="panel-subtitle">Edit the two cards rendered below the hero section on the public About page.</p>
+        </div>
+
+        <form (ngSubmit)="saveVisionMission()" class="form-body">
+          <!-- VISION SECTION -->
+          <div class="form-section-box">
+            <h3 class="box-title">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span>Our Vision</span>
+            </h3>
+
+            <div class="form-group">
+              <label>Vision Card Title</label>
+              <input type="text" [(ngModel)]="vmForm.vision_title" name="vision_title" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label>Vision Paragraphs ({{ vmForm.vision_paragraphs.length }})</label>
+              <div *ngFor="let vp of vmForm.vision_paragraphs; let vIdx = index" class="paragraph-item-row">
+                <div class="p-index-num">#{{ vIdx + 1 }}</div>
+                <textarea
+                  [(ngModel)]="vmForm.vision_paragraphs[vIdx]"
+                  [name]="'vp_' + vIdx"
+                  rows="2"
+                  class="form-textarea flex-1"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-circle"
+                  (click)="removeVisionParagraph(vIdx)"
+                  title="Remove"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Add vision p -->
+              <div class="add-sub-box">
+                <textarea
+                  [(ngModel)]="vmForm.newVisionText"
+                  name="new_vp"
+                  rows="2"
+                  placeholder="Add additional vision paragraph..."
+                  class="form-textarea"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-secondary mt-1"
+                  (click)="addVisionParagraph()"
+                  [disabled]="!vmForm.newVisionText.trim()"
+                >
+                  + Add Vision Paragraph
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MISSION SECTION -->
+          <div class="form-section-box mt-4">
+            <h3 class="box-title">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              <span>Our Mission</span>
+            </h3>
+
+            <div class="form-group">
+              <label>Mission Card Title</label>
+              <input type="text" [(ngModel)]="vmForm.mission_title" name="mission_title" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label>Mission Statement Text</label>
+              <textarea
+                [(ngModel)]="vmForm.mission_text"
+                name="mission_text"
+                rows="4"
+                class="form-textarea"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving Changes...' : 'Save Vision & Mission' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Visual Preview -->
+      <div class="panel-card preview-card">
+        <div class="panel-header">
+          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+          <h2 class="panel-title">Public Card Layout</h2>
+          <p class="panel-subtitle">Visual replica of the 2-column cards.</p>
+        </div>
+
+        <div class="vm-live-preview-grid">
+          <!-- Vision Card Preview -->
+          <div class="vm-preview-card vm-preview-vision">
+            <div class="vm-preview-header">
+              <div class="vm-icon-circle">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+              <span class="vm-preview-label">{{ vmForm.vision_title || 'OUR VISION' }}</span>
+            </div>
+            <div class="vm-preview-content">
+              <p *ngFor="let p of vmForm.vision_paragraphs">{{ p }}</p>
+            </div>
+          </div>
+
+          <!-- Mission Card Preview -->
+          <div class="vm-preview-card vm-preview-mission">
+            <div class="vm-preview-header">
+              <div class="vm-icon-circle">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+              </div>
+              <span class="vm-preview-label">{{ vmForm.mission_title || 'OUR MISSION' }}</span>
+            </div>
+            <div class="vm-preview-content">
+              <p>{{ vmForm.mission_text }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ====================================================
+       TAB 4: SAUDI VISION 2030 ALIGNMENT
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'vision_2030'" class="tab-content-panel">
+    
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Vision 2030 Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">NATIONAL AGENDA</div>
+          <h2 class="panel-title">Saudi Vision 2030 Section</h2>
+          <p class="panel-subtitle">Configure the banner background, national pledge, and 4 pillar badges.</p>
+        </div>
+
+        <form (ngSubmit)="saveVision2030()" class="form-body">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label>Eyebrow Badge</label>
+              <input type="text" [(ngModel)]="v2030Form.badge" name="v2030_badge" class="form-input" />
+            </div>
+            <div class="form-group col-8">
+              <label>Section Heading</label>
+              <input type="text" [(ngModel)]="v2030Form.title" name="v2030_title" class="form-input" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Pledge Description</label>
+            <textarea [(ngModel)]="v2030Form.description" name="v2030_desc" rows="3" class="form-textarea"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Background Skyline Image</label>
+            <div class="file-upload-box">
+              <input type="file" (change)="onV2030ImageSelected($event)" accept="image/*" id="v2030ImgInput" />
+              <label for="v2030ImgInput" class="file-upload-label">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span>Upload New Skyline/Flag Banner</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Feature Badges -->
+          <div class="form-group mt-3">
+            <div class="d-flex justify-between align-center mb-2">
+              <label class="mb-0">Transformation Pillars ({{ v2030Form.features.length }})</label>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="addV2030Feature()">
+                + Add Pillar
+              </button>
+            </div>
+
+            <div class="features-edit-grid">
+              <div *ngFor="let feat of v2030Form.features; let fIdx = index" class="feature-edit-item">
+                <div class="feature-item-header">
+                  <span class="pillar-label">Pillar #{{ fIdx + 1 }}</span>
+                  <button type="button" class="btn-delete-tiny" (click)="removeV2030Feature(fIdx)">
+                    &times;
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  [(ngModel)]="feat.title"
+                  [name]="'feat_t_' + fIdx"
+                  placeholder="Pillar Title (e.g. Health Sector Transformation)"
+                  class="form-input mb-1"
+                />
+                <input
+                  type="text"
+                  [(ngModel)]="feat.desc"
+                  [name]="'feat_d_' + fIdx"
+                  placeholder="Short description (optional)"
+                  class="form-input text-xs"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving Vision 2030...' : 'Save Vision 2030 Section' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Visual Preview -->
+      <div class="panel-card preview-card">
+        <div class="panel-header">
+          <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+          <h2 class="panel-title">Vision 2030 Banner Preview</h2>
+          <p class="panel-subtitle">Visual replica of the panoramic banner.</p>
+        </div>
+
+        <div class="v2030-live-preview-box">
+          <img
+            [src]="v2030ImagePreview || resolveImg(v2030Form.image_url, 'saudi_biotech_strategy.jpg')"
+            alt="Saudi Skyline"
+            class="v2030-bg-img"
+          />
+          <div class="v2030-preview-overlay"></div>
+
+          <div class="v2030-preview-content">
+            <div class="v2030-text-col">
+              <span class="v2030-eyebrow">{{ v2030Form.badge || 'NATIONALITY' }}</span>
+              <h3 class="v2030-title">{{ v2030Form.title || 'Aligned with Saudi Vision 2030' }}</h3>
+              <p class="v2030-desc">{{ v2030Form.description }}</p>
+            </div>
+
+            <div class="v2030-card-col">
+              <div class="v2030-preview-grid">
+                <div *ngFor="let feat of v2030Form.features" class="v2030-preview-item">
+                  <div class="v2030-item-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                  </div>
+                  <span class="v2030-item-text">{{ feat.title }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ====================================================
+       MODAL 1: ADD / EDIT LEADER PROFILE MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isLeaderModalOpen()"
+    (click)="closeLeaderModal()"
+  >
+    <div
+      class="modal-box modal-lg"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">{{ isEditingLeader() ? 'EDIT LEADER' : 'NEW LEADER' }}</span>
+          <h2 class="modal-title">
+            {{ isEditingLeader() ? 'Edit ' + leaderForm.name : 'Add Founding Leader Profile' }}
+          </h2>
+        </div>
+        <button type="button" class="btn-close-modal" (click)="closeLeaderModal()">&times;</button>
+      </div>
+
+      <form (ngSubmit)="saveLeader()" class="modal-body-scroll">
+        
+        <!-- ROW 1: Name & Initials -->
+        <div class="form-row">
+          <div class="form-group col-8">
+            <label>Full Name *</label>
+            <input
+              type="text"
+              [(ngModel)]="leaderForm.name"
+              name="l_name"
+              placeholder="e.g. Dr. Khaled Almosa"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group col-4">
+            <label>Initials / Avatar Code</label>
+            <input
+              type="text"
+              [(ngModel)]="leaderForm.initials"
+              name="l_initials"
+              placeholder="e.g. KA"
+              class="form-input"
+              maxlength="4"
+            />
+          </div>
+        </div>
+
+        <!-- ROW 2: Title & Board -->
+        <div class="form-row">
+          <div class="form-group col-8">
+            <label>Executive Title *</label>
+            <input
+              type="text"
+              [(ngModel)]="leaderForm.title"
+              name="l_title"
+              placeholder="e.g. Founder and Chairman of Vaccine Industrial Company"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group col-4">
+            <label>Board / Committee Badge</label>
+            <select [(ngModel)]="leaderForm.badge" name="l_badge" class="form-select">
+              <option value="Founder & Chairman">Founder &amp; Chairman</option>
+              <option value="Executive Board">Executive Board</option>
+              <option value="Advisory Board">Advisory Board</option>
+              <option value="Scientific Board">Scientific Board</option>
+              <option value="Medical Board">Medical Board</option>
+              <option value="Board Member">Board Member</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ROW 3: Role Summary -->
+        <div class="form-group">
+          <label>Role Summary (Displayed on Card)</label>
+          <textarea
+            [(ngModel)]="leaderForm.role"
+            name="l_role"
+            rows="2"
+            placeholder="Brief 1-2 sentence overview of professional leadership"
+            class="form-textarea"
+          ></textarea>
+        </div>
+
+        <!-- ROW 4: Photo Upload -->
+        <div class="form-row align-center">
+          <div class="form-group col-4">
+            <div class="leader-upload-preview">
+              <img
+                *ngIf="leaderPhotoPreview"
+                [src]="leaderPhotoPreview"
+                alt="Leader preview"
+                class="photo-preview-img"
+              />
+              <div *ngIf="!leaderPhotoPreview" class="photo-preview-placeholder">
+                {{ leaderForm.initials || 'PIC' }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-8">
+            <label>Upload Official Portrait Photo</label>
+            <input type="file" (change)="onLeaderPhotoSelected($event)" accept="image/*" class="form-input-file" />
+            <span class="field-hint">PNG, JPG, WEBP. High quality portrait recommended.</span>
+          </div>
+        </div>
+
+        <!-- ROW 5: Status & Order -->
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Display Status</label>
+            <select [(ngModel)]="leaderForm.status" name="l_status" class="form-select">
+              <option value="Active">Active (Visible on public carousel)</option>
+              <option value="Inactive">Inactive (Hidden)</option>
+            </select>
+          </div>
+          <div class="form-group col-6">
+            <label>Sort Order Index</label>
+            <input
+              type="number"
+              [(ngModel)]="leaderForm.order_index"
+              name="l_order"
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <!-- SECTION: Comprehensive Bio Sections (Modal Content) -->
+        <div class="bio-builder-section">
+          <div class="bio-builder-header">
+            <div>
+              <h3 class="bio-title">Detailed Profile Biography &amp; Credentials</h3>
+              <p class="bio-subtitle">Configure structured sections (paragraphs or bullet points) shown in the full profile modal.</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSection()">
+              + Add Bio Section
+            </button>
+          </div>
+
+          <div *ngFor="let sec of leaderForm.bio_sections; let sIdx = index" class="bio-section-box">
+            <div class="bio-sec-header">
+              <input
+                type="text"
+                [(ngModel)]="sec.heading"
+                [name]="'sec_h_' + sIdx"
+                placeholder="Section Heading (e.g. Government Policy & Innovation Leadership)"
+                class="form-input bio-heading-input"
+              />
+              <button
+                type="button"
+                class="btn-delete-tiny"
+                (click)="removeBioSection(sIdx)"
+                title="Remove Section"
+              >
+                &times;
+              </button>
+            </div>
+
+            <!-- Paragraphs -->
+            <div class="bio-paragraphs-block">
+              <label class="sub-label">Paragraphs:</label>
+              <div *ngFor="let p of sec.paragraphs; let pIdx = index" class="bio-p-row">
+                <textarea
+                  [(ngModel)]="sec.paragraphs![pIdx]"
+                  [name]="'sec_p_' + sIdx + '_' + pIdx"
+                  rows="2"
+                  class="form-textarea flex-1"
+                  placeholder="Enter paragraph text..."
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioParagraph(sec, pIdx)"
+                >
+                  &times;
+                </button>
+              </div>
+              <button type="button" class="btn-link-sm" (click)="addBioParagraph(sec)">
+                + Add Paragraph
+              </button>
+            </div>
+
+            <!-- Bullet Items -->
+            <div class="bio-items-block mt-2">
+              <label class="sub-label">Bullet Items / Key Achievements:</label>
+              <div *ngFor="let itm of sec.items; let iIdx = index" class="bio-item-row">
+                <input
+                  type="text"
+                  [(ngModel)]="sec.items![iIdx]"
+                  [name]="'sec_i_' + sIdx + '_' + iIdx"
+                  class="form-input flex-1 text-sm"
+                  placeholder="Achievement or credential bullet..."
+                />
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioItem(sec, iIdx)"
+                >
+                  &times;
+                </button>
+              </div>
+              <div class="d-flex align-center gap-2 mt-1">
+                <input
+                  #newItemInput
+                  type="text"
+                  placeholder="Type new bullet item..."
+                  class="form-input flex-1 text-sm"
+                  (keyup.enter)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                />
+                <button
+                  type="button"
+                  class="btn btn-sm btn-secondary"
+                  (click)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                >
+                  Add Item
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="closeLeaderModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Saving Leader...' : (isEditingLeader() ? 'Update Leader Profile' : 'Create Leader') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 2: LIVE PREVIEW OF LEADER MODAL (EXACT PUBLIC REPLICA)
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isPreviewLeaderModalOpen() && previewLeader()"
+    (click)="closePreviewLeader()"
+  >
+    <div
+      class="about-modal about-leader-modal preview-modal-scale"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Top-Right Close Button -->
+      <button
+        type="button"
+        class="about-modal__close-btn"
+        (click)="closePreviewLeader()"
+        aria-label="Close leader profile"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Leader Modal Header: Photo + Name + Title -->
+      <div class="about-leader-modal__header">
+        <div class="about-leader-modal__portrait">
+          <img
+            *ngIf="previewLeader()?.image"
+            [src]="resolveImg(previewLeader()?.image)"
+            [alt]="previewLeader()?.name"
+            class="about-leader-modal__photo"
+          />
+          <div *ngIf="!previewLeader()?.image" class="about-leader-card__avatar">
+            <span class="about-leader-card__initials">{{ previewLeader()?.initials || 'VP' }}</span>
+          </div>
+        </div>
+        <div class="about-leader-modal__meta">
+          <span class="about-modal__eyebrow">{{ previewLeader()?.badge || 'LEADERSHIP' }}</span>
+          <h2 class="about-leader-modal__name">
+            {{ previewLeader()?.name }}
+          </h2>
+          <p class="about-leader-modal__title">{{ previewLeader()?.title }}</p>
+          <p class="about-leader-modal__role-tag">{{ previewLeader()?.role }}</p>
+        </div>
+      </div>
+
+      <!-- Leader Modal Body: Detailed Bio Sections -->
+      <div class="about-modal__body about-leader-modal__body">
+        <div
+          *ngFor="let section of previewLeader()?.bio_sections"
+          class="about-leader-modal__section"
+        >
+          <h3 class="about-leader-modal__section-heading">{{ section.heading }}</h3>
+
+          <p *ngFor="let p of section.paragraphs" class="about-leader-modal__text">
+            {{ p }}
+          </p>
+
+          <ul *ngIf="section.items && section.items.length > 0" class="about-leader-modal__list">
+            <li *ngFor="let item of section.items" class="about-leader-modal__list-item">
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 3: PREVIEW COMPANY OVERVIEW STORY MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isOverviewPreviewModalOpen()"
+    (click)="closeOverviewPreview()"
+  >
+    <div
+      class="about-modal preview-modal-scale"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="about-modal__close-btn"
+        (click)="closeOverviewPreview()"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="about-modal__header">
+        <span class="about-modal__eyebrow">{{ overviewForm.badge || 'COMPANY OVERVIEW' }}</span>
+        <h2 class="about-modal__heading">
+          {{ overviewForm.title || 'Pioneering Biotechnology in Saudi Arabia' }}
+        </h2>
+      </div>
+
+      <div class="about-modal__body">
+        <p *ngFor="let p of overviewForm.paragraphs">{{ p }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 4: DELETE CONFIRMATION MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isDeleteModalOpen()"
+    (click)="closeDeleteModal()"
+  >
+    <div class="modal-box modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title text-danger">Delete Leader Profile</h3>
+        <button type="button" class="btn-close-modal" (click)="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete <strong>{{ itemToDeleteName() }}</strong>?</p>
+        <p class="text-sm text-muted mt-2">This action cannot be undone and will immediately remove this leader from the public about carousel.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="executeDeleteLeader()">
+          Delete Permanently
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

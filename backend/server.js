@@ -15,6 +15,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const careerRoutes = require('./routes/careerRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const partnerRoutes = require('./routes/partnerRoutes');
+const aboutRoutes = require('./routes/aboutRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,6 +49,7 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/careers', careerRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/partners', partnerRoutes);
+app.use('/api/about', aboutRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
