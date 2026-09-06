@@ -6,11 +6,11 @@
   <header class="mgmt-header">
     <div class="mgmt-header__left">
       <div class="mgmt-header__title-row">
-        <h1 class="mgmt-header__title">Partners &amp; Alliances</h1>
-        <span class="mgmt-badge">BIOTECH ECOSYSTEM</span>
+        <h1 class="mgmt-header__title">Strategic Partners Management</h1>
+        <span class="mgmt-badge">VIC ALLIANCES</span>
       </div>
       <p class="mgmt-header__subtitle">
-        Manage dynamic hero banner, strategic global partners, custom partnership sections, and incoming collaboration inquiries.
+        Manage company strategic partners, technology transfer agreements, production lines, and academic research collaborations.
       </p>
     </div>
 
@@ -20,16 +20,15 @@
         class="btn-secondary"
         (click)="restoreDefaults()"
         [disabled]="isSyncing()"
-        title="Reset partners, banner, and sections to official defaults"
+        title="Reset partners to official defaults"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="spin-icon" [class.spinning]="isSyncing()">
           <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
         </svg>
-        <span>{{ isSyncing() ? 'Syncing Defaults...' : 'Sync Defaults' }}</span>
+        <span>{{ isSyncing() ? 'Syncing...' : 'Sync Defaults' }}</span>
       </button>
 
       <button
-        *ngIf="activeTab() === 'partners'"
         type="button"
         class="btn-primary"
         (click)="openAddPartnerModal()"
@@ -39,19 +38,6 @@
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
         <span>Add Partner</span>
-      </button>
-
-      <button
-        *ngIf="activeTab() === 'sections'"
-        type="button"
-        class="btn-primary"
-        (click)="openAddSectionModal()"
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        <span>Add New Section</span>
       </button>
     </div>
   </header>
@@ -72,668 +58,245 @@
   </div>
 
   <!-- ==========================================
-       NAV TABS
+       KPI METRIC SUMMARY CARDS
        ========================================== -->
-  <div class="mgmt-tabs">
-    <button
-      type="button"
-      class="mgmt-tab-btn"
-      [class.active]="activeTab() === 'partners'"
-      (click)="switchTab('partners')"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      <span>Strategic Partners</span>
-      <span class="tab-counter">{{ totalPartnersCount() }}</span>
-    </button>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--teal">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
+          <path d="M16 2h3.5a2 2 0 0 1 2 2v5.5a1 1 0 0 1-.3.7L16 15"></path>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ totalPartnersCount() }}</span>
+        <span class="kpi-label">Total Partners</span>
+      </div>
+    </div>
 
-    <button
-      type="button"
-      class="mgmt-tab-btn"
-      [class.active]="activeTab() === 'banner'"
-      (click)="switchTab('banner')"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
-        <line x1="12" y1="17" x2="12" y2="21"></line>
-      </svg>
-      <span>Banner &amp; Hero Settings</span>
-    </button>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--emerald">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ activePartnersCount() }}</span>
+        <span class="kpi-label">Active on Public Page</span>
+      </div>
+    </div>
 
-    <button
-      type="button"
-      class="mgmt-tab-btn"
-      [class.active]="activeTab() === 'sections'"
-      (click)="switchTab('sections')"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-        <polyline points="2 17 12 22 22 17"></polyline>
-        <polyline points="2 12 12 17 22 12"></polyline>
-      </svg>
-      <span>Dynamic Sections</span>
-      <span class="tab-counter">{{ totalSectionsCount() }}</span>
-    </button>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--indigo">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ uniqueCategories().length }}</span>
+        <span class="kpi-label">Categories</span>
+      </div>
+    </div>
 
-    <button
-      type="button"
-      class="mgmt-tab-btn"
-      [class.active]="activeTab() === 'inquiries'"
-      (click)="switchTab('inquiries')"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-        <polyline points="22,6 12,13 2,6"></polyline>
-      </svg>
-      <span>Inquiries &amp; Leads</span>
-      <span class="tab-counter" [class.tab-counter--alert]="newInquiriesCount() > 0">
-        {{ newInquiriesCount() }}
-      </span>
-    </button>
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--amber">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ uniqueTiers().length }}</span>
+        <span class="kpi-label">Strategic Tiers</span>
+      </div>
+    </div>
   </div>
 
   <!-- ==========================================
-       TAB 1: STRATEGIC PARTNERS LIST
+       TOOLBAR (SEARCH & FILTERS)
        ========================================== -->
-  <div *ngIf="activeTab() === 'partners'" class="tab-content">
-
-    <!-- KPI Metric Summary Cards -->
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--teal">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
-            <path d="M16 2h3.5a2 2 0 0 1 2 2v5.5a1 1 0 0 1-.3.7L16 15"></path>
-          </svg>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-value">{{ totalPartnersCount() }}</span>
-          <span class="kpi-label">Total Partners</span>
-        </div>
-      </div>
-
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--emerald">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-value">{{ activePartnersCount() }}</span>
-          <span class="kpi-label">Active on Public Page</span>
-        </div>
-      </div>
-
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--indigo">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-value">{{ uniqueCategories().length }}</span>
-          <span class="kpi-label">Collaboration Categories</span>
-        </div>
-      </div>
-
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--amber">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-value">{{ uniqueTiers().length }}</span>
-          <span class="kpi-label">Strategic Tiers</span>
-        </div>
-      </div>
+  <div class="toolbar">
+    <div class="toolbar__search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search partner name, category, or scope..."
+        [ngModel]="partnerSearch()"
+        (ngModelChange)="partnerSearch.set($event)"
+        class="search-input"
+      />
     </div>
 
-    <!-- Filters & Search Toolbar -->
-    <div class="toolbar">
-      <div class="toolbar__search">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input
-          type="text"
-          placeholder="Search partner name, category, or scope..."
-          [ngModel]="partnerSearch()"
-          (ngModelChange)="partnerSearch.set($event)"
-          class="search-input"
-        />
-      </div>
+    <div class="toolbar__filters">
+      <select
+        [ngModel]="selectedTier()"
+        (ngModelChange)="selectedTier.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Tiers</option>
+        <option *ngFor="let t of uniqueTiers()" [value]="t">{{ t }}</option>
+      </select>
 
-      <div class="toolbar__filters">
-        <select
-          [ngModel]="selectedTier()"
-          (ngModelChange)="selectedTier.set($event)"
-          class="filter-select"
-        >
-          <option value="All">All Tiers</option>
-          <option *ngFor="let t of uniqueTiers()" [value]="t">{{ t }}</option>
-        </select>
+      <select
+        [ngModel]="selectedCategory()"
+        (ngModelChange)="selectedCategory.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Categories</option>
+        <option *ngFor="let c of uniqueCategories()" [value]="c">{{ c }}</option>
+      </select>
 
-        <select
-          [ngModel]="selectedCategory()"
-          (ngModelChange)="selectedCategory.set($event)"
-          class="filter-select"
-        >
-          <option value="All">All Categories</option>
-          <option *ngFor="let c of uniqueCategories()" [value]="c">{{ c }}</option>
-        </select>
+      <select
+        [ngModel]="selectedStatus()"
+        (ngModelChange)="selectedStatus.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Status</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
 
-        <select
-          [ngModel]="selectedStatus()"
-          (ngModelChange)="selectedStatus.set($event)"
-          class="filter-select"
-        >
-          <option value="All">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-      </div>
+  <!-- ==========================================
+       PARTNERS DATA TABLE
+       ========================================== -->
+  <div class="table-card">
+    <div *ngIf="isLoading()" class="loading-state">
+      <div class="spinner"></div>
+      <span>Loading strategic partners...</span>
     </div>
 
-    <!-- Partners Table & Card List -->
-    <div class="table-card">
-      <div *ngIf="isLoading()" class="loading-state">
-        <div class="spinner"></div>
-        <span>Loading partners list...</span>
-      </div>
+    <div *ngIf="!isLoading() && filteredPartners().length === 0" class="empty-state">
+      <div class="empty-icon">🤝</div>
+      <h3>No Partners Found</h3>
+      <p>No partners match the current search or filters. Try adjusting your query or add a new partner.</p>
+      <button type="button" class="btn-primary" (click)="openAddPartnerModal()">+ Add Partner</button>
+    </div>
 
-      <div *ngIf="!isLoading() && filteredPartners().length === 0" class="empty-state">
-        <div class="empty-icon">🤝</div>
-        <h3>No Partners Found</h3>
-        <p>No partners match the current search or filters. Try adjusting your query or add a new partner.</p>
-        <button type="button" class="btn-primary" (click)="openAddPartnerModal()">+ Add Partner</button>
-      </div>
-
-      <div *ngIf="!isLoading() && filteredPartners().length > 0" class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width: 50px;">#</th>
-              <th style="width: 90px;">Logo</th>
-              <th>Partner Name &amp; Tier</th>
-              <th>Category Label</th>
-              <th>Partnership Scope</th>
-              <th style="width: 110px;">Status</th>
-              <th style="width: 140px; text-align: right;">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let p of filteredPartners(); let i = index">
-              <!-- Order Index & Up/Down -->
-              <td>
-                <div class="order-cell">
-                  <span class="order-num">{{ p.order_index || (i + 1) }}</span>
-                  <div class="order-btns">
-                    <button type="button" class="btn-micro" (click)="movePartner(p, 'up')" title="Move Up">&uarr;</button>
-                    <button type="button" class="btn-micro" (click)="movePartner(p, 'down')" title="Move Down">&darr;</button>
-                  </div>
+    <div *ngIf="!isLoading() && filteredPartners().length > 0" class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th style="width: 100px;">Logo</th>
+            <th>Partner Name &amp; Tier</th>
+            <th>Category</th>
+            <th>Partnership Scope</th>
+            <th style="width: 120px;">Status</th>
+            <th style="width: 130px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredPartners(); let i = index">
+            <!-- Order Index & Up/Down -->
+            <td>
+              <div class="order-cell">
+                <span class="order-num">{{ p.order_index || (i + 1) }}</span>
+                <div class="order-btns">
+                  <button type="button" class="btn-micro" (click)="movePartner(p, 'up')" title="Move Up">&uarr;</button>
+                  <button type="button" class="btn-micro" (click)="movePartner(p, 'down')" title="Move Down">&darr;</button>
                 </div>
-              </td>
+              </div>
+            </td>
 
-              <!-- Logo Box -->
-              <td>
-                <div class="logo-thumb-wrapper">
-                  <img
-                    [src]="resolveImg(p.logo)"
-                    [alt]="p.name"
-                    class="logo-thumb"
-                    (error)="$any($event.target).src = 'logo_navbar.png'"
-                  />
-                </div>
-              </td>
+            <!-- Logo Thumbnail -->
+            <td>
+              <div class="logo-thumb-wrapper">
+                <img
+                  [src]="resolveImg(p.logo)"
+                  [alt]="p.name"
+                  class="logo-thumb"
+                  (error)="$any($event.target).src = 'logo_navbar.png'"
+                />
+              </div>
+            </td>
 
-              <!-- Name & Tier -->
-              <td>
-                <div class="partner-name-col">
-                  <strong class="partner-name">{{ p.name }}</strong>
-                  <span class="tier-tag">{{ p.tier || 'Strategic Alliance' }}</span>
-                  <a *ngIf="p.website" [href]="p.website" target="_blank" class="web-link" title="Visit website">
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    <span>Website</span>
-                  </a>
-                </div>
-              </td>
+            <!-- Name & Tier -->
+            <td>
+              <div class="partner-name-col">
+                <strong class="partner-name">{{ p.name }}</strong>
+                <span class="tier-tag">{{ p.tier || 'Strategic Alliance' }}</span>
+                <a *ngIf="p.website" [href]="p.website" target="_blank" class="web-link" title="Visit website">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span>Website</span>
+                </a>
+              </div>
+            </td>
 
-              <!-- Category -->
-              <td>
-                <span class="category-badge">{{ p.category }}</span>
-              </td>
+            <!-- Category -->
+            <td>
+              <span class="category-badge">{{ p.category }}</span>
+            </td>
 
-              <!-- Scope Description -->
-              <td>
-                <p class="scope-text" [title]="p.description">{{ p.description }}</p>
-              </td>
+            <!-- Scope Description -->
+            <td>
+              <p class="scope-text" [title]="p.description">{{ p.description }}</p>
+            </td>
 
-              <!-- Status Toggle -->
-              <td>
+            <!-- Status Toggle -->
+            <td>
+              <button
+                type="button"
+                class="status-pill"
+                [class.status-pill--active]="p.status === 'Active'"
+                [class.status-pill--inactive]="p.status === 'Inactive'"
+                (click)="togglePartnerStatus(p)"
+                title="Click to toggle status"
+              >
+                <span class="status-dot"></span>
+                <span>{{ p.status }}</span>
+              </button>
+            </td>
+
+            <!-- Actions -->
+            <td style="text-align: right;">
+              <div class="actions-group">
                 <button
                   type="button"
-                  class="status-pill"
-                  [class.status-pill--active]="p.status === 'Active'"
-                  [class.status-pill--inactive]="p.status === 'Inactive'"
-                  (click)="togglePartnerStatus(p)"
-                  title="Click to toggle status"
+                  class="btn-icon"
+                  (click)="openEditPartnerModal(p)"
+                  title="Edit Partner"
                 >
-                  <span class="status-dot"></span>
-                  <span>{{ p.status }}</span>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
                 </button>
-              </td>
 
-              <!-- Actions -->
-              <td style="text-align: right;">
-                <div class="actions-group">
-                  <button
-                    type="button"
-                    class="btn-icon"
-                    (click)="openEditPartnerModal(p)"
-                    title="Edit Partner"
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 20h9"></path>
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                    </svg>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn-icon btn-icon--danger"
-                    (click)="confirmDelete('partner', p.id!, p.name)"
-                    title="Delete Partner"
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       TAB 2: DYNAMIC BANNER & PAGE SETTINGS
-       ========================================== -->
-  <div *ngIf="activeTab() === 'banner'" class="tab-content">
-    
-    <!-- Live Preview Card -->
-    <div class="preview-section">
-      <div class="section-badge-label">HERO LIVE VISUAL PREVIEW</div>
-      <div class="hero-live-preview">
-        <div class="hero-preview__bg">
-          <img
-            [src]="bannerPreviewUrl || resolveImg(settings().hero_image)"
-            alt="Hero Preview"
-            class="hero-preview__img"
-          />
-          <div class="hero-preview__overlay"></div>
-        </div>
-
-        <div class="hero-preview__content">
-          <span class="hero-preview__eyebrow">{{ settings().hero_badge }}</span>
-          <h2 class="hero-preview__title">
-            {{ settings().hero_title }}<br />
-            {{ settings().hero_title_line2 }}
-          </h2>
-          <p class="hero-preview__desc">{{ settings().hero_description }}</p>
-          <div class="hero-preview__btn">
-            <span>{{ settings().cta_text }}</span>
-            <span>&rarr;</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Edit Settings Form -->
-    <div class="card-box">
-      <h2 class="card-box__title">Hero Banner Configuration</h2>
-      <p class="card-box__desc">Modify text, imagery, call-to-action button, and dynamic highlight metrics displayed on the live public partners page.</p>
-
-      <form (ngSubmit)="saveBannerSettings()" class="settings-form">
-        
-        <!-- Image Upload Field -->
-        <div class="form-group">
-          <label class="form-label">Hero Background Image</label>
-          <div class="upload-dropzone" [class.has-image]="bannerPreviewUrl || settings().hero_image">
-            <div class="upload-dropzone__preview" *ngIf="bannerPreviewUrl || settings().hero_image">
-              <img [src]="bannerPreviewUrl || resolveImg(settings().hero_image)" alt="Banner preview" />
-              <div class="upload-dropzone__overlay">
-                <label for="banner-file-input" class="btn-secondary btn-sm">Change Image</label>
-                <button *ngIf="bannerFile" type="button" class="btn-danger btn-sm" (click)="removeBannerFile()">Cancel</button>
-              </div>
-            </div>
-            <div class="upload-dropzone__placeholder" *ngIf="!bannerPreviewUrl && !settings().hero_image">
-              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <path d="M21 15l-5-5L5 21"></path>
-              </svg>
-              <p>Click or drag image file here to upload new hero banner (PNG, JPG, WEBP recommended, up to 10MB)</p>
-              <label for="banner-file-input" class="btn-primary btn-sm">Browse Files</label>
-            </div>
-            <input
-              id="banner-file-input"
-              type="file"
-              accept="image/*"
-              class="hidden-file-input"
-              (change)="onBannerFileSelected($event)"
-            />
-          </div>
-          <span class="help-text">Default fallback is <code>partner_banner.jpg</code>. Uploading a new image will replace it.</span>
-        </div>
-
-        <div class="form-row-2">
-          <div class="form-group">
-            <label class="form-label">Top Eyebrow Badge</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="settings().hero_badge"
-              name="hero_badge"
-              placeholder="e.g. OUR PARTNERS"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Call-to-Action (CTA) Button Text</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="settings().cta_text"
-              name="cta_text"
-              placeholder="e.g. Partner With Us"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="form-row-2">
-          <div class="form-group">
-            <label class="form-label">Main Heading Line 1</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="settings().hero_title"
-              name="hero_title"
-              placeholder="e.g. Stronger Together."
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Main Heading Line 2</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="settings().hero_title_line2"
-              name="hero_title_line2"
-              placeholder="e.g. Building Better Futures."
-              required
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Hero Description Text</label>
-          <textarea
-            class="form-control"
-            rows="3"
-            [(ngModel)]="settings().hero_description"
-            name="hero_description"
-            placeholder="Overview paragraph for the partnership mission..."
-            required
-          ></textarea>
-        </div>
-
-        <!-- Dynamic Stats / KPI Highlight Boxes -->
-        <div class="stats-config-wrapper">
-          <div class="stats-config-header">
-            <div>
-              <h3 class="stats-config-title">Highlight Metrics &amp; Badges</h3>
-              <p class="stats-config-sub">Custom statistics displayed below or within the partnership sections</p>
-            </div>
-            <button type="button" class="btn-secondary btn-sm" (click)="addStatItem()">+ Add Stat</button>
-          </div>
-
-          <div class="stats-config-list">
-            <div *ngFor="let stat of settings().stats; let sIdx = index" class="stat-config-row">
-              <div class="stat-config-field">
-                <label>Metric Value</label>
-                <input type="text" class="form-control" [(ngModel)]="stat.value" [name]="'stat_val_' + sIdx" placeholder="e.g. 10+" />
-              </div>
-              <div class="stat-config-field flex-2">
-                <label>Metric Label</label>
-                <input type="text" class="form-control" [(ngModel)]="stat.label" [name]="'stat_lbl_' + sIdx" placeholder="e.g. Global Strategic Alliances" />
-              </div>
-              <button type="button" class="btn-remove-stat" (click)="removeStatItem(sIdx)" title="Remove Metric">&times;</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" [disabled]="isSaving()">
-            <svg *ngIf="isSaving()" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="spin-icon spinning">
-              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-            </svg>
-            <span>{{ isSaving() ? 'Saving Changes...' : 'Save Banner Settings' }}</span>
-          </button>
-        </div>
-
-      </form>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       TAB 3: DYNAMIC PARTNERSHIP SECTIONS
-       ========================================== -->
-  <div *ngIf="activeTab() === 'sections'" class="tab-content">
-    
-    <div class="tab-intro-card">
-      <div>
-        <h2 class="tab-intro-title">Dynamic Partnership Sections &amp; Pillars</h2>
-        <p class="tab-intro-text">
-          Customize the interactive Ecosystem Carousel Pillars (Technology, Research, Government, Manufacturing, Distribution), or add dynamic split image+text sections for Saudi Vision 2030, collaboration models, and facilities.
-        </p>
-      </div>
-      <button type="button" class="btn-primary" (click)="openAddSectionModal()">+ Add New Section</button>
-    </div>
-
-    <!-- Sections Grid -->
-    <div class="sections-grid">
-      <div *ngFor="let sec of sections(); let sIdx = index" class="section-card">
-        
-        <!-- Section Header -->
-        <div class="section-card__top">
-          <div class="section-badge-pill" [class.badge-pillar]="sec.section_key === 'ecosystem_pillar'">
-            {{ sec.badge || (sec.section_key === 'ecosystem_pillar' ? 'ECOSYSTEM PILLAR' : 'CONTENT BLOCK') }}
-          </div>
-          <span class="layout-tag">{{ sec.layout_type }}</span>
-        </div>
-
-        <!-- Section Main Info -->
-        <div class="section-card__body">
-          <h3 class="section-card__title">{{ sec.title }}</h3>
-          <h4 *ngIf="sec.subtitle" class="section-card__subtitle">{{ sec.subtitle }}</h4>
-          <p class="section-card__desc">{{ sec.content }}</p>
-
-          <!-- Image Preview if available -->
-          <div *ngIf="sec.image_url" class="section-card__img-preview">
-            <img [src]="resolveImg(sec.image_url)" [alt]="sec.title" />
-          </div>
-
-          <!-- Bullet Points Preview -->
-          <ul *ngIf="sec.bullet_points && sec.bullet_points.length > 0" class="section-bullets-preview">
-            <li *ngFor="let bp of sec.bullet_points.slice(0, 3)">{{ bp }}</li>
-            <li *ngIf="sec.bullet_points.length > 3" class="more-bullets">+ {{ sec.bullet_points.length - 3 }} more points</li>
-          </ul>
-        </div>
-
-        <!-- Section Footer -->
-        <div class="section-card__footer">
-          <span class="status-pill" [class.status-pill--active]="sec.status === 'Active'">
-            <span class="status-dot"></span>
-            {{ sec.status }}
-          </span>
-
-          <div class="actions-group">
-            <button type="button" class="btn-icon" (click)="openEditSectionModal(sec)" title="Edit Section">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-              </svg>
-            </button>
-
-            <button type="button" class="btn-icon btn-icon--danger" (click)="confirmDelete('section', sec.id!, sec.title)" title="Delete Section">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       TAB 4: PARTNERSHIP INQUIRIES & LEADS
-       ========================================== -->
-  <div *ngIf="activeTab() === 'inquiries'" class="tab-content">
-
-    <div class="toolbar">
-      <div class="toolbar__search">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input
-          type="text"
-          placeholder="Search inquiries by name, organization, or email..."
-          [ngModel]="inquirySearch()"
-          (ngModelChange)="inquirySearch.set($event)"
-          class="search-input"
-        />
-      </div>
-
-      <div class="toolbar__filters">
-        <select
-          [ngModel]="inquiryStatusFilter()"
-          (ngModelChange)="inquiryStatusFilter.set($event)"
-          class="filter-select"
-        >
-          <option value="All">All Inquiries</option>
-          <option value="New">New</option>
-          <option value="Under Review">Under Review</option>
-          <option value="Contacted">Contacted</option>
-          <option value="Archived">Archived</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="table-card">
-      <div *ngIf="filteredInquiries().length === 0" class="empty-state">
-        <div class="empty-icon">📬</div>
-        <h3>No Inquiries Found</h3>
-        <p>There are no partnership inquiry submissions matching your filter.</p>
-      </div>
-
-      <div *ngIf="filteredInquiries().length > 0" class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Contact Name &amp; Role</th>
-              <th>Organization</th>
-              <th>Email &amp; Phone</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Received Date</th>
-              <th style="text-align: right;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let inq of filteredInquiries()">
-              <td>
-                <strong>{{ inq.full_name }}</strong>
-              </td>
-              <td>
-                <span class="org-name">{{ inq.organization }}</span>
-              </td>
-              <td>
-                <div class="email-phone-col">
-                  <a [href]="'mailto:' + inq.email" class="email-link">{{ inq.email }}</a>
-                  <span *ngIf="inq.phone" class="phone-text">{{ inq.phone }}</span>
-                </div>
-              </td>
-              <td>
-                <span class="category-badge">{{ inq.category }}</span>
-              </td>
-              <td>
-                <select
-                  class="status-dropdown"
-                  [ngModel]="inq.status"
-                  (ngModelChange)="updateInquiryStatus(inq, $event)"
-                  [class.status-new]="inq.status === 'New'"
-                  [class.status-review]="inq.status === 'Under Review'"
-                  [class.status-contacted]="inq.status === 'Contacted'"
+                <button
+                  type="button"
+                  class="btn-icon btn-icon--danger"
+                  (click)="confirmDelete(p.id!, p.name)"
+                  title="Delete Partner"
                 >
-                  <option value="New">New</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Contacted">Contacted</option>
-                  <option value="Archived">Archived</option>
-                </select>
-              </td>
-              <td>
-                <span class="date-text">{{ inq.created_at ? (inq.created_at | date:'mediumDate') : 'Recent' }}</span>
-              </td>
-              <td style="text-align: right;">
-                <div class="actions-group">
-                  <button type="button" class="btn-secondary btn-sm" (click)="openInquiryDetails(inq)">
-                    View Scope
-                  </button>
-                  <button type="button" class="btn-icon btn-icon--danger" (click)="confirmDelete('inquiry', inq.id!, inq.organization)">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
   </div>
 
 </div>
 
 
 <!-- ==========================================
-     MODAL 1: ADD / EDIT STRATEGIC PARTNER
+     MODAL: ADD / EDIT STRATEGIC PARTNER
      ========================================== -->
 <div *ngIf="isPartnerModalOpen()" class="modal-backdrop" (click)="closePartnerModal()">
   <div class="modal-container modal-container--md" (click)="$event.stopPropagation()">
@@ -869,244 +432,7 @@
 
 
 <!-- ==========================================
-     MODAL 2: ADD / EDIT DYNAMIC SECTION
-     ========================================== -->
-<div *ngIf="isSectionModalOpen()" class="modal-backdrop" (click)="closeSectionModal()">
-  <div class="modal-container modal-container--lg" (click)="$event.stopPropagation()">
-    
-    <div class="modal-header">
-      <div>
-        <h2 class="modal-title">{{ isEditingSection() ? 'Edit Dynamic Section' : 'Add Dynamic Partnership Section' }}</h2>
-        <p class="modal-sub">Create customized content blocks, split layouts with images, or ecosystem pillars.</p>
-      </div>
-      <button type="button" class="btn-close" (click)="closeSectionModal()">&times;</button>
-    </div>
-
-    <form (ngSubmit)="saveSection()" class="modal-body">
-      
-      <div class="form-row-3">
-        <div class="form-group">
-          <label class="form-label">Section Key / Type</label>
-          <select class="form-control" [(ngModel)]="sectionForm.section_key" name="sec_key">
-            <option value="ecosystem_pillar">Ecosystem Carousel Pillar</option>
-            <option value="vision_2030_alignment">Saudi Vision 2030 Alignment</option>
-            <option value="collaboration_framework">Collaboration Framework</option>
-            <option value="custom_section">Custom Section</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Layout Style</label>
-          <select class="form-control" [(ngModel)]="sectionForm.layout_type" name="sec_layout">
-            <option value="card">Card / Pillar Box</option>
-            <option value="split_right">Split Layout (Text Left, Image Right)</option>
-            <option value="split_left">Split Layout (Image Left, Text Right)</option>
-            <option value="banner_highlight">Banner Highlight Box</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Icon (for Cards)</label>
-          <select class="form-control" [(ngModel)]="sectionForm.icon" name="sec_icon">
-            <option value="handshake">Handshake (Technology/Deals)</option>
-            <option value="microscope">Microscope (Research/R&D)</option>
-            <option value="building">Building (Government/Institutions)</option>
-            <option value="factory">Factory (Manufacturing/Production)</option>
-            <option value="globe">Globe (Distribution/Global Reach)</option>
-            <option value="shield">Shield (Security/Sovereignty)</option>
-            <option value="award">Award (Excellence/Framework)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row-2">
-        <div class="form-group">
-          <label class="form-label">Section Badge / Eyebrow</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="sectionForm.badge"
-            name="sec_badge"
-            placeholder="e.g. SAUDI VISION 2030 or PILLAR 1"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Section Title *</label>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="sectionForm.title"
-            name="sec_title"
-            placeholder="e.g. Pioneering Biomanufacturing Sovereignty"
-            required
-          />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Subtitle / Secondary Line</label>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="sectionForm.subtitle"
-          name="sec_subtitle"
-          placeholder="e.g. Public-Private Partnerships Driving Bio-Manufacturing Independence"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Content Body</label>
-        <textarea
-          class="form-control"
-          rows="3"
-          [(ngModel)]="sectionForm.content"
-          name="sec_content"
-          placeholder="Detailed narrative or description..."
-        ></textarea>
-      </div>
-
-      <!-- Image Upload Field for Split Layouts -->
-      <div class="form-group" *ngIf="sectionForm.layout_type !== 'card'">
-        <label class="form-label">Section Feature Image</label>
-        <div class="upload-dropzone" [class.has-image]="sectionImagePreview || sectionForm.image_url">
-          <div class="upload-dropzone__preview" *ngIf="sectionImagePreview || sectionForm.image_url">
-            <img [src]="sectionImagePreview || resolveImg(sectionForm.image_url)" alt="Section preview" />
-            <div class="upload-dropzone__overlay">
-              <label for="sec-img-input" class="btn-secondary btn-sm">Change Image</label>
-              <button type="button" class="btn-danger btn-sm" (click)="removeSectionImage()">Remove</button>
-            </div>
-          </div>
-          <div class="upload-dropzone__placeholder" *ngIf="!sectionImagePreview && !sectionForm.image_url">
-            <p>Upload a high-resolution facility, agreement, or cleanroom photo</p>
-            <label for="sec-img-input" class="btn-primary btn-sm">Select Image</label>
-          </div>
-          <input
-            id="sec-img-input"
-            type="file"
-            accept="image/*"
-            class="hidden-file-input"
-            (change)="onSectionImageSelected($event)"
-          />
-        </div>
-      </div>
-
-      <!-- Bullet Points List Editor -->
-      <div class="form-group" *ngIf="sectionForm.layout_type !== 'card'">
-        <label class="form-label">Key Highlights / Bullet Points</label>
-        <div class="bullet-input-row">
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="sectionForm.newBulletText"
-            name="newBullet"
-            placeholder="Type bullet point and click Add..."
-            (keydown.enter)="$event.preventDefault(); addBulletPoint()"
-          />
-          <button type="button" class="btn-secondary" (click)="addBulletPoint()">+ Add Point</button>
-        </div>
-
-        <ul class="bullet-items-list" *ngIf="sectionForm.bullet_points.length > 0">
-          <li *ngFor="let bp of sectionForm.bullet_points; let bIdx = index" class="bullet-item-row">
-            <span>&#10003; {{ bp }}</span>
-            <button type="button" class="btn-remove-bullet" (click)="removeBulletPoint(bIdx)">&times;</button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="form-row-2">
-        <div class="form-group">
-          <label class="form-label">Status</label>
-          <select class="form-control" [(ngModel)]="sectionForm.status" name="sec_status">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Display Order</label>
-          <input type="number" class="form-control" [(ngModel)]="sectionForm.order_index" name="sec_order" min="0" />
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn-secondary" (click)="closeSectionModal()">Cancel</button>
-        <button type="submit" class="btn-primary" [disabled]="isSaving()">
-          {{ isSaving() ? 'Saving...' : (isEditingSection() ? 'Update Section' : 'Create Section') }}
-        </button>
-      </div>
-
-    </form>
-
-  </div>
-</div>
-
-
-<!-- ==========================================
-     MODAL 3: INQUIRY DETAILS VIEW
-     ========================================== -->
-<div *ngIf="isInquiryDetailModalOpen() && selectedInquiry()" class="modal-backdrop" (click)="closeInquiryDetails()">
-  <div class="modal-container modal-container--md" (click)="$event.stopPropagation()">
-    
-    <div class="modal-header">
-      <div>
-        <span class="category-badge">{{ selectedInquiry()?.category }}</span>
-        <h2 class="modal-title">{{ selectedInquiry()?.organization }}</h2>
-        <p class="modal-sub">Submitted by {{ selectedInquiry()?.full_name }}</p>
-      </div>
-      <button type="button" class="btn-close" (click)="closeInquiryDetails()">&times;</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="inquiry-info-grid">
-        <div class="info-block">
-          <span class="info-label">Contact Name</span>
-          <span class="info-val">{{ selectedInquiry()?.full_name }}</span>
-        </div>
-
-        <div class="info-block">
-          <span class="info-label">Email Address</span>
-          <a [href]="'mailto:' + selectedInquiry()?.email" class="email-link">{{ selectedInquiry()?.email }}</a>
-        </div>
-
-        <div class="info-block">
-          <span class="info-label">Organization</span>
-          <span class="info-val">{{ selectedInquiry()?.organization }}</span>
-        </div>
-
-        <div class="info-block">
-          <span class="info-label">Phone / Mobile</span>
-          <span class="info-val">{{ selectedInquiry()?.phone || 'Not Provided' }}</span>
-        </div>
-      </div>
-
-      <div class="message-box">
-        <h4 class="message-box__title">Proposed Collaboration Scope:</h4>
-        <p class="message-box__content">{{ selectedInquiry()?.message }}</p>
-      </div>
-
-      <div class="form-group mt-3">
-        <label class="form-label">Internal Follow-Up Notes</label>
-        <textarea
-          class="form-control"
-          rows="3"
-          [(ngModel)]="selectedInquiry()!.notes"
-          placeholder="Add private team notes, action items, or meeting schedule..."
-        ></textarea>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn-secondary" (click)="closeInquiryDetails()">Close</button>
-      <button type="button" class="btn-primary" (click)="saveInquiryNotes()">Save Notes</button>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- ==========================================
-     MODAL 4: DELETE CONFIRMATION MODAL
+     MODAL: DELETE CONFIRMATION MODAL
      ========================================== -->
 <div *ngIf="isDeleteModalOpen()" class="modal-backdrop" (click)="closeDeleteModal()">
   <div class="modal-container modal-container--sm" (click)="$event.stopPropagation()">
@@ -1118,7 +444,7 @@
 
     <div class="modal-body">
       <p>Are you sure you want to delete <strong>{{ itemToDeleteName() }}</strong>?</p>
-      <p class="text-muted">This action will permanently remove this record from the database.</p>
+      <p class="text-muted">This action will permanently remove this partner from the database.</p>
     </div>
 
     <div class="modal-footer">
