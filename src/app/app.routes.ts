@@ -127,6 +127,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'partners',
+        loadComponent: () =>
+          import('./features/admin/partners-management/partners-management').then(
+            m => m.PartnersManagementComponent
+          ),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./features/admin/settings/settings').then(m => m.SettingsComponent),

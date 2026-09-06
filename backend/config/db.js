@@ -286,6 +286,9 @@ async function seedDefaultData(db) {
 
   // Seed default job postings if empty
   await seedJobPostings(db);
+
+  // Seed default partners data if empty
+  await seedPartnersData(db);
 }
 
 const defaultJobPositions = [
@@ -491,6 +494,313 @@ async function seedJobPostings(db, force = false) {
   }
 }
 
+const defaultPartnersList = [
+  {
+    code: 'csl',
+    name: 'CSL Seqirus',
+    category: 'Technology Transfers Partner',
+    tier: 'Strategic Alliance',
+    logo: 'CSLSeqirus_1_logo-e1761739712420.png',
+    website: 'https://www.cslseqirus.com',
+    description: 'Technology transfer partner for full localization of seasonal influenza and pandemic response.',
+    order_index: 1,
+    status: 'Active'
+  },
+  {
+    code: 'uhlmann',
+    name: 'Uhlmann Pac-Systems',
+    category: 'Production Lines Partner',
+    tier: 'Production Lines & Automation',
+    logo: 'uhlmann-logo.png',
+    website: 'https://www.uhlmann.de',
+    description: 'Uhlmann Pac-Systems, Germany is the world’s leading system provider for the packaging of pharmaceuticals with state of art AI driven technology.',
+    order_index: 2,
+    status: 'Active'
+  },
+  {
+    code: 'rota',
+    name: 'ROTA',
+    category: 'Production Lines Partner',
+    tier: 'Production Lines & Automation',
+    logo: 'Rota-Logo-large-e1779129484988.png',
+    website: 'https://www.rota.de',
+    description: 'ROTA, Germany is a 100-year-old evolved from a simple ampoule machine into a full portfolio of advanced systems.',
+    order_index: 3,
+    status: 'Active'
+  },
+  {
+    code: 'bcm',
+    name: 'Baylor College of Medicine',
+    category: 'Vaccine development, Research & Training',
+    tier: 'Academic Research & Clinical R&D',
+    logo: 'bcm.png',
+    website: 'https://www.bcm.edu',
+    description: 'Baylor College of Medicine and VIC-RDI have signed Academic and R&D agreement for vaccine development.',
+    order_index: 4,
+    status: 'Active'
+  },
+  {
+    code: 'kacst',
+    name: 'KACST',
+    category: 'Academic Research & Developments',
+    tier: 'Academic Research & Developments',
+    logo: 'Vaccine-Website-design-06.png',
+    website: 'https://www.kacst.gov.sa',
+    description: 'KACST and VIC RDI have signed collaboration agreement for research, development and innovation to localize Vaccine Manufacturing in Saudi Arabia.',
+    order_index: 5,
+    status: 'Active'
+  },
+  {
+    code: 'nibrt',
+    name: 'NIBRT',
+    category: 'Bio processing research and training partners',
+    tier: 'Academic Research & Clinical R&D',
+    logo: 'nibrt.webp',
+    website: 'https://www.nibrt.ie',
+    description: 'A Global Centre of Excellence for Training and Research to help the growth and development of the biopharma manufacturing industry.',
+    order_index: 6,
+    status: 'Active'
+  },
+  {
+    code: 'dvs',
+    name: 'DVS',
+    category: 'Business Development Consultants',
+    tier: 'Strategic Advisory & Consulting',
+    logo: 'DVS.jpeg',
+    website: '',
+    description: 'DVS Proposes a strategic business development collaboration and commits to build a strong sustainable Vaccine portfolio.',
+    order_index: 7,
+    status: 'Active'
+  },
+  {
+    code: 'zyme',
+    name: 'Zyme',
+    category: 'Project Management Partners',
+    tier: 'Project Management & Engineering',
+    logo: 'Zyme-Logo-big.png',
+    website: '',
+    description: 'Experts in traditional project management techniques with deep domain knowledge of the biotech process.',
+    order_index: 8,
+    status: 'Active'
+  },
+  {
+    code: 'keyplants',
+    name: 'KeyPlants',
+    category: 'Engineering Partner - Turnkey modular concept',
+    tier: 'Project Management & Engineering',
+    logo: 'keyplant.jpg',
+    website: 'https://www.keyplants.com',
+    description: 'Keyplants and capabilities include full in-house Design and Fabrication as well as subject matter expertise.',
+    order_index: 9,
+    status: 'Active'
+  },
+  {
+    code: 'ath',
+    name: 'Arabian Trade House',
+    category: 'Supply Chain Partner',
+    tier: 'Supply Chain & Commercial Distribution',
+    logo: 'ATC-1.png',
+    website: '',
+    description: 'Arabian Trade House is a leading Biotechnology products distributor in Saudi Arabia. The Company was established in 1978.',
+    order_index: 10,
+    status: 'Active'
+  }
+];
+
+const defaultPartnershipSections = [
+  {
+    section_key: 'ecosystem_pillar',
+    badge: 'PILLAR 1',
+    title: 'Technology Partners',
+    subtitle: 'Global Innovators',
+    content: 'Global innovators driving advanced bioprocess, cell culture, and mRNA solutions.',
+    icon: 'handshake',
+    layout_type: 'card',
+    order_index: 1,
+    status: 'Active'
+  },
+  {
+    section_key: 'ecosystem_pillar',
+    badge: 'PILLAR 2',
+    title: 'Research & Academic Partners',
+    subtitle: 'Scientific Excellence',
+    content: 'Collaborating for scientific excellence, clinical trial leadership, and translational immunology.',
+    icon: 'microscope',
+    layout_type: 'card',
+    order_index: 2,
+    status: 'Active'
+  },
+  {
+    section_key: 'ecosystem_pillar',
+    badge: 'PILLAR 3',
+    title: 'Government Partners',
+    subtitle: 'National Health Priorities',
+    content: 'Aligned with Saudi Vision 2030, Ministry of Health, and SFDA national security standards.',
+    icon: 'building',
+    layout_type: 'card',
+    order_index: 3,
+    status: 'Active'
+  },
+  {
+    section_key: 'ecosystem_pillar',
+    badge: 'PILLAR 4',
+    title: 'Manufacturing Partners',
+    subtitle: 'Scale & Reliability',
+    content: 'Ensuring world-class sterile filling, automated packaging, and cGMP compliance at scale.',
+    icon: 'factory',
+    layout_type: 'card',
+    order_index: 4,
+    status: 'Active'
+  },
+  {
+    section_key: 'ecosystem_pillar',
+    badge: 'PILLAR 5',
+    title: 'Distribution & Commercial Partners',
+    subtitle: 'Global Reach',
+    content: 'End-to-end temperature-controlled cold chain delivering vaccines safely across MENA and beyond.',
+    icon: 'globe',
+    layout_type: 'card',
+    order_index: 5,
+    status: 'Active'
+  },
+  {
+    section_key: 'vision_2030_alignment',
+    badge: 'SAUDI VISION 2030',
+    title: 'Pioneering Biomanufacturing Sovereignty in the Kingdom',
+    subtitle: 'A state-of-the-art biopharmaceutical campus built for global tech transfer',
+    content: 'Located in Sudair Industrial City, VIC is establishing Saudi Arabia’s foremost human vaccine biomanufacturing facility. In alignment with Saudi Vision 2030 and the National Biotechnology Strategy, we partner with world-class innovators to localize end-to-end biological manufacturing, securing the Kingdom’s healthcare future.',
+    bullet_points: JSON.stringify([
+      'SFDA cGMP & WHO Prequalification-ready production cleanrooms',
+      'SAR 500 Million+ bio-facility with high-speed automated sterile filling lines',
+      'Complete tech-transfer pipeline from master cell banking to final drug product release',
+      'Regional cold-chain logistics hub serving GCC, MENA, and international markets'
+    ]),
+    image_url: 'baylor_vic_agreement.jpg',
+    icon: 'shield',
+    cta_text: 'Discover Our Facility',
+    cta_url: '/about',
+    layout_type: 'split_right',
+    order_index: 6,
+    status: 'Active'
+  },
+  {
+    section_key: 'collaboration_framework',
+    badge: 'COLLABORATION MODELS',
+    title: 'Flexible Frameworks Tailored for High-Impact Innovation',
+    subtitle: 'From technology licensing to turn-key bioprocessing and regional co-distribution',
+    content: 'Whether you are a multinational biotechnology enterprise, a clinical-stage research institution, or a specialized equipment manufacturer, VIC offers collaborative models that accelerate market entry, provide strategic access to the Saudi market, and ensure regulatory agility.',
+    bullet_points: JSON.stringify([
+      'Technology Transfer & Active Pharmaceutical Ingredient (API) Localization',
+      'Collaborative Clinical Research & Fast-Track SFDA Regulatory Registration',
+      'Contract Development & Manufacturing Organization (CDMO) Services',
+      'Turnkey Cold-Chain Supply Chain & Multi-Country Commercial Distribution'
+    ]),
+    image_url: 'modon_vic_land.jpg',
+    icon: 'award',
+    cta_text: 'Start Collaboration',
+    cta_url: '#partner-inquiry',
+    layout_type: 'split_left',
+    order_index: 7,
+    status: 'Active'
+  }
+];
+
+async function seedPartnersData(db, force = false) {
+  try {
+    // 1. Seed Partners Page Settings
+    const [settings] = await db.query('SELECT COUNT(*) as count FROM partners_page_settings');
+    if (settings[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM partners_page_settings');
+      }
+      const defaultStats = JSON.stringify([
+        { label: 'Global Strategic Alliances', value: '10+' },
+        { label: 'Ecosystem Pillars', value: '5' },
+        { label: 'Capital Commitment', value: 'SAR 500M+' },
+        { label: 'Vision 2030 Biotech Impact', value: '100%' }
+      ]);
+      await db.query(`
+        INSERT INTO partners_page_settings 
+        (id, hero_badge, hero_title, hero_title_line2, hero_accent, hero_description, hero_image, cta_text, stats_json)
+        VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+          hero_badge = VALUES(hero_badge),
+          hero_title = VALUES(hero_title),
+          hero_title_line2 = VALUES(hero_title_line2),
+          hero_accent = VALUES(hero_accent),
+          hero_description = VALUES(hero_description),
+          hero_image = VALUES(hero_image),
+          cta_text = VALUES(cta_text),
+          stats_json = VALUES(stats_json)
+      `, [
+        'OUR PARTNERS',
+        'Stronger Together.',
+        'Building Better Futures.',
+        'Futures.',
+        'Collaboration is at the heart of everything we do. We work with global leaders, research institutions, and government entities to advance vaccine innovation and strengthen global health.',
+        'partner_banner.jpg',
+        'Partner With Us',
+        defaultStats
+      ]);
+      console.log('[DB Seed] Seeded partners page banner settings.');
+    }
+
+    // 2. Seed Strategic Partners
+    const [partners] = await db.query('SELECT COUNT(*) as count FROM partners');
+    if (partners[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM partners');
+      }
+      for (const p of defaultPartnersList) {
+        await db.query(`
+          INSERT INTO partners (code, name, category, tier, logo, website, description, order_index, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          p.code, p.name, p.category, p.tier, p.logo, p.website || '', p.description, p.order_index, p.status
+        ]);
+      }
+      console.log(`[DB Seed] Seeded ${defaultPartnersList.length} strategic partners.`);
+    }
+
+    // 3. Seed Partnership Dynamic Sections
+    const [sections] = await db.query('SELECT COUNT(*) as count FROM partnership_sections');
+    if (sections[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM partnership_sections');
+      }
+      for (const s of defaultPartnershipSections) {
+        await db.query(`
+          INSERT INTO partnership_sections (section_key, badge, title, subtitle, content, bullet_points, image_url, icon, cta_text, cta_url, layout_type, order_index, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          s.section_key, s.badge || '', s.title, s.subtitle || '', s.content || '',
+          s.bullet_points || null, s.image_url || null, s.icon || null,
+          s.cta_text || '', s.cta_url || '', s.layout_type, s.order_index, s.status
+        ]);
+      }
+      console.log(`[DB Seed] Seeded ${defaultPartnershipSections.length} partnership dynamic sections.`);
+    }
+
+    // 4. Seed initial sample inquiry if empty
+    const [inquiries] = await db.query('SELECT COUNT(*) as count FROM partnership_inquiries');
+    if (inquiries[0].count === 0) {
+      await db.query(`
+        INSERT INTO partnership_inquiries (full_name, organization, email, phone, category, message, status)
+        VALUES 
+        (?, ?, ?, ?, ?, ?, ?),
+        (?, ?, ?, ?, ?, ?, ?)
+      `, [
+        'Dr. Julian Vance', 'BioPharma Global Solutions Ltd', 'j.vance@biopharmasolutions.com', '+44 20 7183 9200', 'Technology Transfer', 'Interested in exploring turn-key formulation technology licensing for pneumococcal conjugate vaccines in the Saudi market.', 'New',
+        'Prof. Tariq Mansour', 'King Abdulaziz University R&D', 'tmansour@kau.edu.sa', '+966 50 445 6789', 'Clinical Trials', 'Proposal to partner on Phase II pediatric clinical trials and joint immunological biobanking in western province.', 'Under Review'
+      ]);
+      console.log('[DB Seed] Seeded sample partnership inquiries.');
+    }
+
+  } catch (err) {
+    console.error('[DB Seed Partner Error]', err.message);
+  }
+}
+
 // Getter for pool
 function getPool() {
   if (!pool) {
@@ -506,5 +816,9 @@ module.exports = {
   initDatabase,
   getPool,
   seedJobPostings,
-  defaultJobPositions
+  defaultJobPositions,
+  seedPartnersData,
+  defaultPartnersList,
+  defaultPartnershipSections
 };
+

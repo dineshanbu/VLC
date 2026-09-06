@@ -101,3 +101,70 @@ CREATE TABLE IF NOT EXISTS job_applications (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (job_id) REFERENCES job_postings(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Partners Page Settings (Hero banner and page configuration)
+CREATE TABLE IF NOT EXISTS partners_page_settings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  hero_badge VARCHAR(100) DEFAULT 'OUR PARTNERS',
+  hero_title VARCHAR(255) DEFAULT 'Stronger Together.',
+  hero_title_line2 VARCHAR(255) DEFAULT 'Building Better Futures.',
+  hero_accent VARCHAR(100) DEFAULT 'Futures.',
+  hero_description TEXT NULL,
+  hero_image VARCHAR(500) DEFAULT 'partner_banner.jpg',
+  cta_text VARCHAR(100) DEFAULT 'Partner With Us',
+  stats_json JSON NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Strategic Partners & Alliances Table
+CREATE TABLE IF NOT EXISTS partners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(50) NULL,
+  name VARCHAR(150) NOT NULL,
+  category VARCHAR(150) NOT NULL,
+  tier VARCHAR(100) DEFAULT 'Strategic Alliance',
+  logo VARCHAR(500) NOT NULL,
+  website VARCHAR(500) NULL,
+  description TEXT NOT NULL,
+  featured TINYINT(1) DEFAULT 1,
+  order_index INT DEFAULT 0,
+  status ENUM('Active', 'Inactive') DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dynamic Partnership Content Sections (Pillars, Collaboration Models, Vision 2030 highlights)
+CREATE TABLE IF NOT EXISTS partnership_sections (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  section_key VARCHAR(100) DEFAULT 'custom_section',
+  badge VARCHAR(100) NULL,
+  title VARCHAR(255) NOT NULL,
+  subtitle VARCHAR(255) NULL,
+  content TEXT NULL,
+  bullet_points JSON NULL,
+  image_url VARCHAR(500) NULL,
+  icon VARCHAR(100) NULL,
+  cta_text VARCHAR(100) NULL,
+  cta_url VARCHAR(255) NULL,
+  layout_type VARCHAR(50) DEFAULT 'card',
+  order_index INT DEFAULT 0,
+  status ENUM('Active', 'Inactive') DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Partnership Inquiries Table (Submissions from public modal)
+CREATE TABLE IF NOT EXISTS partnership_inquiries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  organization VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  phone VARCHAR(50) DEFAULT NULL,
+  category VARCHAR(100) DEFAULT 'Technology Transfer',
+  message TEXT NULL,
+  status ENUM('New', 'Under Review', 'Contacted', 'Archived') DEFAULT 'New',
+  notes TEXT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

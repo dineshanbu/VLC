@@ -1,40 +1,41 @@
 <!-- ====================================================
-     PARTNERS PAGE
-     Exact Home Scale Typography, Colors & Spacing
+     PARTNERS PAGE — PUBLIC
      Vaccine Industrial Company
+     Dynamic Hero Banner, Strategic Alliances & Dynamic Sections
      ==================================================== -->
 
 <!-- ====================================================
-     SECTION 1 — HERO BANNER (MATCHING REFERENCE DESIGN)
+     SECTION 1 — HERO BANNER (DYNAMIC IMAGE & TEXT)
      ==================================================== -->
 <section class="partner-hero">
 
-  <!-- Master Background Image: Team Handshake & World Map -->
+  <!-- Master Background Image: Dynamic from Admin -->
   <div class="partner-hero__image-wrapper">
     <img
-      src="partner_banner.jpg"
+      [src]="resolveImg(pageSettings.hero_image)"
       alt="VIC Strategic Partnerships — Global executive and medical collaboration"
       class="partner-hero__image"
+      (error)="$any($event.target).src = 'partner_banner.jpg'"
     />
     <div class="partner-hero__overlay" aria-hidden="true"></div>
   </div>
 
-  <!-- Left Content -->
+  <!-- Hero Content -->
   <div class="partner-hero__container">
     <div class="partner-hero__content">
 
-      <!-- Eyebrow -->
-      <span class="partner-hero__eyebrow">OUR PARTNERS</span>
+      <!-- Eyebrow Badge -->
+      <span class="partner-hero__eyebrow">{{ pageSettings.hero_badge }}</span>
 
       <!-- Main Heading -->
       <h1 class="partner-hero__heading">
-        Stronger Together.<br />
-        Building Better <span class="partner-hero__heading-accent">Futures.</span>
+        {{ pageSettings.hero_title }}<br />
+        <span class="partner-hero__heading-accent">{{ pageSettings.hero_title_line2 }}</span>
       </h1>
 
       <!-- Description -->
       <p class="partner-hero__description">
-        Collaboration is at the heart of everything we do. We work with global leaders, research institutions, and government entities to advance vaccine innovation and strengthen global health.
+        {{ pageSettings.hero_description }}
       </p>
 
       <!-- Action Button — Opens Partner With Us Inquiry Modal -->
@@ -46,7 +47,7 @@
           aria-haspopup="dialog"
           aria-label="Partner With Us — Open Partnership Inquiry Form"
         >
-          <span>Partner With Us</span>
+          <span>{{ pageSettings.cta_text || 'Partner With Us' }}</span>
           <span class="partner-hero__btn-arrow" aria-hidden="true">&rarr;</span>
         </button>
       </div>
@@ -54,7 +55,17 @@
     </div>
   </div>
 
-  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
+  <!-- Dynamic Highlight Stats Bar (Desktop & Mobile) -->
+  <div class="partner-hero__stats-bar" *ngIf="pageSettings.stats && pageSettings.stats.length > 0">
+    <div class="partner-hero__stats-container">
+      <div class="partner-hero__stat-item" *ngFor="let st of pageSettings.stats">
+        <span class="partner-hero__stat-num">{{ st.value }}</span>
+        <span class="partner-hero__stat-lbl">{{ st.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
   <div class="partner-hero__wave-wrapper" aria-hidden="true">
     <svg
       class="partner-hero__wave-svg"
@@ -88,7 +99,7 @@
 
 
 <!-- ====================================================
-     SECTION 2 — OUR STRATEGIC PARTNERS (EXACT MATCH)
+     SECTION 2 — OUR STRATEGIC PARTNERS (DYNAMIC & FILTERABLE)
      ==================================================== -->
 <section class="partner-strategic">
   <div class="partner-strategic__container">
@@ -100,7 +111,29 @@
       <div class="partner-strategic__line"></div>
     </div>
 
-    <!-- Partner Cards Grid (Matching media_1788262238049.png) -->
+    <!-- Category Filter Chips (Desktop & Mobile Scroll) -->
+    <div class="partner-filter-bar" *ngIf="availableCategories.length > 1">
+      <button
+        type="button"
+        class="filter-chip"
+        [class.filter-chip--active]="selectedCategory === 'all'"
+        (click)="setCategory('all')"
+      >
+        All Alliances ({{ strategicPartners.length }})
+      </button>
+
+      <button
+        *ngFor="let cat of availableCategories"
+        type="button"
+        class="filter-chip"
+        [class.filter-chip--active]="selectedCategory === cat"
+        (click)="setCategory(cat)"
+      >
+        {{ cat }}
+      </button>
+    </div>
+
+    <!-- Partner Cards Grid -->
     <div class="partner-strategic__grid">
       <div
         class="partner-strategic__item"
@@ -113,26 +146,30 @@
         <!-- Logo Box Card -->
         <div class="partner-strategic__logo-card">
           <img
-            [src]="partner.logo"
+            [src]="resolveImg(partner.logo, 'CSLSeqirus_1_logo-e1761739712420.png')"
             [alt]="partner.name"
             class="partner-strategic__logo"
             loading="lazy"
+            (error)="$any($event.target).src = 'logo_navbar.png'"
           />
         </div>
 
-        <!-- Category Label Below Card -->
-        <span class="partner-strategic__label">{{ partner.category }}</span>
+        <!-- Name & Category Label Below Card -->
+        <div class="partner-strategic__info">
+          <strong class="partner-strategic__name">{{ partner.name }}</strong>
+          <span class="partner-strategic__label">{{ partner.category }}</span>
+        </div>
       </div>
     </div>
 
     <!-- View All Partners Toggle Button -->
-    <div class="partner-strategic__action">
+    <div class="partner-strategic__action" *ngIf="filteredPartners.length > 5">
       <button
         type="button"
         class="partner-strategic__view-all-btn"
         (click)="toggleViewAllPartners()"
       >
-        <span>{{ showAllPartners ? 'Show Less' : 'View All Partners' }}</span>
+        <span>{{ showAllPartners ? 'Show Less' : ('View All Partners (' + filteredPartners.length + ')') }}</span>
         <span
           class="partner-strategic__btn-arrow"
           [class.partner-strategic__btn-arrow--up]="showAllPartners"
@@ -146,8 +183,7 @@
 
 
 <!-- ====================================================
-     SECTION 3 — OUR PARTNERSHIP ECOSYSTEM (CAROUSEL AUTOPLAY)
-     Moved below Our Strategic Partners as requested
+     SECTION 3 — OUR PARTNERSHIP ECOSYSTEM (DYNAMIC CAROUSEL)
      ==================================================== -->
 <section class="partner-ecosystem">
   <div class="partner-ecosystem__container">
@@ -183,7 +219,7 @@
       </div>
     </div>
 
-    <!-- Responsive Carousel Window & Track (Autoplays every 2s) -->
+    <!-- Responsive Carousel Window & Track (Autoplays every 2.5s) -->
     <div
       class="partner-ecosystem__carousel-window"
       (mouseenter)="stopEcosystemAutoPlay()"
@@ -233,7 +269,7 @@
                   <path d="M12 18h1"></path>
                   <path d="M7 18h1"></path>
                 </svg>
-                <svg *ngIf="item.icon === 'globe'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg *ngIf="item.icon === 'globe' || !item.icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="2" y1="12" x2="22" y2="12"></line>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -267,8 +303,93 @@
 </section>
 
 
+<!-- ====================================================
+     SECTION 4 — DYNAMIC CONTENT SECTIONS (VISION 2030 & MODELS)
+     Custom sections uploaded and configured from Admin
+     ==================================================== -->
+<section
+  *ngFor="let sec of additionalSections; let sIdx = index"
+  class="partner-dynamic-section"
+  [class.partner-dynamic-section--alt]="sIdx % 2 !== 0"
+>
+  <div class="partner-dynamic-section__container">
+    <div
+      class="partner-split-grid"
+      [class.partner-split-grid--reverse]="sec.layout_type === 'split_left'"
+    >
+      
+      <!-- Text Narrative Column -->
+      <div class="partner-split-col partner-split-col--text">
+        <span *ngIf="sec.badge" class="partner-split-badge">{{ sec.badge }}</span>
+        <h2 class="partner-split-title">{{ sec.title }}</h2>
+        <h3 *ngIf="sec.subtitle" class="partner-split-subtitle">{{ sec.subtitle }}</h3>
+        
+        <p *ngIf="sec.content" class="partner-split-desc">
+          {{ sec.content }}
+        </p>
+
+        <!-- Highlights / Bullet Points List -->
+        <ul *ngIf="sec.bullet_points && sec.bullet_points.length > 0" class="partner-split-bullets">
+          <li *ngFor="let bp of sec.bullet_points">
+            <span class="bullet-icon-check">&#10003;</span>
+            <span class="bullet-text">{{ bp }}</span>
+          </li>
+        </ul>
+
+        <!-- Action Button -->
+        <div class="partner-split-actions">
+          <button
+            type="button"
+            class="partner-split-btn"
+            (click)="openInquiryModal(sec.badge || sec.title)"
+          >
+            <span>{{ sec.cta_text || 'Inquire Collaboration' }}</span>
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature Image Column -->
+      <div class="partner-split-col partner-split-col--media" *ngIf="sec.image_url">
+        <div class="partner-split-img-card">
+          <img
+            [src]="resolveImg(sec.image_url, 'baylor_vic_agreement.jpg')"
+            [alt]="sec.title"
+            class="partner-split-img"
+            loading="lazy"
+            (error)="$any($event.target).src = 'partner_banner.jpg'"
+          />
+          <div class="partner-split-img-glow" aria-hidden="true"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 
+<!-- ====================================================
+     SECTION 5 — PARTNERSHIP INQUIRY CALLOUT BANNER
+     ==================================================== -->
+<section class="partner-cta-banner">
+  <div class="partner-cta-banner__container">
+    <div class="partner-cta-banner__content">
+      <span class="partner-cta-banner__eyebrow">GLOBAL BIOTECHNOLOGY NETWORK</span>
+      <h2 class="partner-cta-banner__heading">Ready to Pioneer Next-Generation Vaccine Manufacturing?</h2>
+      <p class="partner-cta-banner__desc">
+        Connect directly with VIC's Executive Business Development and Technology Transfer team to discuss localization, turnkey partnerships, and clinical co-development.
+      </p>
+      <button
+        type="button"
+        class="partner-cta-banner__btn"
+        (click)="openInquiryModal()"
+      >
+        <span>Partner With Us</span>
+        <span>&rarr;</span>
+      </button>
+    </div>
+  </div>
+</section>
 
 
 <!-- ====================================================
@@ -316,7 +437,7 @@
         <div class="partner-inquiry__success-icon" aria-hidden="true">&#10003;</div>
         <h3 class="partner-inquiry__success-heading">Inquiry Received</h3>
         <p class="partner-inquiry__success-text">
-          Thank you, {{ inquiryForm.fullName }}. Our Corporate Alliances &amp; Business Development division has received your submission and will contact you promptly.
+          Thank you, {{ inquiryForm.full_name }}. Our Corporate Alliances &amp; Business Development division has received your submission and will contact you promptly.
         </p>
         <button
           type="button"
@@ -325,6 +446,11 @@
         >
           Submit Another Inquiry
         </button>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="inquiryError" class="partner-inquiry__error">
+        {{ inquiryError }}
       </div>
 
       <!-- Inquiry Form -->
@@ -342,7 +468,7 @@
               name="mFullName"
               required
               placeholder="Dr. / Mr. / Ms. Full Name"
-              [(ngModel)]="inquiryForm.fullName"
+              [(ngModel)]="inquiryForm.full_name"
             />
           </div>
 
@@ -373,19 +499,31 @@
           </div>
 
           <div class="partner-inquiry__field">
-            <label for="m-category">Partnership Category</label>
-            <select
-              id="m-category"
-              name="mCategory"
-              [(ngModel)]="inquiryForm.category"
-            >
-              <option value="Technology Transfer">Technology Transfer &amp; Localization</option>
-              <option value="Clinical Trials">Clinical Research &amp; Trials</option>
-              <option value="Distribution">Distribution &amp; Commercialization</option>
-              <option value="Engineering">Engineering, Cleanrooms &amp; Bioprocess</option>
-              <option value="Other">Other Strategic Opportunity</option>
-            </select>
+            <label for="m-phone">Phone / Mobile</label>
+            <input
+              id="m-phone"
+              type="tel"
+              name="mPhone"
+              placeholder="+966 5x xxx xxxx"
+              [(ngModel)]="inquiryForm.phone"
+            />
           </div>
+        </div>
+
+        <div class="partner-inquiry__field">
+          <label for="m-category">Partnership Category</label>
+          <select
+            id="m-category"
+            name="mCategory"
+            [(ngModel)]="inquiryForm.category"
+          >
+            <option value="Technology Transfer">Technology Transfer &amp; Localization</option>
+            <option value="Clinical Trials">Clinical Research &amp; Trials</option>
+            <option value="Distribution">Distribution &amp; Commercialization</option>
+            <option value="Engineering">Engineering, Cleanrooms &amp; Bioprocess</option>
+            <option value="Academic R&D">Academic &amp; Institutional R&D</option>
+            <option value="Other">Other Strategic Opportunity</option>
+          </select>
         </div>
 
         <div class="partner-inquiry__field">
@@ -402,8 +540,9 @@
         <button
           type="submit"
           class="partner-inquiry__submit-btn"
+          [disabled]="isSubmittingInquiry"
         >
-          <span>Submit Partnership Inquiry</span>
+          <span>{{ isSubmittingInquiry ? 'Sending Inquiry...' : 'Submit Partnership Inquiry' }}</span>
           <span aria-hidden="true">&rarr;</span>
         </button>
       </form>
@@ -446,14 +585,16 @@
     <div class="partner-detail-modal__header">
       <div class="partner-detail-modal__logo-wrap">
         <img
-          [src]="selectedPartner.logo"
+          [src]="resolveImg(selectedPartner.logo, 'CSLSeqirus_1_logo-e1761739712420.png')"
           [alt]="selectedPartner.name"
           class="partner-detail-modal__logo"
+          (error)="$any($event.target).src = 'logo_navbar.png'"
         />
       </div>
       <div class="partner-detail-modal__info">
         <span class="partner-detail-modal__category">{{ selectedPartner.category }}</span>
         <h2 id="partner-detail-title" class="partner-detail-modal__title">{{ selectedPartner.name }}</h2>
+        <span *ngIf="selectedPartner.tier" class="partner-detail-modal__tier">{{ selectedPartner.tier }}</span>
       </div>
     </div>
 
@@ -465,6 +606,15 @@
 
     <!-- Modal Footer -->
     <div class="partner-detail-modal__footer">
+      <a
+        *ngIf="selectedPartner.website"
+        [href]="selectedPartner.website"
+        target="_blank"
+        class="partner-detail-modal__btn-web"
+      >
+        <span>Official Website</span>
+        <span>&rarr;</span>
+      </a>
       <button
         type="button"
         class="partner-detail-modal__btn-close"
@@ -476,6 +626,3 @@
 
   </div>
 </div>
-
-
-
