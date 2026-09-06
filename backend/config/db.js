@@ -74,6 +74,30 @@ async function createTables(db) {
         await db.query(stmt);
       }
     }
+
+    // Ensure job_postings has the modern fields if table was created previously
+    try {
+      const [columns] = await db.query("SHOW COLUMNS FROM job_postings");
+      const colNames = columns.map(c => c.Field);
+      
+      if (!colNames.includes('job_code')) {
+        await db.query("ALTER TABLE job_postings ADD COLUMN job_code VARCHAR(50) NULL AFTER id");
+      }
+      if (!colNames.includes('overview')) {
+        await db.query("ALTER TABLE job_postings ADD COLUMN overview TEXT NULL AFTER experience");
+      }
+      if (!colNames.includes('responsibilities')) {
+        await db.query("ALTER TABLE job_postings ADD COLUMN responsibilities JSON NULL AFTER requirements");
+      }
+      if (!colNames.includes('qualifications')) {
+        await db.query("ALTER TABLE job_postings ADD COLUMN qualifications JSON NULL AFTER responsibilities");
+      }
+      // Relax type column to VARCHAR if it was an ENUM
+      await db.query("ALTER TABLE job_postings MODIFY COLUMN type VARCHAR(50) DEFAULT 'Full-Time'");
+    } catch (migErr) {
+      console.log('[DB Migration Notice]', migErr.message);
+    }
+
     console.log('[DB] Database tables checked/created successfully.');
   }
 }
@@ -259,6 +283,212 @@ async function seedDefaultData(db) {
     }
     console.log('[DB Seed] Initial media assets seeded.');
   }
+
+  // Seed default job postings if empty
+  await seedJobPostings(db);
+}
+
+const defaultJobPositions = [
+  {
+    job_code: 'vic-rd-01',
+    title: 'Senior Research Scientist – Virology',
+    department: 'Research & Development',
+    location: 'Riyadh, KSA',
+    experience: '5 - 8 years',
+    type: 'Full-Time',
+    overview: 'Lead the viral vector and cell-culture characterization for novel vaccine candidates at VIC’s state-of-the-art biopharmaceutical laboratories in Riyadh.',
+    responsibilities: [
+      'Design and execute cell-based viral propagation and harvest protocols under cGMP standards.',
+      'Lead analytical assays (ELISA, qPCR, flow cytometry) for viral potency and antigen purity determination.',
+      'Collaborate with international research partners including CSL Seqirus and Baylor College of Medicine.',
+      'Author scientific reports, standard operating procedures (SOPs), and regulatory filing dossiers.'
+    ],
+    qualifications: [
+      'Ph.D. or Master’s in Virology, Molecular Biology, Biotechnology, or related life sciences.',
+      '5+ years hands-on experience in mammalian cell culture and viral vaccine development.',
+      'Demonstrated expertise in cGMP compliance and SFDA/FDA regulatory expectations.',
+      'Strong verbal and written English communication skills.'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-mfg-01',
+    title: 'Process Development Engineer',
+    department: 'Manufacturing',
+    location: 'King Abdullah Economic City',
+    experience: '3 - 6 years',
+    type: 'Full-Time',
+    overview: 'Oversee the scale-up and optimization of bioreactor and purification unit operations at our advanced commercial manufacturing complex.',
+    responsibilities: [
+      'Scale upstream and downstream bioprocesses from bench scale to commercial bioreactors (up to 2,000L).',
+      'Execute tech transfer protocols and equipment qualification (IQ/OQ/PQ) in cleanroom environments.',
+      'Implement automated Process Analytical Technology (PAT) to monitor critical process parameters.',
+      'Drive root-cause investigations and process deviation resolutions using DMAIC methodology.'
+    ],
+    qualifications: [
+      'B.Sc. or M.Sc. in Chemical Engineering, Biochemical Engineering, or Biotechnology.',
+      '3–6 years of upstream/downstream bioprocess engineering in an aseptic vaccine or biologic facility.',
+      'Experience with single-use bioreactors, chromatography skids, and ultrafiltration/diafiltration systems.',
+      'Familiarity with clean utility systems (WFI, clean steam, compressed clean air).'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-qa-01',
+    title: 'Quality Assurance Specialist',
+    department: 'Quality',
+    location: 'Riyadh, KSA',
+    experience: '2 - 4 years',
+    type: 'Full-Time',
+    overview: 'Ensure strict compliance with national and international cGMP guidelines across analytical, production, and supply chain operations.',
+    responsibilities: [
+      'Review and approve batch production records, validation protocols, and analytical test results.',
+      'Administer quality management systems (CAPA, change control, deviation management).',
+      'Conduct internal quality audits and prepare facility teams for SFDA inspections.',
+      'Collaborate with manufacturing teams on line clearance and cleanroom environmental monitoring.'
+    ],
+    qualifications: [
+      'Bachelor’s degree in Pharmacy, Chemistry, Microbiology, or related science.',
+      '2–4 years of Quality Assurance experience in a licensed pharmaceutical or vaccine manufacturing plant.',
+      'Thorough knowledge of SFDA GMP guidelines, WHO standards, and ICH quality guidelines.',
+      'High attention to detail and sound technical writing skills.'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-ra-01',
+    title: 'Regulatory Affairs Manager',
+    department: 'Regulatory Affairs',
+    location: 'Riyadh, KSA',
+    experience: '6 - 10 years',
+    type: 'Full-Time',
+    overview: 'Drive regulatory strategy and life-cycle management for VIC’s human vaccine portfolio with the Saudi Food & Drug Authority (SFDA) and regional health authorities.',
+    responsibilities: [
+      'Lead the compilation, submission, and defense of Marketing Authorization Applications (MAA) in eCTD format.',
+      'Liaise directly with the SFDA and Ministry of Health on vaccine registration and fast-track pathways.',
+      'Provide strategic regulatory guidance on technology transfers and post-approval variations.',
+      'Monitor evolving regional and global vaccine regulatory requirements to ensure proactive compliance.'
+    ],
+    qualifications: [
+      'Degree in Pharmacy, Pharmacology, or Life Sciences (Master’s or PharmD preferred).',
+      '6–10 years of progressive regulatory affairs experience in Saudi Arabia or the GCC region.',
+      'Proven track record of successful biologic or vaccine product registrations with SFDA.',
+      'Expertise in eCTD compilation and life-cycle regulatory dossier management.'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-sc-01',
+    title: 'Supply Chain Planner',
+    department: 'Supply Chain',
+    location: 'Riyadh, KSA',
+    experience: '2 - 5 years',
+    type: 'Full-Time',
+    overview: 'Optimize cold-chain distribution, master production scheduling, and critical biopharmaceutical raw material inventories.',
+    responsibilities: [
+      'Develop end-to-end master production schedules aligned with national vaccination campaign requirements.',
+      'Manage cold-chain logistics (-80°C, -20°C, and 2-8°C) ensuring GDP validation across transport lanes.',
+      'Maintain material requirements planning (MRP) for critical single-use consumables and media.',
+      'Liaise with customs clearance agencies and health authorities for rapid material import permits.'
+    ],
+    qualifications: [
+      'Bachelor’s in Supply Chain Management, Industrial Engineering, or Business Administration.',
+      '2–5 years of biopharma or pharmaceutical supply chain experience in Saudi Arabia.',
+      'Knowledge of cold-chain GDP regulations and temperature-controlled validation standards.',
+      'Proficiency with enterprise ERP platforms (SAP/Oracle).'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-hr-01',
+    title: 'HR Business Partner',
+    department: 'Human Resources',
+    location: 'Riyadh, KSA',
+    experience: '3 - 6 years',
+    type: 'Full-Time',
+    overview: 'Champion talent acquisition, Saudization initiatives, and workforce capability building for VIC’s high-growth biotechnology teams.',
+    responsibilities: [
+      'Partner with executive department leaders to attract and recruit specialized biotech and engineering talent.',
+      'Implement specialized development and training tracks in partnership with international institutions.',
+      'Foster organizational culture, employee engagement, and talent retention programs.',
+      'Ensure alignment with Saudi Labor Law, Saudization quotas (Nitaqat), and national human capital targets.'
+    ],
+    qualifications: [
+      'Bachelor’s degree in Human Resources, Business Administration, or related discipline.',
+      '3–6 years of HRBP or talent acquisition experience in pharmaceutical, healthcare, or technology industries.',
+      'Strong knowledge of Saudi Labor Law, Qiwa, and Muqeem systems.',
+      'Bilingual proficiency in Arabic and English.'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-mfg-02',
+    title: 'Bioprocess Validation Engineer',
+    department: 'Manufacturing',
+    location: 'Sudair Industrial City',
+    experience: '3 - 6 years',
+    type: 'Full-Time',
+    overview: 'Execute cleaning validation, process validation, and thermal mapping across Sudair biomanufacturing lines.',
+    responsibilities: [
+      'Author and execute IQ/OQ/PQ protocols for aseptic filling isolators, freeze dryers, and formulation skids.',
+      'Lead cleaning validation studies, recovery tests, and carryover limit assessments.',
+      'Collaborate with engineering and manufacturing teams to ensure re-qualification cycles are maintained.'
+    ],
+    qualifications: [
+      'Degree in Engineering, Pharmaceutical Sciences, or Industrial Technology.',
+      '3+ years validation experience in sterile injectables or biologic production.',
+      'Demonstrated understanding of Annex 1 sterile manufacturing requirements.'
+    ],
+    status: 'Active'
+  },
+  {
+    job_code: 'vic-rd-02',
+    title: 'Formulation & Drug Delivery Scientist',
+    department: 'Research & Development',
+    location: 'Riyadh, KSA',
+    experience: '5 - 8 years',
+    type: 'Full-Time',
+    overview: 'Develop and evaluate novel adjuvant formulations and liquid stabilization matrices for vaccine storage stability.',
+    responsibilities: [
+      'Formulate emulsion, liposomal, and nanoparticle adjuvants for enhanced immune response.',
+      'Conduct accelerated and real-time stability studies in accordance with ICH Q1A guidelines.',
+      'Characterize formulation physical stability via DLS, zeta potential, and high-resolution microscopy.'
+    ],
+    qualifications: [
+      'Ph.D. or Master’s in Pharmaceutical Sciences, Physical Chemistry, or Nanotechnology.',
+      '5+ years experience in sterile formulation development or biophysical characterization.'
+    ],
+    status: 'Active'
+  }
+];
+
+async function seedJobPostings(db, force = false) {
+  const [existing] = await db.query('SELECT COUNT(*) as count FROM job_postings');
+  if (existing[0].count === 0 || force) {
+    if (force) {
+      await db.query('DELETE FROM job_postings');
+    }
+    for (const job of defaultJobPositions) {
+      await db.query(`
+        INSERT INTO job_postings (job_code, title, department, location, type, experience, overview, description, requirements, responsibilities, qualifications, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        job.job_code,
+        job.title,
+        job.department,
+        job.location,
+        job.type,
+        job.experience,
+        job.overview,
+        job.overview, // fallback for description
+        Array.isArray(job.qualifications) ? job.qualifications.join('\n') : '', // fallback for requirements
+        JSON.stringify(job.responsibilities),
+        JSON.stringify(job.qualifications),
+        job.status
+      ]);
+    }
+    console.log(`[DB Seed] Seeded ${defaultJobPositions.length} default career job postings.`);
+  }
 }
 
 // Getter for pool
@@ -274,5 +504,7 @@ function getPool() {
 
 module.exports = {
   initDatabase,
-  getPool
+  getPool,
+  seedJobPostings,
+  defaultJobPositions
 };

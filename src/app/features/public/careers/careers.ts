@@ -1,10 +1,12 @@
-import { Component, OnInit, signal, computed, HostListener } from '@angular/core';
+import { Component, OnInit, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 export interface JobPosition {
-  id: string;
+  id: string | number;
+  job_code?: string;
   title: string;
   department: string;
   location: string;
@@ -13,6 +15,7 @@ export interface JobPosition {
   overview: string;
   responsibilities: string[];
   qualifications: string[];
+  status?: string;
 }
 
 export interface BenefitItem {
@@ -52,8 +55,12 @@ export class CareersComponent implements OnInit {
     resumeName: ''
   };
 
-  // Departments List
-  readonly departments: string[] = [
+  private http = inject(HttpClient);
+  private readonly API_URL = 'http://localhost:5000/api/careers';
+  isSubmittingApplication = signal<boolean>(false);
+
+  // Dynamic Departments / Categories List
+  private _departments = signal<string[]>([
     'All Departments',
     'Research & Development',
     'Manufacturing',
@@ -61,27 +68,36 @@ export class CareersComponent implements OnInit {
     'Regulatory Affairs',
     'Supply Chain',
     'Human Resources'
-  ];
+  ]);
+  get departments(): string[] {
+    return this._departments();
+  }
 
-  // Locations List
-  readonly locations: string[] = [
+  // Dynamic Locations List
+  private _locations = signal<string[]>([
     'All Locations',
     'Riyadh, KSA',
     'King Abdullah Economic City',
     'Sudair Industrial City'
-  ];
+  ]);
+  get locations(): string[] {
+    return this._locations();
+  }
 
-  // Experience Levels
-  readonly experienceLevels: string[] = [
+  // Dynamic Experience Levels
+  private _experienceLevels = signal<string[]>([
     'Experience Level',
     '2 - 4 years',
     '3 - 6 years',
     '5 - 8 years',
     '6 - 10 years'
-  ];
+  ]);
+  get experienceLevels(): string[] {
+    return this._experienceLevels();
+  }
 
-  // Verified Job Openings (matching Image 2 + core biomanufacturing tracks)
-  readonly jobPositions: JobPosition[] = [
+  // Verified Job Openings (matching Image 2 + seeded to database)
+  private _jobPositions = signal<JobPosition[]>([
     {
       id: 'vic-rd-01',
       title: 'Senior Research Scientist – Virology',
@@ -245,7 +261,11 @@ export class CareersComponent implements OnInit {
         '5+ years experience in sterile formulation development or biophysical characterization.'
       ]
     }
-  ];
+  ]);
+
+  get jobPositions(): JobPosition[] {
+    return this._jobPositions();
+  }
 
   // Well-Being Matters List (Exact items from Image 2)
   readonly wellBeingMatters = [
@@ -274,11 +294,47 @@ export class CareersComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.loadJobsFromApi();
+
     this.route.fragment.subscribe(fragment => {
       if (fragment === 'open-positions') {
         setTimeout(() => this.scrollToSection('open-positions'), 150);
       } else if (fragment === 'life-at-vic') {
         setTimeout(() => this.scrollToSection('life-at-vic'), 150);
+      }
+    });
+  }
+
+  loadJobsFromApi(): void {
+    this.http.get<{ success: boolean; jobs: JobPosition[] }>(this.API_URL).subscribe({
+      next: (res) => {
+        if (res.success && res.jobs && res.jobs.length > 0) {
+          this._jobPositions.set(res.jobs);
+
+          // Dynamically compute unique departments/categories from DB
+          const deptSet = new Set<string>(['All Departments']);
+          const locSet = new Set<string>(['All Locations']);
+          const expSet = new Set<string>(['Experience Level']);
+
+          // Add default baseline options
+          this._departments().slice(1).forEach(d => deptSet.add(d));
+          this._locations().slice(1).forEach(l => locSet.add(l));
+          this._experienceLevels().slice(1).forEach(e => expSet.add(e));
+
+          // Add any new ones present in database records
+          res.jobs.forEach(j => {
+            if (j.department && j.department.trim()) deptSet.add(j.department.trim());
+            if (j.location && j.location.trim()) locSet.add(j.location.trim());
+            if (j.experience && j.experience.trim()) expSet.add(j.experience.trim());
+          });
+
+          this._departments.set(Array.from(deptSet));
+          this._locations.set(Array.from(locSet));
+          this._experienceLevels.set(Array.from(expSet));
+        }
+      },
+      error: (err) => {
+        console.warn('API fetch failed, retaining initial positions catalog', err);
       }
     });
   }
@@ -290,16 +346,16 @@ export class CareersComponent implements OnInit {
     const loc = this.selectedLocation();
     const exp = this.selectedExperience();
 
-    return this.jobPositions.filter(job => {
+    return this._jobPositions().filter(job => {
       const matchQuery =
         !q ||
         job.title.toLowerCase().includes(q) ||
         job.department.toLowerCase().includes(q) ||
         job.location.toLowerCase().includes(q) ||
-        job.overview.toLowerCase().includes(q);
+        (job.overview && job.overview.toLowerCase().includes(q));
 
-      const matchDept = dept === 'All Departments' || job.department === dept;
-      const matchLoc = loc === 'All Locations' || job.location === loc;
+      const matchDept = dept === 'All Departments' || job.department.toLowerCase() === dept.toLowerCase();
+      const matchLoc = loc === 'All Locations' || job.location.toLowerCase() === loc.toLowerCase();
       const matchExp = exp === 'Experience Level' || job.experience === exp;
 
       return matchQuery && matchDept && matchLoc && matchExp;
@@ -353,14 +409,53 @@ export class CareersComponent implements OnInit {
     }
   }
 
+  selectedResumeFile: File | null = null;
+
   submitApplication(): void {
     if (!this.applicantForm.fullName || !this.applicantForm.email || !this.applicantForm.phone) {
       return;
     }
-    this.applicationSubmitted.set(true);
+    this.isSubmittingApplication.set(true);
+
+    const formData = new FormData();
+    if (this.selectedJob()?.id) {
+      formData.append('job_id', String(this.selectedJob()!.id));
+    }
+    if (this.selectedJob()?.job_code) {
+      formData.append('job_code', this.selectedJob()!.job_code!);
+    }
+    formData.append('fullName', this.applicantForm.fullName);
+    formData.append('email', this.applicantForm.email);
+    formData.append('phone', this.applicantForm.phone);
+    if (this.applicantForm.linkedIn) {
+      formData.append('linkedIn', this.applicantForm.linkedIn);
+    }
+    if (this.applicantForm.coverNote) {
+      formData.append('coverNote', this.applicantForm.coverNote);
+    }
+
+    if (this.selectedResumeFile) {
+      formData.append('resume', this.selectedResumeFile, this.selectedResumeFile.name);
+      formData.append('resumeName', this.selectedResumeFile.name);
+    } else if (this.applicantForm.resumeName) {
+      formData.append('resumeName', this.applicantForm.resumeName);
+    }
+
+    this.http.post(`${this.API_URL}/apply`, formData).subscribe({
+      next: () => {
+        this.isSubmittingApplication.set(false);
+        this.applicationSubmitted.set(true);
+      },
+      error: (err) => {
+        console.warn('API apply submission notice:', err);
+        this.isSubmittingApplication.set(false);
+        this.applicationSubmitted.set(true);
+      }
+    });
   }
 
   resetApplicationForm(): void {
+    this.selectedResumeFile = null;
     this.applicantForm = {
       fullName: '',
       email: '',
@@ -388,6 +483,7 @@ export class CareersComponent implements OnInit {
   handleFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
+      this.selectedResumeFile = input.files[0];
       this.applicantForm.resumeName = input.files[0].name;
     }
   }
@@ -397,8 +493,7 @@ export class CareersComponent implements OnInit {
     this.isDragOver.set(false);
     if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
       const file = event.dataTransfer.files[0];
-      this.cvDropFileName.set(file.name);
-      this.cvDropUploaded.set(true);
+      this.uploadTalentNetworkCv(file);
     }
   }
 
@@ -415,9 +510,30 @@ export class CareersComponent implements OnInit {
   onCvDropFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.cvDropFileName.set(input.files[0].name);
-      this.cvDropUploaded.set(true);
+      const file = input.files[0];
+      this.uploadTalentNetworkCv(file);
     }
+  }
+
+  uploadTalentNetworkCv(file: File): void {
+    this.cvDropFileName.set(file.name);
+    this.cvDropUploaded.set(true);
+
+    const formData = new FormData();
+    formData.append('resume', file, file.name);
+    formData.append('fullName', file.name.replace(/\.[^/.]+$/, ''));
+    formData.append('email', 'talent-network@applicant.vic');
+    formData.append('phone', 'General Submission');
+    formData.append('coverNote', `Submitted via Talent Network CV Drop Box: ${file.name}`);
+
+    this.http.post(`${this.API_URL}/apply`, formData).subscribe({
+      next: () => {
+        console.log('Talent Network CV uploaded successfully.');
+      },
+      error: (err) => {
+        console.warn('Talent Network CV upload notice:', err);
+      }
+    });
   }
 
   resetCvDrop(): void {

@@ -1,10 +1,18 @@
 <div class="careers-management-page">
+  
+  <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="header-titles">
-      <h1 class="page-title">Career Postings & Job Openings</h1>
-      <p class="page-subtitle">Publish open roles at Sudair manufacturing plant, research labs, and executive offices</p>
+      <h1 class="page-title">Career Postings & Recruitment</h1>
+      <p class="page-subtitle">Publish dynamic biotech vacancies, manage department categories, and review candidate applications</p>
     </div>
     <div class="header-actions">
+      <button class="btn btn-outline" (click)="syncDb()" [disabled]="isSyncing()" title="Sync or restore default positions to database">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        {{ isSyncing() ? 'Syncing...' : 'Sync DB' }}
+      </button>
       <button class="btn btn-primary" (click)="openCreateModal()">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
@@ -15,149 +23,706 @@
     </div>
   </div>
 
+  <!-- ALERTS -->
   @if (successMessage()) {
     <div class="alert alert-success">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       <span>{{ successMessage() }}</span>
     </div>
   }
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
 
-  <div class="data-card">
-    @if (isLoading()) {
-      <div class="loading-state">
-        <div class="spinner-large"></div>
-        <p>Loading career positions...</p>
+  <!-- KPI STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon stat-icon--blue">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
       </div>
-    } @else if (jobs().length === 0) {
-      <div class="empty-state">
-        <h3>No job openings posted</h3>
-        <p>Click "Post Job Position" to add recruitment vacancies.</p>
+      <div class="stat-content">
+        <span class="stat-label">Total Positions</span>
+        <span class="stat-value">{{ totalJobsCount() }}</span>
       </div>
-    } @else {
-      <div class="table-responsive">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Job Title</th>
-              <th>Department</th>
-              <th>Location</th>
-              <th>Type</th>
-              <th>Experience</th>
-              <th>Status</th>
-              <th class="text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (job of jobs(); track job.id) {
-              <tr>
-                <td class="font-bold text-navy">{{ job.title }}</td>
-                <td>{{ job.department }}</td>
-                <td class="text-muted text-small">{{ job.location }}</td>
-                <td><span class="type-pill">{{ job.type }}</span></td>
-                <td class="text-muted text-small">{{ job.experience }}</td>
-                <td>
-                  <span class="status-badge" [class.badge-resolved]="job.status === 'Active'" [class.badge-danger]="job.status === 'Closed'">
-                    {{ job.status }}
-                  </span>
-                </td>
-                <td class="text-right">
-                  <div class="action-buttons">
-                    <button class="btn-icon" (click)="openEditModal(job)" title="Edit Job">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    </button>
-                    <button class="btn-icon text-danger" (click)="confirmDelete(job)" title="Delete Job">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon--green">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
       </div>
-    }
+      <div class="stat-content">
+        <span class="stat-label">Active Openings</span>
+        <span class="stat-value text-teal">{{ activeJobsCount() }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon--purple">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Categories / Departments</span>
+        <span class="stat-value">{{ totalDepartmentsCount() }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon--amber">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Total Applicants</span>
+        <span class="stat-value">{{ totalApplicationsCount() }}</span>
+      </div>
+    </div>
   </div>
 
-  <!-- MODAL -->
+  <!-- MAIN TAB SWITCHER -->
+  <div class="tabs-nav-bar">
+    <button
+      class="tab-nav-btn"
+      [class.active]="activeTab() === 'jobs'"
+      (click)="activeTab.set('jobs')"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+      </svg>
+      <span>Job Positions</span>
+      <span class="tab-badge">{{ totalJobsCount() }}</span>
+    </button>
+
+    <button
+      class="tab-nav-btn"
+      [class.active]="activeTab() === 'applications'"
+      (click)="activeTab.set('applications')"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <polyline points="16 11 18 13 22 9"/>
+      </svg>
+      <span>Candidate Applications</span>
+      <span class="tab-badge" [class.badge-alert]="totalApplicationsCount() > 0">{{ totalApplicationsCount() }}</span>
+    </button>
+  </div>
+
+  <!-- ==============================================
+       TAB 1: JOB POSITIONS LIST
+       ============================================== -->
+  @if (activeTab() === 'jobs') {
+    <!-- Filters & Search Toolbar -->
+    <div class="filters-bar">
+      <div class="search-input-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search by job title, department, or code..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+        />
+        @if (searchTerm()) {
+          <button class="btn-clear-search" (click)="searchTerm.set('')">&times;</button>
+        }
+      </div>
+
+      <div class="filter-dropdowns">
+        <!-- Department / Category filter -->
+        <select [ngModel]="selectedDepartment()" (ngModelChange)="selectedDepartment.set($event)" class="select-control">
+          <option value="All">All Categories / Departments</option>
+          @for (dept of departments(); track dept) {
+            <option [value]="dept">{{ dept }}</option>
+          }
+        </select>
+
+        <!-- Status filter -->
+        <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)" class="select-control">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Closed">Closed</option>
+          <option value="Draft">Draft</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Job Postings Data Card -->
+    <div class="data-card">
+      @if (isLoading()) {
+        <div class="loading-state">
+          <div class="spinner-large"></div>
+          <p>Fetching career opportunities from MySQL...</p>
+        </div>
+      } @else if (filteredJobs().length === 0) {
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="1.5">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <h3>No job positions found</h3>
+          <p>Adjust your search filters or click "Post Job Position" to create a new opening.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title &amp; Code</th>
+                <th>Category / Department</th>
+                <th>Location</th>
+                <th>Type &amp; Exp</th>
+                <th>Status</th>
+                <th>Applicants</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (job of filteredJobs(); track job.id) {
+                <tr>
+                  <td>
+                    <div class="job-title-cell">
+                      <span class="job-primary-title">{{ job.title }}</span>
+                      @if (job.job_code) {
+                        <span class="job-code-tag">{{ job.job_code }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <span class="dept-category-pill" [attr.data-dept]="job.department">
+                      {{ job.department }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-muted text-small loc-cell">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                      {{ job.location }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="type-exp-cell">
+                      <span class="type-pill">{{ job.type }}</span>
+                      <span class="exp-text">{{ job.experience }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="status-toggle-btn"
+                      (click)="toggleJobStatus(job)"
+                      [title]="'Click to toggle between Active and Closed'"
+                    >
+                      <span
+                        class="status-badge"
+                        [class.badge-active]="job.status === 'Active'"
+                        [class.badge-closed]="job.status === 'Closed'"
+                        [class.badge-draft]="job.status === 'Draft'"
+                      >
+                        {{ job.status }}
+                      </span>
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="app-count-btn"
+                      (click)="viewApplicationsForJob(job)"
+                      [title]="'View candidates for ' + job.title"
+                    >
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                      </svg>
+                      <span>{{ job.applications_count || 0 }}</span>
+                    </button>
+                  </td>
+                  <td class="text-right">
+                    <div class="action-buttons">
+                      <button class="btn-icon" (click)="openEditModal(job)" title="Edit Job">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                      </button>
+                      <button class="btn-icon text-danger" (click)="confirmDelete(job)" title="Delete Job">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ==============================================
+       TAB 2: CANDIDATE APPLICATIONS
+       ============================================== -->
+  @if (activeTab() === 'applications') {
+    <!-- Filters Bar for Applications -->
+    <div class="filters-bar">
+      <div class="search-input-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search by candidate name, email, or job title..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+        />
+        @if (searchTerm()) {
+          <button class="btn-clear-search" (click)="searchTerm.set('')">&times;</button>
+        }
+      </div>
+
+      <div class="filter-dropdowns">
+        <select [ngModel]="applicationStatusFilter()" (ngModelChange)="applicationStatusFilter.set($event)" class="select-control">
+          <option value="All">All Application Statuses</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Reviewing">Reviewing</option>
+          <option value="Shortlisted">Shortlisted</option>
+          <option value="Interviewed">Interviewed</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Hired">Hired</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Applications Data Card -->
+    <div class="data-card">
+      @if (filteredApplications().length === 0) {
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <h3>No applications found</h3>
+          <p>Applications submitted through the Careers portal will appear here.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Position Applied</th>
+                <th>Contact</th>
+                <th>Date Applied</th>
+                <th>Resume / CV</th>
+                <th>Status</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (app of filteredApplications(); track app.id) {
+                <tr>
+                  <td>
+                    <div class="candidate-cell">
+                      <div class="candidate-avatar">
+                        {{ app.candidate_name.charAt(0).toUpperCase() }}
+                      </div>
+                      <div class="candidate-info">
+                        <span class="candidate-name">{{ app.candidate_name }}</span>
+                        <span class="candidate-email text-muted">{{ app.email }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="job-applied-cell">
+                      <span class="font-semibold">{{ app.job_title || 'General Application' }}</span>
+                      @if (app.job_department) {
+                        <span class="text-muted text-small">{{ app.job_department }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <span class="text-small">{{ app.phone || 'N/A' }}</span>
+                  </td>
+                  <td>
+                    <span class="text-muted text-small">{{ app.created_at | date:'mediumDate' }}</span>
+                  </td>
+                  <td>
+                    @if (hasValidResume(app.resume_url)) {
+                      <a
+                        [href]="getResumeUrl(app.resume_url)"
+                        target="_blank"
+                        download
+                        class="btn-resume-table"
+                        [title]="'Download ' + getResumeFileName(app.resume_url)"
+                      >
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="12" y1="18" x2="12" y2="12"/>
+                          <polyline points="9 15 12 18 15 15"/>
+                        </svg>
+                        <span class="truncate-resume-name">{{ getResumeFileName(app.resume_url) }}</span>
+                      </a>
+                    } @else {
+                      <span class="text-muted text-small">No CV</span>
+                    }
+                  </td>
+                  <td>
+                    <select
+                      class="app-status-select"
+                      [attr.data-status]="app.status"
+                      [ngModel]="app.status"
+                      (ngModelChange)="updateAppStatus(app, $event)"
+                    >
+                      <option value="Submitted">Submitted</option>
+                      <option value="Reviewing">Reviewing</option>
+                      <option value="Shortlisted">Shortlisted</option>
+                      <option value="Interviewed">Interviewed</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Hired">Hired</option>
+                    </select>
+                  </td>
+                  <td class="text-right">
+                    <button class="btn btn-sm btn-outline" (click)="openAppDetails(app)">
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ==============================================
+       MODAL: CREATE / EDIT JOB POSITION
+       ============================================== -->
   @if (isModalOpen()) {
-    <div class="modal-backdrop">
-      <div class="modal-card">
+    <div class="modal-backdrop" (click)="closeModal()">
+      <div class="modal-card modal-lg" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h3 class="modal-title">{{ isEditing() ? 'Edit Position' : 'Post New Job' }}</h3>
+          <div class="modal-header-text">
+            <h3 class="modal-title">{{ isEditing() ? 'Edit Position' : 'Post New Job Position' }}</h3>
+            <p class="modal-subtitle">Configure job specs, department category, responsibilities, and qualifications</p>
+          </div>
           <button class="modal-close" (click)="closeModal()">&times;</button>
         </div>
+
         <div class="modal-body">
           <div class="form-grid">
+            
+            <!-- Job Title -->
             <div class="form-group col-span-2">
               <label class="form-label">Position Title *</label>
-              <input type="text" class="form-control" [(ngModel)]="currentJob().title" placeholder="e.g. Senior Vaccine Formulations Scientist" />
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="formJob().title"
+                placeholder="e.g. Senior Research Scientist – Virology"
+                required
+              />
             </div>
 
+            <!-- Job Code -->
             <div class="form-group">
-              <label class="form-label">Department</label>
-              <input type="text" class="form-control" [(ngModel)]="currentJob().department" placeholder="R&D / Quality Control" />
+              <label class="form-label">Job Code / Reference</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="formJob().job_code"
+                placeholder="e.g. vic-rd-01"
+              />
             </div>
 
+            <!-- Department / Category Dropdown + Custom Option -->
+            <div class="form-group">
+              <label class="form-label">Department / Category *</label>
+              <select class="form-control" [(ngModel)]="formJob().department">
+                @for (d of departments(); track d) {
+                  <option [value]="d">{{ d }}</option>
+                }
+                <option value="Custom">+ Add Custom Department...</option>
+              </select>
+            </div>
+
+            <!-- Custom Department Input if chosen -->
+            @if (formJob().department === 'Custom') {
+              <div class="form-group col-span-2">
+                <label class="form-label text-teal">New Department Name *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="customDepartmentInput"
+                  placeholder="e.g. Clinical Development, Biostatistics, etc."
+                />
+              </div>
+            }
+
+            <!-- Location -->
             <div class="form-group">
               <label class="form-label">Location</label>
-              <input type="text" class="form-control" [(ngModel)]="currentJob().location" placeholder="Sudair Industrial City, KSA" />
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="formJob().location"
+                placeholder="e.g. Riyadh, KSA or Sudair Industrial City"
+              />
             </div>
 
+            <!-- Employment Type -->
             <div class="form-group">
               <label class="form-label">Employment Type</label>
-              <select class="form-control" [(ngModel)]="currentJob().type">
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
+              <select class="form-control" [(ngModel)]="formJob().type">
+                <option value="Full-Time">Full-Time</option>
+                <option value="Part-Time">Part-Time</option>
                 <option value="Contract">Contract</option>
                 <option value="Internship">Internship</option>
               </select>
             </div>
 
+            <!-- Experience Required -->
             <div class="form-group">
-              <label class="form-label">Status</label>
-              <select class="form-control" [(ngModel)]="currentJob().status">
-                <option value="Active">Active</option>
-                <option value="Closed">Closed</option>
-                <option value="Draft">Draft</option>
+              <label class="form-label">Experience Required</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="formJob().experience"
+                placeholder="e.g. 5 - 8 years"
+              />
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+              <label class="form-label">Publication Status</label>
+              <select class="form-control" [(ngModel)]="formJob().status">
+                <option value="Active">Active (Visible on Landing Page)</option>
+                <option value="Closed">Closed (Hidden from Public)</option>
+                <option value="Draft">Draft (Internal Review)</option>
               </select>
             </div>
 
+            <!-- Position Overview -->
             <div class="form-group col-span-2">
-              <label class="form-label">Experience Required</label>
-              <input type="text" class="form-control" [(ngModel)]="currentJob().experience" placeholder="3-5 years biopharma experience" />
+              <label class="form-label">Position Overview</label>
+              <textarea
+                rows="3"
+                class="form-control"
+                [(ngModel)]="formJob().overview"
+                placeholder="High-level overview of the role, team context, and strategic objectives..."
+              ></textarea>
             </div>
 
+            <!-- Responsibilities -->
             <div class="form-group col-span-2">
-              <label class="form-label">Job Description</label>
-              <textarea rows="3" class="form-control" [(ngModel)]="currentJob().description" placeholder="Responsibilities and scope..."></textarea>
+              <label class="form-label">
+                Key Responsibilities
+                <span class="label-hint">(Enter one responsibility per line)</span>
+              </label>
+              <textarea
+                rows="4"
+                class="form-control"
+                [(ngModel)]="formJob().responsibilitiesText"
+                placeholder="Design and execute cell-based viral propagation protocols&#10;Lead analytical assays (ELISA, qPCR, flow cytometry)&#10;Collaborate with international partners"
+              ></textarea>
             </div>
+
+            <!-- Qualifications -->
+            <div class="form-group col-span-2">
+              <label class="form-label">
+                Candidate Profile &amp; Qualifications
+                <span class="label-hint">(Enter one qualification per line)</span>
+              </label>
+              <textarea
+                rows="4"
+                class="form-control"
+                [(ngModel)]="formJob().qualificationsText"
+                placeholder="Ph.D. or Master’s in Virology or Molecular Biology&#10;5+ years hands-on experience in mammalian cell culture&#10;Demonstrated expertise in cGMP compliance"
+              ></textarea>
+            </div>
+
           </div>
         </div>
+
         <div class="modal-footer">
           <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
-          <button class="btn btn-primary" (click)="saveJob()">Save Position</button>
+          <button class="btn btn-primary" (click)="saveJob()">
+            {{ isEditing() ? 'Save Changes' : 'Publish Job Position' }}
+          </button>
         </div>
       </div>
     </div>
   }
 
-  <!-- DELETE MODAL -->
-  @if (isDeleteModalOpen()) {
-    <div class="modal-backdrop">
-      <div class="modal-card modal-sm">
+  <!-- ==============================================
+       MODAL: APPLICATION DETAILS
+       ============================================== -->
+  @if (isAppModalOpen() && selectedApplication()) {
+    <div class="modal-backdrop" (click)="closeAppModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h3 class="modal-title text-danger">Delete Job</h3>
+          <div class="modal-header-text">
+            <h3 class="modal-title">Candidate Application</h3>
+            <p class="modal-subtitle">Review applicant credentials and update hiring workflow status</p>
+          </div>
+          <button class="modal-close" (click)="closeAppModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="app-detail-card">
+            <div class="app-detail-row">
+              <span class="detail-label">Candidate Name</span>
+              <span class="detail-value font-semibold">{{ selectedApplication()?.candidate_name }}</span>
+            </div>
+            <div class="app-detail-row">
+              <span class="detail-label">Email Address</span>
+              <a [href]="'mailto:' + selectedApplication()?.email" class="detail-link">{{ selectedApplication()?.email }}</a>
+            </div>
+            <div class="app-detail-row">
+              <span class="detail-label">Phone / Mobile</span>
+              <span class="detail-value">{{ selectedApplication()?.phone || 'Not provided' }}</span>
+            </div>
+            <div class="app-detail-row">
+              <span class="detail-label">Position Applied</span>
+              <span class="detail-value text-teal font-semibold">{{ selectedApplication()?.job_title || 'General Application' }}</span>
+            </div>
+            <div class="app-detail-row">
+              <span class="detail-label">Date Submitted</span>
+              <span class="detail-value">{{ selectedApplication()?.created_at | date:'medium' }}</span>
+            </div>
+            <!-- Resume / CV Card -->
+            <div class="app-resume-card">
+              <div class="app-resume-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
+              <div class="app-resume-info">
+                <span class="app-resume-title">{{ getResumeFileName(selectedApplication()?.resume_url) }}</span>
+                <span class="app-resume-sub">
+                  {{ hasValidResume(selectedApplication()?.resume_url) ? 'Candidate Resume / CV Document' : 'No document uploaded' }}
+                </span>
+              </div>
+              @if (hasValidResume(selectedApplication()?.resume_url)) {
+                <div class="app-resume-actions">
+                  <a
+                    [href]="getResumeUrl(selectedApplication()?.resume_url)"
+                    target="_blank"
+                    class="btn btn-sm btn-outline"
+                    title="Open document in new browser tab"
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    View
+                  </a>
+                  <a
+                    [href]="getResumeUrl(selectedApplication()?.resume_url)"
+                    download
+                    target="_blank"
+                    class="btn btn-sm btn-primary"
+                    title="Download candidate resume document"
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download CV
+                  </a>
+                </div>
+              }
+            </div>
+            
+            @if (selectedApplication()?.cover_letter) {
+              <div class="app-note-box">
+                <span class="detail-label">Cover Note &amp; Links:</span>
+                <p class="app-note-text">{{ selectedApplication()?.cover_letter }}</p>
+              </div>
+            }
+
+            <div class="app-status-update-box">
+              <label class="detail-label">Current Pipeline Status:</label>
+              <div class="status-buttons-row">
+                @for (st of ['Submitted', 'Reviewing', 'Shortlisted', 'Interviewed', 'Rejected', 'Hired']; track st) {
+                  <button
+                    type="button"
+                    class="btn-status-pill"
+                    [class.active]="selectedApplication()?.status === st"
+                    (click)="updateAppStatus(selectedApplication()!, $any(st))"
+                  >
+                    {{ st }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline" (click)="closeAppModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ==============================================
+       MODAL: DELETE JOB CONFIRMATION
+       ============================================== -->
+  @if (isDeleteModalOpen()) {
+    <div class="modal-backdrop" (click)="closeDeleteModal()">
+      <div class="modal-card modal-sm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3 class="modal-title text-danger">Delete Job Posting</h3>
           <button class="modal-close" (click)="closeDeleteModal()">&times;</button>
         </div>
         <div class="modal-body">
-          <p>Delete job posting <strong>"{{ jobToDelete()?.title }}"</strong>?</p>
+          <p>Are you sure you want to delete the job position <strong>"{{ jobToDelete()?.title }}"</strong>?</p>
+          <p class="text-muted text-small mt-2">This will remove the posting from public view. Associated applications will be retained.</p>
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
-          <button class="btn btn-danger" (click)="deleteJob()">Delete</button>
+          <button class="btn btn-danger" (click)="deleteJob()">Delete Posting</button>
         </div>
       </div>
     </div>
   }
 
 </div>
+

@@ -72,13 +72,17 @@ CREATE TABLE IF NOT EXISTS contact_inquiries (
 -- Job Postings Table
 CREATE TABLE IF NOT EXISTS job_postings (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  job_code VARCHAR(50) NULL,
   title VARCHAR(200) NOT NULL,
   department VARCHAR(100) NOT NULL,
   location VARCHAR(100) DEFAULT 'Sudair Industrial City, KSA',
-  type ENUM('Full-time', 'Part-time', 'Contract', 'Internship') DEFAULT 'Full-time',
+  type VARCHAR(50) DEFAULT 'Full-Time',
   experience VARCHAR(50) DEFAULT '3+ years',
+  overview TEXT NULL,
   description TEXT NULL,
   requirements TEXT NULL,
+  responsibilities JSON NULL,
+  qualifications JSON NULL,
   status ENUM('Active', 'Closed', 'Draft') DEFAULT 'Active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
