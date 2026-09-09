@@ -145,6 +145,93 @@ async function createTables(db) {
       console.log('[DB Migration Notice - About]', aboutMigErr.message);
     }
 
+    // Ensure products and products_page_settings tables exist and have utf8mb4 charset
+    try {
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS products (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          product_code VARCHAR(100) NOT NULL UNIQUE,
+          category ENUM('our-products', 'future-portfolio') DEFAULT 'our-products',
+          name VARCHAR(200) NOT NULL,
+          name_ar VARCHAR(200) NULL,
+          subtitle VARCHAR(255) NOT NULL,
+          subtitle_ar VARCHAR(255) NULL,
+          image VARCHAR(500) NOT NULL,
+          featured_image VARCHAR(500) NULL,
+          description TEXT NOT NULL,
+          description_ar TEXT NULL,
+          features JSON NULL,
+          features_ar JSON NULL,
+          specs JSON NULL,
+          specs_ar JSON NULL,
+          storage JSON NULL,
+          storage_ar JSON NULL,
+          indication_desc TEXT NULL,
+          indication_desc_ar TEXT NULL,
+          indication_target VARCHAR(255) NULL,
+          indication_target_ar VARCHAR(255) NULL,
+          indication_route VARCHAR(255) NULL,
+          indication_route_ar VARCHAR(255) NULL,
+          gallery JSON NULL,
+          resources JSON NULL,
+          resources_ar JSON NULL,
+          order_index INT DEFAULT 0,
+          status ENUM('Active', 'Inactive') DEFAULT 'Active',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+      `);
+
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS products_page_settings (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          hero_badge VARCHAR(100) DEFAULT 'OUR PRODUCTS',
+          hero_badge_ar VARCHAR(100) DEFAULT 'منتجاتنا',
+          hero_title_part1 VARCHAR(255) DEFAULT 'Innovative Vaccines.',
+          hero_title_part1_ar VARCHAR(255) DEFAULT 'لقاحات مبتكرة.',
+          hero_title_part2 VARCHAR(255) DEFAULT 'Trusted ',
+          hero_title_part2_ar VARCHAR(255) DEFAULT 'حماية ',
+          hero_title_accent VARCHAR(100) DEFAULT 'Protection.',
+          hero_title_accent_ar VARCHAR(100) DEFAULT 'موثوقة.',
+          hero_description TEXT NULL,
+          hero_description_ar TEXT NULL,
+          hero_image VARCHAR(500) DEFAULT 'home_banner.png',
+          section_eyebrow VARCHAR(100) DEFAULT 'OUR PRODUCTS',
+          section_eyebrow_ar VARCHAR(100) DEFAULT 'منتجاتنا الدوائية',
+          cta_badge VARCHAR(100) DEFAULT 'STRATEGIC COLLABORATION',
+          cta_badge_ar VARCHAR(100) DEFAULT 'شراكة استراتيجية',
+          cta_title_part1 VARCHAR(255) DEFAULT 'Building a Healthier Future, ',
+          cta_title_part1_ar VARCHAR(255) DEFAULT 'نبني مستقبلاً أكثر صحة، ',
+          cta_title_accent VARCHAR(100) DEFAULT 'Together.',
+          cta_title_accent_ar VARCHAR(100) DEFAULT 'معاً.',
+          cta_description TEXT NULL,
+          cta_description_ar TEXT NULL,
+          cta_btn_text VARCHAR(100) DEFAULT 'Explore Partnerships',
+          cta_btn_text_ar VARCHAR(100) DEFAULT 'استكشف شراكاتنا',
+          cta_link VARCHAR(255) DEFAULT '/partners',
+          page_resources JSON NULL,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+      `);
+      // Ensure indication_items dynamic fields exist
+      try {
+        const [prodColsRaw] = await db.query("SHOW COLUMNS FROM products");
+        const prodCols = prodColsRaw.map(c => c.Field);
+        if (!prodCols.includes('indication_items')) {
+          await db.query("ALTER TABLE products ADD COLUMN indication_items JSON NULL AFTER indication_route_ar");
+        }
+        if (!prodCols.includes('indication_items_ar')) {
+          await db.query("ALTER TABLE products ADD COLUMN indication_items_ar JSON NULL AFTER indication_items");
+        }
+      } catch (migColErr) {
+        console.log('[DB Migration Notice - indication_items]', migColErr.message);
+      }
+
+      console.log('[DB Migration] Products tables verified with Arabic columns and utf8mb4 charset.');
+    } catch (prodMigErr) {
+      console.log('[DB Migration Notice - Products]', prodMigErr.message);
+    }
+
     console.log('[DB] Database tables checked/created successfully.');
   }
 }
@@ -339,6 +426,9 @@ async function seedDefaultData(db) {
 
   // Seed default about us content & leaders if empty
   await seedAboutData(db);
+
+  // Seed default products & portfolio if empty
+  await seedProductsData(db);
 }
 
 const defaultJobPositions = [
@@ -895,10 +985,10 @@ const defaultAboutContent = {
   },
   vision_mission: {
     section_key: 'vision_mission',
-    badge: 'FOUNDATIONAL PILLARS',
-    badge_ar: 'الركائز التأسيسية',
-    title: 'Our Vision & Mission',
-    title_ar: 'رؤيتنا ورسالتنا',
+    badge: 'OUR PURPOSE',
+    badge_ar: 'أهدافنا',
+    title: '',
+    title_ar: '',
     content_json: {
       vision_title: 'OUR VISION',
       vision_paragraphs: [
@@ -1235,6 +1325,577 @@ async function seedAboutData(db, force = false) {
   }
 }
 
+// ==========================================
+// 4. PRODUCTS & PORTFOLIO DEFAULTS & SEEDING
+// ==========================================
+
+const defaultProductsList = [
+  {
+    product_code: 'flucelvax',
+    category: 'our-products',
+    name: 'Flucelvax®',
+    name_ar: 'Flucelvax®',
+    subtitle: 'Seasonal Influenza Vaccine',
+    subtitle_ar: 'لقاح الإنفلونزا الموسمية المعتمد على مزارع الخلايا',
+    image: 'flucelvax_featured.png',
+    featured_image: 'flucelvax_featured.png',
+    description: 'Flucelvax® is a next-generation, cell culture-based influenza vaccine designed to help protect against seasonal flu.',
+    description_ar: 'يعتبر Flucelvax® جيلاً متقدماً من لقاحات الإنفلونزا المصنعة بتقنية زراعة الخلايا لتوفير أقصى درجات الحماية من سلالات الإنفلونزا الموسمية.',
+    features: [
+      'Produced in MDCK cell culture',
+      'Egg-free manufacturing process',
+      'High purity and consistent quality'
+    ],
+    features_ar: [
+      'مصنع في مزارع خلايا MDCK الحيوية المتقدمة',
+      'خالٍ تماماً من البيض ومناسب للأشخاص ذوي الحساسية',
+      'درجة نقاء استثنائية وجودة تصنيعية متسقة عالمياً'
+    ],
+    specs: [
+      { label: 'Product Name', value: 'Flucelvax®' },
+      { label: 'Type', value: 'Seasonal Influenza Vaccine' },
+      { label: 'Technology', value: 'Cell Culture (MDCK)' },
+      { label: 'Formulation', value: 'Suspension for Injection' },
+      { label: 'Pack Size', value: '0.5 mL pre-filled syringe' },
+      { label: 'Route of Administration', value: 'Intramuscular use' },
+      { label: 'Manufacturer', value: 'Vaccine Industrial Company (VIC)' }
+    ],
+    specs_ar: [
+      { label: 'اسم المنتج الدوائي', value: 'Flucelvax®' },
+      { label: 'نوع اللقاح', value: 'لقاح الإنفلونزا الموسمية' },
+      { label: 'التقنية الحيوية', value: 'زراعة الخلايا (MDCK)' },
+      { label: 'الشكل الصيدلاني', value: 'معلق للحقن' },
+      { label: 'حجم العبوة', value: 'حقنة مسبقة التعبئة 0.5 مل' },
+      { label: 'طريقة الإعطاء', value: 'حقن عضلي' },
+      { label: 'جهة التصنيع', value: 'شركة اللقاحات الصناعية (VIC)' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: '24 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم، يمنع التجميد' },
+      { label: 'مدة الصلاحية', value: '24 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم، يحفظ في عبوته الأصلية' }
+    ],
+    indication_desc: 'is indicated for active immunization against seasonal and epidemic pathogens targeted by this vaccine. Administration must comply with official national health authority vaccination guidelines.',
+    indication_desc_ar: 'مخصص للتحصين الفعال ضد مسببات الأمراض الموسمية والوبائية المستهدفة بهذا اللقاح. ويجب أن تتوافق طريقة الإعطاء بدقة مع الإرشادات الوطنية المعتمدة من وزارة الصحة.',
+    indication_target: 'Individuals 6 months and older / High-risk and general population cohorts',
+    indication_target_ar: 'الأفراد من سن 6 أشهر فما فوق / الفئات الأكثر عرضة للمخاطر الصحية وعامة أفراد المجتمع',
+    indication_route: 'Administered via intramuscular injection by qualified healthcare professionals',
+    indication_route_ar: 'عن طريق الحقن العضلي بإشراف ممارسين صحيين معتمدين',
+    gallery: [
+      'flucelvax_featured.png',
+      'p4.jpg',
+      'flucelvax_modal_main.jpg',
+      'thumb_vials1.jpg'
+    ],
+    resources: [
+      { name: 'Product Information', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'Prescribing Information', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'Patient Information Leaflet', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    resources_ar: [
+      { name: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'نشرة معلومات المرضى', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'شهادة الجودة والتصنيع الدوائي', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    order_index: 0,
+    status: 'Active'
+  },
+  {
+    product_code: 'vaxigrip',
+    category: 'our-products',
+    name: 'Vaxigrip®',
+    name_ar: 'Vaxigrip®',
+    subtitle: 'Influenza Vaccine (Split Virion)',
+    subtitle_ar: 'لقاح الإنفلونزا (فيروس مجزأ معطل)',
+    image: 'p3.jpg',
+    featured_image: 'p3.jpg',
+    description: 'Vaxigrip® is formulated to provide robust seasonal protection against circulating influenza viruses, backed by proven clinical efficacy.',
+    description_ar: 'تم تطوير Vaxigrip® لتوفير استجابة مناعية قوية ضد فيروسات الإنفلونزا المنتشرة، مدعوماً بنتائج سريرية مثبتة على نطاق دولي واسع.',
+    features: [
+      'Quadrivalent broad protection against circulating flu strains',
+      'High batch-to-batch consistency and purity',
+      'Compliant with international WHO recommendations'
+    ],
+    features_ar: [
+      'حماية رباعية واسعة النطاق ضد سلالات الإنفلونزا المتداولة',
+      'اتساق عالي الجودة بين دفعات الإنتاج مع أعلى معايير النقاء',
+      'متطابق كلياً مع توصيات منظمة الصحة العالمية (WHO)'
+    ],
+    specs: [
+      { label: 'Product Name', value: 'Vaxigrip®' },
+      { label: 'Type', value: 'Influenza Vaccine (Split Virion)' },
+      { label: 'Technology', value: 'Inactivated Split Virion' },
+      { label: 'Formulation', value: 'Injectable Suspension' },
+      { label: 'Pack Size', value: '0.5 mL pre-filled syringe' },
+      { label: 'Route of Administration', value: 'Intramuscular / Subcutaneous' },
+      { label: 'Manufacturer', value: 'Vaccine Industrial Company (VIC)' }
+    ],
+    specs_ar: [
+      { label: 'اسم المنتج الدوائي', value: 'Vaxigrip®' },
+      { label: 'نوع اللقاح', value: 'لقاح الإنفلونزا (فيروس مجزأ)' },
+      { label: 'التقنية الحيوية', value: 'فيروس معطل مجزأ' },
+      { label: 'الشكل الصيدلاني', value: 'معلق للحقن' },
+      { label: 'حجم العبوة', value: 'حقنة مسبقة التعبئة 0.5 مل' },
+      { label: 'طريقة الإعطاء', value: 'حقن عضلي أو تحت الجلد' },
+      { label: 'جهة التصنيع', value: 'شركة اللقاحات الصناعية (VIC)' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: '24 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم، يمنع التجميد' },
+      { label: 'مدة الصلاحية', value: '24 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم' }
+    ],
+    indication_desc: 'is indicated for active immunization against influenza viral infections.',
+    indication_desc_ar: 'مخصص للتحصين الفعال ضد عدوى فيروسات الإنفلونزا الموسمية.',
+    indication_target: 'Adults and pediatric cohorts aged 6 months and above',
+    indication_target_ar: 'البالغين والأطفال من عمر 6 أشهر فما فوق',
+    indication_route: 'Intramuscular or deep subcutaneous injection',
+    indication_route_ar: 'عن طريق الحقن العضلي أو تحت الجلد بعمق',
+    gallery: [
+      'p3.jpg',
+      'thumb_vials1.jpg',
+      'thumb_vials2.jpg',
+      'thumb_scientist.jpg'
+    ],
+    resources: [
+      { name: 'Product Information', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'Prescribing Information', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'Patient Information Leaflet', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    resources_ar: [
+      { name: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'نشرة معلومات المرضى', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'شهادة الجودة والتصنيع الدوائي', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    order_index: 1,
+    status: 'Active'
+  },
+  {
+    product_code: 'pneumovax',
+    category: 'our-products',
+    name: 'Pneumovax®',
+    name_ar: 'Pneumovax®',
+    subtitle: 'Pneumococcal Polyvalent Vaccine',
+    subtitle_ar: 'لقاح المكورات الرئوية متعدد التكافؤ',
+    image: 'p2.jpg',
+    featured_image: 'p2.jpg',
+    description: 'Pneumovax® is a polyvalent vaccine formulated to protect against invasive pneumococcal infections in vulnerable and high-risk populations.',
+    description_ar: 'لقاح عالي الكفاءة تم تركيبه للحماية من عدوى المكورات الرئوية لدى الفئات الضعيفة والأكثر عرضة للإصابة والمضاعفات التنفسية.',
+    features: [
+      'Broad 23-serotype pneumococcal coverage',
+      'Elevated and durable immune response',
+      'Produced under strict GMP quality standards'
+    ],
+    features_ar: [
+      'تغطية وقائية واسعة النطاق تشمل 23 نمطاً مصلياً رئوياً',
+      'استجابة مناعية طويلة الأمد ومثبتة سريرياً',
+      'ينتج وفقاً لأدق معايير ممارسات التصنيع الجيد (GMP)'
+    ],
+    specs: [
+      { label: 'Product Name', value: 'Pneumovax®' },
+      { label: 'Type', value: 'Pneumococcal Polyvalent Vaccine' },
+      { label: 'Technology', value: 'Purified Capsular Polysaccharide' },
+      { label: 'Formulation', value: 'Solution for Injection' },
+      { label: 'Pack Size', value: '0.5 mL single-dose vial / syringe' },
+      { label: 'Route of Administration', value: 'Intramuscular / Subcutaneous' },
+      { label: 'Manufacturer', value: 'Vaccine Industrial Company (VIC)' }
+    ],
+    specs_ar: [
+      { label: 'اسم المنتج الدوائي', value: 'Pneumovax®' },
+      { label: 'نوع اللقاح', value: 'لقاح المكورات الرئوية متعدد التكافؤ' },
+      { label: 'التقنية الحيوية', value: 'عديد السكاريد المحفظي المنقى' },
+      { label: 'الشكل الصيدلاني', value: 'محلول للحقن' },
+      { label: 'حجم العبوة', value: 'قارورة جرعة واحدة 0.5 مل' },
+      { label: 'طريقة الإعطاء', value: 'حقن عضلي أو تحت الجلد' },
+      { label: 'جهة التصنيع', value: 'شركة اللقاحات الصناعية (VIC)' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: '24 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم، يمنع التجميد' },
+      { label: 'مدة الصلاحية', value: '24 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم' }
+    ],
+    indication_desc: 'is indicated for vaccination against pneumococcal disease caused by the 23 serotypes in the vaccine.',
+    indication_desc_ar: 'مخصص للوقاية من أمراض المكورات الرئوية الناتجة عن 23 نمطاً مصلياً مشمولاً باللقاح.',
+    indication_target: 'Adults 50+ and persons aged 2+ with increased risk',
+    indication_target_ar: 'البالغين من سن 50 فما فوق والأشخاص من سن سنتين فأكثر ذوي الخطورة العالية',
+    indication_route: 'Intramuscular or subcutaneous',
+    indication_route_ar: 'عن طريق الحقن العضلي أو تحت الجلد',
+    gallery: [
+      'p2.jpg',
+      'thumb_vials1.jpg',
+      'thumb_vials2.jpg',
+      'thumb_scientist.jpg'
+    ],
+    resources: [
+      { name: 'Product Information', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'Prescribing Information', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'Patient Information Leaflet', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    resources_ar: [
+      { name: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'نشرة معلومات المرضى', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'شهادة الجودة والتصنيع الدوائي', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    order_index: 2,
+    status: 'Active'
+  },
+  {
+    product_code: 'rotarix',
+    category: 'our-products',
+    name: 'Rotarix®',
+    name_ar: 'Rotarix®',
+    subtitle: 'Rotavirus Oral Vaccine',
+    subtitle_ar: 'لقاح الروتا الفموي للرضع',
+    image: 'p1.jpg',
+    featured_image: 'p1.jpg',
+    description: 'Rotarix® is an oral vaccine offering early and robust protection against severe rotavirus gastroenteritis in infants.',
+    description_ar: 'لقاح حي موهن يعطى عن طريق الفم لتوفير حماية مبكرة وفعالة للرضع ضد التهاب المعدة والأمعاء الحاد الناجم عن فيروس الروتا.',
+    features: [
+      'Gentle oral drop administration for infants',
+      'High clinical efficacy against severe rotavirus diarrhea',
+      'Extensively validated across global clinical trials'
+    ],
+    features_ar: [
+      'جرعات فموية لطيفة ومناسبة للرضع والأطفال حديثي الولادة',
+      'فعالية إكلينيكية عالية ومثبتة ضد نوبات الإسهال الشديد',
+      'معتمد ومختبر بدقة عبر دراسات سريرية دولية رائدة'
+    ],
+    specs: [
+      { label: 'Product Name', value: 'Rotarix®' },
+      { label: 'Type', value: 'Live Attenuated Rotavirus Vaccine' },
+      { label: 'Technology', value: 'Human Attenuated Strain' },
+      { label: 'Formulation', value: 'Oral Suspension' },
+      { label: 'Pack Size', value: '1.5 mL oral applicator' },
+      { label: 'Route of Administration', value: 'Oral Use Only' },
+      { label: 'Manufacturer', value: 'Vaccine Industrial Company (VIC)' }
+    ],
+    specs_ar: [
+      { label: 'اسم المنتج الدوائي', value: 'Rotarix®' },
+      { label: 'نوع اللقاح', value: 'لقاح فيروس الروتا الحي الموهن' },
+      { label: 'التقنية الحيوية', value: 'سلالة بشرية موهنة' },
+      { label: 'الشكل الصيدلاني', value: 'معلق فموي' },
+      { label: 'حجم العبوة', value: 'أداة تطبيق فموية 1.5 مل' },
+      { label: 'طريقة الإعطاء', value: 'استخدام فموي فقط' },
+      { label: 'جهة التصنيع', value: 'شركة اللقاحات الصناعية (VIC)' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: '24 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم، يمنع التجميد' },
+      { label: 'مدة الصلاحية', value: '24 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم' }
+    ],
+    indication_desc: 'is indicated for the prevention of rotavirus gastroenteritis in infants from 6 to 24 weeks of age.',
+    indication_desc_ar: 'مخصص للوقاية من التهاب المعدة والأمعاء بفيروس الروتا للرضع من سن 6 أسابيع إلى 24 أسبوعاً.',
+    indication_target: 'Infants from 6 to 24 weeks of age',
+    indication_target_ar: 'الرضع من عمر 6 إلى 24 أسبوعاً',
+    indication_route: 'Oral administration only',
+    indication_route_ar: 'إعطاء عن طريق الفم فقط',
+    gallery: [
+      'p1.jpg',
+      'thumb_vials1.jpg',
+      'thumb_vials2.jpg',
+      'thumb_scientist.jpg'
+    ],
+    resources: [
+      { name: 'Product Information', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'Prescribing Information', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'Patient Information Leaflet', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'Quality Certificate', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    resources_ar: [
+      { name: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: 'نشرة معلومات المرضى', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: 'شهادة الجودة والتصنيع الدوائي', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ],
+    order_index: 3,
+    status: 'Active'
+  },
+  {
+    product_code: 'meningococcal-quad',
+    category: 'future-portfolio',
+    name: 'MenACWY®',
+    name_ar: 'MenACWY®',
+    subtitle: 'Meningococcal Conjugate Vaccine',
+    subtitle_ar: 'لقاح المكورات السحائية المقترن الرباعي',
+    image: 'modal_vials_banner.jpg',
+    featured_image: 'modal_vials_banner.jpg',
+    description: 'Next-generation conjugate vaccine targeting Neisseria meningitidis serogroups A, C, W-135, and Y to safeguard public health and pilgrims.',
+    description_ar: 'لقاح مقترن متقدم من الجيل الجديد يستهدف المجموعات المصلية A و C و W-135 و Y لحماية الصحة العامة وضيوف الرحمن.',
+    features: [
+      'Comprehensive 4-strain meningococcal coverage',
+      'Conjugate protein technology for extended immunity',
+      'Formulated for national immunization schedules'
+    ],
+    features_ar: [
+      'تغطية وقائية شاملة ضد 4 سلالات للمكورات السحائية',
+      'تقنية بروتينية مقترنة لمناعة طويلة الأمد',
+      'مصمم ليتوافق مع جداول التحصين الوطنية المعتمدة'
+    ],
+    specs: [
+      { label: 'Pipeline Phase', value: 'Phase III Development / Technology Transfer' },
+      { label: 'Target Indication', value: 'Meningococcal Disease Prevention' },
+      { label: 'Target Age Group', value: 'Infants, Adolescents, and Travelers' },
+      { label: 'Manufacturing Target', value: 'VIC Bio-Facility, Sudair, KSA' }
+    ],
+    specs_ar: [
+      { label: 'مرحلة التطوير', value: 'المرحلة السريرية الثالثة / نقل التقنية' },
+      { label: 'دواعي الاستعمال المستهدفة', value: 'الوقاية من مرض المكورات السحائية' },
+      { label: 'الفئة العمرية المستهدفة', value: 'الرضع، المراهقين، والمسافرين' },
+      { label: 'منشأة التصنيع المستهدفة', value: 'مجمع VIC الحيوي، سدير، المملكة' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: 'Target 24 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم' },
+      { label: 'مدة الصلاحية', value: 'مستهدف 24 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم' }
+    ],
+    indication_desc: 'Active immunization against invasive meningococcal disease.',
+    indication_desc_ar: 'التحصين الفعال ضد مرض المكورات السحائية الغازي.',
+    indication_target: 'Infants, adolescents, and pilgrims',
+    indication_target_ar: 'الرضع والمراهقين والحجاج والمعتمرين',
+    indication_route: 'Intramuscular injection',
+    indication_route_ar: 'حقن عضلي',
+    gallery: [
+      'modal_vials_banner.jpg',
+      'thumb_vials1.jpg'
+    ],
+    resources: [],
+    resources_ar: [],
+    order_index: 4,
+    status: 'Active'
+  },
+  {
+    product_code: 'recombinant-hepb',
+    category: 'future-portfolio',
+    name: 'HepB Recombinant',
+    name_ar: 'لقاح التهاب الكبد ب المؤتلف',
+    subtitle: 'Hepatitis B Recombinant Vaccine',
+    subtitle_ar: 'لقاح التهاب الكبد الوبائي ب المعاد تركيبه جينياً',
+    image: 'thumb_vials2.jpg',
+    featured_image: 'thumb_vials2.jpg',
+    description: 'Advanced recombinant hepatitis B surface antigen (HBsAg) vaccine providing durable lifetime immunity for newborns and adults.',
+    description_ar: 'لقاح متطور يعتمد على مستضد السطح لالتهاب الكبد ب المنتج بتقنية الحمض النووي المؤتلف لتوفير مناعة مدى الحياة.',
+    features: [
+      'Recombinant DNA technology platform',
+      'High seroprotection rates across all demographics',
+      'Localized manufacturing in Saudi Arabia'
+    ],
+    features_ar: [
+      'منصة تقنية الحمض النووي المؤتلف (Recombinant DNA)',
+      'معدلات حماية مصلية عالية عبر جميع الفئات العمرية',
+      'تصنيع وطني متكامل داخل المملكة العربية السعودية'
+    ],
+    specs: [
+      { label: 'Pipeline Phase', value: 'Development & Localization' },
+      { label: 'Target Indication', value: 'Hepatitis B Infection' },
+      { label: 'Formulation', value: 'Injectable Suspension' },
+      { label: 'Manufacturing Target', value: 'VIC Bio-Facility, Sudair, KSA' }
+    ],
+    specs_ar: [
+      { label: 'مرحلة التطوير', value: 'التطوير والتوطين التقني' },
+      { label: 'دواعي الاستعمال المستهدفة', value: 'الوقاية من عدوى التهاب الكبد ب' },
+      { label: 'الشكل الصيدلاني', value: 'معلق قابل للحقن' },
+      { label: 'منشأة التصنيع المستهدفة', value: 'مجمع VIC الحيوي، سدير، المملكة' }
+    ],
+    storage: [
+      { label: 'Storage Temperature', value: '2°C to 8°C' },
+      { label: 'Do Not Freeze', value: 'Yes' },
+      { label: 'Shelf Life', value: 'Target 36 Months' },
+      { label: 'Protect from Light', value: 'Yes' }
+    ],
+    storage_ar: [
+      { label: 'درجة حرارة التخزين', value: '2 إلى 8 درجات مئوية' },
+      { label: 'عدم التجميد', value: 'نعم' },
+      { label: 'مدة الصلاحية', value: 'مستهدف 36 شهراً' },
+      { label: 'الحماية من الضوء', value: 'نعم' }
+    ],
+    indication_desc: 'Prevention of Hepatitis B infection.',
+    indication_desc_ar: 'الوقاية من عدوى فيروس التهاب الكبد الوبائي ب.',
+    indication_target: 'Newborns, children, and high-risk adults',
+    indication_target_ar: 'حديثي الولادة والأطفال والبالغين ذوي الخطورة',
+    indication_route: 'Intramuscular injection',
+    indication_route_ar: 'حقن عضلي',
+    gallery: [
+      'thumb_vials2.jpg',
+      'thumb_vials1.jpg'
+    ],
+    resources: [],
+    resources_ar: [],
+    order_index: 5,
+    status: 'Active'
+  }
+];
+
+const defaultProductsPageSettings = {
+  hero_badge: 'OUR PRODUCTS',
+  hero_badge_ar: 'منتجاتنا',
+  hero_title_part1: 'Innovative Vaccines.',
+  hero_title_part1_ar: 'لقاحات مبتكرة.',
+  hero_title_part2: 'Trusted ',
+  hero_title_part2_ar: 'حماية ',
+  hero_title_accent: 'Protection.',
+  hero_title_accent_ar: 'موثوقة.',
+  hero_description: 'Developing and manufacturing high-quality vaccines to protect lives and strengthen global health security.',
+  hero_description_ar: 'تطوير وتصنيع لقاحات عالية الجودة لحماية الأرواح وتعزيز الأمن الصحي العالمي والمحلي.',
+  hero_image: 'home_banner.png',
+  section_eyebrow: 'OUR PRODUCTS',
+  section_eyebrow_ar: 'منتجاتنا الدوائية',
+  cta_badge: 'STRATEGIC COLLABORATION',
+  cta_badge_ar: 'شراكة استراتيجية',
+  cta_title_part1: 'Building a Healthier Future, ',
+  cta_title_part1_ar: 'نبني مستقبلاً أكثر صحة، ',
+  cta_title_accent: 'Together.',
+  cta_title_accent_ar: 'معاً.',
+  cta_description: 'Partnering with global biotechnology leaders, research institutes, and healthcare organizations to localize advanced vaccine manufacturing and safeguard public health.',
+  cta_description_ar: 'نتعاون مع رواد التقنية الحيوية العالميين ومراكز الأبحاث لتوطين التصنيع المتقدم للقاحات وحماية الصحة العامة.',
+  cta_btn_text: 'Explore Partnerships',
+  cta_btn_text_ar: 'استكشف شراكاتنا',
+  cta_link: '/partners',
+  page_resources: [
+    { name: 'Product Information', name_ar: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
+    { name: 'Prescribing Information', name_ar: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+    { name: 'Patient Information Leaflet', name_ar: 'نشرة معلومات المرضى', type: 'PDF', size: '0.8 MB', icon: 'patient' },
+    { name: 'Quality Certificate', name_ar: 'شهادة الجودة والتصنيع الدوائي', type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+  ]
+};
+
+async function seedProductsData(db, force = false) {
+  try {
+    // 1. Seed / Update Products Settings
+    const [existingSettings] = await db.query('SELECT COUNT(*) as count FROM products_page_settings');
+    if (existingSettings[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM products_page_settings');
+      }
+      const s = defaultProductsPageSettings;
+      await db.query(`
+        INSERT INTO products_page_settings (
+          hero_badge, hero_badge_ar,
+          hero_title_part1, hero_title_part1_ar,
+          hero_title_part2, hero_title_part2_ar,
+          hero_title_accent, hero_title_accent_ar,
+          hero_description, hero_description_ar,
+          hero_image,
+          section_eyebrow, section_eyebrow_ar,
+          cta_badge, cta_badge_ar,
+          cta_title_part1, cta_title_part1_ar,
+          cta_title_accent, cta_title_accent_ar,
+          cta_description, cta_description_ar,
+          cta_btn_text, cta_btn_text_ar,
+          cta_link, page_resources
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        s.hero_badge, s.hero_badge_ar,
+        s.hero_title_part1, s.hero_title_part1_ar,
+        s.hero_title_part2, s.hero_title_part2_ar,
+        s.hero_title_accent, s.hero_title_accent_ar,
+        s.hero_description, s.hero_description_ar,
+        s.hero_image,
+        s.section_eyebrow, s.section_eyebrow_ar,
+        s.cta_badge, s.cta_badge_ar,
+        s.cta_title_part1, s.cta_title_part1_ar,
+        s.cta_title_accent, s.cta_title_accent_ar,
+        s.cta_description, s.cta_description_ar,
+        s.cta_btn_text, s.cta_btn_text_ar,
+        s.cta_link, JSON.stringify(s.page_resources)
+      ]);
+      console.log('[DB Seed] Seeded products page settings and resources.');
+    }
+
+    // 2. Seed Products
+    const [existingProducts] = await db.query('SELECT COUNT(*) as count FROM products');
+    if (existingProducts[0].count === 0 || force) {
+      if (force) {
+        await db.query('DELETE FROM products');
+      }
+      for (const p of defaultProductsList) {
+        await db.query(`
+          INSERT INTO products (
+            product_code, category, name, name_ar, subtitle, subtitle_ar,
+            image, featured_image, description, description_ar,
+            features, features_ar, specs, specs_ar, storage, storage_ar,
+            indication_desc, indication_desc_ar, indication_target, indication_target_ar,
+            indication_route, indication_route_ar,
+            gallery, resources, resources_ar, order_index, status
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          p.product_code,
+          p.category,
+          p.name,
+          p.name_ar,
+          p.subtitle,
+          p.subtitle_ar,
+          p.image,
+          p.featured_image,
+          p.description,
+          p.description_ar,
+          JSON.stringify(p.features),
+          JSON.stringify(p.features_ar),
+          JSON.stringify(p.specs),
+          JSON.stringify(p.specs_ar),
+          JSON.stringify(p.storage),
+          JSON.stringify(p.storage_ar),
+          p.indication_desc,
+          p.indication_desc_ar,
+          p.indication_target,
+          p.indication_target_ar,
+          p.indication_route,
+          p.indication_route_ar,
+          JSON.stringify(p.gallery),
+          JSON.stringify(p.resources),
+          JSON.stringify(p.resources_ar),
+          p.order_index,
+          p.status
+        ]);
+      }
+      console.log(`[DB Seed] Seeded ${defaultProductsList.length} default commercial vaccines & pipeline candidates.`);
+    }
+
+  } catch (err) {
+    console.error('[DB Seed Products Error]', err.message);
+  }
+}
+
 // Getter for pool
 function getPool() {
   if (!pool) {
@@ -1256,7 +1917,11 @@ module.exports = {
   defaultPartnershipSections,
   seedAboutData,
   defaultAboutContent,
-  defaultLeadersList
+  defaultLeadersList,
+  seedProductsData,
+  defaultProductsList,
+  defaultProductsPageSettings
 };
+
 
 

@@ -198,7 +198,7 @@
               <div class="meta-item col-span-2">
                 <span class="meta-key">Direct Link:</span>
                 <div class="direct-link-bar">
-                  <input type="text" class="form-control font-mono text-small" [value]="previewItem()?.file_url?.startsWith('http') ? previewItem()?.file_url : 'http://localhost:5000' + previewItem()?.file_url" readonly />
+                  <input type="text" class="form-control font-mono text-small" [value]="getImageUrl(previewItem()?.file_url)" readonly />
                   <button class="btn btn-sm btn-outline" (click)="copyLink(previewItem()!)">Copy</button>
                 </div>
               </div>
@@ -210,7 +210,7 @@
         <div class="modal-footer">
           <button class="btn btn-outline" (click)="closePreview()">Close</button>
           <a
-            [href]="previewItem()?.file_url?.startsWith('http') ? previewItem()?.file_url : (previewItem()?.file_url?.startsWith('/uploads') ? 'http://localhost:5000' + previewItem()?.file_url : previewItem()?.file_url)"
+            [href]="getImageUrl(previewItem()?.file_url)"
             target="_blank"
             download
             class="btn btn-primary"

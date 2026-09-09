@@ -1,0 +1,1669 @@
+<div class="product-mgmt-wrapper">
+
+  <!-- ====================================================
+       PAGE HEADER & NAVIGATION ACTIONS
+       ==================================================== -->
+  <div class="product-header-card">
+    <div class="header-left">
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>CONTENT MANAGEMENT &amp; PRODUCT PIPELINE</span>
+      </div>
+      <h1 class="header-title">Products &amp; Portfolio Management</h1>
+      <p class="header-subtitle">
+        Manage commercial vaccines, clinical pipeline candidates, technical specifications, storage, Saudi Arabic localization, and public landing page presentation.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="restoreDefaults()"
+        [disabled]="isSyncing()"
+        title="Restore official default products and Saudi Arabic translations"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <polyline points="23 20 23 14 17 14"></polyline>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+        </svg>
+        <span>{{ isSyncing() ? 'Restoring Defaults...' : 'Restore Defaults' }}</span>
+      </button>
+
+      <a
+        routerLink="/products"
+        target="_blank"
+        class="btn btn-outline"
+        title="View live public products landing page in new tab"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Live Landing Page</span>
+      </a>
+
+      <button
+        *ngIf="activeTab() === 'catalog'"
+        type="button"
+        class="btn btn-primary"
+        (click)="openAddProductModal()"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Product</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div *ngIf="successMessage()" class="alert alert-success">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <div class="alert-text">{{ successMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <div *ngIf="errorMessage()" class="alert alert-danger">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <div class="alert-text">{{ errorMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <!-- ====================================================
+       KPI METRIC CARDS
+       ==================================================== -->
+  <div class="kpi-cards-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon-wrap kpi-blue">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Total Portfolio</span>
+        <span class="kpi-value">{{ totalProductsCount() }}</span>
+        <span class="kpi-meta">Commercial + Pipeline</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-wrap kpi-teal">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <polyline points="9 12 11 14 15 10"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Commercial Vaccines</span>
+        <span class="kpi-value">{{ commercialCount() }}</span>
+        <span class="kpi-meta">Licensed &amp; Manufactured</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-wrap kpi-amber">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Pipeline Candidates</span>
+        <span class="kpi-value">{{ pipelineCount() }}</span>
+        <span class="kpi-meta">Phase III &amp; Tech Transfer</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon-wrap kpi-green">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-content">
+        <span class="kpi-label">Live Active</span>
+        <span class="kpi-value">{{ activeCount() }}</span>
+        <span class="kpi-meta">Visible on Landing Page</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       SECTION NAVIGATION TABS
+       ==================================================== -->
+  <div class="section-tabs-bar">
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'catalog'"
+      (click)="switchTab('catalog')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+      <span>Products Catalog</span>
+      <span class="tab-badge">{{ totalProductsCount() }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'hero'"
+      (click)="switchTab('hero')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+        <line x1="4" y1="22" x2="4" y2="15"></line>
+      </svg>
+      <span>Hero Banner &amp; Eyebrow</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'resources'"
+      (click)="switchTab('resources')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+      </svg>
+      <span>Resources &amp; Downloads</span>
+      <span class="tab-badge">{{ pageResources().length }}</span>
+    </button>
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'cta'"
+      (click)="switchTab('cta')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
+        <path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l2.8-2.8a1 1 0 0 0 0-1.4l-2.8-2.8a1 1 0 0 0-1.4 0L14 12"></path>
+        <path d="M7 11 4.7 8.7a1 1 0 0 1 0-1.4l2.8-2.8a1 1 0 0 1 1.4 0L11.4 7"></path>
+        <path d="M2 13.5V19a2 2 0 0 0 2 2h3.5a1 1 0 0 0 .7-.3L13 16"></path>
+      </svg>
+      <span>Partnerships CTA Banner</span>
+    </button>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div *ngIf="isLoading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading products catalog, specifications, and Saudi Arabic data...</p>
+  </div>
+
+  <!-- ====================================================
+       TAB 1: PRODUCTS CATALOG
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'catalog'" class="tab-content-panel">
+    
+    <!-- Filter Toolbar -->
+    <div class="toolbar-card">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search products by English or Arabic name, subtitle, code..."
+          [ngModel]="productSearch()"
+          (ngModelChange)="productSearch.set($event)"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Category:</label>
+        <select [ngModel]="selectedCategoryFilter()" (ngModelChange)="selectedCategoryFilter.set($event)">
+          <option value="All">All Categories</option>
+          <option value="our-products">Our Products (Commercial)</option>
+          <option value="future-portfolio">Future Portfolio (Pipeline)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select [ngModel]="selectedStatusFilter()" (ngModelChange)="selectedStatusFilter.set($event)">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active Only</option>
+          <option value="Inactive">Inactive Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 70px;">Order</th>
+            <th style="width: 90px;">Image</th>
+            <th>Product Name &amp; Code</th>
+            <th>Category</th>
+            <th>Subtitle (EN / AR)</th>
+            <th>Features / Specs</th>
+            <th style="width: 100px;">Status</th>
+            <th style="width: 220px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts(); let i = index">
+            <!-- Order Buttons -->
+            <td>
+              <div class="order-reorder-btns">
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveProduct(product, 'up')"
+                  title="Move Up"
+                >
+                  ▲
+                </button>
+                <span class="order-index-pill">{{ product.order_index }}</span>
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveProduct(product, 'down')"
+                  title="Move Down"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+
+            <!-- Thumbnail -->
+            <td>
+              <div class="table-product-thumb">
+                <img
+                  [src]="resolveImg(product.image)"
+                  [alt]="product.name"
+                  class="thumb-img"
+                  (error)="product.image = 'flucelvax_featured.png'"
+                />
+              </div>
+            </td>
+
+            <!-- Name & Code -->
+            <td>
+              <div class="product-name-cell">
+                <div class="name-en">{{ product.name }}</div>
+                <div class="name-ar" *ngIf="product.name_ar && product.name_ar !== product.name">{{ product.name_ar }}</div>
+                <span class="code-badge">{{ product.product_code }}</span>
+              </div>
+            </td>
+
+            <!-- Category -->
+            <td>
+              <span
+                class="category-badge"
+                [class.category-commercial]="product.category === 'our-products'"
+                [class.category-pipeline]="product.category === 'future-portfolio'"
+              >
+                {{ product.category === 'our-products' ? 'Commercial Vaccine' : 'Future Pipeline' }}
+              </span>
+            </td>
+
+            <!-- Subtitle -->
+            <td>
+              <div class="subtitle-cell">
+                <div class="sub-en">{{ product.subtitle }}</div>
+                <div class="sub-ar" *ngIf="product.subtitle_ar">{{ product.subtitle_ar }}</div>
+              </div>
+            </td>
+
+            <!-- Features / Specs Count -->
+            <td>
+              <div class="meta-pill-group">
+                <span class="meta-pill" title="Key Features">{{ product.features.length || 0 }} Features</span>
+                <span class="meta-pill" title="Specs">{{ product.specs.length || 0 }} Specs</span>
+                <span class="meta-pill" title="Storage">{{ product.storage.length || 0 }} Storage</span>
+              </div>
+            </td>
+
+            <!-- Status Toggle -->
+            <td>
+              <button
+                type="button"
+                class="status-toggle-pill"
+                [class.active]="product.status === 'Active'"
+                (click)="toggleProductStatus(product)"
+                title="Click to toggle status"
+              >
+                <span class="status-indicator"></span>
+                <span>{{ product.status }}</span>
+              </button>
+            </td>
+
+            <!-- Action Buttons -->
+            <td>
+              <div class="table-actions">
+                <!-- Preview -->
+                <button
+                  type="button"
+                  class="action-btn btn-view"
+                  (click)="openLivePreview(product)"
+                  title="Live Preview on Landing Page"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <span>Preview</span>
+                </button>
+
+                <!-- Edit -->
+                <button
+                  type="button"
+                  class="action-btn btn-edit"
+                  (click)="openEditProductModal(product)"
+                  title="Edit Product Details &amp; Arabic Localization"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  <span>Edit</span>
+                </button>
+
+                <!-- Delete -->
+                <button
+                  type="button"
+                  class="action-btn btn-delete"
+                  (click)="openDeleteModal(product)"
+                  title="Delete Product"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredProducts().length === 0">
+            <td colspan="8" class="empty-table">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>No products match your search or category filters.</p>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="productSearch.set(''); selectedCategoryFilter.set('All'); selectedStatusFilter.set('All')">
+                  Reset Filters
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ====================================================
+       TAB 2: HERO BANNER & EYEBROW SETTINGS
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'hero'" class="tab-content-panel">
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Hero Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">HERO BANNER CONFIGURATION</div>
+          <h2 class="panel-title">Top Hero &amp; Eyebrow</h2>
+          <p class="panel-subtitle">Configure the page hero title, teal accent word, description, and background image in English and Saudi Arabic.</p>
+        </div>
+
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="heroSettingsLang() === 'en'" (click)="heroSettingsLang.set('en')">
+            <span>🇬🇧</span> English Content
+          </button>
+          <button type="button" class="pill-btn" [class.active]="heroSettingsLang() === 'ar'" (click)="heroSettingsLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
+        <form (ngSubmit)="saveHeroSettings()" class="form-body">
+          
+          <!-- ENGLISH HERO -->
+          <ng-container *ngIf="heroSettingsLang() === 'en'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>Breadcrumb / Eyebrow (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_badge" name="hero_badge" class="form-input" placeholder="e.g. OUR PRODUCTS" />
+              </div>
+              <div class="form-group col-8">
+                <label>Heading Line 1 (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_part1" name="hero_title_part1" class="form-input" placeholder="e.g. Innovative Vaccines." required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Heading Line 2 Prefix (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_part2" name="hero_title_part2" class="form-input" placeholder="e.g. Trusted " />
+              </div>
+              <div class="form-group col-6">
+                <label>Heading Teal Accent Word (EN)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_accent" name="hero_title_accent" class="form-input" placeholder="e.g. Protection." />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Hero Description (EN)</label>
+              <textarea [(ngModel)]="heroForm.hero_description" name="hero_desc" rows="3" class="form-textarea" placeholder="Developing and manufacturing high-quality vaccines..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Section Eyebrow Label (EN)</label>
+              <input type="text" [(ngModel)]="heroForm.section_eyebrow" name="section_eyebrow" class="form-input" placeholder="e.g. OUR PRODUCTS" />
+            </div>
+          </ng-container>
+
+          <!-- ARABIC HERO -->
+          <ng-container *ngIf="heroSettingsLang() === 'ar'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>العنوان الترويجي (Eyebrow AR)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_badge_ar" name="hero_badge_ar" class="form-input rtl-input" placeholder="مثال: منتجاتنا" />
+              </div>
+              <div class="form-group col-8">
+                <label>السطر الأول من العنوان (Heading Line 1 AR)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_part1_ar" name="hero_title_part1_ar" class="form-input rtl-input" placeholder="مثال: لقاحات مبتكرة." />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>بادئة السطر الثاني (Prefix AR)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_part2_ar" name="hero_title_part2_ar" class="form-input rtl-input" placeholder="مثال: حماية " />
+              </div>
+              <div class="form-group col-6">
+                <label>الكلمة المميزة باللون التيل (Accent AR)</label>
+                <input type="text" [(ngModel)]="heroForm.hero_title_accent_ar" name="hero_title_accent_ar" class="form-input rtl-input" placeholder="مثال: موثوقة." />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>الوصف الموجز للبانر (Description AR)</label>
+              <textarea [(ngModel)]="heroForm.hero_description_ar" name="hero_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="تطوير وتصنيع لقاحات عالية الجودة لحماية الأرواح..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>عنوان قسم المنتجات الرئيسي (Section Eyebrow AR)</label>
+              <input type="text" [(ngModel)]="heroForm.section_eyebrow_ar" name="section_eyebrow_ar" class="form-input rtl-input" placeholder="مثال: منتجاتنا الدوائية" />
+            </div>
+          </ng-container>
+
+          <!-- IMAGE UPLOAD -->
+          <div class="form-group">
+            <label>Hero Background Banner Image</label>
+            <div class="file-upload-box">
+              <input type="file" (change)="onHeroImageSelected($event)" accept="image/*" id="heroImgInput" />
+              <label for="heroImgInput" class="file-upload-label">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Upload New Hero Image</span>
+                <span class="file-hint">Replaces default home_banner.png</span>
+              </label>
+            </div>
+            <div *ngIf="heroImagePreview || heroForm.hero_image" class="preview-thumb-box">
+              <img [src]="heroImagePreview || resolveImg(heroForm.hero_image)" alt="Hero Preview" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              <span>{{ isSaving() ? 'Saving Changes...' : 'Save Hero Settings' }}</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Preview of Hero -->
+      <div class="panel-card preview-panel">
+        <div class="panel-header">
+          <div class="panel-badge">LIVE HERO PREVIEW</div>
+          <h3 class="panel-title">Rendered Hero Banner</h3>
+          <p class="panel-subtitle">Matches public landing page header scale.</p>
+        </div>
+
+        <div class="hero-live-preview-box" [class.rtl-preview]="heroSettingsLang() === 'ar'">
+          <div class="hero-prev-bg">
+            <img [src]="heroImagePreview || resolveImg(heroForm.hero_image)" alt="Banner" />
+            <div class="hero-prev-overlay"></div>
+          </div>
+          <div class="hero-prev-content">
+            <span class="hero-prev-breadcrumb">
+              {{ heroSettingsLang() === 'ar' ? 'الرئيسية > ' + (heroForm.hero_badge_ar || 'منتجاتنا') : 'Home > ' + heroForm.hero_badge }}
+            </span>
+            <h1 class="hero-prev-heading">
+              {{ heroSettingsLang() === 'ar' ? heroForm.hero_title_part1_ar : heroForm.hero_title_part1 }}<br/>
+              {{ heroSettingsLang() === 'ar' ? heroForm.hero_title_part2_ar : heroForm.hero_title_part2 }}
+              <span class="accent">{{ heroSettingsLang() === 'ar' ? heroForm.hero_title_accent_ar : heroForm.hero_title_accent }}</span>
+            </h1>
+            <p class="hero-prev-desc">
+              {{ heroSettingsLang() === 'ar' ? heroForm.hero_description_ar : heroForm.hero_description }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================
+       TAB 3: RESOURCES & DOWNLOADS
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'resources'" class="tab-content-panel">
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Existing Page Resources -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">PAGE-LEVEL DOWNLOADS</div>
+          <h2 class="panel-title">Resources &amp; Technical Leaflets</h2>
+          <p class="panel-subtitle">These documents are displayed in the "Resources &amp; Downloads" grid on the products landing page.</p>
+        </div>
+
+        <div class="resources-list-mgmt">
+          <div *ngFor="let res of pageResources(); let idx = index" class="resource-mgmt-item">
+            <div class="res-icon-wrap">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name-en">{{ res.name }}</div>
+              <div class="res-name-ar" *ngIf="res.name_ar">{{ res.name_ar }}</div>
+              <div class="res-meta">{{ res.type }} &bull; {{ res.size }} &bull; Icon: {{ res.icon }}</div>
+            </div>
+            <button type="button" class="btn-icon-danger" (click)="removePageResource(idx)" title="Remove Resource">
+              &times;
+            </button>
+          </div>
+
+          <div *ngIf="pageResources().length === 0" class="empty-state-card">
+            No page resources configured. Add your first downloadable document below.
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Add New Page Resource Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">ADD NEW RESOURCE</div>
+          <h3 class="panel-title">New Document Entry</h3>
+          <p class="panel-subtitle">Add official brochures, medical monographs, or SFDA certification leaflets.</p>
+        </div>
+
+        <div class="form-body">
+          <div class="form-group">
+            <label>Document Title (English)</label>
+            <input type="text" [(ngModel)]="newPageResName" class="form-input" placeholder="e.g. Product Information Leaflet" />
+          </div>
+
+          <div class="form-group">
+            <label>اسم الوثيقة (Saudi Arabic)</label>
+            <input type="text" [(ngModel)]="newPageResNameAr" class="form-input rtl-input" placeholder="مثال: معلومات المنتج الدوائي المعتمدة" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label>File Type</label>
+              <select [(ngModel)]="newPageResType" class="form-select">
+                <option value="PDF">PDF</option>
+                <option value="DOCX">DOCX</option>
+                <option value="ZIP">ZIP</option>
+              </select>
+            </div>
+            <div class="form-group col-4">
+              <label>File Size</label>
+              <input type="text" [(ngModel)]="newPageResSize" class="form-input" placeholder="e.g. 1.2 MB" />
+            </div>
+            <div class="form-group col-4">
+              <label>Icon Style</label>
+              <select [(ngModel)]="newPageResIcon" class="form-select">
+                <option value="document">Document</option>
+                <option value="prescribing">Prescribing</option>
+                <option value="patient">Patient</option>
+                <option value="certificate">Certificate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" (click)="addPageResource()" [disabled]="!newPageResName.trim()">
+              Add Document to Landing Page
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================
+       TAB 4: PARTNERSHIPS CTA BANNER
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'cta'" class="tab-content-panel">
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: CTA Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">BOTTOM CALL TO ACTION</div>
+          <h2 class="panel-title">Partnership Banner Settings</h2>
+          <p class="panel-subtitle">Controls the collaboration banner situated above the footer on the products page.</p>
+        </div>
+
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="ctaSettingsLang() === 'en'" (click)="ctaSettingsLang.set('en')">
+            <span>🇬🇧</span> English Content
+          </button>
+          <button type="button" class="pill-btn" [class.active]="ctaSettingsLang() === 'ar'" (click)="ctaSettingsLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
+        <form (ngSubmit)="saveCtaSettings()" class="form-body">
+          
+          <!-- ENGLISH CTA -->
+          <ng-container *ngIf="ctaSettingsLang() === 'en'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>Badge Pill (EN)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_badge" name="cta_badge" class="form-input" placeholder="e.g. STRATEGIC COLLABORATION" />
+              </div>
+              <div class="form-group col-8">
+                <label>Main Heading Prefix (EN)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_title_part1" name="cta_title_part1" class="form-input" placeholder="e.g. Building a Healthier Future, " />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Teal Accent Word (EN)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_title_accent" name="cta_title_accent" class="form-input" placeholder="e.g. Together." />
+              </div>
+              <div class="form-group col-6">
+                <label>Button Text (EN)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_btn_text" name="cta_btn_text" class="form-input" placeholder="e.g. Explore Partnerships" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Description Paragraph (EN)</label>
+              <textarea [(ngModel)]="ctaForm.cta_description" name="cta_desc" rows="3" class="form-textarea" placeholder="Partnering with global biotechnology leaders..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Target Link</label>
+              <input type="text" [(ngModel)]="ctaForm.cta_link" name="cta_link" class="form-input" placeholder="/partners" />
+            </div>
+          </ng-container>
+
+          <!-- ARABIC CTA -->
+          <ng-container *ngIf="ctaSettingsLang() === 'ar'">
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label>شارة التعاون (Badge AR)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_badge_ar" name="cta_badge_ar" class="form-input rtl-input" placeholder="مثال: شراكة استراتيجية" />
+              </div>
+              <div class="form-group col-8">
+                <label>عنوان البانر الرئيسي (Heading AR)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_title_part1_ar" name="cta_title_part1_ar" class="form-input rtl-input" placeholder="مثال: نبني مستقبلاً أكثر صحة، " />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>الكلمة المميزة (Accent AR)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_title_accent_ar" name="cta_title_accent_ar" class="form-input rtl-input" placeholder="مثال: معاً." />
+              </div>
+              <div class="form-group col-6">
+                <label>نص زر الدعوة للإجراء (Button AR)</label>
+                <input type="text" [(ngModel)]="ctaForm.cta_btn_text_ar" name="cta_btn_text_ar" class="form-input rtl-input" placeholder="مثال: استكشف شراكاتنا" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>الوصف الموجز (Description AR)</label>
+              <textarea [(ngModel)]="ctaForm.cta_description_ar" name="cta_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="نتعاون مع رواد التقنية الحيوية العالميين..."></textarea>
+            </div>
+          </ng-container>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              <span>{{ isSaving() ? 'Saving Changes...' : 'Save CTA Banner Settings' }}</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Preview of CTA Banner -->
+      <div class="panel-card preview-panel">
+        <div class="panel-header">
+          <div class="panel-badge">LIVE CTA PREVIEW</div>
+          <h3 class="panel-title">Rendered Partnerships Banner</h3>
+        </div>
+
+        <div class="cta-live-preview-box" [class.rtl-preview]="ctaSettingsLang() === 'ar'">
+          <div class="cta-prev-badge">
+            <span>{{ ctaSettingsLang() === 'ar' ? (ctaForm.cta_badge_ar || 'شراكة استراتيجية') : ctaForm.cta_badge }}</span>
+          </div>
+          <h2 class="cta-prev-heading">
+            {{ ctaSettingsLang() === 'ar' ? ctaForm.cta_title_part1_ar : ctaForm.cta_title_part1 }}
+            <span class="accent">{{ ctaSettingsLang() === 'ar' ? ctaForm.cta_title_accent_ar : ctaForm.cta_title_accent }}</span>
+          </h2>
+          <p class="cta-prev-desc">
+            {{ ctaSettingsLang() === 'ar' ? ctaForm.cta_description_ar : ctaForm.cta_description }}
+          </p>
+          <div class="cta-prev-btn">
+            <span>{{ ctaSettingsLang() === 'ar' ? (ctaForm.cta_btn_text_ar || 'استكشف شراكاتنا') : ctaForm.cta_btn_text }}</span>
+            &rarr;
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ====================================================
+     PRODUCT EDIT / ADD MODAL (Bilingual EN & Saudi AR)
+     ==================================================== -->
+<div *ngIf="isProductModalOpen()" class="modal-backdrop" (click)="closeProductModal()">
+  <div class="modal-dialog modal-xl" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <span class="modal-badge">{{ isEditingProduct() ? 'EDIT PRODUCT' : 'NEW PRODUCT REGISTRATION' }}</span>
+        <h2 class="modal-title">{{ isEditingProduct() ? productForm.name : 'Create New Vaccine or Pipeline Product' }}</h2>
+      </div>
+
+      <!-- Dual Language Switcher Pills -->
+      <div class="modal-lang-toggle">
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="productFormLang() === 'en'"
+          (click)="productFormLang.set('en')"
+        >
+          <span>🇬🇧</span> English
+        </button>
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="productFormLang() === 'ar'"
+          (click)="productFormLang.set('ar')"
+        >
+          <span>🇸🇦</span> Saudi Arabic (العربية)
+        </button>
+      </div>
+
+      <button type="button" class="btn-close-modal" (click)="closeProductModal()">&times;</button>
+    </div>
+
+    <!-- Sub-navigation Tabs -->
+    <div class="modal-subtabs">
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'basic'" (click)="activeFormSubTab.set('basic')">General Info</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'images'" (click)="activeFormSubTab.set('images')">Images &amp; Gallery</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'features'" (click)="activeFormSubTab.set('features')">Features ({{ productForm.features.length }})</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'specs'" (click)="activeFormSubTab.set('specs')">Specifications ({{ productForm.specs.length }})</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'storage'" (click)="activeFormSubTab.set('storage')">Storage &amp; Handling</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'indication'" (click)="activeFormSubTab.set('indication')">Indications &amp; Route</button>
+      <button type="button" class="subtab-btn" [class.active]="activeFormSubTab() === 'resources'" (click)="activeFormSubTab.set('resources')">Attached Leaflets</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <!-- SUBTAB 1: BASIC INFO -->
+      <div *ngIf="activeFormSubTab() === 'basic'" class="subtab-panel">
+        
+        <div class="form-row">
+          <div class="form-group col-4">
+            <label>Category *</label>
+            <select [(ngModel)]="productForm.category" class="form-select">
+              <option value="our-products">Our Products (Commercial Vaccine)</option>
+              <option value="future-portfolio">Future Portfolio (Clinical Pipeline)</option>
+            </select>
+          </div>
+          <div class="form-group col-4">
+            <label>Product Code / Slug *</label>
+            <input type="text" [(ngModel)]="productForm.product_code" class="form-input" placeholder="e.g. flucelvax" />
+            <span class="field-hint">Used in URLs and internal identifiers.</span>
+          </div>
+          <div class="form-group col-2">
+            <label>Order Index</label>
+            <input type="number" [(ngModel)]="productForm.order_index" class="form-input" />
+          </div>
+          <div class="form-group col-2">
+            <label>Status</label>
+            <select [(ngModel)]="productForm.status" class="form-select">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ENGLISH GENERAL INFO -->
+        <div *ngIf="productFormLang() === 'en'">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label>Product Name (English) *</label>
+              <input type="text" [(ngModel)]="productForm.name" class="form-input" placeholder="e.g. Flucelvax®" required />
+            </div>
+            <div class="form-group col-6">
+              <label>Product Subtitle (English)</label>
+              <input type="text" [(ngModel)]="productForm.subtitle" class="form-input" placeholder="e.g. Seasonal Influenza Vaccine" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description Paragraph (English)</label>
+            <textarea [(ngModel)]="productForm.description" rows="4" class="form-textarea" placeholder="Flucelvax® is a next-generation cell culture-based influenza vaccine..."></textarea>
+          </div>
+        </div>
+
+        <!-- ARABIC GENERAL INFO -->
+        <div *ngIf="productFormLang() === 'ar'">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label>اسم المنتج الدوائي (Saudi Arabic) *</label>
+              <input type="text" [(ngModel)]="productForm.name_ar" class="form-input rtl-input" placeholder="مثال: Flucelvax®" />
+            </div>
+            <div class="form-group col-6">
+              <label>العنوان الفرعي للمنتج (Saudi Arabic)</label>
+              <input type="text" [(ngModel)]="productForm.subtitle_ar" class="form-input rtl-input" placeholder="مثال: لقاح الإنفلونزا الموسمية المعتمد على مزارع الخلايا" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>الوصف التعريفي باللغة العربية (Saudi Arabic)</label>
+            <textarea [(ngModel)]="productForm.description_ar" rows="4" class="form-textarea rtl-input" placeholder="يعتبر Flucelvax® جيلاً متقدماً من لقاحات الإنفلونزا المصنعة بتقنية زراعة الخلايا..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUBTAB 2: IMAGES & GALLERY -->
+      <div *ngIf="activeFormSubTab() === 'images'" class="subtab-panel">
+        
+        <!-- Image Hub Header Notice -->
+        <div class="image-hub-banner">
+          <div class="image-hub-banner-content">
+            <div class="hub-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="hub-title">Product Image Manager</h4>
+              <p class="hub-subtitle">
+                Upload your product images below. Choose any image as the <strong>Cover Image</strong> to appear on the public landing page spotlight. All other images are automatically included in the product gallery.
+              </p>
+            </div>
+          </div>
+          <div class="hub-stats">
+            <span class="hub-stat-badge">{{ productImages().length }} Images in Gallery</span>
+          </div>
+        </div>
+
+        <!-- Master Single Upload Zone -->
+        <div class="master-upload-zone" [class.drag-over]="isDraggingOver">
+          <input 
+            type="file" 
+            multiple 
+            accept="image/*" 
+            id="masterImageUploadInput" 
+            (change)="onMasterImagesSelected($event)" 
+          />
+          <label for="masterImageUploadInput" class="master-upload-label">
+            <div class="upload-icon-circle">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <div class="upload-text-group">
+              <span class="upload-primary-text">Click to browse or drop images here</span>
+              <span class="upload-secondary-text">Upload one or multiple images at once (PNG, JPG, WEBP)</span>
+            </div>
+            <button type="button" class="btn-browse-files">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Browse &amp; Upload Images
+            </button>
+          </label>
+        </div>
+
+        <!-- Active Cover Spotlight Bar -->
+        <div class="cover-spotlight-bar" *ngIf="activeCoverItem() as cover">
+          <div class="spotlight-left">
+            <div class="spotlight-thumb">
+              <img [src]="cover.url" alt="Cover spotlight preview" (error)="$any($event.target).src = 'flucelvax_featured.png'" />
+            </div>
+            <div class="spotlight-details">
+              <div class="spotlight-tag">
+                <span class="star-icon">★</span> ACTIVE LANDING PAGE COVER
+              </div>
+              <h5 class="spotlight-filename" [title]="cover.path">{{ cover.path }}</h5>
+              <p class="spotlight-desc">This featured image is rendered on the public landing page hero carousel spotlight card.</p>
+            </div>
+          </div>
+          <div class="spotlight-right">
+            <span class="status-badge-active">Cover Active</span>
+          </div>
+        </div>
+
+        <!-- Images Grid & Card Actions -->
+        <div class="product-images-section">
+          <div class="section-title-row">
+            <div>
+              <h5 class="images-grid-heading">Product Images ({{ productImages().length }})</h5>
+              <span class="images-hint">Click <strong>"★ Make Cover"</strong> on any image to change the main landing page showcase image</span>
+            </div>
+          </div>
+
+          <div class="product-images-grid" *ngIf="productImages().length > 0; else noImagesTpl">
+            <div 
+              *ngFor="let img of productImages(); let idx = index" 
+              class="img-card" 
+              [class.is-cover-card]="img.isCover"
+            >
+              <!-- Cover Badge -->
+              <div class="card-badges" *ngIf="img.isCover">
+                <span class="badge-tag badge-cover-active">★ MAIN COVER</span>
+              </div>
+
+              <!-- Delete Button -->
+              <button 
+                type="button" 
+                class="btn-card-delete" 
+                (click)="removeImageItem(idx)" 
+                title="Remove image from gallery"
+              >&times;</button>
+
+              <!-- Thumbnail Preview -->
+              <div class="img-card-thumb" (click)="setCoverImageItem(idx)" title="Click to set as Cover">
+                <img [src]="img.url" [alt]="img.path" (error)="$any($event.target).src = 'flucelvax_featured.png'" />
+              </div>
+
+              <!-- Meta info -->
+              <div class="img-card-meta">
+                <span class="img-name" [title]="img.path">{{ img.path }}</span>
+              </div>
+
+              <!-- Card Action Button -->
+              <div class="img-card-actions">
+                <button 
+                  type="button" 
+                  class="btn-action-cover-full" 
+                  [class.active]="img.isCover"
+                  (click)="setCoverImageItem(idx)"
+                  [title]="img.isCover ? 'Currently active main cover image' : 'Set as main landing cover image'"
+                >
+                  <span *ngIf="img.isCover">★ Active Cover</span>
+                  <span *ngIf="!img.isCover">Make Cover</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noImagesTpl>
+            <div class="no-images-placeholder">
+              <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p>No images uploaded yet. Use the upload box above to add images.</p>
+            </div>
+          </ng-template>
+
+          <!-- Add Image by Filename/Path Row -->
+          <div class="add-by-path-row mt-3">
+            <label class="label-sm">Or enter an image filename or URL directly:</label>
+            <div class="path-input-group">
+              <input 
+                type="text" 
+                [(ngModel)]="newImageUrlInput" 
+                class="form-input form-input-sm" 
+                placeholder="e.g. flucelvax_featured.png or /uploads/..." 
+                (keyup.enter)="addImageByPath()"
+              />
+              <button type="button" class="btn btn-secondary btn-sm" (click)="addImageByPath()">+ Add to Gallery</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUBTAB 3: KEY FEATURES -->
+      <div *ngIf="activeFormSubTab() === 'features'" class="subtab-panel">
+        <p class="panel-hint">Key bullet points rendered with teal checkmarks on the showcase card and detail overview.</p>
+
+        <!-- English Features -->
+        <div *ngIf="productFormLang() === 'en'">
+          <div class="feature-item-list">
+            <div *ngFor="let feat of productForm.features; let fIdx = index" class="feature-row">
+              <span class="check-icon">✓</span>
+              <input type="text" [(ngModel)]="productForm.features[fIdx]" class="form-input" />
+              <button type="button" class="btn-icon-danger" (click)="removeFeatureEn(fIdx)">&times;</button>
+            </div>
+          </div>
+
+          <div class="add-inline-box mt-3">
+            <input type="text" [(ngModel)]="newFeatureEn" class="form-input" placeholder="Add new English feature highlight..." (keyup.enter)="addFeatureEn()" />
+            <button type="button" class="btn btn-secondary" (click)="addFeatureEn()">Add Bullet</button>
+          </div>
+        </div>
+
+        <!-- Arabic Features -->
+        <div *ngIf="productFormLang() === 'ar'">
+          <div class="feature-item-list">
+            <div *ngFor="let feat of productForm.features_ar; let fIdx = index" class="feature-row">
+              <span class="check-icon">✓</span>
+              <input type="text" [(ngModel)]="productForm.features_ar[fIdx]" class="form-input rtl-input" />
+              <button type="button" class="btn-icon-danger" (click)="removeFeatureAr(fIdx)">&times;</button>
+            </div>
+          </div>
+
+          <div class="add-inline-box mt-3">
+            <input type="text" [(ngModel)]="newFeatureAr" class="form-input rtl-input" placeholder="إضافة ميزة جديدة باللغة العربية..." (keyup.enter)="addFeatureAr()" />
+            <button type="button" class="btn btn-secondary" (click)="addFeatureAr()">إضافة ميزة</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB 4: SPECIFICATIONS -->
+      <div *ngIf="activeFormSubTab() === 'specs'" class="subtab-panel">
+        <p class="panel-hint">Technical specifications displayed in the 2-column overview and Specifications tab.</p>
+
+        <!-- English Specs -->
+        <div *ngIf="productFormLang() === 'en'">
+          <table class="specs-edit-table">
+            <thead>
+              <tr>
+                <th style="width: 35%;">Specification Label</th>
+                <th>Value</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let spec of productForm.specs; let sIdx = index">
+                <td><input type="text" [(ngModel)]="spec.label" class="form-input form-input-sm" /></td>
+                <td><input type="text" [(ngModel)]="spec.value" class="form-input form-input-sm" /></td>
+                <td><button type="button" class="btn-icon-danger" (click)="removeSpecEn(sIdx)">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="add-spec-row mt-3">
+            <input type="text" [(ngModel)]="newSpecLabelEn" class="form-input" placeholder="Label (e.g. Formulation)" />
+            <input type="text" [(ngModel)]="newSpecValEn" class="form-input" placeholder="Value (e.g. Suspension for Injection)" />
+            <button type="button" class="btn btn-secondary" (click)="addSpecEn()">Add Spec</button>
+          </div>
+        </div>
+
+        <!-- Arabic Specs -->
+        <div *ngIf="productFormLang() === 'ar'">
+          <table class="specs-edit-table">
+            <thead>
+              <tr>
+                <th style="width: 35%;">المواصفة (Label AR)</th>
+                <th>القيمة (Value AR)</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let spec of productForm.specs_ar; let sIdx = index">
+                <td><input type="text" [(ngModel)]="spec.label" class="form-input form-input-sm rtl-input" /></td>
+                <td><input type="text" [(ngModel)]="spec.value" class="form-input form-input-sm rtl-input" /></td>
+                <td><button type="button" class="btn-icon-danger" (click)="removeSpecAr(sIdx)">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="add-spec-row mt-3">
+            <input type="text" [(ngModel)]="newSpecLabelAr" class="form-input rtl-input" placeholder="المواصفة (مثال: الشكل الصيدلاني)" />
+            <input type="text" [(ngModel)]="newSpecValAr" class="form-input rtl-input" placeholder="القيمة (مثال: معلق للحقن)" />
+            <button type="button" class="btn btn-secondary" (click)="addSpecAr()">إضافة مواصفة</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB 5: STORAGE & HANDLING -->
+      <div *ngIf="activeFormSubTab() === 'storage'" class="subtab-panel">
+        <p class="panel-hint">Cold-chain storage parameters and shelf-life requirements.</p>
+
+        <!-- English Storage -->
+        <div *ngIf="productFormLang() === 'en'">
+          <table class="specs-edit-table">
+            <thead>
+              <tr>
+                <th style="width: 35%;">Condition</th>
+                <th>Requirement</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of productForm.storage; let stIdx = index">
+                <td><input type="text" [(ngModel)]="item.label" class="form-input form-input-sm" /></td>
+                <td><input type="text" [(ngModel)]="item.value" class="form-input form-input-sm" /></td>
+                <td><button type="button" class="btn-icon-danger" (click)="removeStorageEn(stIdx)">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="add-spec-row mt-3">
+            <input type="text" [(ngModel)]="newStorageLabelEn" class="form-input" placeholder="Condition (e.g. Storage Temperature)" />
+            <input type="text" [(ngModel)]="newStorageValEn" class="form-input" placeholder="Value (e.g. 2°C to 8°C)" />
+            <button type="button" class="btn btn-secondary" (click)="addStorageEn()">Add Storage Item</button>
+          </div>
+        </div>
+
+        <!-- Arabic Storage -->
+        <div *ngIf="productFormLang() === 'ar'">
+          <table class="specs-edit-table">
+            <thead>
+              <tr>
+                <th style="width: 35%;">شرط الحفظ (Condition AR)</th>
+                <th>المعيار (Value AR)</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of productForm.storage_ar; let stIdx = index">
+                <td><input type="text" [(ngModel)]="item.label" class="form-input form-input-sm rtl-input" /></td>
+                <td><input type="text" [(ngModel)]="item.value" class="form-input form-input-sm rtl-input" /></td>
+                <td><button type="button" class="btn-icon-danger" (click)="removeStorageAr(stIdx)">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="add-spec-row mt-3">
+            <input type="text" [(ngModel)]="newStorageLabelAr" class="form-input rtl-input" placeholder="شرط الحفظ (مثال: درجة حرارة التخزين)" />
+            <input type="text" [(ngModel)]="newStorageValAr" class="form-input rtl-input" placeholder="المعيار (مثال: 2 إلى 8 درجات مئوية)" />
+            <button type="button" class="btn btn-secondary" (click)="addStorageAr()">إضافة شرط حفظ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBTAB 6: INDICATIONS & ROUTE -->
+      <div *ngIf="activeFormSubTab() === 'indication'" class="subtab-panel">
+        
+        <!-- English Indication -->
+        <div *ngIf="productFormLang() === 'en'">
+          <div class="form-group">
+            <label>Indication Statement (English)</label>
+            <textarea [(ngModel)]="productForm.indication_desc" rows="3" class="form-textarea" placeholder="is indicated for active immunization against seasonal pathogens..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label>Target Population (English)</label>
+              <input type="text" [(ngModel)]="productForm.indication_target" class="form-input" placeholder="Individuals 6 months and older..." />
+            </div>
+            <div class="form-group col-6">
+              <label>Administration Route (English)</label>
+              <input type="text" [(ngModel)]="productForm.indication_route" class="form-input" placeholder="Administered via intramuscular injection..." />
+            </div>
+          </div>
+
+          <!-- Dynamic Additional Indication Key-Value Parameters -->
+          <div class="mt-3">
+            <label class="label-sm font-bold">Custom Indication Parameters &amp; Details (English):</label>
+            <table class="specs-edit-table mt-1" *ngIf="productForm.indication_items && productForm.indication_items.length > 0">
+              <thead>
+                <tr>
+                  <th style="width: 35%;">Parameter / Field Label</th>
+                  <th>Clinical Value / Information</th>
+                  <th style="width: 50px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of productForm.indication_items; let iIdx = index">
+                  <td><input type="text" [(ngModel)]="item.label" class="form-input form-input-sm" /></td>
+                  <td><input type="text" [(ngModel)]="item.value" class="form-input form-input-sm" /></td>
+                  <td><button type="button" class="btn-icon-danger" (click)="removeIndicationItemEn(iIdx)">&times;</button></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="add-spec-row mt-2">
+              <input type="text" [(ngModel)]="newIndicationLabelEn" class="form-input" placeholder="New Field (e.g. Dosage / Contraindication)" />
+              <input type="text" [(ngModel)]="newIndicationValEn" class="form-input" placeholder="Value (e.g. 0.5 mL / Severe allergic reaction)" />
+              <button type="button" class="btn btn-secondary" (click)="addIndicationItemEn()">+ Add Parameter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arabic Indication -->
+        <div *ngIf="productFormLang() === 'ar'">
+          <div class="form-group">
+            <label>بيان دواعي الاستعمال باللغة العربية (Saudi Arabic)</label>
+            <textarea [(ngModel)]="productForm.indication_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="مخصص للتحصين الفعال ضد مسببات الأمراض المستهدفة بهذا اللقاح..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label>الفئة المستهدفة (Saudi Arabic)</label>
+              <input type="text" [(ngModel)]="productForm.indication_target_ar" class="form-input rtl-input" placeholder="الأفراد من سن 6 أشهر فما فوق وعامة أفراد المجتمع" />
+            </div>
+            <div class="form-group col-6">
+              <label>طريقة الإعطاء (Saudi Arabic)</label>
+              <input type="text" [(ngModel)]="productForm.indication_route_ar" class="form-input rtl-input" placeholder="عن طريق الحقن العضلي بإشراف ممارسين صحيين معتمدين" />
+            </div>
+          </div>
+
+          <!-- Dynamic Additional Indication Key-Value Parameters (Arabic) -->
+          <div class="mt-3">
+            <label class="label-sm font-bold">معايير وتفاصيل إضافية لدواعي الاستعمال (باللغة العربية):</label>
+            <table class="specs-edit-table mt-1" *ngIf="productForm.indication_items_ar && productForm.indication_items_ar.length > 0">
+              <thead>
+                <tr>
+                  <th style="width: 35%;">اسم الحقل / المعيار</th>
+                  <th>القيمة السريرية / التوجيه</th>
+                  <th style="width: 50px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of productForm.indication_items_ar; let iIdx = index">
+                  <td><input type="text" [(ngModel)]="item.label" class="form-input form-input-sm rtl-input" /></td>
+                  <td><input type="text" [(ngModel)]="item.value" class="form-input form-input-sm rtl-input" /></td>
+                  <td><button type="button" class="btn-icon-danger" (click)="removeIndicationItemAr(iIdx)">&times;</button></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="add-spec-row mt-2">
+              <input type="text" [(ngModel)]="newIndicationLabelAr" class="form-input rtl-input" placeholder="اسم الحقل (مثال: موانع الاستعمال / الجرعة)" />
+              <input type="text" [(ngModel)]="newIndicationValAr" class="form-input rtl-input" placeholder="القيمة (مثال: الحساسية الشديدة / 0.5 مل)" />
+              <button type="button" class="btn btn-secondary" (click)="addIndicationItemAr()">+ إضافة معيار</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUBTAB 7: ATTACHED DOCUMENTS -->
+      <div *ngIf="activeFormSubTab() === 'resources'" class="subtab-panel">
+        <p class="panel-hint">Product-specific downloadable leaflets shown in Tab 5 (Documents) of the product detail modal.</p>
+
+        <div class="resources-list-mgmt">
+          <div *ngFor="let res of productForm.resources; let rIdx = index" class="resource-mgmt-item">
+            <div class="res-icon-wrap">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name-en">{{ res.name }}</div>
+              <div class="res-name-ar" *ngIf="res.name_ar">{{ res.name_ar }}</div>
+              <div class="res-meta">{{ res.type }} &bull; {{ res.size }} &bull; Icon: {{ res.icon }}</div>
+            </div>
+            <button type="button" class="btn-icon-danger" (click)="removeProductResource(rIdx)">&times;</button>
+          </div>
+        </div>
+
+        <div class="add-spec-row mt-3">
+          <input type="text" [(ngModel)]="newResourceNameEn" class="form-input" placeholder="Document Name (EN)" />
+          <input type="text" [(ngModel)]="newResourceNameAr" class="form-input rtl-input" placeholder="اسم الوثيقة (AR)" />
+          <select [(ngModel)]="newResourceType" class="form-select" style="max-width: 90px;">
+            <option value="PDF">PDF</option>
+            <option value="DOCX">DOCX</option>
+          </select>
+          <input type="text" [(ngModel)]="newResourceSize" class="form-input" placeholder="Size (e.g. 1.2 MB)" style="max-width: 100px;" />
+          <button type="button" class="btn btn-secondary" (click)="addProductResource()" [disabled]="!newResourceNameEn.trim()">Add Leaflet</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeProductModal()" [disabled]="isSaving()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="saveProduct()" [disabled]="isSaving()">
+        <span>{{ isSaving() ? 'Saving Product...' : (isEditingProduct() ? 'Update Product' : 'Create Product') }}</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ====================================================
+     LIVE PREVIEW MODAL (Landing Page Accurate Replica)
+     ==================================================== -->
+@if (isPreviewModalOpen() && previewProduct(); as product) {
+  <div class="modal-backdrop" (click)="closeLivePreview()">
+    <div class="modal-dialog modal-xl preview-container-dialog" (click)="$event.stopPropagation()">
+    
+    <!-- Preview Toolbar Bar -->
+    <div class="preview-control-bar">
+      <div class="preview-mode-switch">
+        <button
+          type="button"
+          class="mode-btn"
+          [class.active]="previewViewMode() === 'card'"
+          (click)="previewViewMode.set('card')"
+        >
+          Showcase Card View
+        </button>
+        <button
+          type="button"
+          class="mode-btn"
+          [class.active]="previewViewMode() === 'modal'"
+          (click)="previewViewMode.set('modal')"
+        >
+          Product Detail Modal View
+        </button>
+      </div>
+
+      <!-- Preview Language Toggle -->
+      <div class="preview-lang-pills">
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="previewLang() === 'en'"
+          (click)="previewLang.set('en')"
+        >
+          <span>🇬🇧</span> English
+        </button>
+        <button
+          type="button"
+          class="pill-btn"
+          [class.active]="previewLang() === 'ar'"
+          (click)="previewLang.set('ar')"
+        >
+          <span>🇸🇦</span> Saudi Arabic (العربية)
+        </button>
+      </div>
+
+      <button type="button" class="btn-close-modal" (click)="closeLivePreview()">&times;</button>
+    </div>
+
+    <!-- PREVIEW VIEW 1: SHOWCASE CARD -->
+    <div *ngIf="previewViewMode() === 'card'" class="preview-body" [class.rtl-preview]="previewLang() === 'ar'">
+      <div class="landing-showcase-card">
+        <div class="showcase-content">
+          <h2 class="showcase-title"><span>{{ getPreviewName(product) }}</span></h2>
+          <h3 class="showcase-subtitle">{{ getPreviewSubtitle(product) }}</h3>
+          <p class="showcase-description">{{ getPreviewDescription(product) }}</p>
+
+          <ul class="showcase-features">
+            <li *ngFor="let feat of getPreviewFeatures(product)" class="showcase-feature-item">
+              <svg class="feature-check-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>{{ feat }}</span>
+            </li>
+          </ul>
+
+          <button type="button" class="showcase-btn" (click)="previewViewMode.set('modal')">
+            <span>{{ previewLang() === 'ar' ? 'عرض تفاصيل المنتج' : 'View Product Details' }}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="showcase-media">
+          <div class="showcase-image-frame">
+            <img [src]="resolveImg(product.featured_image || product.image)" [alt]="product.name" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW VIEW 2: PRODUCT DETAIL MODAL ACCURATE REPLICA -->
+    <div *ngIf="previewViewMode() === 'modal'" class="preview-body preview-modal-body" [class.rtl-preview]="previewLang() === 'ar'">
+      <div class="public-modal-replica">
+        
+        <!-- Header -->
+        <div class="pub-modal-header">
+          <div class="pub-brand">
+            <img src="logo_navbar.png" alt="VIC" class="pub-logo" />
+          </div>
+          <div class="pub-links">
+            <span class="pub-web">www.vaccine.com.sa</span>
+          </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="pub-breadcrumb">
+          <span>{{ previewLang() === 'ar' ? 'الرئيسية' : 'Home' }}</span>
+          <span class="sep">&gt;</span>
+          <span>{{ previewLang() === 'ar' ? 'منتجاتنا' : 'Products' }}</span>
+          <span class="sep">&gt;</span>
+          <span class="cur">{{ getPreviewName(product) }}</span>
+        </div>
+
+        <!-- Top Gallery + Summary -->
+        <div class="pub-hero-grid">
+          <!-- Gallery -->
+          <div class="pub-gallery">
+            <div class="pub-gallery-preview">
+              <img [src]="resolveImg(product.gallery[previewThumbnailIdx()] || product.image)" [alt]="product.name" />
+            </div>
+            <div *ngIf="product.gallery.length > 1" class="pub-gallery-thumbs">
+              <div
+                *ngFor="let th of product.gallery; let tIdx = index"
+                class="pub-thumb"
+                [class.active]="tIdx === previewThumbnailIdx()"
+                (click)="previewThumbnailIdx.set(tIdx)"
+              >
+                <img [src]="resolveImg(th)" [alt]="'thumb ' + tIdx" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="pub-summary">
+            <h2 class="pub-title">{{ getPreviewName(product) }}</h2>
+            <h3 class="pub-subtitle">{{ getPreviewSubtitle(product) }}</h3>
+            <p class="pub-desc">{{ getPreviewDescription(product) }}</p>
+
+            <ul class="pub-features">
+              <li *ngFor="let f of getPreviewFeatures(product)">
+                <span class="chk">✓</span>
+                <span>{{ f }}</span>
+              </li>
+            </ul>
+
+            <div class="pub-download-act">
+              <button type="button" class="pub-btn-dl">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{{ previewLang() === 'ar' ? 'تحميل الكتيب التعريفي' : 'Download Brochure' }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Tabs -->
+        <div class="pub-tabs">
+          <button type="button" class="pub-tab" [class.active]="previewActiveTab() === 'Overview'" (click)="previewActiveTab.set('Overview')">
+            {{ previewLang() === 'ar' ? 'نظرة عامة' : 'Overview' }}
+          </button>
+          <button type="button" class="pub-tab" [class.active]="previewActiveTab() === 'Specification'" (click)="previewActiveTab.set('Specification')">
+            {{ previewLang() === 'ar' ? 'المواصفات الفنية' : 'Specification' }}
+          </button>
+          <button type="button" class="pub-tab" [class.active]="previewActiveTab() === 'Indication'" (click)="previewActiveTab.set('Indication')">
+            {{ previewLang() === 'ar' ? 'دواعي الاستعمال' : 'Indication' }}
+          </button>
+          <button type="button" class="pub-tab" [class.active]="previewActiveTab() === 'Storage'" (click)="previewActiveTab.set('Storage')">
+            {{ previewLang() === 'ar' ? 'الحفظ والتخزين' : 'Storage & Handling' }}
+          </button>
+          <button type="button" class="pub-tab" [class.active]="previewActiveTab() === 'Documents'" (click)="previewActiveTab.set('Documents')">
+            {{ previewLang() === 'ar' ? 'الوثائق الطبية' : 'Documents' }}
+          </button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="pub-tab-body">
+          
+          <!-- TAB 1: OVERVIEW -->
+          <div *ngIf="previewActiveTab() === 'Overview'" class="pub-overview-grid">
+            <div class="pub-col">
+              <h4>{{ previewLang() === 'ar' ? 'نظرة عامة على المنتج' : 'Product Overview' }}</h4>
+              <p>{{ getPreviewDescription(product) }}</p>
+
+              <h4 class="mt-4">{{ previewLang() === 'ar' ? 'معايير الجودة والتصنيع' : 'Quality Standards' }}</h4>
+              <ul class="pub-features">
+                <li *ngFor="let f of getPreviewFeatures(product)">
+                  <span class="chk">✓</span>
+                  <span>{{ f }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pub-col">
+              <h4>{{ previewLang() === 'ar' ? 'المواصفات الدوائية' : 'Specifications' }}</h4>
+              <table class="pub-table">
+                <tbody>
+                  <tr *ngFor="let sp of getPreviewSpecs(product)">
+                    <td class="lbl">{{ sp.label }}</td>
+                    <td class="val">{{ sp.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 2: SPECIFICATION -->
+          <div *ngIf="previewActiveTab() === 'Specification'">
+            <table class="pub-table">
+              <tbody>
+                <tr *ngFor="let sp of getPreviewSpecs(product)">
+                  <td class="lbl">{{ sp.label }}</td>
+                  <td class="val">{{ sp.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB 3: INDICATION -->
+          <div *ngIf="previewActiveTab() === 'Indication'">
+            <p class="pub-desc-p">
+              {{ getPreviewName(product) }} {{ getPreviewIndicationDesc(product) }}
+            </p>
+            <table class="pub-table">
+              <tbody>
+                <tr>
+                  <td class="lbl">{{ previewLang() === 'ar' ? 'الفئة المستهدفة' : 'Target Population' }}</td>
+                  <td class="val">{{ getPreviewIndicationTarget(product) }}</td>
+                </tr>
+                <tr>
+                  <td class="lbl">{{ previewLang() === 'ar' ? 'طريقة الإعطاء' : 'Administration Route' }}</td>
+                  <td class="val">{{ getPreviewIndicationRoute(product) }}</td>
+                </tr>
+                <tr *ngFor="let item of getPreviewIndicationItems(product)">
+                  <td class="lbl">{{ item.label }}</td>
+                  <td class="val">{{ item.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB 4: STORAGE & HANDLING -->
+          <div *ngIf="previewActiveTab() === 'Storage'">
+            <table class="pub-table">
+              <tbody>
+                <tr *ngFor="let st of getPreviewStorage(product)">
+                  <td class="lbl">{{ st.label }}</td>
+                  <td class="val">{{ st.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB 5: DOCUMENTS -->
+          <div *ngIf="previewActiveTab() === 'Documents'">
+            <table class="pub-table">
+              <tbody>
+                <tr *ngFor="let res of getPreviewResources(product)">
+                  <td class="lbl">{{ previewLang() === 'ar' && res.name_ar ? res.name_ar : res.name }}</td>
+                  <td class="val">{{ res.type }} ({{ res.size }}) &mdash; Available upon official medical request</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+}
+
+
+<!-- ====================================================
+     DELETE CONFIRMATION MODAL
+     ==================================================== -->
+@if (isDeleteModalOpen() && productToDelete(); as item) {
+  <div class="modal-backdrop" (click)="closeDeleteModal()">
+    <div class="modal-dialog modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header modal-header-danger">
+        <h3 class="modal-title">Delete Product</h3>
+        <button type="button" class="btn-close-modal" (click)="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete <strong>{{ item.name }}</strong> ({{ item.product_code }})?</p>
+        <p class="text-danger-sm">This action cannot be undone and will remove the product from the public catalog.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete Product</button>
+      </div>
+    </div>
+  </div>
+}
+

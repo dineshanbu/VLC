@@ -1,8 +1,10 @@
 import { Component, HostListener, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AboutService } from '../../../core/services/about.service';
 import { TranslationService } from '../../../core/services/translation.service';
 import { AboutPageContentMap } from '../../../core/models/about.model';
+import { environment } from '../../../../environments/environment';
 
 export interface LeaderSection {
   heading: string;
@@ -29,13 +31,20 @@ export interface Leader {
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './about.html',
-  styleUrl: './about.css'
+  styleUrls: ['./about.css', '../public-theme.css']
 })
 export class AboutComponent implements OnInit, OnDestroy {
   private aboutService = inject(AboutService);
   public translationService = inject(TranslationService);
+
+  onHeroImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.endsWith('home_banner.png')) {
+      img.src = 'home_banner.png';
+    }
+  }
 
   // Dynamic Content Signals
   pageContent = signal<Partial<AboutPageContentMap>>({});
@@ -473,7 +482,7 @@ export class AboutComponent implements OnInit, OnDestroy {
   resolveImg(path: string | undefined | null, fallback = 'home_banner.png'): string {
     if (!path) return fallback;
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
+    if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }
 
@@ -728,4 +737,5 @@ export class AboutComponent implements OnInit, OnDestroy {
     return leader.bioSections || [];
   }
 }
+
 

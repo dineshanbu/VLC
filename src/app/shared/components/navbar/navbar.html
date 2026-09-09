@@ -1,4 +1,4 @@
-<nav class="navbar" [class.navbar--scrolled]="isScrolled()">
+<nav class="navbar" [class.navbar--scrolled]="isScrolled()" [class.navbar--transparent]="!isScrolled()" [class.navbar--home]="isHomePage()">
   <div class="navbar__container">
 
     <!-- Brand Logo (Compact & Refined) -->
@@ -22,27 +22,27 @@
       }
     </ul>
 
-    <!-- Right Side Actions -->
+    <!-- Right Side Actions (Language Switcher) -->
     <div class="navbar__right">
       <!-- Language Switcher -->
       <div class="navbar__lang">
         <button
+          type="button"
           class="navbar__lang-btn"
           [class.navbar__lang-btn--active]="currentLang() === 'en'"
           (click)="switchLanguage('en')"
         >EN</button>
         <span class="navbar__lang-separator">|</span>
         <button
+          type="button"
           class="navbar__lang-btn"
           [class.navbar__lang-btn--active]="currentLang() === 'ar'"
           (click)="switchLanguage('ar')"
         >العربية</button>
       </div>
-
-      <!-- Compact CTA Button -->
-      <a routerLink="/contact" class="btn btn-primary navbar__cta">
-        {{ translationService.translate('nav.contactUsBtn') }}
-      </a>
+      <button type="button" class="navbar__search" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
+      </button>
     </div>
 
     <!-- Mobile Hamburger Button -->
@@ -109,11 +109,6 @@
           (click)="switchLanguage('ar')"
         >العربية</button>
       </div>
-
-      <!-- Mobile CTA Button -->
-      <a routerLink="/contact" class="btn btn-primary mobile-menu__cta" (click)="closeMobileMenu()">
-        {{ translationService.translate('nav.contactUsBtn') }}
-      </a>
     </div>
   </div>
 }

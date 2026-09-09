@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { TranslationService } from '../../../core/services/translation.service';
+import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 export interface JobPosition {
   id: string | number;
@@ -29,9 +32,24 @@ export interface BenefitItem {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './careers.html',
-  styleUrl: './careers.css'
+  styleUrls: ['./careers.css', '../public-theme.css']
 })
 export class CareersComponent implements OnInit {
+  public translationService = inject(TranslationService);
+
+  resolveImg(path: string | undefined | null, fallback = 'home_banner.png'): string {
+    if (!path || !path.trim()) return fallback;
+    const resolved = resolveImageUrl(path, fallback);
+    return resolved || fallback;
+  }
+
+  onHeroImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.endsWith('home_banner.png')) {
+      img.src = 'home_banner.png';
+    }
+  }
+
   // Filter States
   searchQuery = signal<string>('');
   selectedDepartment = signal<string>('All Departments');
@@ -56,7 +74,7 @@ export class CareersComponent implements OnInit {
   };
 
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:5000/api/careers';
+  private readonly API_URL = `${environment.apiUrl}/careers`;
   isSubmittingApplication = signal<boolean>(false);
 
   // Dynamic Departments / Categories List
@@ -598,3 +616,4 @@ export class CareersComponent implements OnInit {
     }
   }
 }
+

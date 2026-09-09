@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardService } from '../../../core/services/dashboard.service';
 import { DashboardResponse } from '../../../core/models/dashboard.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -13,6 +14,7 @@ import { DashboardResponse } from '../../../core/models/dashboard.model';
 })
 export class AdminDashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
+  readonly apiUrl = environment.apiUrl;
 
   data = signal<DashboardResponse | null>(null);
   isLoading = signal<boolean>(true);

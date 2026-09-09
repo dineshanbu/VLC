@@ -9,18 +9,8 @@
   <aside class="admin-sidebar">
     <!-- Brand Header -->
     <div class="sidebar-header">
-      <a routerLink="/admin/dashboard" class="brand-link">
-        <div class="brand-logo-icon">
-          <svg viewBox="0 0 40 40" fill="none" class="vic-icon-svg">
-            <rect width="40" height="40" rx="10" fill="var(--color-primary-light)" />
-            <path d="M12 28L20 12L28 28H23L20 22L17 28H12Z" fill="#00D2D3" />
-            <circle cx="20" cy="18" r="3" fill="#FFFFFF" />
-          </svg>
-        </div>
-        <div class="brand-text">
-          <span class="brand-title">VIC PORTAL</span>
-          <span class="brand-badge">MANAGEMENT</span>
-        </div>
+      <a routerLink="/admin/dashboard" class="brand-link" title="VIC Dashboard">
+        <img src="logo_navbar_white.png" alt="Vaccine Industrial Company" class="sidebar-logo-img" />
       </a>
       <button class="btn-close-sidebar" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -56,6 +46,17 @@
             </svg>
           </span>
           <span class="nav-label">User Management</span>
+        </a>
+
+        <a routerLink="/admin/product" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </span>
+          <span class="nav-label">Products &amp; Portfolio</span>
         </a>
 
         <a routerLink="/admin/news" routerLinkActive="active" class="nav-item">
@@ -182,6 +183,13 @@
             <line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
         </button>
+
+        <a routerLink="/admin/dashboard" class="header-logo-link" title="VIC Admin Dashboard">
+          <img src="logo_navbar.png" alt="Vaccine Industrial Company" class="header-logo-img" />
+        </a>
+
+        <div class="header-divider-v"></div>
+
         <div class="header-breadcrumb">
           <span class="portal-badge">VIC BIOTECH</span>
           <span class="separator">/</span>
@@ -190,6 +198,16 @@
       </div>
 
       <div class="header-right">
+        <!-- View Landing Page Link -->
+        <a routerLink="/" target="_blank" class="btn-view-site" title="View Public Landing Page">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span class="view-site-text">View Landing Page</span>
+        </a>
+
         <!-- System Status Badge -->
         <div class="status-indicator-badge">
           <span class="status-dot online"></span>

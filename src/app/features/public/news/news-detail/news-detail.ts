@@ -17,7 +17,7 @@ import { resolveImageUrl } from '../../../../core/utils/image-url.util';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './news-detail.html',
-  styleUrl: './news-detail.css',
+  styleUrls: ['./news-detail.css', '../../public-theme.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class NewsDetailComponent implements OnInit, OnDestroy {
@@ -25,8 +25,29 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private newsService = inject(NewsService);
 
-  getImageUrl(url?: string | null): string {
-    return resolveImageUrl(url);
+  readonly fallbackImages = [
+    'news1.jpeg',
+    'construction_milestone_oct.jpg',
+    'news2.jpg',
+    'news3.jpg',
+    'news4.jpg'
+  ];
+
+  getImageUrl(url?: string | null, index = 0): string {
+    const fallback = this.fallbackImages[index % this.fallbackImages.length];
+    if (!url || !url.trim()) return fallback;
+    const resolved = resolveImageUrl(url, fallback);
+    return resolved || fallback;
+  }
+
+  onImgError(event: Event, index = 0): void {
+    const img = event.target as HTMLImageElement;
+    if (!img) return;
+    const fallback = this.fallbackImages[index % this.fallbackImages.length];
+    if (img.getAttribute('data-failed') !== 'true') {
+      img.setAttribute('data-failed', 'true');
+      img.src = fallback;
+    }
   }
 
   slug = signal<string>('');
@@ -72,14 +93,18 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
             date: a.date_str || '2025',
             formattedDate: a.formatted_date || a.date_str || '2025',
             readTime: a.read_time || '3 min read',
-            image: a.image || 'news1.jpeg',
-            badge: a.badge || a.category.toUpperCase(),
+            image: a.image?.trim() ? a.image.trim() : (getArticleBySlug(slug)?.image || 'news1.jpeg'),
+            badge: a.badge || a.category?.toUpperCase() || 'NEWS',
             summary: a.summary || '',
             contentHtml: a.content_html || '',
             officialLink: a.official_link || ''
           };
           this.article.set(mapped);
-          this.relatedArticles.set(getRelatedArticles(slug, 3));
+          const related = getRelatedArticles(slug, 3).map((r, idx) => ({
+            ...r,
+            image: r.image?.trim() ? r.image.trim() : this.fallbackImages[idx % this.fallbackImages.length]
+          }));
+          this.relatedArticles.set(related);
         }
       },
       error: () => {
@@ -113,3 +138,4 @@ export class NewsDetailComponent implements OnInit, OnDestroy {
     }
   }
 }
+

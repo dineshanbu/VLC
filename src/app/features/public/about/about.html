@@ -7,32 +7,41 @@
 <!-- ====================================================
      SECTION 1 — ABOUT HERO BANNER (APPROVED SPLIT COMPOSITION)
      ==================================================== -->
-<section class="about-hero">
+<section class="products-hero about-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    <img
+      [src]="resolveImg(pageContent().hero?.image_url, 'home_banner.png')"
+      alt="Vaccine Industrial Holding LLC Headquarters and Manufacturing Facility"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    />
+    <div class="products-hero__overlay"></div>
+  </div>
 
-  <!-- Content Section (Left on Desktop, Top on Mobile) -->
-  <div class="about-hero__container">
-    <div class="about-hero__content">
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
 
-      <!-- Eyebrow -->
-      <span class="about-hero__eyebrow">{{ translationService.currentLang() === 'ar' ? (pageContent().hero?.badge_ar || translationService.translate('about.hero.badge')) : (pageContent().hero?.badge || translationService.translate('about.hero.badge')) }}</span>
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.about') }}</span>
+      </nav>
 
       <!-- Main Heading -->
-      <h1 class="about-hero__heading">
+      <h1 class="about-hero__heading products-hero__heading">
         {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.title_ar || translationService.translate('about.hero.title')) : (pageContent().hero?.title || translationService.translate('about.hero.title')) }}
       </h1>
 
-      <!-- Subheading -->
-      <p class="about-hero__subheading">
-        {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.subtitle_ar || translationService.translate('about.hero.subtitle')) : (pageContent().hero?.subtitle || translationService.translate('about.hero.subtitle')) }}
-      </p>
-
-      <!-- Short Description -->
-      <p class="about-hero__description">
+      <!-- Subtitle Description -->
+      <p class="about-hero__description products-hero__description">
         {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.description_ar || translationService.translate('about.hero.desc')) : (pageContent().hero?.description || translationService.translate('about.hero.desc')) }}
       </p>
 
-      <!-- Read More Button — Opens Company Overview Modal -->
-      <div class="about-hero__action">
+      <!-- Read More Action Button (Opens Company Overview Modal) -->
+      <div class="products-hero__action">
         <button
           type="button"
           class="about-hero__read-more-btn"
@@ -52,20 +61,10 @@
     </div>
   </div>
 
-  <!-- Headquarters Building Image (Right Split on Desktop, Bottom on Mobile) -->
-  <div class="about-hero__image-wrapper">
-    <img
-      [src]="resolveImg(pageContent().hero?.image_url, 'home_banner.png')"
-      alt="Vaccine Industrial Holding LLC Headquarters and Manufacturing Facility"
-      class="about-hero__image"
-    />
-    <div class="about-hero__overlay"></div>
-  </div>
-
-  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
-  <div class="about-hero__wave-wrapper" aria-hidden="true">
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
     <svg
-      class="about-hero__wave-svg"
+      class="products-hero__wave-svg"
       viewBox="0 0 1440 120"
       fill="none"
       preserveAspectRatio="none"
@@ -80,164 +79,198 @@
         </linearGradient>
       </defs>
 
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
       <path
-        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
         fill="url(#aboutTealWaveGrad)"
       />
 
+      <!-- Clean Seamless Base Matching Section 2 -->
       <path
-        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
-        fill="#F0F4F8"
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
+        fill="#FFFFFF"
       />
     </svg>
   </div>
-
 </section>
 
 
 <!-- ====================================================
-     SECTION 2 — OUR VISION + OUR MISSION
-     Clean 2-Column Equal-Height Desktop Grid
+     SECTION 2 — OUR PURPOSE: VISION & MISSION
+     Exact Layout matching Reference (media_1788803647218.png)
      ==================================================== -->
-<section class="about-overview">
-  <div class="about-overview__container">
-    <div class="about-overview__grid">
+<section class="about-purpose vic-section">
+  <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="about-purpose__container vic-container">
 
-      <!-- Column 1 (Left): Our Vision Card -->
-      <div class="about-vm-card about-vm-card--vision">
+    <!-- Section Header: Our Purpose -->
+    <div class="about-purpose__header">
+      <span class="about-purpose__eyebrow">
+        {{ translationService.currentLang() === 'ar'
+          ? (pageContent().vision_mission?.badge_ar && pageContent().vision_mission?.badge_ar !== 'الركائز التأسيسية' ? pageContent().vision_mission?.badge_ar : translationService.translate('about.purpose.eyebrow'))
+          : (pageContent().vision_mission?.badge && pageContent().vision_mission?.badge !== 'FOUNDATIONAL PILLARS' ? pageContent().vision_mission?.badge : translationService.translate('about.purpose.eyebrow')) }}
+      </span>
+    </div>
 
-        <!-- Card Header: Icon + Label -->
-        <div class="about-vm-card__header-row">
-          <div class="about-vm-card__icon-badge" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </div>
-          <span class="about-vm-card__label">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.vision_title || translationService.translate('about.vision.title')) : (pageContent().vision_mission?.content_json?.vision_title || translationService.translate('about.vision.title')) }}</span>
+    <!-- 2-Column Grid with Center Divider Line -->
+    <div class="about-purpose__grid">
+
+      <!-- Column 1: Our Vision -->
+      <div class="about-purpose__col about-purpose__col--vision">
+        <!-- Soft Cyan Circular Badge with Eye Icon -->
+        <div class="about-purpose__badge" aria-hidden="true">
+          <svg class="about-purpose__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
         </div>
 
-        <!-- Vision body clipped to 6 lines, expands on toggle -->
-        <div
-          class="about-vm-card__clip about-vm-card__clip--vision"
-          [class.about-vm-card__clip--open]="isVisionExpanded"
-        >
-          <div class="about-vm-card__body">
-            <!-- Arabic Paragraphs -->
-            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishVisionParagraphs">
-              <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
-                <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.vision_paragraphs" class="about-vm-card__text">
-                  {{ p }}
-                </p>
-              </ng-container>
-            </ng-container>
+        <div class="about-purpose__content">
+          <h3 class="about-purpose__title">
+            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.vision_title || translationService.translate('about.vision.title')) : (pageContent().vision_mission?.content_json?.vision_title || translationService.translate('about.vision.title')) }}
+          </h3>
+          <!-- Teal accent dash -->
+          <div class="about-purpose__line" aria-hidden="true"></div>
 
-            <!-- English Paragraphs -->
-            <ng-template #englishVisionParagraphs>
-              <ng-container *ngIf="pageContent().vision_mission?.content_json?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
-                <p *ngFor="let p of pageContent().vision_mission?.content_json?.vision_paragraphs" class="about-vm-card__text">
-                  {{ p }}
-                </p>
-              </ng-container>
-            </ng-template>
-
-            <ng-template #defaultVisionParagraphs>
-              <p class="about-vm-card__text">
-                {{ translationService.translate('about.vision.p1') }}
-              </p>
-              <p class="about-vm-card__text">
-                {{ translationService.translate('about.vision.p2') }}
-              </p>
-              <p class="about-vm-card__text">
-                {{ translationService.translate('about.vision.p3') }}
-              </p>
-            </ng-template>
-          </div>
-          <!-- Soft fade gradient — hidden when expanded -->
-          <div class="about-vm-card__fade" aria-hidden="true"></div>
-        </div>
-
-        <!-- Read More / Read Less link -->
-        <div class="about-vm-card__action">
-          <button
-            type="button"
-            class="about-vm-card__link-btn"
-            (click)="toggleVision()"
-            [attr.aria-expanded]="isVisionExpanded"
+          <!-- Vision text clipped, expandable -->
+          <div
+            class="about-purpose__clip"
+            [class.about-purpose__clip--open]="isVisionExpanded"
           >
-            <span>{{ isVisionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore') }}</span>
-          </button>
-        </div>
+            <div class="about-purpose__body">
+              <!-- Arabic Paragraphs -->
+              <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishVisionParagraphs">
+                <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
+                  <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.vision_paragraphs" class="about-purpose__text">
+                    {{ p }}
+                  </p>
+                </ng-container>
+              </ng-container>
 
+              <!-- English Paragraphs -->
+              <ng-template #englishVisionParagraphs>
+                <ng-container *ngIf="pageContent().vision_mission?.content_json?.vision_paragraphs?.length > 0; else defaultVisionParagraphs">
+                  <p *ngFor="let p of pageContent().vision_mission?.content_json?.vision_paragraphs" class="about-purpose__text">
+                    {{ p }}
+                  </p>
+                </ng-container>
+              </ng-template>
+
+              <ng-template #defaultVisionParagraphs>
+                <p class="about-purpose__text">
+                  {{ translationService.translate('about.vision.p1') }}
+                </p>
+                <p class="about-purpose__text">
+                  {{ translationService.translate('about.vision.p2') }}
+                </p>
+                <p class="about-purpose__text">
+                  {{ translationService.translate('about.vision.p3') }}
+                </p>
+              </ng-template>
+            </div>
+            <!-- Soft fade gradient when collapsed with multiple paragraphs -->
+            <div class="about-purpose__fade" aria-hidden="true"></div>
+          </div>
+
+          <!-- Arrow Toggle button (arrow alone, no text) -->
+          <div class="about-purpose__action">
+            <button
+              type="button"
+              class="about-purpose__arrow-btn"
+              (click)="toggleVision()"
+              [class.about-purpose__arrow-btn--open]="isVisionExpanded"
+              [attr.aria-expanded]="isVisionExpanded"
+              [attr.aria-label]="isVisionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore')"
+            >
+              <svg class="about-purpose__arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Column 2 (Right): Our Mission Card -->
-      <div class="about-vm-card about-vm-card--mission">
+      <!-- Center Vertical Divider -->
+      <div class="about-purpose__divider" aria-hidden="true"></div>
 
-        <!-- Card Header: Icon + Label -->
-        <div class="about-vm-card__header-row">
-          <div class="about-vm-card__icon-badge" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <circle cx="12" cy="12" r="6"></circle>
-              <circle cx="12" cy="12" r="2"></circle>
-            </svg>
-          </div>
-          <span class="about-vm-card__label">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.mission_title || translationService.translate('about.mission.title')) : (pageContent().vision_mission?.content_json?.mission_title || translationService.translate('about.mission.title')) }}</span>
+      <!-- Column 2: Our Mission -->
+      <div class="about-purpose__col about-purpose__col--mission">
+        <!-- Soft Cyan Circular Badge with Bullseye/Target Icon -->
+        <div class="about-purpose__badge" aria-hidden="true">
+          <svg class="about-purpose__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <line x1="22" y1="2" x2="13.5" y2="10.5"></line>
+            <polygon points="12 12 16 11 13 15" fill="currentColor"></polygon>
+          </svg>
         </div>
 
-        <!-- Mission body clipped to 4 lines, expands on toggle -->
-        <div
-          class="about-vm-card__clip about-vm-card__clip--mission"
-          [class.about-vm-card__clip--open]="isMissionExpanded"
-        >
-          <div class="about-vm-card__body">
-            <!-- Arabic Mission Text -->
-            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishMissionParagraphs">
-              <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.mission_paragraphs?.length > 0; else defaultMissionText">
-                <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.mission_paragraphs" class="about-vm-card__text">
-                  {{ p }}
-                </p>
-              </ng-container>
-            </ng-container>
+        <div class="about-purpose__content">
+          <h3 class="about-purpose__title">
+            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_mission?.content_json_ar?.mission_title || translationService.translate('about.mission.title')) : (pageContent().vision_mission?.content_json?.mission_title || translationService.translate('about.mission.title')) }}
+          </h3>
+          <!-- Teal accent dash -->
+          <div class="about-purpose__line" aria-hidden="true"></div>
 
-            <!-- English Mission Text -->
-            <ng-template #englishMissionParagraphs>
-              <ng-container *ngIf="pageContent().vision_mission?.content_json?.mission_paragraphs?.length > 0; else defaultMissionText">
-                <p *ngFor="let p of pageContent().vision_mission?.content_json?.mission_paragraphs" class="about-vm-card__text">
-                  {{ p }}
-                </p>
-              </ng-container>
-            </ng-template>
-
-            <ng-template #defaultMissionText>
-              <p class="about-vm-card__text">
-                {{ translationService.translate('about.mission.p1') }}
-              </p>
-            </ng-template>
-          </div>
-          <!-- Soft fade gradient — hidden when expanded -->
-          <div class="about-vm-card__fade" aria-hidden="true"></div>
-        </div>
-
-        <!-- Read More / Read Less link -->
-        <div class="about-vm-card__action">
-          <button
-            type="button"
-            class="about-vm-card__link-btn"
-            (click)="toggleMission()"
-            [attr.aria-expanded]="isMissionExpanded"
+          <!-- Mission text clipped, expandable -->
+          <div
+            class="about-purpose__clip"
+            [class.about-purpose__clip--open]="isMissionExpanded"
           >
-            <span>{{ isMissionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore') }}</span>
-          </button>
-        </div>
+            <div class="about-purpose__body">
+              <!-- Arabic Mission Text -->
+              <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishMissionParagraphs">
+                <ng-container *ngIf="pageContent().vision_mission?.content_json_ar?.mission_paragraphs?.length > 0; else defaultMissionText">
+                  <p *ngFor="let p of pageContent().vision_mission?.content_json_ar?.mission_paragraphs" class="about-purpose__text">
+                    {{ p }}
+                  </p>
+                </ng-container>
+              </ng-container>
 
+              <!-- English Mission Text -->
+              <ng-template #englishMissionParagraphs>
+                <ng-container *ngIf="pageContent().vision_mission?.content_json?.mission_paragraphs?.length > 0; else defaultMissionText">
+                  <p *ngFor="let p of pageContent().vision_mission?.content_json?.mission_paragraphs" class="about-purpose__text">
+                    {{ p }}
+                  </p>
+                </ng-container>
+              </ng-template>
+
+              <ng-template #defaultMissionText>
+                <p class="about-purpose__text">
+                  {{ translationService.translate('about.mission.p1') }}
+                </p>
+                <p class="about-purpose__text">
+                  {{ translationService.translate('about.mission.p2') }}
+                </p>
+              </ng-template>
+            </div>
+            <!-- Soft fade gradient when collapsed -->
+            <div class="about-purpose__fade" aria-hidden="true"></div>
+          </div>
+
+          <!-- Arrow Toggle button (arrow alone, no text) -->
+          <div class="about-purpose__action">
+            <button
+              type="button"
+              class="about-purpose__arrow-btn"
+              (click)="toggleMission()"
+              [class.about-purpose__arrow-btn--open]="isMissionExpanded"
+              [attr.aria-expanded]="isMissionExpanded"
+              [attr.aria-label]="isMissionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore')"
+            >
+              <svg class="about-purpose__arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
-
 
 <!-- ====================================================
      COMPANY OVERVIEW — PREMIUM MODAL POPUP
@@ -334,156 +367,11 @@
 
 
 <!-- ====================================================
-     SECTION 3 — ALIGNED WITH SAUDI VISION 2030
-     3-Column Banner: Text | Image | Feature Grid
-     ==================================================== -->
-<!-- ====================================================
-     SECTION 3 — ALIGNED WITH SAUDI VISION 2030
-     Panoramic Banner with Floating Feature Card
-     ==================================================== -->
-<section class="about-v2030">
-  <div class="about-v2030__container">
-    <div class="about-v2030__banner">
-
-      <!-- Background Image: Flag & Riyadh Skyline -->
-      <img
-        [src]="resolveImg(pageContent().vision_2030?.image_url, 'saudi_biotech_strategy.jpg')"
-        alt="Saudi Arabia Flag with Riyadh skyline — Vision 2030"
-        class="about-v2030__bg-img"
-      />
-
-      <!-- Soft Left Fade Gradient Overlay -->
-      <div class="about-v2030__overlay" aria-hidden="true"></div>
-
-      <!-- Banner Content Layer -->
-      <div class="about-v2030__content">
-
-        <!-- Left: Text Content -->
-        <div class="about-v2030__text">
-          <span class="about-v2030__eyebrow">{{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.badge_ar || pageContent().vision_2030?.badge || translationService.translate('about.v2030.badge')) : (pageContent().vision_2030?.badge || translationService.translate('about.v2030.badge')) }}</span>
-          <h2 class="about-v2030__heading">
-            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.title_ar || pageContent().vision_2030?.title || translationService.translate('about.v2030.title')) : (pageContent().vision_2030?.title || translationService.translate('about.v2030.title')) }}
-          </h2>
-          <p class="about-v2030__desc">
-            {{ translationService.currentLang() === 'ar' ? (pageContent().vision_2030?.description_ar || pageContent().vision_2030?.description || translationService.translate('about.v2030.desc')) : (pageContent().vision_2030?.description || translationService.translate('about.v2030.desc')) }}
-          </p>
-        </div>
-
-        <!-- Right: Floating 2×2 Feature Card -->
-        <div class="about-v2030__card">
-          <div class="about-v2030__grid">
-
-            <!-- Arabic dynamic features -->
-            <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishFeatures">
-              <ng-container *ngIf="pageContent().vision_2030?.content_json_ar && pageContent().vision_2030?.content_json_ar.length > 0; else defaultFeatures">
-                <div
-                  *ngFor="let feat of pageContent().vision_2030?.content_json_ar; let idx = index"
-                  class="about-v2030__item"
-                  [class.about-v2030__item--tl]="idx === 0"
-                  [class.about-v2030__item--tr]="idx === 1"
-                  [class.about-v2030__item--bl]="idx === 2"
-                  [class.about-v2030__item--br]="idx === 3"
-                >
-                  <div class="about-v2030__icon-badge" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                      <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
-                    </svg>
-                  </div>
-                  <span class="about-v2030__item-label">{{ feat.title }}</span>
-                </div>
-              </ng-container>
-            </ng-container>
-
-            <!-- English dynamic features -->
-            <ng-template #englishFeatures>
-              <ng-container *ngIf="pageContent().vision_2030?.content_json && pageContent().vision_2030?.content_json.length > 0; else defaultFeatures">
-                <div
-                  *ngFor="let feat of pageContent().vision_2030?.content_json; let idx = index"
-                  class="about-v2030__item"
-                  [class.about-v2030__item--tl]="idx === 0"
-                  [class.about-v2030__item--tr]="idx === 1"
-                  [class.about-v2030__item--bl]="idx === 2"
-                  [class.about-v2030__item--br]="idx === 3"
-                >
-                  <div class="about-v2030__icon-badge" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                      <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
-                    </svg>
-                  </div>
-                  <span class="about-v2030__item-label">{{ feat.title }}</span>
-                </div>
-              </ng-container>
-            </ng-template>
-
-            <!-- Default 4 Pillars Fallback -->
-            <ng-template #defaultFeatures>
-              <!-- Item 1: Health Sector Transformation -->
-              <div class="about-v2030__item about-v2030__item--tl">
-                <div class="about-v2030__icon-badge" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    <path d="M3.5 12h3l2-3 3 6 2-3h7"></path>
-                  </svg>
-                </div>
-                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar1') }}</span>
-              </div>
-
-              <!-- Item 2: Economic Diversification -->
-              <div class="about-v2030__item about-v2030__item--tr">
-                <div class="about-v2030__icon-badge" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                    <circle cx="18" cy="7" r="2"></circle>
-                    <circle cx="12" cy="2" r="2"></circle>
-                    <circle cx="6" cy="11" r="2"></circle>
-                  </svg>
-                </div>
-                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar2') }}</span>
-              </div>
-
-              <!-- Item 3: Local Content Development -->
-              <div class="about-v2030__item about-v2030__item--bl">
-                <div class="about-v2030__icon-badge" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-                  </svg>
-                </div>
-                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar3') }}</span>
-              </div>
-
-              <!-- Item 4: Innovation & Sustainability -->
-              <div class="about-v2030__item about-v2030__item--br">
-                <div class="about-v2030__icon-badge" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.05-6.95l-1.41 1.41m-9.08 9.08l-1.41 1.41m0-11.9l1.41 1.41m9.08 9.08l1.41 1.41"></path>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                  </svg>
-                </div>
-                <span class="about-v2030__item-label">{{ translationService.translate('about.v2030.pillar4') }}</span>
-              </div>
-            </ng-template>
-
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ====================================================
      SECTION 4 — OUR LEADERSHIP (RESPONSIVE CAROUSEL)
      ==================================================== -->
-<section class="about-leadership">
-  <div class="about-leadership__container">
+<section class="about-leadership vic-section vic-section--soft">
+  <img class="vic-floating-v vic-floating-v--right" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="about-leadership__container vic-container">
 
     <!-- Header with Controls -->
     <div class="about-leadership__header-row">
@@ -594,7 +482,47 @@
 
 
 <!-- ====================================================
-     SECTION 5 — LEADER PROFILE MODAL POPUP
+     SECTION 5 — STATE-OF-THE-ART FACILITY
+     ==================================================== -->
+<section class="about-facility" aria-labelledby="facility-heading">
+  <div class="about-facility__container">
+    <div class="about-facility__gallery" aria-label="Vaccine Industrial Company facility gallery">
+      <figure class="about-facility__image about-facility__image--top">
+        <img src="slide_Images/Vic top1.png" alt="Vaccine Industrial Company facility exterior" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--main">
+        <img src="slide_Images/Vic main1.png" alt="Vaccine Industrial Company manufacturing facility" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--rdi">
+        <img src="slide_Images/Vic RDI.png" alt="VIC research and development facility" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--side-one">
+        <img src="slide_Images/Vic side.png" alt="Vaccine Industrial Company campus view" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--side-two">
+        <img src="slide_Images/Vic side 2.png" alt="Vaccine Industrial Company facility entrance" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--side-three">
+        <img src="slide_Images/vic side 3.png" alt="Vaccine Industrial Company building exterior" loading="lazy" />
+      </figure>
+      <figure class="about-facility__image about-facility__image--main-two">
+        <img src="slide_Images/Vic main2.png" alt="Vaccine Industrial Company production campus" loading="lazy" />
+      </figure>
+    </div>
+
+    <div class="about-facility__content">
+      <h2 id="facility-heading" class="about-facility__heading">State-of-the-Art Facility: Pioneering Excellence in Vaccine Manufacturing</h2>
+      <p class="about-facility__lead">Welcome to our cutting-edge facility, where innovation meets precision in the pursuit of safeguarding global health. Our state-of-the-art manufacturing hub is designed to push the boundaries of vaccine production, setting new benchmarks for quality, efficiency, and reliability.</p>
+      <p>Discover a facility that blends advanced technology with meticulous attention to detail, ensuring the seamless execution of every stage in the vaccine manufacturing process. From research and development laboratories to manufacturing suites equipped with the latest advancements, our facility is a testament to our commitment to excellence.</p>
+      <p>At the heart of our operations is a team of dedicated professionals, experts in their respective fields, working collaboratively to bring forth groundbreaking vaccines. Explore our facility to witness the convergence of expertise, cutting-edge technology, and a shared passion for advancing healthcare.</p>
+      <p>Join us on a virtual tour as we invite you to explore the core of our operations, showcasing the commitment to quality, safety, and innovation that defines our facility. At Vaccine Industrial Company, we are not just manufacturing vaccines; we are shaping a healthier future for generations to come.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 6 — LEADER PROFILE MODAL POPUP
      Detailed Biography & Credentials
      ==================================================== -->
 <div
@@ -665,4 +593,5 @@
 
   </div>
 </div>
+
 

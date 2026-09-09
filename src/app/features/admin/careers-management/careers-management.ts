@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 export interface JobPosting {
   id?: number;
@@ -46,7 +47,7 @@ export interface JobApplication {
 })
 export class CareersManagementComponent implements OnInit {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:5000/api/careers';
+  private readonly API_URL = `${environment.apiUrl}/careers`;
 
   // Active Main Tab: 'jobs' | 'applications'
   activeTab = signal<'jobs' | 'applications'>('jobs');
@@ -412,12 +413,12 @@ export class CareersManagementComponent implements OnInit {
       return trimmed;
     }
     if (trimmed.startsWith('/uploads/')) {
-      return `http://localhost:5000${trimmed}`;
+      return `${environment.serverUrl}${trimmed}`;
     }
     if (trimmed.includes('/uploads/')) {
-      return `http://localhost:5000${trimmed.substring(trimmed.indexOf('/uploads/'))}`;
+      return `${environment.serverUrl}${trimmed.substring(trimmed.indexOf('/uploads/'))}`;
     }
-    return `http://localhost:5000/uploads/${trimmed}`;
+    return `${environment.serverUrl}/uploads/${trimmed}`;
   }
 
   getResumeFileName(resumeUrl?: string): string {

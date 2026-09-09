@@ -1,0 +1,395 @@
+/* Shared interior-page theme, based on the approved Home and Products pages.
+   Loaded after each page's layout styles; modal and carousel behavior stays local. */
+:host {
+  --font-heading: 'Times New Roman', Georgia, serif;
+  --font-body: Arial, Helvetica, sans-serif;
+  --color-primary: #11115b;
+  --color-secondary: #008f9f;
+  --color-text-secondary: #555e84;
+  --vic-heading: clamp(32px, 3.25vw, 56px);
+  --vic-copy: clamp(14px, 1.12vw, 17px);
+  --vic-gutter: clamp(28px, 7.7vw, 120px);
+  display: block;
+  background: #f3fcff;
+  color: #11115b;
+  font-family: var(--font-body);
+}
+/* ====================================================
+   UNIFIED INTERIOR PAGE HERO BANNER
+   Matching Products Page Hero Banner Design Exactly
+   ==================================================== */
+:host .products-hero,
+:host .vic-hero {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+:host .products-hero__bg,
+:host .vic-hero__media {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 60%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:host .products-hero__image,
+:host .vic-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
+}
+
+:host .products-hero__overlay,
+:host .vic-hero__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    rgba(255, 255, 255, 0.98) 12%,
+    rgba(255, 255, 255, 0.70) 28%,
+    rgba(255, 255, 255, 0.20) 48%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  display: block;
+}
+
+:host .products-hero__container,
+:host .vic-hero__container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: var(--container-content, 1280px);
+  margin: 0 auto;
+  padding: calc(86px + 24px) var(--container-padding, 36px) clamp(68px, 6vw, 100px);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+:host .products-hero__content,
+:host .vic-hero__content {
+  max-width: 560px;
+  width: 100%;
+  z-index: 5;
+}
+
+/* Breadcrumb Navigation */
+:host .products-hero__breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+}
+
+:host .products-hero__breadcrumb-link {
+  color: #00A3A6;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+:host .products-hero__breadcrumb-link:hover {
+  color: #0B2545;
+  text-decoration: underline;
+}
+
+:host .products-hero__breadcrumb-separator {
+  color: #A0AEC0;
+  font-size: 0.8em;
+}
+
+:host .products-hero__breadcrumb-current {
+  color: #0B2545;
+  font-weight: 500;
+}
+
+:host .products-hero__action,
+:host .careers-hero__actions {
+  margin-top: 28px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Fluid Sweeping Curved Teal Wave Ribbon at Hero Bottom */
+:host .products-hero__wave-wrapper,
+:host [class$="__wave-wrapper"] {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+:host .products-hero__wave-svg,
+:host [class$="__wave-svg"] {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+:host .about-hero__subheading { font: 600 17px/1.5 var(--font-body); color: #008f9f; margin-bottom: 18px; }
+:host .vic-section {
+  position: relative;
+  padding: clamp(48px, 5vw, 80px) 0;
+  scroll-margin-top: 96px;
+  background: radial-gradient(ellipse at 55% 10%, #fff, #f3fcff 60%, #e9f8fd);
+}
+:host .vic-section--soft { background: linear-gradient(110deg, #eaf9ff, #fff 35%, #f2fbff); }
+:host .vic-container { width: 100%; max-width: 1680px; margin-inline: auto; padding-inline: var(--vic-gutter); box-sizing: border-box; }
+:host .vic-section h2 { font-family: var(--font-heading); font-size: var(--vic-heading); font-weight: 700; line-height: 1.12; letter-spacing: -.035em; color: #11115b; }
+:host .vic-section :is(.about-purpose__title, .culture-card__title) { font: 700 var(--vic-heading)/1.12 var(--font-heading); color: #11115b; letter-spacing: -.035em; }
+/* Match the About Us Vision and Mission labels to the Founding Partners heading. */
+:host .about-purpose.vic-section .about-purpose__title {
+  font-family: var(--font-heading);
+  font-size: var(--vic-heading);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -.035em;
+  color: #11115b;
+}
+:host .vic-section :is(.news-category-section__eyebrow, .latest-news-section__label, .press-releases-section__label),
+:host :is(.about-purpose__eyebrow, .about-leadership__eyebrow, .partner-ecosystem__eyebrow, .culture-card__eyebrow) {
+  font: 700 13px/1.5 var(--font-body);
+  letter-spacing: .12em;
+  color: #278eaa;
+}
+:host .vic-section :is(.about-purpose__text, .about-leadership__description, .partner-ecosystem__subtitle, .culture-card__desc) {
+  font: 400 var(--vic-copy)/1.7 var(--font-body);
+  color: #555e84;
+}
+:host :is(.about-leader-card__name, .latest-news-card__title, .press-release-card__title, .related-card-title) {
+  font: 700 clamp(21px, 1.75vw, 28px)/1.22 var(--font-heading);
+  color: #11115b;
+  letter-spacing: -.02em;
+}
+:host :is(.career-job-title, .partner-ecosystem__col-title, .contact-loc-card__title, .culture-benefit-title) {
+  font: 700 clamp(15px, 1.2vw, 18px)/1.4 var(--font-body);
+  color: #11115b;
+}
+:host :is(.about-leader-card, .latest-news-card, .press-release-card, .contact-loc-card, .partner-ecosystem__col, .culture-card) {
+  border: 1px solid #d5edf4;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px #0033590c;
+}
+:host :is(.about-purpose__grid, .careers-culture-grid, .contact-main-grid) { gap: clamp(24px, 3vw, 48px); }
+:host :is(.latest-news-grid, .press-releases-grid) { gap: 24px; }
+:host :is(.latest-news-card__excerpt, .press-release-card__excerpt, .partner-ecosystem__col-desc) { font: 400 14px/1.65 var(--font-body); color: #555e84; }
+:host .vic-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 46px;
+  height: auto;
+  padding: 13px 25px;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  background: linear-gradient(100deg, #05365b, #00c5ce);
+  color: #fff;
+  font: 600 14px/1.4 var(--font-body);
+  box-shadow: 0 6px 18px #0086a325;
+  text-decoration: none;
+}
+:host .vic-btn:hover { background: linear-gradient(100deg, #00345a, #00aebf); color: #fff; }
+:host .vic-btn:disabled { opacity: .55; cursor: not-allowed; }
+:host :is(button, a, input, select, textarea):focus-visible { outline: 3px solid #00aabc; outline-offset: 4px; }
+:host :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) { font-family: var(--font-body); font-size: 16px; border-color: #cce6ee; border-radius: 10px; }
+:host .vic-floating-v {
+  position: absolute;
+  left: .6vw;
+  top: 30px;
+  width: clamp(52px, 6.4vw, 140px);
+  height: auto;
+  opacity: .76;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 18px #005c8942);
+}
+:host .vic-floating-v--right { left: auto; right: .6vw; }
+@media (prefers-reduced-motion: no-preference) {
+  :host .vic-floating-v { animation: vic-brand-float 5.8s ease-in-out infinite; }
+}
+@keyframes vic-brand-float {
+  0%,100% { transform: translateY(0) rotate(0); filter: drop-shadow(0 16px 18px #005c8942); }
+  50% { transform: translateY(-12px) rotate(1.5deg); filter: drop-shadow(0 24px 26px #00b3c657); }
+}
+:host .news-category-section.vic-section { padding-block: 30px; }
+:host .contact-main-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+:host .contact-main-grid > *, :host .careers-culture-grid > * { min-width: 0; }
+:host .contact-form { border-radius: 20px; }
+:host .news-detail { background: #f3fcff; }
+:host .news-detail-title { font: 700 clamp(34px, 3.5vw, 60px)/1.12 var(--font-heading); color: #11115b; letter-spacing: -.035em; }
+:host .news-detail-content { font: 400 17px/1.8 var(--font-body); color: #555e84; }
+:host-context([dir="rtl"]) { --font-heading: 'Cairo', 'IBM Plex Sans Arabic', sans-serif; --font-body: 'IBM Plex Sans Arabic', 'Cairo', sans-serif; }
+:host-context(html[dir="rtl"]) .products-hero,
+:host-context(html[dir="rtl"]) .vic-hero,
+:host-context(.lang-ar) .products-hero,
+:host-context(.lang-ar) .vic-hero {
+  text-align: right;
+}
+:host-context(html[dir="rtl"]) .products-hero__bg,
+:host-context(html[dir="rtl"]) .vic-hero__media,
+:host-context(.lang-ar) .products-hero__bg,
+:host-context(.lang-ar) .vic-hero__media {
+  right: auto;
+  left: 0;
+}
+:host-context(html[dir="rtl"]) .products-hero__image,
+:host-context(html[dir="rtl"]) .vic-hero__media img,
+:host-context(.lang-ar) .products-hero__image,
+:host-context(.lang-ar) .vic-hero__media img {
+  object-position: left center;
+}
+:host-context(html[dir="rtl"]) .products-hero__overlay,
+:host-context(html[dir="rtl"]) .vic-hero__overlay,
+:host-context(.lang-ar) .products-hero__overlay,
+:host-context(.lang-ar) .vic-hero__overlay {
+  background: linear-gradient(
+    270deg,
+    #FFFFFF 0%,
+    rgba(255, 255, 255, 0.98) 12%,
+    rgba(255, 255, 255, 0.70) 28%,
+    rgba(255, 255, 255, 0.20) 48%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  display: block;
+}
+:host-context(html[dir="rtl"]) .products-hero__heading,
+:host-context(html[dir="rtl"]) .vic-hero__heading,
+:host-context(.lang-ar) .products-hero__heading,
+:host-context(.lang-ar) .vic-hero__heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+@media (min-width:768px) and (max-width:1100px) {
+  :host { --vic-gutter: 48px; }
+  :host .vic-floating-v { width: 36px; left: 5px; }
+  :host .vic-floating-v--right { left: auto; right: 5px; }
+  :host .careers-culture-grid { grid-template-columns: 1fr; }
+}
+@media (max-width:900px) {
+  :host .products-hero,
+  :host .vic-hero {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    flex-direction: column;
+    padding-top: 72px;
+    padding-bottom: 0;
+    background-color: #FFFFFF;
+  }
+  :host .products-hero__bg,
+  :host .vic-hero__media {
+    position: relative;
+    order: 1;
+    width: 100%;
+    margin: 0;
+    margin-inline-start: 0;
+    height: 260px;
+    border-radius: 0;
+    overflow: hidden;
+    inset: auto;
+    align-self: stretch;
+  }
+  :host .products-hero__image,
+  :host .vic-hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  :host .products-hero__overlay,
+  :host .vic-hero__overlay {
+    display: none;
+  }
+  :host .products-hero__container,
+  :host .vic-hero__container {
+    order: 2;
+    padding: 24px var(--container-padding, 24px) 24px;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+  :host .products-hero__wave-wrapper,
+  :host .vic-hero [class$="__wave-wrapper"] {
+    display: none;
+  }
+  :host .products-hero__content,
+  :host .vic-hero__content {
+    max-width: 100%;
+    width: 100%;
+  }
+  :host .products-hero__heading,
+  :host .vic-hero__heading {
+    font-size: clamp(1.9rem, 7vw, 2.35rem);
+    margin-bottom: 12px;
+  }
+  :host .products-hero__description,
+  :host .vic-hero__description {
+    font-size: 0.875rem;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+}
+@media (max-width:767px) {
+  :host { --vic-gutter: 24px; --vic-heading: clamp(30px, 8vw, 38px); --vic-copy: 15px; }
+  :host .products-hero,
+  :host .vic-hero {
+    padding-top: 64px;
+  }
+  :host .products-hero__bg,
+  :host .vic-hero__media {
+    height: 200px;
+  }
+  :host .products-hero__container,
+  :host .vic-hero__container {
+    padding: 20px 20px 16px;
+  }
+  :host .products-hero__heading,
+  :host .vic-hero__heading {
+    font-size: clamp(1.65rem, 6.5vw, 1.95rem);
+    margin-bottom: 10px;
+  }
+  :host .products-hero__description,
+  :host .vic-hero__description {
+    font-size: 0.85rem;
+  }
+  :host .vic-section { padding: 48px 0; }
+  :host .vic-section:has(> .vic-floating-v) { padding-top: 72px; }
+  :host .vic-floating-v { width: 42px; left: 18px; top: 18px; }
+  :host .vic-floating-v--right { left: auto; right: 18px; }
+  :host :is(.contact-main-grid, .careers-culture-grid, .about-purpose__grid, .latest-news-grid, .press-releases-grid) { grid-template-columns: minmax(0,1fr); }
+  :host .vic-btn { min-height: 46px; padding: 12px 22px; }
+  :host .vic-section .map-overlay-title { font-size: 28px; }
+}
+
+/* Keep the Vision and Mission descriptions compact on larger screens. */
+:host .vic-section .about-purpose__text {
+  font-size: 14px;
+  line-height: 1.6;
+}

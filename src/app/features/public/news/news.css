@@ -171,13 +171,6 @@
   display: block;
 }
 
-/* Hidden ONLY on Mobile Phone Viewports (< 768px) */
-@media (max-width: 767px) {
-  .news-hero__wave-wrapper {
-    display: none !important;
-  }
-}
-
 
 /* ====================================================
    2. BROWSE BY CATEGORY

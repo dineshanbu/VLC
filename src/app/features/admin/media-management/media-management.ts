@@ -167,7 +167,7 @@ export class MediaManagementComponent implements OnInit {
 
   copyLink(item: MediaItem, event?: Event): void {
     if (event) event.stopPropagation();
-    const fullUrl = item.file_url.startsWith('http') ? item.file_url : `http://localhost:5000${item.file_url}`;
+    const fullUrl = this.getImageUrl(item.file_url);
     navigator.clipboard.writeText(fullUrl);
     if (item.id) {
       this.copiedUrlId.set(item.id);

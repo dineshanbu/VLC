@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ContactService } from '../../../core/services/contact.service';
+import { TranslationService } from '../../../core/services/translation.service';
+import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 export interface ContactMessageForm {
   fullName: string;
@@ -18,10 +20,24 @@ export interface ContactMessageForm {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './contact.html',
-  styleUrl: './contact.css'
+  styleUrls: ['./contact.css', '../public-theme.css']
 })
 export class ContactComponent {
+  public translationService = inject(TranslationService);
   private contactService = inject(ContactService);
+
+  resolveImg(path: string | undefined | null, fallback = 'home_banner.png'): string {
+    if (!path || !path.trim()) return fallback;
+    const resolved = resolveImageUrl(path, fallback);
+    return resolved || fallback;
+  }
+
+  onHeroImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.endsWith('home_banner.png')) {
+      img.src = 'home_banner.png';
+    }
+  }
 
   // Contact Message Form Model
   contactForm: ContactMessageForm = {
@@ -107,3 +123,4 @@ export class ContactComponent {
     this.submissionError.set('');
   }
 }
+

@@ -48,3 +48,8 @@ backend/uploads/*
 # System files
 .DS_Store
 Thumbs.db
+
+# Root scratch and verification artifacts
+/*.png
+/.*.cjs
+

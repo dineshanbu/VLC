@@ -1,5 +1,38 @@
 <app-hero />
 <app-about-vic />
 <app-our-platform />
+<section class="facility-gallery" aria-labelledby="facility-heading">
+  <div class="facility-gallery__pattern" aria-hidden="true"></div>
+  <img class="facility-gallery__watermark" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <img class="facility-gallery__floating-v facility-gallery__floating-v--left" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <img class="facility-gallery__floating-v facility-gallery__floating-v--right" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="facility-gallery__container">
+    <div class="reference-eyebrow"><span>04</span><span>/</span><span>{{ translationService.isRtl() ? 'الأول من نوعه' : 'FIRST OF ITS KIND' }}</span><i aria-hidden="true"></i></div>
+    <h2 id="facility-heading">{{ translationService.isRtl() ? 'الأول من نوعه في المملكة العربية السعودية' : 'First of its Kind in Saudi Arabia' }}</h2>
+    <div class="facility-gallery__carousel">
+      <button class="facility-gallery__arrow facility-gallery__arrow--prev" type="button" (click)="moveFacility(-1)" aria-label="Previous facility image">‹</button>
+      <div class="facility-gallery__grid" aria-live="polite">
+        @for (photo of visibleFacilities(); track photo.src) {
+          <button type="button" class="facility-gallery__photo" (click)="openFacilityModal(photo)" [attr.aria-label]="'View ' + photo.alt"><img [src]="photo.src" [alt]="photo.alt" loading="lazy" /></button>
+        }
+      </div>
+      <button class="facility-gallery__arrow facility-gallery__arrow--next" type="button" (click)="moveFacility(1)" aria-label="Next facility image">›</button>
+    </div>
+    <div class="facility-gallery__dots">
+      @for (photo of facilityImages; track photo.src; let idx = $index) {
+        <button type="button" [class.is-active]="facilityIndex() === idx" (click)="facilityIndex.set(idx)" [attr.aria-label]="'Show facility image ' + (idx + 1)" [attr.aria-pressed]="facilityIndex() === idx"></button>
+      }
+    </div>
+  </div>
+</section>
+@if (facilityModal(); as photo) {
+  <div class="facility-image-modal" role="dialog" aria-modal="true" [attr.aria-label]="photo.alt">
+    <button class="facility-image-modal__backdrop" type="button" aria-label="Close image" (click)="closeFacilityModal()"></button>
+    <div class="facility-image-modal__content">
+      <img [src]="photo.src" [alt]="photo.alt" />
+      <button class="facility-image-modal__close" type="button" aria-label="Close image" (click)="closeFacilityModal()">×</button>
+    </div>
+  </div>
+}
+<app-home-showcase />
 <app-latest-news />
-

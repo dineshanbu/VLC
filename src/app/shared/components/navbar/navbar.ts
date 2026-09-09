@@ -16,6 +16,7 @@ export class NavbarComponent {
   protected readonly isScrolled = signal(false);
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly isNewsPage = signal(false);
+  protected readonly isHomePage = signal(true);
 
   // Active language computed from service
   get currentLang() {
@@ -30,6 +31,7 @@ export class NavbarComponent {
     { label: this.translationService.translate('nav.partners'), route: '/partners' },
     { label: this.translationService.translate('nav.news'), route: '/news' },
     { label: this.translationService.translate('nav.careers'), route: '/careers' },
+    { label: this.translationService.translate('nav.pharmacovigilance'), route: '/pharmacovigilance' },
     { label: this.translationService.translate('nav.contact'), route: '/contact' },
   ]);
 
@@ -39,11 +41,16 @@ export class NavbarComponent {
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe(event => {
       this.updateCurrentPage(event.urlAfterRedirects || event.url);
+      setTimeout(() => {
+        this.isScrolled.set(window.scrollY > 50);
+      }, 50);
     });
   }
 
   private updateCurrentPage(url: string): void {
     this.isNewsPage.set(url.startsWith('/news'));
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    this.isHomePage.set(cleanUrl === '/' || cleanUrl === '');
   }
 
   @HostListener('window:scroll')

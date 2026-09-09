@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MediaItem, MediaListResponse } from '../models/media.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MediaService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:5000/api/media';
+  private readonly API_URL = `${environment.apiUrl}/media`;
 
   getMedia(filters?: { category?: string; format?: string; search?: string }): Observable<MediaListResponse> {
     let params = new HttpParams();

@@ -9,13 +9,14 @@ import {
   PartnerListResponse,
   SectionListResponse
 } from '../models/partner.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartnerService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:5000/api/partners';
+  private readonly API_URL = `${environment.apiUrl}/partners`;
 
   // 1. Page Settings
   getPageSettings(): Observable<{ success: boolean; settings: PartnerPageSettings }> {

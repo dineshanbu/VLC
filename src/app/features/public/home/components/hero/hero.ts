@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { TranslationService } from '../../../../../core/services/translation.service';
 
 @Component({
@@ -7,9 +7,9 @@ import { TranslationService } from '../../../../../core/services/translation.ser
   templateUrl: './hero.html',
   styleUrl: './hero.css'
 })
-export class HeroComponent implements OnInit {
-  @ViewChild('heroVideo') heroVideoRef?: ElementRef<HTMLVideoElement>;
+export class HeroComponent implements OnInit, AfterViewInit {
   @ViewChild('modalVideo') modalVideoRef?: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideo') heroVideoRef?: ElementRef<HTMLVideoElement>;
 
   readonly translationService = inject(TranslationService);
 
@@ -37,24 +37,26 @@ export class HeroComponent implements OnInit {
     return this.translationService.isRtl();
   }
 
-  readonly isVideoLoaded = signal(false);
   readonly isModalOpen = signal(false);
 
   ngOnInit(): void {}
 
-  onVideoCanPlay(): void {
-    this.isVideoLoaded.set(true);
+  ngAfterViewInit(): void {
+    this.playHeroVideo();
+  }
+
+  playHeroVideo(): void {
     const video = this.heroVideoRef?.nativeElement;
-    if (video) {
-      video.play().catch(() => {});
-    }
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.play().catch(() => undefined);
   }
 
   openVideoModal(): void {
     this.isModalOpen.set(true);
-    if (this.heroVideoRef?.nativeElement) {
-      this.heroVideoRef.nativeElement.pause();
-    }
     setTimeout(() => {
       if (this.modalVideoRef?.nativeElement) {
         this.modalVideoRef.nativeElement.currentTime = 0;
@@ -73,9 +75,6 @@ export class HeroComponent implements OnInit {
     this.isModalOpen.set(false);
     if (this.modalVideoRef?.nativeElement) {
       this.modalVideoRef.nativeElement.pause();
-    }
-    if (this.heroVideoRef?.nativeElement) {
-      this.heroVideoRef.nativeElement.play();
     }
   }
 

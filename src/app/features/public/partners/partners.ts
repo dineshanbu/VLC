@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, OnDestroy, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
+import { environment } from '../../../../environments/environment';
 export interface EcosystemItem {
   icon: string;
   titleLine1: string;
@@ -24,7 +25,7 @@ export interface StrategicPartner {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './partners.html',
-  styleUrl: './partners.css'
+  styleUrls: ['./partners.css', '../public-theme.css']
 })
 export class PartnersComponent implements OnInit, OnDestroy {
   private partnerService = inject(PartnerService);
@@ -52,9 +53,10 @@ export class PartnersComponent implements OnInit, OnDestroy {
   selectedPartner: StrategicPartner | null = null;
   isPartnerModalOpen = false;
 
-  // Ecosystem Carousel State & 2-Second Autoplay
+  // Ecosystem Carousel State & Mobile Autoplay
+  isMobileView = false;
   ecosystemIndex = 0;
-  ecosystemCardsPerView = 3;
+  ecosystemCardsPerView = 6;
   private ecosystemAutoPlayTimer: any = null;
   private ecosystemTouchStartX = 0;
   private ecosystemTouchEndX = 0;
@@ -133,37 +135,43 @@ export class PartnersComponent implements OnInit, OnDestroy {
     }
   ];
 
-  // 5 Ecosystem Categories (Exact match to reference design)
+  // 6 Ecosystem Categories (Exact match to attached reference design)
   ecosystemItems: EcosystemItem[] = [
     {
-      icon: 'handshake',
+      icon: 'flask',
       titleLine1: 'Technology',
       titleLine2: 'Partners',
-      desc: 'Global innovators driving advanced solutions.'
+      desc: 'Innovative platforms and technologies.'
+    },
+    {
+      icon: 'gear',
+      titleLine1: 'Manufacturing',
+      titleLine2: 'Partners',
+      desc: 'Advanced equipment and production solutions.'
     },
     {
       icon: 'microscope',
       titleLine1: 'Research & Academic',
       titleLine2: 'Partners',
-      desc: 'Collaborating for scientific excellence.'
+      desc: 'Scientific collaboration and clinical research.'
     },
     {
-      icon: 'building',
+      icon: 'government',
       titleLine1: 'Government',
       titleLine2: 'Partners',
       desc: 'Aligned with national health priorities.'
     },
     {
-      icon: 'factory',
-      titleLine1: 'Manufacturing',
+      icon: 'supply-chain',
+      titleLine1: 'Supply Chain',
       titleLine2: 'Partners',
-      desc: 'Ensuring scale, quality and reliability.'
+      desc: 'Reliable and resilient supply networks.'
     },
     {
-      icon: 'globe',
-      titleLine1: 'Distribution &',
-      titleLine2: 'Commercial Partners',
-      desc: 'Delivering vaccines worldwide.'
+      icon: 'healthcare',
+      titleLine1: 'Healthcare',
+      titleLine2: 'Partners',
+      desc: 'Expanding access to vaccines for healthier communities.'
     }
   ];
 
@@ -181,7 +189,7 @@ export class PartnersComponent implements OnInit, OnDestroy {
   resolveImg(path: string | undefined | null, fallback = 'logo_navbar.png'): string {
     if (!path) return fallback;
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
+    if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }
 
@@ -299,15 +307,21 @@ export class PartnersComponent implements OnInit, OnDestroy {
   private updateEcosystemCardsPerView(): void {
     if (typeof window !== 'undefined') {
       const width = window.innerWidth;
-      if (width <= 640) {
+      this.isMobileView = width <= 768;
+      if (width <= 480) {
         this.ecosystemCardsPerView = 1;
-      } else if (width <= 1024) {
+      } else if (width <= 768) {
         this.ecosystemCardsPerView = 2;
       } else {
-        this.ecosystemCardsPerView = 3;
+        this.ecosystemCardsPerView = 6;
       }
       if (this.ecosystemIndex > this.maxEcosystemIndex) {
         this.ecosystemIndex = this.maxEcosystemIndex;
+      }
+      if (!this.isMobileView) {
+        this.stopEcosystemAutoPlay();
+      } else if (!this.ecosystemAutoPlayTimer) {
+        this.startEcosystemAutoPlay();
       }
     }
   }
@@ -322,7 +336,7 @@ export class PartnersComponent implements OnInit, OnDestroy {
 
   startEcosystemAutoPlay(): void {
     this.stopEcosystemAutoPlay();
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && this.isMobileView) {
       this.ecosystemAutoPlayTimer = setInterval(() => {
         if (!this.isInquiryModalOpen && !this.isPartnerModalOpen) {
           this.nextEcosystem();
@@ -382,3 +396,4 @@ export class PartnersComponent implements OnInit, OnDestroy {
     return item.titleLine1 + item.titleLine2;
   }
 }
+

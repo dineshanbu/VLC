@@ -9,6 +9,7 @@ import {
   AboutPageContentMap,
   LeaderSection
 } from '../../../core/models/about.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-about-management',
@@ -280,7 +281,7 @@ export class AboutManagementComponent implements OnInit {
   resolveImg(path: string | undefined | null, fallback = 'logo_navbar.png'): string {
     if (!path) return fallback;
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
+    if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }
 
@@ -726,10 +727,10 @@ export class AboutManagementComponent implements OnInit {
     };
 
     const formData = new FormData();
-    formData.append('badge', 'FOUNDATIONAL PILLARS');
-    formData.append('badge_ar', 'الركائز التأسيسية');
-    formData.append('title', 'Our Vision & Mission');
-    formData.append('title_ar', 'رؤيتنا ورسالتنا');
+    formData.append('badge', 'OUR PURPOSE');
+    formData.append('badge_ar', 'أهدافنا');
+    formData.append('title', '');
+    formData.append('title_ar', '');
     formData.append('content_json', JSON.stringify(payload));
     formData.append('content_json_ar', JSON.stringify(payloadAr));
 

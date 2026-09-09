@@ -207,5 +207,71 @@ CREATE TABLE IF NOT EXISTS about_leaders (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Products & Pipeline Candidates Table
+CREATE TABLE IF NOT EXISTS products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  product_code VARCHAR(100) NOT NULL UNIQUE,
+  category ENUM('our-products', 'future-portfolio') DEFAULT 'our-products',
+  name VARCHAR(200) NOT NULL,
+  name_ar VARCHAR(200) NULL,
+  subtitle VARCHAR(255) NOT NULL,
+  subtitle_ar VARCHAR(255) NULL,
+  image VARCHAR(500) NOT NULL,
+  featured_image VARCHAR(500) NULL,
+  description TEXT NOT NULL,
+  description_ar TEXT NULL,
+  features JSON NULL,
+  features_ar JSON NULL,
+  specs JSON NULL,
+  specs_ar JSON NULL,
+  storage JSON NULL,
+  storage_ar JSON NULL,
+  indication_desc TEXT NULL,
+  indication_desc_ar TEXT NULL,
+  indication_target VARCHAR(255) NULL,
+  indication_target_ar VARCHAR(255) NULL,
+  indication_route VARCHAR(255) NULL,
+  indication_route_ar VARCHAR(255) NULL,
+  gallery JSON NULL,
+  resources JSON NULL,
+  resources_ar JSON NULL,
+  order_index INT DEFAULT 0,
+  status ENUM('Active', 'Inactive') DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Products Page Settings & Hero Configuration Table
+CREATE TABLE IF NOT EXISTS products_page_settings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  hero_badge VARCHAR(100) DEFAULT 'OUR PRODUCTS',
+  hero_badge_ar VARCHAR(100) DEFAULT 'منتجاتنا',
+  hero_title_part1 VARCHAR(255) DEFAULT 'Innovative Vaccines.',
+  hero_title_part1_ar VARCHAR(255) DEFAULT 'لقاحات مبتكرة.',
+  hero_title_part2 VARCHAR(255) DEFAULT 'Trusted ',
+  hero_title_part2_ar VARCHAR(255) DEFAULT 'حماية ',
+  hero_title_accent VARCHAR(100) DEFAULT 'Protection.',
+  hero_title_accent_ar VARCHAR(100) DEFAULT 'موثوقة.',
+  hero_description TEXT NULL,
+  hero_description_ar TEXT NULL,
+  hero_image VARCHAR(500) DEFAULT 'prodcut_home.jpg',
+  section_eyebrow VARCHAR(100) DEFAULT 'OUR PRODUCTS',
+  section_eyebrow_ar VARCHAR(100) DEFAULT 'منتجاتنا الدوائية',
+  cta_badge VARCHAR(100) DEFAULT 'STRATEGIC COLLABORATION',
+  cta_badge_ar VARCHAR(100) DEFAULT 'شراكة استراتيجية',
+  cta_title_part1 VARCHAR(255) DEFAULT 'Building a Healthier Future, ',
+  cta_title_part1_ar VARCHAR(255) DEFAULT 'نبني مستقبلاً أكثر صحة، ',
+  cta_title_accent VARCHAR(100) DEFAULT 'Together.',
+  cta_title_accent_ar VARCHAR(100) DEFAULT 'معاً.',
+  cta_description TEXT NULL,
+  cta_description_ar TEXT NULL,
+  cta_btn_text VARCHAR(100) DEFAULT 'Explore Partnerships',
+  cta_btn_text_ar VARCHAR(100) DEFAULT 'استكشف شراكاتنا',
+  cta_link VARCHAR(255) DEFAULT '/partners',
+  page_resources JSON NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 
 

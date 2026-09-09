@@ -1,6 +1,9 @@
 import { Component, signal, HostListener, OnInit, OnDestroy, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../core/services/translation.service';
+import { ProductService } from '../../../core/services/product.service';
+import { Product as ProductModel, ProductPageSettings } from '../../../core/models/product.model';
+import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 export interface ProductResource {
   name: string;
@@ -19,6 +22,10 @@ export interface Product {
   features: string[];
   specs: { label: string; value: string }[];
   storage: { label: string; value: string }[];
+  indication_desc?: string;
+  indication_target?: string;
+  indication_route?: string;
+  indication_items?: { label: string; value: string }[];
   gallery: string[];
   resources: ProductResource[];
 }
@@ -31,6 +38,24 @@ export interface Product {
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   readonly translationService = inject(TranslationService);
+  private readonly productService = inject(ProductService);
+
+  resolveImg(path: string | undefined | null, fallback = 'flucelvax_featured.png'): string {
+    if (!path || !path.trim() || path === 'prodcut_home.jpg') return fallback;
+    const resolved = resolveImageUrl(path, fallback);
+    return resolved || fallback;
+  }
+
+  onHeroImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.endsWith('home_banner.png')) {
+      img.src = 'home_banner.png';
+    }
+  }
+
+  readonly dynamicApiProducts = signal<ProductModel[]>([]);
+  readonly dynamicPageResources = signal<ProductResource[]>([]);
+  readonly dynamicPageSettings = signal<ProductPageSettings | null>(null);
 
   // Top Section Tabs: 'Our Products' vs 'Future Portfolio'
   readonly activeSectionTab = signal<'our-products' | 'future-portfolio'>('our-products');
@@ -58,13 +83,124 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.translationService.translate('products.modal.tab.documents')
   ]);
 
+  // Page Settings Dynamic Computeds with RTL / Arabic & English fallback
+  readonly heroTitlePart1 = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.hero_title_part1_ar) return s.hero_title_part1_ar;
+      if (s.hero_title_part1) return s.hero_title_part1;
+    }
+    return this.translationService.translate('products.hero.titlePart1');
+  });
+
+  readonly heroTitlePart2 = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.hero_title_part2_ar !== undefined) return s.hero_title_part2_ar;
+      if (s.hero_title_part2 !== undefined) return s.hero_title_part2;
+    }
+    return this.translationService.translate('products.hero.titlePart2');
+  });
+
+  readonly heroTitleAccent = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.hero_title_accent_ar) return s.hero_title_accent_ar;
+      if (s.hero_title_accent) return s.hero_title_accent;
+    }
+    return this.translationService.translate('products.hero.titleAccent');
+  });
+
+  readonly heroDescription = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.hero_description_ar) return s.hero_description_ar;
+      if (s.hero_description) return s.hero_description;
+    }
+    return this.translationService.translate('products.hero.desc');
+  });
+
+  readonly sectionEyebrow = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.section_eyebrow_ar) return s.section_eyebrow_ar;
+      if (s.section_eyebrow) return s.section_eyebrow;
+    }
+    return this.translationService.translate('products.section.eyebrow');
+  });
+
+  readonly ctaBadge = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.cta_badge_ar) return s.cta_badge_ar;
+      if (s.cta_badge) return s.cta_badge;
+    }
+    return this.translationService.translate('products.cta.badge');
+  });
+
+  readonly ctaTitlePart1 = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.cta_title_part1_ar) return s.cta_title_part1_ar;
+      if (s.cta_title_part1) return s.cta_title_part1;
+    }
+    return this.translationService.translate('products.cta.titlePart1');
+  });
+
+  readonly ctaTitleAccent = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.cta_title_accent_ar) return s.cta_title_accent_ar;
+      if (s.cta_title_accent) return s.cta_title_accent;
+    }
+    return this.translationService.translate('products.cta.titleAccent');
+  });
+
+  readonly ctaDescription = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.cta_description_ar) return s.cta_description_ar;
+      if (s.cta_description) return s.cta_description;
+    }
+    return this.translationService.translate('products.cta.desc');
+  });
+
+  readonly ctaBtnText = computed(() => {
+    const s = this.dynamicPageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      if (isAr && s.cta_btn_text_ar) return s.cta_btn_text_ar;
+      if (s.cta_btn_text) return s.cta_btn_text;
+    }
+    return this.translationService.translate('products.cta.btn');
+  });
+
+  readonly ctaLink = computed(() => {
+    const s = this.dynamicPageSettings();
+    return s?.cta_link || '/partners';
+  });
+
   // Page-level Resources & Downloads
-  readonly pageResources = computed<ProductResource[]>(() => [
-    { name: this.translationService.translate('products.resources.item1'), type: 'PDF', size: '1.2 MB', icon: 'document' },
-    { name: this.translationService.translate('products.resources.item2'), type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
-    { name: this.translationService.translate('products.resources.item3'), type: 'PDF', size: '0.8 MB', icon: 'patient' },
-    { name: this.translationService.translate('products.resources.item4'), type: 'PDF', size: '0.6 MB', icon: 'certificate' }
-  ]);
+  readonly pageResources = computed<ProductResource[]>(() => {
+    if (this.dynamicPageResources().length > 0) {
+      return this.dynamicPageResources();
+    }
+    return [
+      { name: this.translationService.translate('products.resources.item1'), type: 'PDF', size: '1.2 MB', icon: 'document' },
+      { name: this.translationService.translate('products.resources.item2'), type: 'PDF', size: '1.5 MB', icon: 'prescribing' },
+      { name: this.translationService.translate('products.resources.item3'), type: 'PDF', size: '0.8 MB', icon: 'patient' },
+      { name: this.translationService.translate('products.resources.item4'), type: 'PDF', size: '0.6 MB', icon: 'certificate' }
+    ];
+  });
 
   // Commercial Products List
   readonly products = computed<Product[]>(() => [
@@ -97,7 +233,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       ],
       gallery: [
         'flucelvax_featured.png',
-        'p4.jpg',
+        'p4.png',
         'flucelvax_modal_main.jpg',
         'thumb_vials1.jpg'
       ],
@@ -288,8 +424,43 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   ];
 
+
   get currentProductList(): Product[] {
-    return this.activeSectionTab() === 'our-products' ? this.products() : this.futureProducts;
+    const apiList = this.dynamicApiProducts();
+    const tab = this.activeSectionTab();
+    const isAr = this.translationService.isRtl();
+
+    if (apiList && apiList.length > 0) {
+      const filtered = apiList.filter(p => p.category === tab && p.status === 'Active');
+      if (filtered.length > 0) {
+        return filtered.map(p => ({
+          id: p.product_code || String(p.id),
+          name: isAr && p.name_ar ? p.name_ar : p.name,
+          subtitle: isAr && p.subtitle_ar ? p.subtitle_ar : p.subtitle,
+          image: this.resolveImg(p.image),
+          featuredImage: this.resolveImg(p.featured_image || p.image),
+          description: isAr && p.description_ar ? p.description_ar : p.description,
+          features: (isAr && p.features_ar && p.features_ar.length > 0) ? p.features_ar : (p.features || []),
+          specs: (isAr && p.specs_ar && p.specs_ar.length > 0) ? p.specs_ar : (p.specs || []),
+          storage: (isAr && p.storage_ar && p.storage_ar.length > 0) ? p.storage_ar : (p.storage || []),
+          indication_desc: isAr && p.indication_desc_ar ? p.indication_desc_ar : p.indication_desc,
+          indication_target: isAr && p.indication_target_ar ? p.indication_target_ar : p.indication_target,
+          indication_route: isAr && p.indication_route_ar ? p.indication_route_ar : p.indication_route,
+          indication_items: (isAr && p.indication_items_ar && p.indication_items_ar.length > 0) ? p.indication_items_ar : (p.indication_items || []),
+          gallery: (p.gallery && p.gallery.length > 0)
+            ? p.gallery.map(g => this.resolveImg(g))
+            : [this.resolveImg(p.featured_image || p.image)],
+          resources: ((isAr && p.resources_ar && p.resources_ar.length > 0) ? p.resources_ar : (p.resources || [])).map(r => ({
+            name: isAr && r.name_ar ? r.name_ar : r.name,
+            type: r.type,
+            size: r.size,
+            icon: r.icon
+          }))
+        }));
+      }
+    }
+
+    return tab === 'our-products' ? this.products() : this.futureProducts;
   }
 
   get currentProduct(): Product {
@@ -300,6 +471,37 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.startAutoplay();
+    this.loadDynamicData();
+  }
+
+  loadDynamicData(): void {
+    this.productService.getProducts({ status: 'Active' }).subscribe({
+      next: res => {
+        if (res && res.success && res.products && res.products.length > 0) {
+          this.dynamicApiProducts.set(res.products);
+        }
+      },
+      error: () => {}
+    });
+
+    this.productService.getPageSettings().subscribe({
+      next: res => {
+        if (res && res.success && res.settings) {
+          this.dynamicPageSettings.set(res.settings);
+          if (res.settings.page_resources && res.settings.page_resources.length > 0) {
+            const isAr = this.translationService.isRtl();
+            const mapped = res.settings.page_resources.map(r => ({
+              name: isAr && r.name_ar ? r.name_ar : r.name,
+              type: r.type,
+              size: r.size,
+              icon: r.icon
+            }));
+            this.dynamicPageResources.set(mapped);
+          }
+        }
+      },
+      error: () => {}
+    });
   }
 
   ngOnDestroy(): void {

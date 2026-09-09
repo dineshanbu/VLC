@@ -84,9 +84,10 @@
     <div class="news-detail-reading-container">
       <div class="news-detail-image-card">
         <img
-          [src]="getImageUrl(currentArticle.image)"
+          [src]="getImageUrl(currentArticle.image, 0)"
           [alt]="currentArticle.title"
           class="news-detail-hero-img"
+          (error)="onImgError($event, 0)"
         />
         <div class="news-detail-image-caption">
           <span>Vaccine Industrial Company (VIC) • Official Media Release</span>
@@ -155,15 +156,16 @@
       <div class="news-detail-related-grid">
         <article
           class="related-card"
-          *ngFor="let rel of relatedArticles()"
+          *ngFor="let rel of relatedArticles(); let idx = index"
         >
           <!-- Thumbnail -->
           <div class="related-card-img-wrap">
             <img
-              [src]="getImageUrl(rel.image)"
+              [src]="getImageUrl(rel.image, idx)"
               [alt]="rel.title"
               class="related-card-img"
               loading="lazy"
+              (error)="onImgError($event, idx)"
             />
             <span class="related-card-badge">{{ rel.badge || rel.category }}</span>
           </div>

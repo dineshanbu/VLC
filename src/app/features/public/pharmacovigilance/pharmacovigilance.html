@@ -1,0 +1,423 @@
+<!-- ====================================================
+     PHARMACOVIGILANCE PAGE — VACCINE INDUSTRIAL COMPANY (VIC)
+     Exact Typography, Hero Banner Scale & Design Consistency
+     ==================================================== -->
+
+<!-- ====================================================
+     SECTION 1 — HERO BANNER (MATCHING PRODUCTS & ABOUT)
+     ==================================================== -->
+<section class="products-hero pharmacovigilance-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    <img
+      [src]="resolveImg(null, 'home_banner.png')"
+      alt="Vaccine Industrial Company Pharmacovigilance Facility"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    />
+    <div class="products-hero__overlay"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
+
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.pharmacovigilance') }}</span>
+      </nav>
+
+      <!-- Main Headline -->
+      <h1 class="products-hero__heading">
+        {{ translationService.isRtl() ? 'الإبلاغ عن' : 'Adverse Events' }}<br />
+        <span class="products-hero__heading-accent">{{ translationService.isRtl() ? 'الأعراض الجانبية.' : 'Reporting.' }}</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="products-hero__description">
+        {{ translationService.isRtl()
+          ? 'في شركة اللقاحات الصناعية (VIC)، تعد اليقظة الدوائية أولوية أساسية ومحورية. نحن نعمل بفاعلية على مراقبة سلامة الأدوية واللقاحات، وإدارة المخاطر المحتملة، واتخاذ كافة الإجراءات اللازمة لحماية المرضى وتعزيز الرعاية الصحية.'
+          : 'At Vaccine Industrial Company, pharmacovigilance is a core priority. We actively monitor medicine safety, manage potential risks, and take necessary actions to protect patients and improve medical care.' }}
+      </p>
+
+      <!-- Action Button (Scroll to Form) -->
+      <div class="products-hero__action">
+        <a
+          href="#reporting-form"
+          (click)="scrollToForm($event)"
+          class="pv-hero-cta vic-btn"
+          aria-label="Scroll down to adverse events reporting form"
+        >
+          <span>{{ translationService.isRtl() ? 'تعبئة نموذج الإبلاغ' : 'Fill Reporting Form' }}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
+    <svg
+      class="products-hero__wave-svg"
+      viewBox="0 0 1440 120"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="pvTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C9A7" />
+          <stop offset="35%" stop-color="#00E5C9" />
+          <stop offset="70%" stop-color="#0D8A8A" />
+          <stop offset="100%" stop-color="#075E60" />
+        </linearGradient>
+      </defs>
+
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
+      <path
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
+        fill="url(#pvTealWaveGrad)"
+      />
+
+      <!-- Clean Seamless Base Matching Section 2 (#FFFFFF) -->
+      <path
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 2 — DIRECT REPORTING CHANNELS
+     Safety concerns reporting in Saudi Arabia
+     ==================================================== -->
+<section class="pv-channels-section vic-section">
+  <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="pv-channels-container vic-container">
+
+    <!-- Section Header -->
+    <div class="pv-section-header">
+      <span class="pv-eyebrow">
+        {{ translationService.isRtl() ? 'اليقظة الدوائية وسلامة المرضى' : 'PHARMACOVIGILANCE & PATIENT SAFETY' }}
+      </span>
+      <h2 class="pv-title">
+        {{ translationService.isRtl() ? 'قنوات الإبلاغ المباشرة' : 'Direct Reporting Channels' }}
+      </h2>
+      <p class="pv-channels-intro">
+        {{ translationService.isRtl()
+          ? 'للإبلاغ عن أي مخاوف أو بلاغات تتعلق بالسلامة داخل المملكة العربية السعودية، يُرجى التواصل معنا عبر إحدى القنوات التالية:'
+          : 'To report any safety concerns in Saudi Arabia, contact us via: (Please use one of the below reporting channels):' }}
+      </p>
+    </div>
+
+    <!-- 3 Reporting Channel Cards -->
+    <div class="pv-channels-grid">
+
+      <!-- Email Channel Card -->
+      <div class="pv-channel-card pv-channel-card--email">
+        <div class="pv-channel-icon-wrapper" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+        </div>
+        <div class="pv-channel-body">
+          <span class="pv-channel-tag">{{ translationService.isRtl() ? 'البريد الإلكتروني' : 'Official Email' }}</span>
+          <h3 class="pv-channel-name">Email</h3>
+          <a href="mailto:mpv@mesned.com" class="pv-channel-link pv-channel-link--email" aria-label="Send email to mpv@mesned.com">
+            mpv&#64;mesned.com
+          </a>
+          <p class="pv-channel-note">
+            {{ translationService.isRtl() ? 'البريد المخصص لاستقبال بلاغات الأعراض الجانبية' : 'Dedicated adverse event monitoring inbox' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Phone Channel Card 1 -->
+      <div class="pv-channel-card pv-channel-card--phone">
+        <div class="pv-channel-icon-wrapper" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </div>
+        <div class="pv-channel-body">
+          <span class="pv-channel-tag">{{ translationService.isRtl() ? 'جوال رقم' : 'Contact Phone 1' }}</span>
+          <h3 class="pv-channel-name">{{ translationService.isRtl() ? 'الخط المباشر' : 'Primary Safety Line' }}</h3>
+          <a href="tel:+966505545754" class="pv-channel-link" dir="ltr" aria-label="Call +966 50 554 5754">
+            +966 50 554 5754
+          </a>
+          <p class="pv-channel-note">
+            {{ translationService.isRtl() ? 'خدمة تلقي البلاغات الفورية' : 'Immediate pharmacovigilance telephone reception' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Phone Channel Card 2 -->
+      <div class="pv-channel-card pv-channel-card--phone">
+        <div class="pv-channel-icon-wrapper" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </div>
+        <div class="pv-channel-body">
+          <span class="pv-channel-tag">{{ translationService.isRtl() ? 'جوال رقم' : 'Contact Phone 2' }}</span>
+          <h3 class="pv-channel-name">{{ translationService.isRtl() ? 'خط الطوارئ' : 'Secondary Safety Line' }}</h3>
+          <a href="tel:+966551750051" class="pv-channel-link" dir="ltr" aria-label="Call +966 55 175 0051">
+            +966 55 175 0051
+          </a>
+          <p class="pv-channel-note">
+            {{ translationService.isRtl() ? 'متاح للبلاغات والاستفسارات الطبية' : 'Available for urgent safety and medical inquiries' }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alternative Instruction Callout -->
+    <div class="pv-form-prompt-box">
+      <div class="pv-form-prompt-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+      </div>
+      <p class="pv-form-prompt-text">
+        {{ translationService.isRtl()
+          ? 'أو استخدام نموذج الإبلاغ المنشور في هذه الصفحة أدناه لإرسال التقرير مباشرة.'
+          : 'or Use the reporting form published in this page below to submit your report directly.' }}
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 3 — REPORTING FORM
+     "Please fill out the Reporting form below."
+     ==================================================== -->
+<section class="pv-form-section vic-section vic-section--soft" id="reporting-form">
+  <div class="pv-form-container vic-container">
+
+    <div class="pv-form-card">
+
+      <!-- Form Header -->
+      <div class="pv-form-header">
+        <span class="pv-form-eyebrow">
+          {{ translationService.isRtl() ? 'نموذج الإبلاغ عن الأعراض الجانبية' : 'ADVERSE EVENT REPORT FORM' }}
+        </span>
+        <h2 class="pv-form-title">
+          {{ translationService.isRtl() ? 'يرجى ملء نموذج الإبلاغ أدناه.' : 'Please fill out the Reporting form below.' }}
+        </h2>
+        <p class="pv-form-subtitle">
+          {{ translationService.isRtl()
+            ? 'تُعامل جميع البلاغات والمعلومات بسرية تامة وتُتابع وفقاً لمعايير الهيئة العامة للغذاء والدواء (SFDA).'
+            : 'All adverse event reports are treated with strict confidentiality in accordance with Saudi Food & Drug Authority (SFDA) pharmacovigilance standards.' }}
+        </p>
+      </div>
+
+      <!-- Success Confirmation State -->
+      <div *ngIf="formSubmitted()" class="pv-success-box">
+        <div class="pv-success-icon" aria-hidden="true">&#10003;</div>
+        <h3 class="pv-success-title">
+          {{ translationService.isRtl() ? 'تم إرسال بلاغ السلامة بنجاح' : 'Safety Report Submitted Successfully' }}
+        </h3>
+        <p class="pv-success-text">
+          {{ translationService.isRtl()
+            ? 'شكراً لكم على مساهمتكم في تعزيز سلامة الأدوية واللقاحات. لقد استلم فريق اليقظة الدوائية بلاغكم وسيتم مراجعته والتواصل معكم عند الحاجة.'
+            : 'Thank you for contributing to vaccine and medicine safety. Our pharmacovigilance safety officers have received your report and will follow up if additional details are required.' }}
+        </p>
+        <button type="button" class="pv-reset-btn vic-btn" (click)="resetReportForm()">
+          <span>{{ translationService.isRtl() ? 'تقديم بلاغ آخر' : 'Submit Another Report' }}</span>
+        </button>
+      </div>
+
+      <!-- Actual Form Inputs -->
+      <form *ngIf="!formSubmitted()" (ngSubmit)="submitReport()" class="pv-form" novalidate>
+
+        <!-- Error Banner -->
+        <div *ngIf="submissionError()" class="pv-error-banner" role="alert">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>{{ submissionError() }}</span>
+        </div>
+
+        <!-- Row 1: Reporter Name* & Contact Number* -->
+        <div class="pv-form-grid pv-form-grid--2">
+          <!-- Reporter Name* -->
+          <div class="pv-form-group">
+            <label for="reporterName" class="pv-form-label">
+              {{ translationService.isRtl() ? 'اسم المُبلِّغ *' : 'Reporter Name*' }}
+            </label>
+            <input
+              id="reporterName"
+              type="text"
+              name="reporterName"
+              required
+              class="pv-form-input"
+              [placeholder]="translationService.isRtl() ? 'أدخل اسمك الكامل *' : 'Enter full name *'"
+              [(ngModel)]="formModel.reporterName"
+            />
+          </div>
+
+          <!-- Contact Number* -->
+          <div class="pv-form-group">
+            <label for="contactNumber" class="pv-form-label">
+              {{ translationService.isRtl() ? 'رقم التواصل *' : 'Contact Number*' }}
+            </label>
+            <input
+              id="contactNumber"
+              type="tel"
+              name="contactNumber"
+              required
+              class="pv-form-input"
+              [placeholder]="translationService.isRtl() ? '+966 5X XXX XXXX *' : '+966 5X XXX XXXX *'"
+              [(ngModel)]="formModel.contactNumber"
+            />
+          </div>
+        </div>
+
+        <!-- Row 2: Your email & Product Name* -->
+        <div class="pv-form-grid pv-form-grid--2">
+          <!-- Your email -->
+          <div class="pv-form-group">
+            <label for="email" class="pv-form-label">
+              {{ translationService.isRtl() ? 'البريد الإلكتروني' : 'Your email' }}
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              class="pv-form-input"
+              [placeholder]="translationService.isRtl() ? 'name@example.com (اختياري)' : 'name@example.com (optional)'"
+              [(ngModel)]="formModel.email"
+            />
+          </div>
+
+          <!-- Product Name* -->
+          <div class="pv-form-group">
+            <label for="productName" class="pv-form-label">
+              {{ translationService.isRtl() ? 'اسم المنتج أو اللقاح *' : 'Product Name*' }}
+            </label>
+            <input
+              id="productName"
+              type="text"
+              name="productName"
+              required
+              class="pv-form-input"
+              [placeholder]="translationService.isRtl() ? 'اسم الدواء أو اللقاح المعني *' : 'Vaccine or medicine name *'"
+              [(ngModel)]="formModel.productName"
+            />
+          </div>
+        </div>
+
+        <!-- Row 3: Select Occupation -->
+        <div class="pv-form-group">
+          <label for="occupation" class="pv-form-label">
+            {{ translationService.isRtl() ? 'حدد المهنة أو الصفة' : 'Select Occupation' }}
+          </label>
+          <div class="pv-select-wrapper">
+            <select
+              id="occupation"
+              name="occupation"
+              class="pv-form-select"
+              [(ngModel)]="formModel.occupation"
+            >
+              <option value="" disabled selected>
+                {{ translationService.isRtl() ? '-- اختر المهنة --' : '-- Select Occupation --' }}
+              </option>
+              <option *ngFor="let occ of occupations" [value]="occ.value">
+                {{ translationService.isRtl() ? occ.labelAr : occ.labelEn }}
+              </option>
+            </select>
+            <span class="pv-select-arrow" aria-hidden="true">&#9662;</span>
+          </div>
+        </div>
+
+        <!-- Row 4: Side Effect Experience Description* -->
+        <div class="pv-form-group">
+          <label for="sideEffectDescription" class="pv-form-label">
+            {{ translationService.isRtl() ? 'وصف الأعراض الجانبية والتجربة *' : 'Side Effect Experience Description*' }}
+          </label>
+          <textarea
+            id="sideEffectDescription"
+            name="sideEffectDescription"
+            rows="5"
+            required
+            class="pv-form-textarea"
+            [placeholder]="translationService.isRtl()
+              ? 'يرجى تقديم وصف تفصيلي للأعراض التي ظهرت، وتاريخ ووقت البدء، ومدى شدتها، وأي إجراءات علاجية تم اتخاذها...'
+              : 'Please describe the symptoms experienced, date and time of onset, severity, and any medical actions taken...'"
+            [(ngModel)]="formModel.sideEffectDescription"
+          ></textarea>
+        </div>
+
+        <!-- Row 5: Any Other Information to let us know -->
+        <div class="pv-form-group">
+          <label for="otherInfo" class="pv-form-label">
+            {{ translationService.isRtl() ? 'أي معلومات أخرى ترغب في إفادتنا بها' : 'Any Other Information to let us know' }}
+          </label>
+          <textarea
+            id="otherInfo"
+            name="otherInfo"
+            rows="3"
+            class="pv-form-textarea"
+            [placeholder]="translationService.isRtl()
+              ? 'أدوية أخرى متزامنة، التاريخ المرضي، رقم التشغيلة (Batch/Lot number) إن وُجد...'
+              : 'Concomitant medications, medical history, batch or lot number if available...'"
+            [(ngModel)]="formModel.otherInfo"
+          ></textarea>
+        </div>
+
+        <!-- Form Actions & Security Footnote -->
+        <div class="pv-form-actions">
+          <button
+            type="submit"
+            class="pv-submit-btn vic-btn"
+            [disabled]="isSubmitting()"
+            aria-label="Submit Adverse Events Report"
+          >
+            <span>
+              {{ isSubmitting() 
+                ? (translationService.isRtl() ? 'جاري الإرسال...' : 'Submitting Report...') 
+                : (translationService.isRtl() ? 'إرسال بلاغ السلامة' : 'Submit Safety Report') }}
+            </span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+
+          <div class="pv-security-note">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pv-shield-icon" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+            <span>
+              {{ translationService.isRtl()
+                ? 'بياناتكم محمية ومؤمنة تماماً، وتُستخدم حصرياً لأغراض تقييم السلامة الدوائية وفقاً لأنظمة المملكة.'
+                : 'Your information is strictly protected and securely transmitted to qualified pharmacovigilance safety officers.' }}
+            </span>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</section>

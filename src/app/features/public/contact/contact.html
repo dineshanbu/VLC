@@ -7,19 +7,38 @@
      SECTION 1 — HERO BANNER
      Split Composition (Matching About & Careers Scale)
      ==================================================== -->
-<section class="contact-hero">
-  <div class="contact-hero__container">
-    <div class="contact-hero__content">
+<section class="products-hero contact-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    <img
+      [src]="resolveImg(null, 'home_banner.png')"
+      alt="Vaccine Industrial Holding LLC Headquarters and Manufacturing Campus"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    />
+    <div class="products-hero__overlay"></div>
+  </div>
 
-      <!-- Main Headline (Navy + Teal) -->
-      <h1 class="contact-hero__heading">
-        Let's Connect.<br />
-        <span class="contact-hero__heading-accent">Let's Create Impact.</span>
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
+
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.contact') }}</span>
+      </nav>
+
+      <!-- Main Headline -->
+      <h1 class="contact-hero__heading products-hero__heading">
+        {{ translationService.isRtl() ? 'لنتواصل.' : "Let's Connect." }}<br />
+        <span class="contact-hero__heading-accent products-hero__heading-accent">{{ translationService.isRtl() ? 'لنصنع أثراً معاً.' : "Let's Create Impact." }}</span>
       </h1>
 
       <!-- Description Subheading -->
-      <p class="contact-hero__description">
-        We are always open to conversations, collaborations, and opportunities to advance global health together. Reach out to our team — we'd love to hear from you.
+      <p class="contact-hero__description products-hero__description">
+        {{ translationService.isRtl() ? 'نحن نرحب دائمًا بالحوار والتعاون والفرص المشتركة للنهوض بالصحة العالمية معًا. تواصل مع فريقنا - يسعدنا أن نسمع منك.' : "We are always open to conversations, collaborations, and opportunities to advance global health together. Reach out to our team — we'd love to hear from you." }}
       </p>
 
       <!-- Quick Contact Info Rows -->
@@ -49,20 +68,10 @@
     </div>
   </div>
 
-  <!-- Right Split Banner Image (home_banner.png matching About & Careers) -->
-  <div class="contact-hero__image-wrapper">
-    <img
-      src="home_banner.png"
-      alt="Vaccine Industrial Holding LLC Headquarters and Manufacturing Campus"
-      class="contact-hero__image"
-    />
-    <div class="contact-hero__overlay"></div>
-  </div>
-
-  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
-  <div class="contact-hero__wave-wrapper" aria-hidden="true">
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
     <svg
-      class="contact-hero__wave-svg"
+      class="products-hero__wave-svg"
       viewBox="0 0 1440 120"
       fill="none"
       preserveAspectRatio="none"
@@ -77,13 +86,15 @@
         </linearGradient>
       </defs>
 
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
       <path
-        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
         fill="url(#contactTealWaveGrad)"
       />
 
+      <!-- Clean Seamless Base Matching Section 2 (#FFFFFF) -->
       <path
-        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
         fill="#FFFFFF"
       />
     </svg>
@@ -95,8 +106,9 @@
      SECTION 2 — MAIN CONTACT LAYOUT (2 COLUMNS)
      Exact Layout matching Image (media_1788338412638.jpg)
      ==================================================== -->
-<section class="contact-main-section">
-  <div class="contact-main-section__container">
+<section class="contact-main-section vic-section">
+  <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="contact-main-section__container vic-container">
     <div class="contact-main-grid">
 
       <!-- ==============================================
@@ -204,7 +216,7 @@
           <div class="contact-form-actions">
             <button
               type="submit"
-              class="contact-submit-btn"
+              class="contact-submit-btn vic-btn"
               [disabled]="isSubmitting()"
               aria-label="Send contact message"
             >
@@ -378,3 +390,4 @@
     </div>
   </div>
 </section>
+

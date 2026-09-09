@@ -56,6 +56,11 @@ export const routes: Routes = [
           import('./features/public/careers/careers').then(m => m.CareersComponent),
       },
       {
+        path: 'pharmacovigilance',
+        loadComponent: () =>
+          import('./features/public/pharmacovigilance/pharmacovigilance').then(m => m.PharmacovigilanceComponent),
+      },
+      {
         path: 'contact',
         loadComponent: () =>
           import('./features/public/contact/contact').then(m => m.ContactComponent),
@@ -97,6 +102,18 @@ export const routes: Routes = [
           import('./features/admin/user-management/user-management').then(
             m => m.UserManagementComponent
           ),
+      },
+      {
+        path: 'product',
+        loadComponent: () =>
+          import('./features/admin/product-management/product-management').then(
+            m => m.ProductManagementComponent
+          ),
+      },
+      {
+        path: 'products',
+        redirectTo: 'product',
+        pathMatch: 'full',
       },
       {
         path: 'news',

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
 import { Partner } from '../../../core/models/partner.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-partners-management',
@@ -117,7 +118,7 @@ export class PartnersManagementComponent implements OnInit {
   resolveImg(path: string | undefined | null): string {
     if (!path) return 'logo_navbar.png';
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    if (path.startsWith('/uploads/')) return `http://localhost:5000${path}`;
+    if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }
 

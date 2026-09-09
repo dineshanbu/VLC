@@ -1,9 +1,18 @@
 <section class="platform" id="platform">
   <div class="platform__container">
 
-    <!-- Centered Eyebrow Heading -->
-    <div class="platform__label-wrap">
-      <span class="platform__label">{{ translationService.translate('platform.eyebrow') }}</span>
+    <div class="platform__header">
+      <div class="platform__heading-group">
+        <span class="platform__label"><span class="reference-index">03 /</span> {{ translationService.translate('platform.eyebrow') }}</span>
+        <h2 class="platform__heading">
+          @if (translationService.isRtl()) {
+            {{ translationService.translate('platform.heading') }}
+          } @else {
+            Three Pillars for <span class="platform__heading-accent">Greater Impact.</span>
+          }
+        </h2>
+      </div>
+      <p class="platform__intro">{{ translationService.translate('platform.intro') }}</p>
     </div>
 
     <!-- Carousel Outer Wrapper for Floating Side Arrows -->
@@ -31,9 +40,8 @@
         (mouseenter)="pauseAutoplay()"
         (mouseleave)="resumeAutoplay()"
       >
-        @for (card of cards(); track card.title) {
-          <a [routerLink]="card.route" class="platform__card">
-
+        @for (card of cards(); track card.tag; let idx = $index) {
+          <div class="platform__card">
             <!-- Card Full Background Image -->
             <img
               [src]="card.image"
@@ -48,29 +56,27 @@
             <!-- Card Content Layer -->
             <div class="platform__content">
               
-              <!-- Top Header: Number + Tag -->
-              <div class="platform__card-header">
-                <span class="platform__card-num">{{ card.number }}</span>
-                <span class="platform__card-tag" [style.color]="card.tagColor">{{ card.tag }}</span>
+              <div class="platform__card-icon" aria-hidden="true">
+                @switch (idx) {
+                  @case (0) {
+                    <svg viewBox="0 0 48 48"><circle cx="24" cy="10" r="6"></circle><path d="M15 42V29a9 9 0 0 1 18 0v13M9 42h30M15 31H9v11M33 31h6v11"></path></svg>
+                  }
+                  @case (1) {
+                    <svg viewBox="0 0 48 48"><path d="M16 25a12 12 0 1 1 16 0c-3 2.5-4 5-4 8h-8c0-3-1-5.5-4-8ZM20 38h8M21 43h6M24 2v4M7 19h5M36 19h5M11 7l4 4M37 7l-4 4"></path></svg>
+                  }
+                  @default {
+                    <svg viewBox="0 0 48 48"><path d="M7 42h35M10 37V27h7v10M21 37V19h7v18M32 37V10h7v27M10 21l9-8 7 2 12-11M33 4h5v5"></path></svg>
+                  }
+                }
               </div>
 
-              <!-- Title & Description -->
               <div class="platform__card-body">
-                <h3 class="platform__card-title">{{ card.title }}</h3>
+                <span class="platform__card-tag">{{ card.tag }}</span>
                 <p class="platform__card-desc">{{ card.description }}</p>
               </div>
 
-              <!-- Bottom Right Circular Arrow Button -->
-              <div class="platform__card-arrow" aria-hidden="true">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </div>
-
             </div>
-
-          </a>
+          </div>
         }
       </div>
 
@@ -86,19 +92,6 @@
         </svg>
       </button>
 
-    </div>
-
-    <!-- Mobile Indicator Dots Underneath -->
-    <div class="platform__mobile-dots" aria-hidden="true">
-      @for (card of cards(); track card.number; let idx = $index) {
-        <button
-          type="button"
-          class="platform__dot"
-          [class.platform__dot--active]="activeIndex() === idx"
-          (click)="scrollToIndex(idx)"
-          [attr.aria-label]="'Go to slide ' + (idx + 1)"
-        ></button>
-      }
     </div>
 
   </div>

@@ -4,3 +4,4 @@ export * from './news.service';
 export * from './media.service';
 export * from './contact.service';
 export * from './dashboard.service';
+export * from './product.service';

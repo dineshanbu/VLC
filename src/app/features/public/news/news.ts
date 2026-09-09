@@ -10,6 +10,7 @@ import {
   NEWS_CATEGORIES
 } from '../../../core/data/news-data';
 import { NewsService } from '../../../core/services/news.service';
+import { TranslationService } from '../../../core/services/translation.service';
 import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 @Component({
@@ -17,15 +18,50 @@ import { resolveImageUrl } from '../../../core/utils/image-url.util';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './news.html',
-  styleUrl: './news.css'
+  styleUrls: ['./news.css', '../public-theme.css']
 })
 export class NewsComponent implements OnInit {
+  public translationService = inject(TranslationService);
   private newsService = inject(NewsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  getImageUrl(url?: string | null): string {
-    return resolveImageUrl(url);
+  resolveImg(path: string | undefined | null, fallback = 'home_banner.png'): string {
+    if (!path || !path.trim()) return fallback;
+    const resolved = resolveImageUrl(path, fallback);
+    return resolved || fallback;
+  }
+
+  onHeroImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.endsWith('home_banner.png')) {
+      img.src = 'home_banner.png';
+    }
+  }
+
+  readonly fallbackImages = [
+    'news1.jpeg',
+    'construction_milestone_oct.jpg',
+    'news2.jpg',
+    'news3.jpg',
+    'news4.jpg'
+  ];
+
+  getImageUrl(url?: string | null, index = 0): string {
+    const fallback = this.fallbackImages[index % this.fallbackImages.length];
+    if (!url || !url.trim()) return fallback;
+    const resolved = resolveImageUrl(url, fallback);
+    return resolved || fallback;
+  }
+
+  onImgError(event: Event, index = 0): void {
+    const img = event.target as HTMLImageElement;
+    if (!img) return;
+    const fallback = this.fallbackImages[index % this.fallbackImages.length];
+    if (img.getAttribute('data-failed') !== 'true') {
+      img.setAttribute('data-failed', 'true');
+      img.src = fallback;
+    }
   }
 
   // Category Filtering
@@ -69,22 +105,25 @@ export class NewsComponent implements OnInit {
     this.newsService.getNews({ status: 'Published' }).subscribe({
       next: (res) => {
         if (res.articles && res.articles.length > 0) {
-          const mappedArticles: NewsArticle[] = res.articles.map(a => ({
-            id: a.slug || a.id?.toString() || '',
-            slug: a.slug || a.id?.toString() || '',
-            title: a.title,
-            category: a.category,
-            categories: a.categories || [a.category],
-            date: a.date_str || '2025',
-            formattedDate: a.formatted_date || a.date_str || '2025',
-            readTime: a.read_time || '3 min read',
-            image: a.image || 'news1.jpeg',
-            badge: a.badge || a.category.toUpperCase(),
-            summary: a.summary || '',
-            contentHtml: a.content_html || '',
-            officialLink: a.official_link || ''
-          }));
-          this.articlesSignal.set(mappedArticles);
+          const valid = res.articles.filter(a => a && a.title);
+          if (valid.length > 0) {
+            const mappedArticles: NewsArticle[] = valid.map((a, idx) => ({
+              id: a.slug || a.id?.toString() || '',
+              slug: a.slug || a.id?.toString() || '',
+              title: a.title,
+              category: a.category,
+              categories: a.categories || [a.category],
+              date: a.date_str || '2025',
+              formattedDate: a.formatted_date || a.date_str || '2025',
+              readTime: a.read_time || '3 min read',
+              image: a.image?.trim() ? a.image.trim() : this.fallbackImages[idx % this.fallbackImages.length],
+              badge: a.badge || a.category?.toUpperCase() || 'NEWS',
+              summary: a.summary || '',
+              contentHtml: a.content_html || '',
+              officialLink: a.official_link || ''
+            }));
+            this.articlesSignal.set(mappedArticles);
+          }
         }
       },
       error: () => {
@@ -217,3 +256,4 @@ export class NewsComponent implements OnInit {
     }
   }
 }
+

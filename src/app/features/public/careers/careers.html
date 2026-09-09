@@ -7,49 +7,64 @@
      SECTION 1 — CAREERS HERO BANNER
      Split Composition (Matching About & Products Scale)
      ==================================================== -->
-<section class="careers-hero">
-  <!-- Left Content Split -->
-  <div class="careers-hero__container">
-    <div class="careers-hero__content">
+<section class="products-hero careers-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    <img
+      [src]="resolveImg(null, 'home_banner.png')"
+      alt="Vaccine Industrial Holding LLC Biotechnology Facility"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    />
+    <div class="products-hero__overlay"></div>
+  </div>
 
-      <!-- Eyebrow -->
-      <span class="careers-hero__eyebrow">CAREERS AT VIC</span>
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
 
-      <!-- Main Heading (Line 1 Navy, Line 2 Teal matching Image 1) -->
-      <h1 class="careers-hero__heading">
-        Build a Healthier Future.<br />
-        <span class="careers-hero__heading-accent">Build Your Career with VIC.</span>
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.careers') }}</span>
+      </nav>
+
+      <!-- Main Heading -->
+      <h1 class="careers-hero__heading products-hero__heading">
+        {{ translationService.isRtl() ? 'ابنِ مستقبلاً أكثر صحة.' : 'Build a Healthier Future.' }}<br />
+        <span class="careers-hero__heading-accent products-hero__heading-accent">{{ translationService.isRtl() ? 'ابنِ مسيرتك المهنية مع VIC.' : 'Build Your Career with VIC.' }}</span>
       </h1>
 
       <!-- Description Subheading -->
-      <p class="careers-hero__description">
-        Join a team of passionate experts working together to advance vaccine innovation and improve lives around the world.
+      <p class="careers-hero__description products-hero__description">
+        {{ translationService.isRtl() ? 'انضم إلى فريق من الخبراء المتحمسين الذين يعملون معاً لدفع عجلة الابتكار في مجال اللقاحات وتحسين حياة الناس حول العالم.' : 'Join a team of passionate experts working together to advance vaccine innovation and improve lives around the world.' }}
       </p>
 
-      <!-- Action CTAs matching Image 1 -->
+      <!-- Action CTAs -->
       <div class="careers-hero__actions">
         <!-- Primary Solid Teal Button -->
         <button
           type="button"
-          class="careers-hero__btn-primary"
+          class="careers-hero__btn-primary vic-btn"
           (click)="scrollToSection('open-positions')"
           aria-label="View Open Positions at VIC"
         >
-          <span>View Open Positions</span>
+          <span>{{ translationService.isRtl() ? 'الوظائف المتاحة' : 'View Open Positions' }}</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </button>
 
-        <!-- Secondary Outline Button matching Image 1 -->
+        <!-- Secondary Outline Button -->
         <button
           type="button"
           class="careers-hero__btn-secondary"
           (click)="scrollToSection('life-at-vic')"
           aria-label="Learn about Life at VIC"
         >
-          <span>Life at VIC</span>
+          <span>{{ translationService.isRtl() ? 'الحياة في VIC' : 'Life at VIC' }}</span>
           <span class="btn-icon-circle" aria-hidden="true">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
               <polygon points="6 3 20 12 6 21 6 3"></polygon>
@@ -61,20 +76,10 @@
     </div>
   </div>
 
-  <!-- Right Split Banner Image (home_banner.png matching About & Products) -->
-  <div class="careers-hero__image-wrapper">
-    <img
-      src="home_banner.png"
-      alt="Vaccine Industrial Holding LLC Biotechnology Facility"
-      class="careers-hero__image"
-    />
-    <div class="careers-hero__overlay"></div>
-  </div>
-
-  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
-  <div class="careers-hero__wave-wrapper" aria-hidden="true">
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
     <svg
-      class="careers-hero__wave-svg"
+      class="products-hero__wave-svg"
       viewBox="0 0 1440 120"
       fill="none"
       preserveAspectRatio="none"
@@ -89,13 +94,15 @@
         </linearGradient>
       </defs>
 
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
       <path
-        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
         fill="url(#careersTealWaveGrad)"
       />
 
+      <!-- Clean Seamless Base Matching Section 2 (#FFFFFF) -->
       <path
-        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
         fill="#FFFFFF"
       />
     </svg>
@@ -107,8 +114,9 @@
      SECTION 2 — OPEN POSITIONS
      Exact Layout matching Image 2
      ==================================================== -->
-<section class="careers-positions-section" id="open-positions">
-  <div class="careers-positions-section__container">
+<section class="careers-positions-section vic-section" id="open-positions">
+  <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="careers-positions-section__container vic-container">
 
     <!-- Section Header -->
     <div class="careers-positions-header">
@@ -189,7 +197,7 @@
       <!-- Search Submit Button -->
       <button
         type="button"
-        class="careers-filter-toolbar__submit-btn"
+        class="careers-filter-toolbar__submit-btn vic-btn"
         (click)="scrollToSection('open-positions')"
         aria-label="Execute job search"
       >
@@ -282,8 +290,9 @@
      SECTION 3 — LIFE AT VIC & YOUR WELL-BEING MATTERS
      Exact 2-Card Layout matching Image 2
      ==================================================== -->
-<section class="careers-culture-section" id="life-at-vic">
-  <div class="careers-culture-section__container">
+<section class="careers-culture-section vic-section vic-section--soft" id="life-at-vic">
+  <img class="vic-floating-v vic-floating-v--right" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="careers-culture-section__container vic-container">
     <div class="careers-culture-grid">
 
       <!-- ==============================================
@@ -299,7 +308,7 @@
           </p>
           <button
             type="button"
-            class="culture-card__video-btn"
+            class="culture-card__video-btn vic-btn"
             (click)="openVideoModal()"
             aria-label="Watch our company culture video"
           >
@@ -424,8 +433,8 @@
      SECTION 4 — JOIN OUR MISSION (CV DROP & LOGIN)
      Exact match to user design (media_1788338052142.png)
      ==================================================== -->
-<section class="careers-talent-network-section" id="talent-network">
-  <div class="careers-talent-network-section__container">
+<section class="careers-talent-network-section vic-section" id="talent-network">
+  <div class="careers-talent-network-section__container vic-container">
     <div class="talent-network-card">
 
       <!-- Column 1: Info & Heading -->
@@ -480,26 +489,6 @@
           </label>
           <span class="cv-drop-limits">Accepted formats: PDF, DOC, DOCX (Max 5MB)</span>
         </div>
-      </div>
-
-      <!-- Column 3: Already have an account? Login Card -->
-      <div class="talent-network-col talent-network-col--login">
-        <h3 class="talent-login-title">Already have an account?</h3>
-        <p class="talent-login-desc">
-          Login to your profile and apply to jobs instantly.
-        </p>
-        <button
-          type="button"
-          class="talent-login-btn"
-          (click)="openCandidateLoginModal()"
-          aria-label="Login to candidate profile"
-        >
-          <span>Login</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </button>
       </div>
 
     </div>
@@ -669,7 +658,7 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="careers-submit-btn" [disabled]="isSubmittingApplication()">
+              <button type="submit" class="careers-submit-btn vic-btn" [disabled]="isSubmittingApplication()">
                 <span>{{ isSubmittingApplication() ? 'Submitting Application...' : 'Submit Application' }}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -802,7 +791,7 @@
         </div>
 
         <div class="form-actions" style="margin-top: 8px;">
-          <button type="submit" class="careers-submit-btn" style="width: 100%; justify-content: center;">
+          <button type="submit" class="careers-submit-btn vic-btn" style="width: 100%; justify-content: center;">
             <span>Sign In</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -814,3 +803,4 @@
     </div>
   </div>
 </div>
+

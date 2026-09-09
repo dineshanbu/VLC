@@ -43,7 +43,7 @@ app-news-detail {
    ==================================================== */
 
 .news-detail .news-detail-nav {
-  padding: 16px 0;
+  padding: calc(86px + 16px) 0 16px;
   background-color: #F8FAFC;
   border-bottom: 1px solid #E2E8F0;
 }

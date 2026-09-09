@@ -1,0 +1,584 @@
+/* ====================================================
+   PHARMACOVIGILANCE PAGE STYLES
+   Vaccine Industrial Company (VIC)
+   Matches About / Products Typography Scale & Colors
+   ==================================================== */
+
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #FFFFFF;
+  font-family: var(--font-body);
+}
+
+/* ====================================================
+   1. HERO BANNER
+   ==================================================== */
+.pharmacovigilance-hero {
+  position: relative;
+  width: 100%;
+  min-height: 540px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.products-hero.pharmacovigilance-hero .products-hero__container {
+  padding-top: calc(86px + 28px);
+  padding-bottom: clamp(72px, 7vw, 110px);
+  position: relative;
+  z-index: 5;
+}
+
+.products-hero.pharmacovigilance-hero .products-hero__content {
+  max-width: 580px;
+  position: relative;
+  z-index: 5;
+}
+
+.products-hero.pharmacovigilance-hero .products-hero__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.35rem, 2.75vw, 2.85rem);
+  font-weight: var(--weight-regular, 400);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: #0B2545;
+  margin: 0 0 18px 0;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+.products-hero.pharmacovigilance-hero .products-hero__heading-accent {
+  color: #00A3A6;
+}
+
+.products-hero.pharmacovigilance-hero .products-hero__description {
+  font-family: var(--font-body);
+  font-size: 0.9063rem;
+  font-weight: var(--weight-regular, 400);
+  line-height: 1.7;
+  color: #4A5568;
+  margin: 0 0 28px 0;
+  max-width: 480px;
+  display: block;
+}
+
+.pv-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+
+/* ====================================================
+   2. SECTION 2 — DIRECT REPORTING CHANNELS
+   ==================================================== */
+.pv-channels-section {
+  position: relative;
+  padding: clamp(48px, 5vw, 76px) 0 clamp(40px, 4vw, 64px);
+  background: radial-gradient(ellipse at 55% 10%, #FFFFFF, #f3fcff 60%, #e9f8fd);
+}
+
+.pv-channels-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--vic-gutter, 28px);
+  box-sizing: border-box;
+}
+
+.pv-section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto clamp(32px, 4vw, 48px);
+}
+
+.pv-eyebrow {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #278eaa;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.pv-title {
+  font-family: var(--font-heading);
+  font-size: var(--vic-heading);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.035em;
+  color: #11115b;
+  margin: 0 0 16px 0;
+}
+
+.pv-channels-intro {
+  font-family: var(--font-body);
+  font-size: var(--vic-copy);
+  line-height: 1.7;
+  color: #555e84;
+  margin: 0 auto;
+  max-width: 660px;
+}
+
+/* Channels Grid */
+.pv-channels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(20px, 2.5vw, 32px);
+  margin-bottom: 32px;
+}
+
+.pv-channel-card {
+  background: #FFFFFF;
+  border: 1px solid #d5edf4;
+  border-radius: 18px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 28px rgba(0, 51, 89, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pv-channel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #008f9f, #00cbd5);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.pv-channel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(0, 51, 89, 0.1);
+  border-color: #aae0eb;
+}
+
+.pv-channel-card:hover::before {
+  opacity: 1;
+}
+
+.pv-channel-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(0, 163, 166, 0.12), rgba(0, 203, 213, 0.06));
+  color: #008f9f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.pv-channel-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.pv-channel-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #008f9f;
+  margin-bottom: 6px;
+}
+
+.pv-channel-name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #11115b;
+  margin: 0 0 12px 0;
+}
+
+.pv-channel-link {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #11115b;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 10px;
+  transition: color 0.18s ease;
+  word-break: break-all;
+}
+
+.pv-channel-link:hover {
+  color: #008f9f;
+}
+
+.pv-channel-link--email {
+  color: #008f9f;
+}
+
+.pv-channel-link--email:hover {
+  color: #005f6b;
+  text-decoration: underline;
+}
+
+.pv-channel-note {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #6a7698;
+  margin: auto 0 0 0;
+}
+
+/* Callout Box */
+.pv-form-prompt-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: #FFFFFF;
+  border: 1.5px dashed #aedee9;
+  border-radius: 14px;
+  padding: 16px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pv-form-prompt-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 143, 159, 0.1);
+  color: #008f9f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pv-form-prompt-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #11115b;
+  margin: 0;
+}
+
+
+/* ====================================================
+   3. SECTION 3 — REPORTING FORM
+   ==================================================== */
+.pv-form-section {
+  position: relative;
+  padding: clamp(56px, 6vw, 92px) 0;
+  scroll-margin-top: 96px;
+}
+
+.pv-form-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--vic-gutter, 28px);
+  box-sizing: border-box;
+}
+
+.pv-form-card {
+  background: #FFFFFF;
+  border: 1px solid #d5edf4;
+  border-radius: 24px;
+  padding: clamp(32px, 5vw, 56px);
+  box-shadow: 0 16px 44px rgba(0, 51, 89, 0.07);
+}
+
+.pv-form-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto clamp(28px, 4vw, 44px);
+}
+
+.pv-form-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #278eaa;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.pv-form-title {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 2.5vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.03em;
+  color: #11115b;
+  margin: 0 0 12px 0;
+}
+
+.pv-form-subtitle {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #6a7698;
+  margin: 0;
+}
+
+/* Error Banner */
+.pv-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+/* Success Box */
+.pv-success-box {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.pv-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00C9A7, #0D8A8A);
+  color: #FFFFFF;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(0, 201, 167, 0.35);
+}
+
+.pv-success-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #11115b;
+  margin: 0 0 12px;
+}
+
+.pv-success-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #555e84;
+  max-width: 580px;
+  margin: 0 auto 28px;
+}
+
+.pv-reset-btn {
+  margin: 0 auto;
+}
+
+/* Form Grid & Fields */
+.pv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pv-form-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.pv-form-grid--2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 767px) {
+  .pv-form-grid--2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pv-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pv-form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #11115b;
+}
+
+.pv-form-input,
+.pv-form-select,
+.pv-form-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: #11115b;
+  background: #fbfdfe;
+  border: 1.5px solid #d0e4ea;
+  border-radius: 10px;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+}
+
+.pv-form-input:focus,
+.pv-form-select:focus,
+.pv-form-textarea:focus {
+  outline: none;
+  border-color: #008f9f;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3.5px rgba(0, 143, 159, 0.15);
+}
+
+.pv-form-input::placeholder,
+.pv-form-textarea::placeholder {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.pv-form-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Custom Select Styling */
+.pv-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.pv-form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.pv-select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6a7698;
+  pointer-events: none;
+  font-size: 14px;
+}
+
+/* Actions and Security Note */
+.pv-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.pv-submit-btn {
+  align-self: flex-start;
+  min-height: 50px;
+  padding: 14px 34px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  border: none;
+}
+
+.pv-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.pv-security-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8125rem;
+  color: #6a7698;
+  line-height: 1.5;
+}
+
+.pv-shield-icon {
+  color: #008f9f;
+  flex-shrink: 0;
+}
+
+
+/* ====================================================
+   4. RTL SUPPORT (ARABIC)
+   ==================================================== */
+:host-context(html[dir="rtl"]) .pv-select-arrow,
+:host-context(.lang-ar) .pv-select-arrow {
+  right: auto;
+  left: 16px;
+}
+
+:host-context(html[dir="rtl"]) .pv-form-select,
+:host-context(.lang-ar) .pv-form-select {
+  padding-right: 16px;
+  padding-left: 38px;
+}
+
+:host-context(html[dir="rtl"]) .pv-submit-btn svg,
+:host-context(.lang-ar) .pv-submit-btn svg {
+  transform: rotate(180deg);
+}
+
+:host-context(html[dir="rtl"]) .pv-channel-card,
+:host-context(.lang-ar) .pv-channel-card {
+  text-align: right;
+  align-items: flex-start;
+}
+
+:host-context(html[dir="rtl"]) .pv-channel-card .pv-channel-link,
+:host-context(.lang-ar) .pv-channel-card .pv-channel-link {
+  direction: ltr;
+  text-align: right;
+  align-self: flex-start;
+}
+
+
+/* ====================================================
+   5. RESPONSIVE BREAKPOINTS
+   ==================================================== */
+@media (max-width: 767px) {
+  .pv-channels-section {
+    padding: 40px 0;
+  }
+
+  .pv-channel-card {
+    padding: 24px 20px;
+  }
+
+  .pv-form-card {
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+
+  .pv-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pv-form-prompt-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+}

@@ -7,35 +7,49 @@
 <!-- ====================================================
      SECTION 1 — HERO BANNER (SPLIT COMPOSITION)
      ==================================================== -->
-<section class="news-hero">
+<section class="products-hero news-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    <img
+      [src]="resolveImg(null, 'home_banner.png')"
+      alt="Vaccine Industrial Company Headquarters and Manufacturing Facility"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    />
+    <div class="products-hero__overlay"></div>
+  </div>
 
-  <!-- Left Content Container -->
-  <div class="news-hero__container">
-    <div class="news-hero__content">
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
 
-      <!-- Eyebrow -->
-      <span class="news-hero__eyebrow">NEWS &amp; MEDIA</span>
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.news') }}</span>
+      </nav>
 
-      <!-- Main Heading (Playfair / DM Serif Display with Teal Accent) -->
-      <h1 class="news-hero__heading">
-        Stories of Innovation.<br />
-        <span class="news-hero__heading-teal">Impacting Lives.</span>
+      <!-- Main Heading -->
+      <h1 class="news-hero__heading products-hero__heading">
+        {{ translationService.isRtl() ? 'قصص الابتكار.' : 'Stories of Innovation.' }}<br />
+        <span class="news-hero__heading-teal products-hero__heading-accent">{{ translationService.isRtl() ? 'نترك أثراً في الحياة.' : 'Impacting Lives.' }}</span>
       </h1>
 
-      <!-- Short Description -->
-      <p class="news-hero__description">
-        Explore the latest news, press releases, and media resources from Vaccine Industrial Company (VIC).
+      <!-- Subtitle Description -->
+      <p class="news-hero__description products-hero__description">
+        {{ translationService.isRtl() ? 'استكشف أحدث الأخبار والبيانات الصحفية والوسائط الإعلامية من شركة اللقاحات الصناعية (VIC).' : 'Explore the latest news, press releases, and media resources from Vaccine Industrial Company (VIC).' }}
       </p>
 
       <!-- Action Button — Smoothly navigates to latest news -->
-      <div class="news-hero__action">
+      <div class="products-hero__action">
         <button
           type="button"
           class="news-hero__btn-primary"
           (click)="scrollToSection('latest-news-section')"
           aria-label="View Press Releases"
         >
-          <span>View Press Releases</span>
+          <span>{{ translationService.isRtl() ? 'عرض البيانات الصحفية' : 'View Press Releases' }}</span>
           <span class="btn-arrow" aria-hidden="true">&rarr;</span>
         </button>
       </div>
@@ -43,20 +57,10 @@
     </div>
   </div>
 
-  <!-- Headquarters Building Image with Smooth Fade Gradient Overlay -->
-  <div class="news-hero__image-wrapper">
-    <img
-      src="home_banner.png"
-      alt="Vaccine Industrial Company Headquarters and Manufacturing Facility"
-      class="news-hero__image"
-    />
-    <div class="news-hero__overlay" aria-hidden="true"></div>
-  </div>
-
-  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching Home Page) -->
-  <div class="news-hero__wave-wrapper" aria-hidden="true">
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
     <svg
-      class="news-hero__wave-svg"
+      class="products-hero__wave-svg"
       viewBox="0 0 1440 120"
       fill="none"
       preserveAspectRatio="none"
@@ -71,18 +75,19 @@
         </linearGradient>
       </defs>
 
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
       <path
-        d="M 0,86 C 300,118 560,18 880,24 C 1140,28 1320,82 1440,68 L 1440,120 L 0,120 Z"
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
         fill="url(#newsTealWaveGrad)"
       />
 
+      <!-- Clean Seamless Base Matching Section 2 (#F8FAFC) -->
       <path
-        d="M 0,102 C 300,134 560,34 880,40 C 1140,44 1320,98 1440,84 L 1440,120 L 0,120 Z"
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
         fill="#F8FAFC"
       />
     </svg>
   </div>
-
 </section>
 
 
@@ -90,8 +95,8 @@
      SECTION 2 — BROWSE BY CATEGORY (IMAGE 1 EXACT DESIGN)
      With "MOU" Extra Category Added
      ==================================================== -->
-<section class="news-category-section" id="browse-categories">
-  <div class="news-category-section__container">
+<section class="news-category-section vic-section" id="browse-categories">
+  <div class="news-category-section__container vic-container">
 
     <!-- Category Label -->
     <h2 class="news-category-section__eyebrow">BROWSE BY CATEGORY</h2>
@@ -120,8 +125,9 @@
      SECTION 3 — LATEST NEWS (IMAGE 2 TOP SECTION EXACT DESIGN)
      4-Card Row with Image, Teal Badge, Date, Title, Excerpt, Read More
      ==================================================== -->
-<section class="latest-news-section" id="latest-news-section">
-  <div class="latest-news-section__container">
+<section class="latest-news-section vic-section" id="latest-news-section">
+  <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="latest-news-section__container vic-container">
 
     <!-- Header: LATEST NEWS on Left, View All News on Right -->
     <div class="latest-news-section__header">
@@ -154,16 +160,17 @@
     <!-- 4-Card Grid (Exact layout from Image 2) -->
     <div class="latest-news-grid" *ngIf="displayedArticles().length > 0">
       <article
-        *ngFor="let article of displayedArticles()"
+        *ngFor="let article of displayedArticles(); let i = index"
         class="latest-news-card"
       >
         <!-- Card Image Thumbnail with Teal Badge Overlay -->
         <a [routerLink]="['/news', article.slug]" class="latest-news-card__image-wrap" [attr.aria-label]="article.title">
           <img
-            [src]="getImageUrl(article.image)"
+            [src]="getImageUrl(article.image, i)"
             [alt]="article.title"
             class="latest-news-card__image"
             loading="lazy"
+            (error)="onImgError($event, i)"
           />
           <span class="latest-news-card__badge">{{ article.badge }}</span>
         </a>
@@ -199,8 +206,9 @@
      SECTION 4 — PRESS RELEASES (IMAGE 2 BOTTOM SECTION EXACT DESIGN)
      4 Horizontal Cards with Date Box, Title, PDF Size & Download Icon
      ==================================================== -->
-<section class="press-releases-section" id="press-releases">
-  <div class="press-releases-section__container">
+<section class="press-releases-section vic-section vic-section--soft" id="press-releases">
+  <img class="vic-floating-v vic-floating-v--right" src="v-floating-mark.png" alt="" aria-hidden="true" />
+  <div class="press-releases-section__container vic-container">
 
     <!-- Header: PRESS RELEASES on Left, View All Press Releases on Right -->
     <div class="press-releases-section__header">
@@ -282,8 +290,8 @@
      SECTION 5 — STAY UPDATED (NEWSLETTER BANNER)
      Exact layout matching user design (media_1788336182183.png)
      ==================================================== -->
-<section class="stay-updated-section" id="stay-updated">
-  <div class="stay-updated-section__container">
+<section class="stay-updated-section vic-section" id="stay-updated">
+  <div class="stay-updated-section__container vic-container">
     <div class="stay-updated-card">
 
       <!-- Left Group: Circular Icon Badge + Text -->
@@ -335,7 +343,7 @@
           </div>
           <button
             type="submit"
-            class="stay-updated-btn"
+            class="stay-updated-btn vic-btn"
             aria-label="Subscribe to newsletter"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -356,3 +364,4 @@
   <div class="news-download-toast__icon">&#10003;</div>
   <span>{{ downloadNotice() }}</span>
 </div>
+

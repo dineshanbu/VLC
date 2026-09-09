@@ -1,14 +1,20 @@
 <section class="about-vic" id="about-vic">
+  <img class="about-vic__brand-mark" src="v-floating-mark.png" alt="" aria-hidden="true" />
   <div class="about-vic__container">
 
-    <div class="about-vic__card">
+    <div class="about-vic__grid">
 
-      <!-- Left Content Column (43%) -->
+      <!-- Left Content Column -->
       <div class="about-vic__content">
-        <span class="about-vic__eyebrow">{{ translationService.translate('aboutVic.eyebrow') }}</span>
+        <!-- Eyebrow label with horizontal accent line -->
+        <div class="about-vic__eyebrow-wrapper">
+          <span class="about-vic__eyebrow-index">02 <span aria-hidden="true">/</span></span><span class="about-vic__eyebrow">{{ translationService.translate('aboutVic.eyebrow') }}</span>
+          <span class="about-vic__eyebrow-line" aria-hidden="true"></span>
+        </div>
 
         <h2 class="about-vic__heading">
-          {{ translationService.translate('aboutVic.headingLine1') }}<br>{{ translationService.translate('aboutVic.headingLine2') }}
+          {{ translationService.translate('aboutVic.headingLine1') }}<br>
+          {{ translationService.translate('aboutVic.headingLine2') }}
         </h2>
 
         <p class="about-vic__desc">
@@ -16,27 +22,21 @@
         </p>
 
         <div class="about-vic__action">
-          <a routerLink="/about" class="btn btn-primary about-vic__btn">
+          <a routerLink="/about" class="about-vic__btn">
             <span>{{ translationService.translate('aboutVic.btn') }}</span>
-            <svg class="about-vic__btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="12" x2="20" y2="12"></line>
-              <polyline points="13 5 20 12 13 19"></polyline>
+            <svg class="about-vic__btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </a>
         </div>
       </div>
 
-      <!-- Right Media Column (57%) — Pure Native Autoplaying Looping Video -->
-      <div class="about-vic__media">
-        <video
-          class="about-vic__video"
-          src="about.mp4"
-          autoplay
-          loop
-          muted
-          playsinline
-          preload="auto"
-        ></video>
+      <!-- Right Media Column with curved organic mask & floating badge -->
+      <div class="about-vic__media-wrapper">
+        <div class="about-vic__curved-media">
+          <img class="about-vic__image" src="vc-company.jpg" alt="Vaccine Industrial Company facility" loading="lazy" />
+        </div>
       </div>
 
     </div>

@@ -3,7 +3,10 @@
 
     <!-- Header: Section Label on Left, View All News Link on Right -->
     <div class="news__header">
-      <span class="news__label">{{ translationService.translate('news.eyebrow') }}</span>
+      <div>
+        <span class="news__label"><span class="reference-index">06 /</span> {{ translationService.translate('news.mediaEyebrow') }}</span>
+        <h2 class="news__heading">{{ translationService.translate('news.homeHeading') }}</h2>
+      </div>
 
       <a routerLink="/news" class="news__view-all">
         <span>{{ translationService.translate('news.viewAll') }}</span>
@@ -24,12 +27,18 @@
       (mouseenter)="pauseAutoplay()"
       (mouseleave)="resumeAutoplay()"
     >
-      @for (item of news(); track item.title) {
-        <a [href]="item.link" target="_blank" rel="noopener noreferrer" class="news__card">
+      @for (item of news(); track $index; let idx = $index) {
+        <a [routerLink]="item.link" class="news__card">
 
           <!-- Image at Top -->
           <div class="news__image-wrap">
-            <img [src]="getImageUrl(item.image)" [alt]="item.title" class="news__image" />
+            <img
+              [src]="getImageUrl(item.image, idx)"
+              [alt]="item.title"
+              class="news__image"
+              loading="lazy"
+              (error)="onImgError($event, idx)"
+            />
           </div>
 
           <!-- Content Body -->
@@ -90,5 +99,39 @@
 
     </div>
 
+  </div>
+</section>
+
+<section class="vision-support">
+  <div class="vision-support__overlay" aria-hidden="true"></div>
+  <div class="vision-support__container">
+    <div class="vision-support__copy">
+      <span class="vision-support__eyebrow"><span class="reference-index">07 /</span> {{ translationService.translate('visionSupport.eyebrow') }}</span>
+      <h2>{{ translationService.translate('visionSupport.title') }}</h2>
+      <p>{{ translationService.translate('visionSupport.description') }}</p>
+    </div>
+
+    <div class="vision-support__pillars">
+      <div class="vision-support__pillar">
+        <svg viewBox="0 0 40 40"><path d="M11 35V17h18v18M16 17V9h8v8M7 35h26M17 25h6M17 30h6"></path></svg>
+        <span>{{ translationService.translate('visionSupport.item1') }}</span>
+      </div>
+      <div class="vision-support__pillar">
+        <svg viewBox="0 0 40 40"><circle cx="13" cy="13" r="4"></circle><circle cx="27" cy="13" r="4"></circle><circle cx="20" cy="9" r="4"></circle><path d="M6 31v-5a7 7 0 0 1 10-6M34 31v-5a7 7 0 0 0-10-6M13 33v-6a7 7 0 0 1 14 0v6"></path></svg>
+        <span>{{ translationService.translate('visionSupport.item2') }}</span>
+      </div>
+      <div class="vision-support__pillar">
+        <svg viewBox="0 0 40 40"><path d="M9 8h12v12H9zM19 20l12 12M24 21l4-4 5 5-4 4M8 31l8-8"></path><circle cx="12" cy="12" r="1"></circle></svg>
+        <span>{{ translationService.translate('visionSupport.item3') }}</span>
+      </div>
+      <div class="vision-support__pillar">
+        <svg viewBox="0 0 40 40"><path d="M20 5c8 0 13 5 13 12 0 9-8 15-13 18-5-3-13-9-13-18C7 10 12 5 20 5Z"></path><path d="M20 12v12M14 18h12"></path></svg>
+        <span>{{ translationService.translate('visionSupport.item4') }}</span>
+      </div>
+    </div>
+
+    <div class="vision-support__mark" aria-label="Saudi Vision 2030">
+      <img src="/vision-2030-logo.png" alt="Saudi Vision 2030 — Kingdom of Saudi Arabia" />
+    </div>
   </div>
 </section>
