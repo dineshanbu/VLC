@@ -1079,3 +1079,23 @@
   .culture-card { padding: 24px; }
   .form-row-2 { grid-template-columns: 1fr; }
 }
+
+/* Keep the hero copy and calls to action in separate, non-overlapping rows. */
+:host .products-hero.careers-hero .careers-hero__description {
+  display: block;
+  margin-bottom: 0;
+}
+
+:host .products-hero.careers-hero .careers-hero__actions {
+  position: relative;
+  z-index: 6;
+  clear: both;
+  margin-top: 28px;
+}
+
+@media (max-width: 767px) {
+  :host .products-hero.careers-hero .careers-hero__actions {
+    margin-top: 20px;
+    gap: 12px;
+  }
+}

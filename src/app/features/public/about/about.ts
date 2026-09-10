@@ -486,6 +486,19 @@ export class AboutComponent implements OnInit, OnDestroy {
     return path;
   }
 
+  heroTitlePrefix(): string {
+    const title = this.translationService.currentLang() === 'ar'
+      ? (this.pageContent().hero?.title_ar || this.translationService.translate('about.hero.title'))
+      : (this.pageContent().hero?.title || this.translationService.translate('about.hero.title'));
+    return title.replace(/\s*Holding LLC$/, '');
+  }
+
+  heroTitleHighlight(): string {
+    if (this.translationService.currentLang() === 'ar') return '';
+    const title = this.pageContent().hero?.title || this.translationService.translate('about.hero.title');
+    return /Holding LLC$/.test(title) ? 'Holding LLC' : '';
+  }
+
   ngOnDestroy(): void {
     this.stopAutoPlay();
   }

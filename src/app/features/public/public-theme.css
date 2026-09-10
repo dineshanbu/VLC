@@ -393,3 +393,266 @@
   font-size: 14px;
   line-height: 1.6;
 }
+
+/* Shared dark scientific hero used by all interior pages. */
+:host .products-hero {
+  min-height: clamp(420px, 33vw, 540px);
+  background: #031d42;
+}
+
+:host .products-hero__bg {
+  inset: 0;
+  width: auto;
+  z-index: 0;
+}
+
+:host .products-hero__image {
+  object-position: center;
+  filter: saturate(.85) contrast(1.12) brightness(.76);
+}
+
+:host .products-hero__overlay {
+  display: block;
+  background:
+    linear-gradient(90deg, rgba(1,21,53,.96) 0%, rgba(2,28,65,.89) 29%, rgba(2,35,76,.52) 58%, rgba(1,21,52,.28) 100%),
+    linear-gradient(0deg, rgba(0,10,34,.28), transparent 55%);
+}
+
+:host .products-hero__container {
+  z-index: 2;
+  max-width: 1440px;
+  min-height: inherit;
+  padding: clamp(90px, 7.2vw, 118px) clamp(32px, 8vw, 120px) clamp(86px, 7vw, 112px);
+}
+
+:host .products-hero__content { max-width: min(48vw, 545px); }
+:host .products-hero__breadcrumb { margin-bottom: 22px; color: #d7f7fb; }
+:host .products-hero__breadcrumb-link { color: #6beaf0; }
+:host .products-hero__breadcrumb-current { color: #edf9fc; }
+:host .products-hero__breadcrumb-separator { color: #6beaf0; }
+
+:host .products-hero__eyebrow {
+  display: block;
+  width: fit-content;
+  margin-bottom: 16px;
+  padding-bottom: 9px;
+  border-bottom: 2px solid #00c9d6;
+  color: #d9fbff;
+  font: 700 .6875rem/1 var(--font-body);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+:host .products-hero__heading {
+  max-width: 560px;
+  margin: 0 0 14px;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: clamp(2.45rem, 4vw, 3.3rem);
+  text-shadow: 0 4px 22px rgba(0,0,0,.24);
+}
+
+:host .products-hero__heading-accent { color: #00d1dd; }
+:host .products-hero__description {
+  max-width: 385px;
+  color: #e6f7fb;
+  font: 400 clamp(.875rem, 1vw, 1rem)/1.5 var(--font-body);
+}
+
+:host .products-hero__side-message {
+  position: absolute;
+  z-index: 2;
+  right: clamp(34px, 7vw, 110px);
+  bottom: clamp(96px, 8vw, 135px);
+  max-width: 130px;
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom: 3px solid #00d1dd;
+  color: #f2fcff;
+  font: 700 clamp(.7rem, .78vw, .82rem)/1.35 var(--font-body);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+:host .products-hero__wave-wrapper { z-index: 3; height: clamp(54px, 6vw, 92px); }
+
+/* Page-specific hero selectors keep the shared visual system ahead of local legacy rules. */
+:host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__heading {
+  max-width: 560px;
+  margin: 0 0 14px;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: clamp(2.45rem, 4vw, 3.3rem);
+  text-shadow: 0 4px 22px rgba(0,0,0,.24);
+}
+:host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__heading-accent { color: #00d1dd; }
+:host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__description { color: #e6f7fb; }
+
+@media (max-width: 767px) {
+  :host .products-hero {
+    display: block;
+    min-height: 430px;
+    padding-top: 64px;
+    overflow: hidden;
+  }
+  :host .products-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: auto;
+  }
+  :host .products-hero__image {
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    filter: saturate(.82) contrast(1.12) brightness(.58);
+  }
+  :host .products-hero__overlay {
+    display: block;
+    background: linear-gradient(90deg, rgba(1,20,53,.94) 0%, rgba(1,24,58,.82) 57%, rgba(1,22,55,.48) 100%);
+  }
+  :host .products-hero__container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: 430px;
+    padding: 92px 20px 66px;
+    background: transparent;
+  }
+  :host .products-hero__content { max-width: 100%; }
+  :host .products-hero__breadcrumb { margin-bottom: 14px; color: #d7f7fb; }
+  :host .products-hero__breadcrumb-link { color: #6beaf0; }
+  :host .products-hero__breadcrumb-current { color: #edf9fc; }
+  :host .products-hero__breadcrumb-separator { color: #6beaf0; }
+  :host .products-hero__eyebrow { display: block; margin-bottom: 14px; }
+  :host .products-hero__heading {
+    max-width: 100%;
+    color: #fff;
+    font-size: clamp(1.72rem, 7.8vw, 2.12rem);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+  }
+  :host .products-hero__description { max-width: 330px; color: #e6f7fb; font-size: .8125rem; line-height: 1.52; }
+  :host .products-hero__side-message { display: none; }
+  :host .products-hero__wave-wrapper { display: block; z-index: 3; height: 44px; }
+  :host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__heading {
+    color: #fff;
+    font-size: clamp(1.72rem, 7.8vw, 2.12rem);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+  }
+  :host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__heading-accent { color: #00d1dd; }
+:host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__description { color: #e6f7fb; }
+}
+
+/* Partners uses the vic-hero markup, so apply the same Products heading settings explicitly. */
+:host .partner-hero .partner-hero__heading {
+  max-width: 560px;
+  margin: 0 0 14px;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: clamp(2.45rem, 4vw, 3.3rem);
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 767px) {
+  :host .partner-hero .partner-hero__heading {
+    max-width: 100%;
+    font-size: clamp(1.72rem, 7.8vw, 2.12rem);
+  }
+}
+
+/* Use the Products CTA color treatment for every interior-page hero action. */
+:host .products-hero :is(
+  .about-hero__read-more-btn,
+  .careers-hero__btn-primary,
+  .careers-hero__btn-secondary,
+  .news-hero__btn-primary,
+  .pv-hero-cta,
+  .contact-quick-link,
+  .partner-hero__btn-primary
+) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 8px;
+  background: #0D8A8A;
+  box-shadow: 0 3px 12px rgba(13, 138, 138, 0.25);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:host .products-hero :is(
+  .about-hero__read-more-btn,
+  .careers-hero__btn-primary,
+  .careers-hero__btn-secondary,
+  .news-hero__btn-primary,
+  .pv-hero-cta,
+  .contact-quick-link,
+  .partner-hero__btn-primary
+):hover {
+  background: #0A6F6F;
+  box-shadow: 0 5px 18px rgba(13, 138, 138, 0.38);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+:host .products-hero .contact-hero__quick-links {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+:host .products-hero .contact-quick-link__icon,
+:host .products-hero .careers-hero__btn-secondary .btn-icon-circle {
+  color: #FFFFFF;
+  background-color: transparent;
+}
+
+/* About Us hero action: show it on every breakpoint and match the dark banner theme. */
+:host .products-hero.about-hero .products-hero__action {
+  display: flex;
+  margin-top: 24px;
+}
+
+:host .products-hero.about-hero .about-hero__read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 46px;
+  height: auto;
+  padding: 13px 25px;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  background: linear-gradient(100deg, #05365b, #00c5ce);
+  box-shadow: 0 6px 18px #0086a325;
+  color: #FFFFFF;
+  font: 600 0.875rem/1.4 var(--font-body);
+}
+
+:host .products-hero.about-hero .about-hero__read-more-btn:hover {
+  background: linear-gradient(100deg, #00345a, #00aebf);
+  box-shadow: 0 8px 22px #0086a340;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+:host .products-hero.about-hero .about-hero__read-more-btn .btn-arrow {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  color: currentColor;
+}

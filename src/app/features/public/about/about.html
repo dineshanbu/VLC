@@ -29,10 +29,11 @@
         <span class="products-hero__breadcrumb-separator">&gt;</span>
         <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.about') }}</span>
       </nav>
+      <span class="products-hero__eyebrow">About VIC</span>
 
       <!-- Main Heading -->
       <h1 class="about-hero__heading products-hero__heading">
-        {{ translationService.currentLang() === 'ar' ? (pageContent().hero?.title_ar || translationService.translate('about.hero.title')) : (pageContent().hero?.title || translationService.translate('about.hero.title')) }}
+        {{ heroTitlePrefix() }}<span *ngIf="heroTitleHighlight()" class="about-hero__heading-highlight"> {{ heroTitleHighlight() }}</span>
       </h1>
 
       <!-- Subtitle Description -->
