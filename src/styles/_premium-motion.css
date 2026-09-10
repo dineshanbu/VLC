@@ -1,0 +1,733 @@
+/* ==========================================================================
+   VIC CORPORATE MOTION DESIGN SYSTEM
+   Vaccine Industrial Company, Saudi Arabia
+   GSAP + ScrollTrigger + Lenis Micro-Interactions & Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LENIS SMOOTH SCROLL INTEGRATION
+   -------------------------------------------------------------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+app-home section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* --------------------------------------------------------------------------
+   NAVBAR STABILITY & ZERO-SHIFT SYSTEM
+   Guarantees 0px layout shift and eliminates re-entrance animations on scroll
+   -------------------------------------------------------------------------- */
+:root:root:root .navbar,
+:root:root:root .navbar--scrolled,
+:root:root:root .navbar:not(.navbar--scrolled),
+:root:root:root body:has(app-home) .navbar,
+:root:root:root body:has(app-home) .navbar--scrolled,
+:root:root:root body:has(app-home) .navbar:not(.navbar--scrolled) {
+  height: 86px !important;
+  animation: none !important;
+  transition: background-color 280ms ease, box-shadow 280ms ease, border-color 280ms ease !important;
+}
+
+:root:root:root .navbar__logo-img,
+:root:root:root .navbar:not(.navbar--scrolled) .navbar__logo-img,
+:root:root:root .navbar--scrolled .navbar__logo-img,
+:root:root:root body:has(app-home) .navbar__logo-img,
+:root:root:root body:has(app-home) .navbar:not(.navbar--scrolled) .navbar__logo-img,
+:root:root:root body:has(app-home) .navbar--scrolled .navbar__logo-img {
+  height: 62px !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+@media (max-width: 1023px) {
+  :root:root:root .navbar,
+  :root:root:root .navbar--scrolled,
+  :root:root:root .navbar:not(.navbar--scrolled),
+  :root:root:root body:has(app-home) .navbar,
+  :root:root:root body:has(app-home) .navbar--scrolled,
+  :root:root:root body:has(app-home) .navbar:not(.navbar--scrolled) {
+    height: 64px !important;
+  }
+  :root:root:root .navbar__logo-img,
+  :root:root:root .navbar:not(.navbar--scrolled) .navbar__logo-img,
+  :root:root:root .navbar--scrolled .navbar__logo-img,
+  :root:root:root body:has(app-home) .navbar__logo-img,
+  :root:root:root body:has(app-home) .navbar:not(.navbar--scrolled) .navbar__logo-img,
+  :root:root:root body:has(app-home) .navbar--scrolled .navbar__logo-img {
+    height: 46px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. TEXT MASKING PRIMITIVES
+   -------------------------------------------------------------------------- */
+.motion-word-mask,
+.motion-line-mask {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.motion-word,
+.motion-line {
+  display: inline-block;
+}
+
+.vic-premium-motion .motion-word-mask,
+.vic-premium-motion .motion-line-mask {
+  overflow: clip;
+  overflow-clip-margin: 0.08em;
+}
+
+.motion-line-mask {
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   3. DESKTOP & STANDARD MOTION SYSTEM (prefers-reduced-motion: no-preference)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  :root:root:root body:has(app-home) {
+    /* GSAP orchestrates these elements; disable conflicting CSS animations */
+    .hero__video,
+    .hero__banner-content,
+    .hero__banner-logo,
+    .hero__banner-copy,
+    .hero__btn-video,
+    .hero__gradient-overlay::after,
+    .hero__facility-badge,
+    .about-vic__curved-media,
+    .about-vic__brand-mark,
+    .about-vic__floating-badge,
+    .facility-gallery__floating-v,
+    .navbar,
+    .navbar--scrolled,
+    .navbar:not(.navbar--scrolled) {
+      animation: none !important;
+    }
+
+    .hero__media-wrapper {
+      overflow: hidden;
+    }
+
+    .hero__video {
+      transform-origin: center;
+      will-change: transform;
+    }
+
+    .hero__banner-title-accent {
+      display: inline-block;
+      color: #00d5df;
+      text-shadow: 0 0 20px rgba(0, 213, 223, 0.45);
+    }
+
+    .hero__scroll {
+      transition: opacity 300ms ease;
+    }
+
+    /* Hero Banner CTA Button - Restored VIC Brand Palette */
+    .hero__btn-video {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      height: 50px !important;
+      min-height: 50px !important;
+      margin-top: clamp(18px, 2vw, 28px) !important;
+      padding: 4px 24px 4px 6px !important;
+      border: 1.5px solid rgba(0, 213, 223, 0.65) !important;
+      border-radius: 99px !important;
+      color: #ffffff !important;
+      background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important;
+      box-shadow: 0 6px 24px rgba(0, 180, 203, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+      cursor: pointer !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      visibility: visible !important;
+      overflow: visible !important;
+      z-index: 5 !important;
+      transition: transform 250ms ease, box-shadow 250ms ease, filter 250ms ease !important;
+    }
+
+    :host-context(html[dir="rtl"]) .hero__btn-video,
+    html[dir="rtl"] .hero__btn-video {
+      padding: 4px 6px 4px 24px !important;
+    }
+
+    .hero__btn-video:hover {
+      transform: translateY(-2px) scale(1.02) !important;
+      box-shadow: 0 8px 30px rgba(0, 180, 203, 0.55), 0 0 20px rgba(0, 213, 223, 0.35) !important;
+      filter: brightness(1.08) !important;
+    }
+
+    .hero__btn-video:active {
+      transform: translateY(0) scale(0.98) !important;
+      box-shadow: 0 2px 14px rgba(0, 180, 203, 0.35) !important;
+    }
+
+    .hero__play-icon-circle {
+      display: grid !important;
+      place-items: center !important;
+      border: 2px solid #00d5df !important;
+      border-radius: 50% !important;
+      width: 38px !important;
+      height: 38px !important;
+      min-width: 38px !important;
+      min-height: 38px !important;
+      background: #043655 !important;
+      color: #00d5df !important;
+      box-shadow: 0 0 14px rgba(0, 213, 223, 0.5) !important;
+      flex-shrink: 0 !important;
+      transition: transform 250ms ease, box-shadow 250ms ease !important;
+    }
+
+    .hero__btn-video:hover .hero__play-icon-circle {
+      box-shadow: 0 0 20px rgba(0, 213, 223, 0.85), inset 0 0 6px rgba(0, 213, 223, 0.35) !important;
+    }
+
+    .hero__play-icon-circle svg {
+      width: 16px !important;
+      height: 16px !important;
+      fill: #00d5df !important;
+      margin-left: 2px !important;
+    }
+
+    :host-context(html[dir="rtl"]) .hero__play-icon-circle svg,
+    html[dir="rtl"] .hero__play-icon-circle svg {
+      margin-left: 0 !important;
+      margin-right: 2px !important;
+    }
+
+    /* ----------------------------------------------------------------------
+       3.1 HEADER / NAVIGATION
+       ---------------------------------------------------------------------- */
+    .navbar,
+    .navbar--scrolled,
+    .navbar:not(.navbar--scrolled) {
+      height: 86px;
+      background-color: rgba(255, 255, 255, 0.75) !important;
+      backdrop-filter: blur(12px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+      border-bottom: 1px solid rgba(210, 235, 248, 0.45) !important;
+      box-shadow: 0 2px 16px rgba(0, 41, 80, 0.04) !important;
+      transition: background-color 280ms ease,
+                  box-shadow 280ms ease,
+                  border-color 280ms ease !important;
+    }
+
+    .navbar::before {
+      display: none !important;
+    }
+
+    .navbar--scrolled {
+      background-color: rgba(255, 255, 255, 0.92) !important;
+      box-shadow: 0 4px 20px rgba(0, 41, 80, 0.08) !important;
+      border-bottom-color: rgba(210, 235, 248, 0.85) !important;
+    }
+
+    .navbar__logo-img,
+    .navbar:not(.navbar--scrolled) .navbar__logo-img,
+    .navbar--scrolled .navbar__logo-img {
+      height: 62px;
+      transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .navbar--scrolled .navbar__logo-img {
+      transform: scale(0.93);
+    }
+
+    /* Navigation Links with Cyan Expanding Underline */
+    .navbar__link {
+      position: relative;
+      transition: color 240ms ease, transform 240ms ease;
+    }
+
+    .navbar__link:hover {
+      transform: translateY(-1px);
+      color: #00A3A6;
+    }
+
+    .navbar__link::after {
+      content: '';
+      position: absolute;
+      inset: auto auto -8px 50%;
+      width: 28px;
+      height: 2.5px;
+      border-radius: 2px;
+      background-color: #00A3A6;
+      box-shadow: 0 0 10px rgba(0, 163, 166, 0.4);
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), background-color 240ms ease;
+    }
+
+    .navbar__link:is(:hover, :focus-visible, .navbar__link--active)::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    /* Search & Language Controls */
+    .navbar__search,
+    .navbar__lang-btn {
+      transition: transform 220ms ease, background-color 220ms ease, color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .navbar__search:hover,
+    .navbar__lang-btn:hover {
+      transform: scale(1.05);
+      background-color: rgba(0, 197, 206, 0.1);
+      color: #00A3A6;
+    }
+
+    /* ----------------------------------------------------------------------
+       3.2 CARDS, MEDIA & PRODUCT GLOW
+       ---------------------------------------------------------------------- */
+    .platform__card,
+    .news__card,
+    .facility-gallery__photo {
+      transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 450ms ease,
+                  border-color 450ms ease;
+    }
+
+    .platform__image,
+    .news__image,
+    .facility-gallery__photo img {
+      transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .platform__card-icon,
+    .home-product__feature-icon,
+    .news__arrow {
+      transition: transform 300ms ease;
+    }
+
+    .news__image-wrap,
+    .facility-gallery__photo {
+      overflow: hidden;
+    }
+
+    /* Flucelvax Scientific Radial Atmosphere */
+    .home-product__visual {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .home-product__visual::after {
+      content: '';
+      position: absolute;
+      inset: 8% 2%;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, rgba(0, 203, 213, 0.28) 0%, rgba(0, 203, 213, 0.08) 50%, transparent 75%);
+      filter: blur(18px);
+    }
+
+    /* Facility Carousel Controls */
+    .facility-gallery__arrow {
+      transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 260ms ease,
+                  background-color 260ms ease,
+                  color 260ms ease;
+    }
+
+    .facility-gallery__dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .facility-gallery__dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 99px;
+      background-color: #b6e5f4;
+      cursor: pointer;
+      transition: width 350ms cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 350ms ease,
+                  box-shadow 350ms ease;
+    }
+
+    .facility-gallery__dots button.is-active {
+      width: 26px;
+      background-color: #00cbd5;
+      box-shadow: 0 0 10px rgba(0, 203, 213, 0.45);
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     4. UNIFIED TACTILE BUTTON SYSTEM
+     Applies consistently across the entire website
+     ------------------------------------------------------------------------ */
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all, .about-hero__read-more-btn, .careers-hero__btn-primary, .partner-hero__btn-primary, .news-hero__btn-primary, .pv-hero-cta) {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 320ms ease,
+                background-color 320ms ease,
+                border-color 320ms ease;
+  }
+
+  /* Soft Light Sweep Sheen Across Buttons */
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all, .about-hero__read-more-btn, .careers-hero__btn-primary, .partner-hero__btn-primary, .news-hero__btn-primary, .pv-hero-cta)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(108deg, transparent 20%, rgba(255, 255, 255, 0.28) 48%, rgba(255, 255, 255, 0.45) 52%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Tactile Press State */
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all, .about-hero__read-more-btn, .careers-hero__btn-primary, .partner-hero__btn-primary, .news-hero__btn-primary, .pv-hero-cta):active {
+    transform: translateY(0) scale(0.97) !important;
+    transition-duration: 100ms;
+  }
+
+  /* Footer Links Animated Underline */
+  app-public-layout .footer__link {
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 240ms ease, transform 240ms ease;
+  }
+
+  app-public-layout .footer__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: #00cbd5;
+    box-shadow: 0 0 6px rgba(0, 203, 213, 0.4);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  :host-context(html[dir="rtl"]) app-public-layout .footer__link::after,
+  html[dir="rtl"] app-public-layout .footer__link::after {
+    left: auto;
+    right: 0;
+    transform-origin: right;
+  }
+
+  app-public-layout .footer__link:is(:hover, :focus-visible) {
+    color: #00cbd5;
+    transform: translateX(2px);
+  }
+
+  :host-context(html[dir="rtl"]) app-public-layout .footer__link:is(:hover, :focus-visible),
+  html[dir="rtl"] app-public-layout .footer__link:is(:hover, :focus-visible) {
+    transform: translateX(-2px);
+  }
+
+  app-public-layout .footer__link:is(:hover, :focus-visible)::after {
+    transform: scaleX(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. HOVER MICRO-INTERACTIONS (FINE POINTERS)
+   -------------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :root:root:root body:has(app-home) {
+    /* Three Pillars Section Hover: Lift + Border + Glow + Image Zoom */
+    .platform__card:hover {
+      transform: translateY(-6px);
+      border-color: #00cbd5;
+      box-shadow: 0 16px 36px rgba(0, 203, 213, 0.22), 0 4px 12px rgba(0, 45, 80, 0.12);
+    }
+    .platform__card:hover .platform__image {
+      transform: scale(1.03);
+    }
+    .platform__card:hover .platform__card-icon {
+      transform: translateY(-3px) scale(1.04);
+    }
+
+    /* Facility Gallery Hover: Scale 1.03 + Shadow + Cyan Highlight */
+    .facility-gallery__photo:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px rgba(5, 87, 124, 0.22), 0 0 0 2px #00cbd5;
+    }
+    .facility-gallery__photo:hover img {
+      transform: scale(1.03);
+    }
+    .facility-gallery__arrow:hover {
+      transform: scale(1.08);
+      background-color: #f0fbfe;
+      box-shadow: 0 0 22px rgba(0, 203, 213, 0.38), 0 4px 14px rgba(5, 87, 124, 0.16);
+      color: #00a3a6;
+    }
+    .facility-gallery__arrow--prev:hover {
+      transform: scale(1.08) translateX(-2px);
+    }
+    .facility-gallery__arrow--next:hover {
+      transform: scale(1.08) translateX(2px);
+    }
+
+    /* Product Feature Hover */
+    .home-product__feature {
+      transition: transform 260ms ease;
+    }
+    .home-product__feature:hover {
+      transform: translateX(4px);
+    }
+    html[dir="rtl"] .home-product__feature:hover {
+      transform: translateX(-4px);
+    }
+    .home-product__feature:hover .home-product__feature-icon {
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px rgba(0, 160, 210, 0.28);
+      border-color: #00cbd5;
+    }
+
+    /* News Cards Hover */
+    .news__card:hover {
+      transform: translateY(-6px);
+      border-color: #00cbd5;
+      box-shadow: 0 20px 42px rgba(5, 60, 95, 0.16), 0 4px 16px rgba(0, 203, 213, 0.18);
+    }
+    .news__card:hover .news__image {
+      transform: scale(1.04);
+    }
+    .news__card:hover .news__arrow {
+      transform: translateX(5px);
+    }
+    html[dir="rtl"] .news__card:hover .news__arrow {
+      transform: translateX(-5px);
+    }
+
+    /* Saudi Vision 2030 Pillars Hover */
+    .vision-support__pillar {
+      transition: transform 280ms ease, color 280ms ease;
+    }
+    .vision-support__pillar:hover {
+      transform: translateY(-3px);
+      color: #008ea6;
+    }
+    .vision-support__pillar:hover svg {
+      stroke: #00cbd5;
+      transform: scale(1.06);
+      transition: transform 280ms ease, stroke 280ms ease;
+    }
+  }
+
+  /* Primary Button Hover State */
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all, .about-hero__read-more-btn, .careers-hero__btn-primary, .partner-hero__btn-primary, .news-hero__btn-primary, .pv-hero-cta):hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 197, 206, 0.35);
+  }
+
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all, .about-hero__read-more-btn, .careers-hero__btn-primary, .partner-hero__btn-primary, .news-hero__btn-primary, .pv-hero-cta):hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Internal Icon / Arrow Shifts */
+  app-public-layout :is(.about-vic__btn-arrow, .news__view-all-arrow, .btn-arrow) {
+    transition: transform 260ms ease;
+  }
+
+  app-public-layout :is(a, button):hover > :is(.about-vic__btn-arrow, .news__view-all-arrow, .btn-arrow) {
+    transform: translateX(4px);
+  }
+
+  html[dir="rtl"] app-public-layout :is(a, button):hover > :is(.about-vic__btn-arrow, .news__view-all-arrow, .btn-arrow) {
+    transform: translateX(-4px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. RESPONSIVE MOBILE OPTIMIZATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  :root:root:root body:has(app-home) {
+    .navbar,
+    .navbar--scrolled,
+    .navbar:not(.navbar--scrolled) {
+      height: 64px;
+    }
+
+    .navbar__logo-img,
+    .navbar:not(.navbar--scrolled) .navbar__logo-img,
+    .navbar--scrolled .navbar__logo-img {
+      height: 42px;
+    }
+
+    .navbar--scrolled::before {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. ACCESSIBILITY: PREFERS-REDUCED-MOTION & PRINT
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce), print {
+  .motion-word-mask,
+  .motion-line-mask {
+    overflow: visible;
+  }
+
+  .motion-word,
+  .motion-line {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .platform__card,
+  .news__card,
+  .facility-gallery__photo,
+  .platform__image,
+  .news__image,
+  .facility-gallery__photo img,
+  .navbar::before,
+  .navbar__container,
+  .navbar__logo-img {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all) {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  :root:root:root app-public-layout :is(.vic-btn, .hero__btn-video, .about-vic__btn, .home-product__link, .news__view-all)::after {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. CIRCULAR SCROLL PROGRESS INDICATOR WITH UP ARROW
+   -------------------------------------------------------------------------- */
+.vic-scroll-top {
+  position: fixed;
+  bottom: clamp(20px, 3vw, 36px);
+  inset-inline-end: clamp(18px, 2.5vw, 32px);
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(2, 22, 48, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 28px rgba(1, 18, 42, 0.55), 0 0 16px rgba(0, 213, 223, 0.22);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(14px) scale(0.88);
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s ease;
+  user-select: none;
+  padding: 0;
+}
+
+.vic-scroll-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.vic-scroll-top:hover {
+  box-shadow: 0 10px 32px rgba(1, 18, 42, 0.7), 0 0 22px rgba(0, 229, 255, 0.5);
+  transform: translateY(-3px) scale(1.06);
+}
+
+.vic-scroll-top:active {
+  transform: translateY(0) scale(0.94);
+}
+
+.vic-scroll-top:focus-visible {
+  outline: 2px solid #00e5ff;
+  outline-offset: 3px;
+}
+
+.vic-scroll-top__progress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.vic-scroll-top__track {
+  fill: none;
+  stroke: rgba(0, 229, 255, 0.18);
+  stroke-width: 3;
+}
+
+.vic-scroll-top__bar {
+  fill: none;
+  stroke: #00e5ff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 131.95;
+  filter: drop-shadow(0 0 3px rgba(0, 229, 255, 0.75));
+  transition: none;
+}
+
+.vic-scroll-top__arrow {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.vic-scroll-top:hover .vic-scroll-top__arrow {
+  transform: translateY(-2px);
+  color: #00e5ff;
+}
+
+@media (max-width: 767px) {
+  .vic-scroll-top {
+    bottom: 16px;
+    inset-inline-end: 14px;
+    width: 44px;
+    height: 44px;
+  }
+  .vic-scroll-top__arrow {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vic-scroll-top,
+  .vic-scroll-top__bar,
+  .vic-scroll-top__arrow {
+    transition: none !important;
+  }
+}
+

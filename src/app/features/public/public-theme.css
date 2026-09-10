@@ -547,14 +547,13 @@
 :host :is(.about-hero, .careers-hero, .contact-hero, .news-hero, .pharmacovigilance-hero) .products-hero__description { color: #e6f7fb; }
 }
 
-/* Partners uses the vic-hero markup, so apply the same Products heading settings explicitly. */
+/* Partners uses the vic-hero markup with light theme background */
 :host .partner-hero .partner-hero__heading {
   max-width: 560px;
   margin: 0 0 14px;
-  color: #FFFFFF;
+  color: var(--color-primary, #11115b);
   font-family: var(--font-heading);
   font-size: clamp(2.45rem, 4vw, 3.3rem);
-  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.24);
 }
 
 @media (max-width: 767px) {

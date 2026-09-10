@@ -4,10 +4,12 @@ import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { filter } from 'rxjs';
 
+import { ScrollTopComponent } from '../../shared/components/scroll-top/scroll-top';
+
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ScrollTopComponent],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css'
 })

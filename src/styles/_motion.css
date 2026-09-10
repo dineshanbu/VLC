@@ -1,0 +1,131 @@
+/* ====================================================
+   VIC PUBLIC MOTION & SCROLL ANIMATION SYSTEM
+   ==================================================== */
+
+/* Floating brand marks & floating elements levitation */
+@keyframes vic-site-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes vic-badge-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Universal scroll reveal classes across all screens */
+.vic-scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.vic-scroll-reveal--visual {
+  opacity: 0;
+  transform: translateY(32px) scale(0.975);
+  transition: opacity 780ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 820ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.vic-scroll-reveal.is-revealed,
+.vic-scroll-reveal--visual.is-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Floating decorations */
+  .vic-floating-v,
+  .section-floating-v,
+  .facility-gallery__floating-v,
+  .about-vic__brand-mark,
+  .about-vic__floating-badge,
+  .hero__facility-badge {
+    animation: vic-site-float 5.8s ease-in-out infinite !important;
+    will-change: transform;
+  }
+
+  .vic-floating-v--right {
+    animation-delay: -2.9s !important;
+  }
+
+  app-public-layout .vic-motion-float {
+    animation: vic-site-float 5.8s ease-in-out infinite !important;
+    animation-play-state: paused !important;
+  }
+
+  app-public-layout .vic-motion-float.vic-motion-in-view {
+    animation-play-state: running !important;
+  }
+
+  app-public-layout .vic-motion-float:nth-child(even) {
+    animation-delay: -2.9s !important;
+  }
+
+  app-public-layout main :is(button, a[class*="btn"], a[class*="cta"]) {
+    transition: background-color 220ms ease, box-shadow 220ms ease,
+      color 220ms ease, transform 220ms ease, scale 220ms ease;
+  }
+
+  app-public-layout main :is(button, a[class*="btn"], a[class*="cta"]):active {
+    scale: .97;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  app-public-layout main :is(figure, [class$="__image-wrapper"], [class$="__media-wrapper"], [class$="__card"], [class$="-card"]) img:not([aria-hidden="true"]) {
+    transition: transform 650ms cubic-bezier(.16, 1, .3, 1);
+  }
+
+  app-public-layout main :is(figure, [class$="__image-wrapper"], [class$="__media-wrapper"], [class$="__card"], [class$="-card"]):hover img:not([aria-hidden="true"]) {
+    transform: scale(1.035);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vic-scroll-reveal,
+  .vic-scroll-reveal--visual,
+  .vic-scroll-reveal.is-revealed,
+  .vic-scroll-reveal--visual.is-revealed {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .vic-floating-v,
+  .section-floating-v,
+  .facility-gallery__floating-v,
+  .about-vic__brand-mark,
+  .about-vic__floating-badge,
+  .hero__facility-badge {
+    animation: none !important;
+  }
+
+  app-public-layout *,
+  app-public-layout *::before,
+  app-public-layout *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  app-public-layout * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
