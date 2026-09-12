@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, inject, signal, computed } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, signal, computed } from '@angular/core';
 import { TranslationService } from '../../../core/services/translation.service';
 import { HeroComponent } from './components/hero/hero';
 import { AboutVicComponent } from './components/about-vic/about-vic';
@@ -6,6 +6,9 @@ import { OurPlatformComponent } from './components/our-platform/our-platform';
 import { LatestNewsComponent } from './components/latest-news/latest-news';
 import { HomeShowcaseComponent } from './components/home-showcase/home-showcase';
 import { RouterLink } from '@angular/router';
+import { HomeFacilityService } from '../../../core/services/home-facility.service';
+import { HomeFacilityImage } from '../../../core/models/home-facility.model';
+import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +16,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
-export class HomeComponent implements AfterViewInit, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly translationService = inject(TranslationService);
+  private readonly homeFacilityService = inject(HomeFacilityService);
   readonly facilityIndex = signal(0);
   readonly facilityModal = signal<{ src: string; alt: string } | null>(null);
   readonly showAllHomePartners = signal(false);
@@ -34,28 +38,43 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { name: 'Zyme Biotech', logo: 'https://vaccine.com.sa/backend/uploads/1789214602591-452447184-zyme.jpg' }
   ];
   readonly displayedHomePartners = computed(() => this.showAllHomePartners() ? this.homePartners : this.homePartners.slice(0, 4));
-  readonly facilityImages = [
-    { src: 'slide_Images/vlc0.png', alt: 'VIC facility exterior' },
-    { src: 'slide_Images/Vic main1.png', alt: 'VIC manufacturing facility exterior' },
-    { src: 'slide_Images/Vic main2.png', alt: 'VIC manufacturing facility' },
-    { src: 'slide_Images/Vic RDI.png', alt: 'VIC research and development facility' },
-    { src: 'slide_Images/Vic side 2.png', alt: 'VIC facility side view' },
-    { src: 'slide_Images/vic side 3.png', alt: 'VIC facility campus view' },
-    { src: 'slide_Images/vic side.png', alt: 'VIC facility exterior view' },
-    { src: 'slide_Images/Vic top1.png', alt: 'VIC facility aerial view' }
-  ];
+  readonly facilityImages = signal<HomeFacilityImage[]>([
+    { title: 'VIC facility exterior', alt_text: 'VIC facility exterior', image_url: '/uploads/facility-gallery/1789227486983-887709867-updated1.png', order_index: 0, status: 'Active' },
+    { title: 'VIC facility exterior', alt_text: 'VIC facility exterior', image_url: '/uploads/facility-gallery/vlc0.png', order_index: 1, status: 'Active' },
+    { title: 'VIC manufacturing facility exterior', alt_text: 'VIC manufacturing facility exterior', image_url: '/uploads/facility-gallery/Vic main1.png', order_index: 2, status: 'Active' },
+    { title: 'VIC manufacturing facility', alt_text: 'VIC manufacturing facility', image_url: '/uploads/facility-gallery/Vic main2.png', order_index: 3, status: 'Active' },
+    { title: 'VIC research and development facility', alt_text: 'VIC research and development facility', image_url: '/uploads/facility-gallery/Vic RDI.png', order_index: 4, status: 'Active' },
+    { title: 'VIC facility side view', alt_text: 'VIC facility side view', image_url: '/uploads/facility-gallery/Vic side 2.png', order_index: 5, status: 'Active' },
+    { title: 'VIC facility campus view', alt_text: 'VIC facility campus view', image_url: '/uploads/facility-gallery/vic side 3.png', order_index: 6, status: 'Active' },
+    { title: 'VIC facility exterior view', alt_text: 'VIC facility exterior view', image_url: '/uploads/facility-gallery/vic side.png', order_index: 7, status: 'Active' },
+    { title: 'VIC facility aerial view', alt_text: 'VIC facility aerial view', image_url: '/uploads/facility-gallery/Vic top1.png', order_index: 8, status: 'Active' }
+  ]);
   readonly visibleFacilities = computed(() => Array.from(
-    { length: Math.min(3, this.facilityImages.length) },
-    (_, offset) => this.facilityImages[(offset + this.facilityIndex()) % this.facilityImages.length]
+    { length: Math.min(3, this.facilityImages().length) },
+    (_, offset) => this.facilityImages()[(offset + this.facilityIndex()) % this.facilityImages().length]
   ));
   moveFacility(direction: number): void {
-    this.facilityIndex.update(index => (index + direction + this.facilityImages.length) % this.facilityImages.length);
+    const count = this.facilityImages().length;
+    if (count) this.facilityIndex.update(index => (index + direction + count) % count);
   }
-  openFacilityModal(photo: { src: string; alt: string }): void {
-    this.facilityModal.set(photo);
+  openFacilityModal(photo: HomeFacilityImage): void {
+    this.facilityModal.set({ src: resolveImageUrl(photo.image_url), alt: photo.alt_text || photo.title });
+  }
+  facilityImageUrl(imageUrl: string): string {
+    return resolveImageUrl(imageUrl);
   }
   closeFacilityModal(): void {
     this.facilityModal.set(null);
+  }
+  ngOnInit(): void {
+    this.homeFacilityService.getImages().subscribe({
+      next: ({ images }) => {
+        if (images?.length) {
+          this.facilityImages.set(images);
+          this.facilityIndex.set(0);
+        }
+      }
+    });
   }
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private revealObserver?: IntersectionObserver;

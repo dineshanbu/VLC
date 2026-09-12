@@ -5,3 +5,5 @@ export * from './media.service';
 export * from './contact.service';
 export * from './dashboard.service';
 export * from './product.service';
+export * from './home-facility.service';
+export * from './home-facility.service';

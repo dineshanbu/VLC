@@ -53,6 +53,20 @@ CREATE TABLE IF NOT EXISTS media_assets (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Home Page: First of its kind facility gallery
+CREATE TABLE IF NOT EXISTS home_facility_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  alt_text VARCHAR(255) NULL,
+  image_url VARCHAR(500) NOT NULL,
+  file_name VARCHAR(255) NULL,
+  source_type ENUM('upload', 'url', 'legacy') NOT NULL DEFAULT 'upload',
+  order_index INT NOT NULL DEFAULT 0,
+  status ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Contact Inquiries Table (Populated from Public Contact Form)
 CREATE TABLE IF NOT EXISTS contact_inquiries (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -287,6 +301,5 @@ CREATE TABLE IF NOT EXISTS products_page_settings (
   page_resources JSON NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 

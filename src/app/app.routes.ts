@@ -130,6 +130,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'facility-gallery',
+        loadComponent: () =>
+          import('./features/admin/facility-gallery-management/facility-gallery-management').then(
+            m => m.FacilityGalleryManagementComponent
+          ),
+      },
+      {
         path: 'contacts',
         loadComponent: () =>
           import('./features/admin/contact-management/contact-management').then(

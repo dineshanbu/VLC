@@ -23,6 +23,7 @@ const partnerRoutes = require('./routes/partnerRoutes');
 const aboutRoutes = require('./routes/aboutRoutes');
 const productRoutes = require('./routes/productRoutes');
 const pharmacovigilanceRoutes = require('./routes/pharmacovigilanceRoutes');
+const homeFacilityRoutes = require('./routes/homeFacilityRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -77,6 +78,7 @@ apiRouter.use('/partners', partnerRoutes);
 apiRouter.use('/about', aboutRoutes);
 apiRouter.use('/products', productRoutes);
 apiRouter.use('/pharmacovigilance', pharmacovigilanceRoutes);
+apiRouter.use('/home-facilities', homeFacilityRoutes);
 
 // Mount under both /api and / for seamless cPanel passenger sub-path compatibility
 app.use('/api', apiRouter);

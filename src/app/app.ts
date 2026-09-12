@@ -47,6 +47,7 @@ export class App {
       'admin/product': 'Product Management',
       'admin/news': 'News Management',
       'admin/media': 'Media Management',
+      'admin/facility-gallery': 'Home Facility Gallery',
       'admin/contacts': 'Contact Inquiries',
       'admin/pharmacovigilance': 'Pharmacovigilance Reports',
       'admin/careers': 'Careers Management',

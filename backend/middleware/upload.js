@@ -35,4 +35,25 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
+// Home facility gallery files are kept in their own folder so they can be
+// moved to a production server together with a single, clearly named folder.
+const facilityGalleryDir = path.join(uploadDir, 'facility-gallery');
+if (!fs.existsSync(facilityGalleryDir)) {
+  fs.mkdirSync(facilityGalleryDir, { recursive: true });
+}
+
+const facilityUpload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, facilityGalleryDir),
+    filename: (_req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const sanitizedOriginal = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+      cb(null, `${uniqueSuffix}-${sanitizedOriginal}`);
+    }
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+  fileFilter
+});
+
 module.exports = upload;
+module.exports.facilityUpload = facilityUpload;

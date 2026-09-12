@@ -10,14 +10,14 @@
     <div class="facility-gallery__carousel">
       <button class="facility-gallery__arrow facility-gallery__arrow--prev" type="button" (click)="moveFacility(-1)" aria-label="Previous facility image">‹</button>
       <div class="facility-gallery__grid" aria-live="polite">
-        @for (photo of visibleFacilities(); track photo.src) {
-          <button type="button" class="facility-gallery__photo" (click)="openFacilityModal(photo)" [attr.aria-label]="'View ' + photo.alt"><img [src]="photo.src" [alt]="photo.alt" loading="lazy" /></button>
+        @for (photo of visibleFacilities(); track photo.id ?? photo.image_url) {
+          <button type="button" class="facility-gallery__photo" (click)="openFacilityModal(photo)" [attr.aria-label]="'View ' + (photo.alt_text || photo.title)"><img [src]="facilityImageUrl(photo.image_url)" [alt]="photo.alt_text || photo.title" loading="lazy" /></button>
         }
       </div>
       <button class="facility-gallery__arrow facility-gallery__arrow--next" type="button" (click)="moveFacility(1)" aria-label="Next facility image">›</button>
     </div>
     <div class="facility-gallery__dots">
-      @for (photo of facilityImages; track photo.src; let idx = $index) {
+      @for (photo of facilityImages(); track photo.id ?? photo.image_url; let idx = $index) {
         <button type="button" [class.is-active]="facilityIndex() === idx" (click)="facilityIndex.set(idx)" [attr.aria-label]="'Show facility image ' + (idx + 1)" [attr.aria-pressed]="facilityIndex() === idx"></button>
       }
     </div>
