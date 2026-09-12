@@ -442,16 +442,17 @@
     .navbar:not(.navbar--scrolled) { height:70px; }
     .hero { height:clamp(500px,100vw,640px); padding-top:70px; box-sizing:border-box; }
     .hero__media-wrapper { position:absolute; inset:0; height:auto; max-height:none; }
-    .hero__banner-content { width:min(86%,420px); flex-direction:column; gap:18px; text-align:center; }
+    .hero__banner-content { position:static; width:min(86%,420px); flex-direction:column; gap:18px; text-align:center; }
     .hero__banner-logo { width:180px; }
     .hero__banner-divider { width:74px; height:1px; }
     .hero__banner-title { max-width:18ch; font-size:clamp(26px,7.2vw,40px); }
     .hero__btn-video {
-      position:relative;
-      top:24px;
-      align-self:flex-start;
-      margin-top:235px;
-      margin-inline-start:-32px;
+      position:absolute !important;
+      inset:auto auto calc(22px + env(safe-area-inset-bottom, 0px)) clamp(20px,6vw,32px) !important;
+      align-self:auto;
+      margin:0 !important;
+      top:auto !important;
+      z-index:10;
       animation:none !important;
       transform:none !important;
       transition:none !important;
@@ -465,6 +466,9 @@
     }
     .hero__btn-video::after {
       display:none !important;
+    }
+    [dir="rtl"] .hero__btn-video {
+      inset:auto clamp(20px,6vw,32px) calc(22px + env(safe-area-inset-bottom, 0px)) auto !important;
     }
     .about-vic__brand-mark { left:auto; right:-36px; top:10px; width:142px; opacity:.3; }
   }

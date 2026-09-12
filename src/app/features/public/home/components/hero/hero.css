@@ -85,6 +85,17 @@ a:focus-visible,button:focus-visible { outline:3px solid #05bacb; outline-offset
  .hero__description { font-size:1.3vw; margin-bottom:1.5vw; }
  .hero__scroll { margin-top:2vw; }
 }
+/* A fixed banner anchor keeps the film action clear of the headline at every tablet, laptop and desktop width. */
+@media(min-width:768px) {
+ .hero__banner-content { position:static !important; }
+ .hero__btn-video {
+   position:absolute !important;
+   inset:auto auto clamp(24px,3vw,52px) clamp(24px,5vw,88px) !important;
+   margin:0 !important;
+   z-index:10 !important;
+ }
+ :host-context([dir="rtl"]) .hero__btn-video { inset:auto clamp(24px,5vw,88px) clamp(24px,3vw,52px) auto !important; }
+}
 .hero-video-modal { position:fixed; inset:0; z-index:9999; display:grid; place-items:center; padding:20px; }
 .hero-video-modal__backdrop { position:absolute; inset:0; background:#071e36db; backdrop-filter:blur(10px); }
 .hero-video-modal__dialog { position:relative; width:min(100%,960px); background:#071e36; color:#fff; border:1px solid #04b5c3; border-radius:18px; overflow:hidden; box-shadow:0 24px 70px #0007; }

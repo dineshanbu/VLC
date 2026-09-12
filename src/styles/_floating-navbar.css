@@ -105,6 +105,41 @@ html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lin
   html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container { padding-inline: 10px; gap: 5px; }
 }
 
+/* Compact phones keep the logo, language controls and menu in separate space. */
+@media (max-width: 420px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    height:68px !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+    padding-inline:10px;
+    gap:5px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo {
+    min-width:0;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    width:min(39vw,145px);
+    height:auto !important;
+    max-width:145px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__right {
+    gap:0;
+    margin-inline-start:auto;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang {
+    gap:2px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang-btn {
+    padding:2px;
+    font-size:13px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__hamburger {
+    width:38px;
+    height:38px;
+    padding:7px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:root:root:root body app-public-layout .navbar.navbar--floating { transition: none !important; }
 }
