@@ -67,7 +67,8 @@ export class NewsComponent implements OnInit {
   // Category Filtering
   selectedCategory = signal<string>('All');
   searchQuery = signal<string>('');
-  showAllNews = signal<boolean>(false);
+  newsPage = signal<number>(1);
+  readonly newsPageSize = 4;
   showAllPressReleases = signal<boolean>(false);
 
   // Newsletter Subscription state
@@ -153,14 +154,22 @@ export class NewsComponent implements OnInit {
     });
   });
 
-  // Displayed Latest News (4 on default, or all if toggled)
+  // Displayed Latest News (four cards per page)
   displayedArticles = computed(() => {
     const all = this.filteredArticles();
-    if (this.showAllNews() || this.selectedCategory() !== 'All' || this.searchQuery()) {
-      return all;
-    }
-    return all.slice(0, 4);
+    const start = (this.newsPage() - 1) * this.newsPageSize;
+    return all.slice(start, start + this.newsPageSize);
   });
+
+  readonly newsPageCount = computed(() =>
+    Math.max(1, Math.ceil(this.filteredArticles().length / this.newsPageSize))
+  );
+
+  readonly newsPages = computed(() =>
+    Array.from({ length: this.newsPageCount() }, (_, index) => index + 1)
+  );
+
+  readonly hasMoreNews = computed(() => this.newsPage() < this.newsPageCount());
 
   // Filtered Press Releases
   filteredPressReleases = computed(() => {
@@ -193,23 +202,32 @@ export class NewsComponent implements OnInit {
 
   setCategory(category: string): void {
     this.selectedCategory.set(category);
+    this.newsPage.set(1);
   }
 
   getCategoryCount(category: string): number {
     if (category === 'All') {
-      return this.articlesSignal().length + this.pressReleases.length;
+      return this.articlesSignal().length;
     }
-    const articleCount = this.articlesSignal().filter(
+    return this.articlesSignal().filter(
       a => a.category === category || (a.categories && a.categories.includes(category))
     ).length;
-    const prCount = this.pressReleases.filter(
-      p => p.category === category || (p.categories && p.categories.includes(category))
-    ).length;
-    return articleCount + prCount;
   }
 
-  toggleViewAllNews(): void {
-    this.showAllNews.update(v => !v);
+  showMoreNews(): void {
+    if (this.hasMoreNews()) this.newsPage.update(page => page + 1);
+  }
+
+  goToNewsPage(page: number): void {
+    this.newsPage.set(Math.min(Math.max(1, page), this.newsPageCount()));
+  }
+
+  previousNewsPage(): void {
+    this.goToNewsPage(this.newsPage() - 1);
+  }
+
+  nextNewsPage(): void {
+    this.goToNewsPage(this.newsPage() + 1);
   }
 
   toggleViewAllPressReleases(): void {

@@ -118,6 +118,7 @@ export class PartnersManagementComponent implements OnInit {
   resolveImg(path: string | undefined | null): string {
     if (!path) return 'logo_navbar.png';
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (path.startsWith('/backend/uploads/')) return `${(environment.serverUrl || '').replace(/\/backend\/?$/, '')}${path}`;
     if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }

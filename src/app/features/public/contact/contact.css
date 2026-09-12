@@ -24,7 +24,7 @@
 .contact-hero {
   position: relative;
   width: 100%;
-  min-height: 480px;
+  min-height: clamp(480px, 36vw, 560px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -40,8 +40,9 @@
   box-sizing: border-box;
 }
 
-.contact-hero__container {
-  padding: calc(86px + 30px) var(--container-padding) 50px;
+.contact-hero__container,
+.products-hero.contact-hero .products-hero__container {
+  padding: clamp(134px, 11vw, 160px) var(--container-padding) 50px !important;
   position: relative;
   z-index: 2;
 }

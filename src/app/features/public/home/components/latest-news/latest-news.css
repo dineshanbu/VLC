@@ -199,114 +199,7 @@
   display: none;
 }
 
-/* Saudi Vision 2030 supporting strip */
-.vision-support {
-  position: relative;
-  min-height: 190px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background: #f8fafb url('/saudi-vision-support-bg.png') right center / cover no-repeat;
-}
-
-.vision-support__overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(255, 255, 255, 0.90) 24%,
-    rgba(255, 255, 255, 0.50) 38%,
-    rgba(255, 255, 255, 0.10) 48%,
-    transparent 58%
-  );
-}
-
-.vision-support__container {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding: 16px clamp(150px, 14vw, 220px) 14px 5.3%;
-  display: grid;
-  grid-template-columns: 1.15fr 1.3fr auto;
-  align-items: center;
-  gap: clamp(24px, 3.5vw, 60px);
-  box-sizing: border-box;
-}
-
-.vision-support__eyebrow {
-  display: block;
-  margin-bottom: 5px;
-  font-family: var(--font-body);
-  font-size: .92rem;
-  font-weight: var(--weight-bold);
-  letter-spacing: .18em;
-  color: var(--color-secondary);
-}
-
-.vision-support__copy h2 {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: clamp(1.45rem, 1.2vw + .8rem, 1.8rem);
-  font-weight: var(--weight-bold);
-  line-height: 1.1;
-  letter-spacing: .08em;
-  color: var(--color-primary);
-}
-
-.vision-support__copy p {
-  max-width: 610px;
-  margin: 14px 0 0;
-  font-family: var(--font-body);
-  font-size: .9rem;
-  font-weight: var(--weight-semibold);
-  line-height: 1.55;
-  color: var(--color-primary);
-}
-
-.vision-support__pillars {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
-}
-
-.vision-support__pillar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  font-family: var(--font-body);
-  font-size: .78rem;
-  font-weight: var(--weight-semibold);
-  line-height: 1.3;
-  color: var(--color-primary);
-}
-
-.vision-support__pillar svg {
-  width: 38px;
-  height: 38px;
-  fill: none;
-  stroke: var(--color-primary-light);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.vision-support__mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 120px;
-}
-
-.vision-support__mark img {
-  display: block;
-  width: clamp(120px, 10.5vw, 160px);
-  height: auto;
-  opacity: 1;
-}
+/* Saudi Vision 2030 section styles are defined comprehensively in src/styles/_vision-support.css */
 
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
@@ -328,23 +221,6 @@
     height: 160px;
   }
 
-  .vision-support__container {
-    grid-template-columns: 1fr;
-    gap: 26px;
-    padding: 26px 20px 22px;
-  }
-
-  .vision-support__pillars {
-    max-width: 720px;
-  }
-
-  .vision-support__mark {
-    position: absolute;
-    top: 34px;
-    right: 28px;
-  }
-
-  .vision-support__mark img { width: 108px; }
 }
 
 /* Mobile: Compact Carousel (< 768px) */
@@ -367,34 +243,7 @@
     padding: 0 18px;
   }
 
-  .vision-support {
-    background-image: url('/saudi-vision-mobile.png');
-    background-position: center top;
-    background-size: cover;
-  }
 
-  .vision-support__container {
-    padding: 22px 18px 18px;
-  }
-
-  .vision-support__copy {
-    padding-right: 94px;
-  }
-
-  .vision-support__copy h2 {
-    font-size: clamp(1.5rem, 1.3vw + 0.85rem, 1.85rem);
-  }
-
-  .vision-support__pillars {
-    display: none;
-  }
-
-  .vision-support__mark {
-    top: 30px;
-    right: 16px;
-  }
-
-  .vision-support__mark img { width: 92px; }
 
   .news__grid {
     display: flex;
@@ -537,26 +386,4 @@
 :host-context(html[dir="rtl"]) .news__nav-btn svg,
 :host-context(.lang-ar) .news__nav-btn svg {
   transform: scaleX(-1);
-}
-
-:host-context(html[dir="rtl"]) .vision-support,
-:host-context(.lang-ar) .vision-support {
-  background-position: left center;
-}
-
-:host-context(html[dir="rtl"]) .vision-support__overlay,
-:host-context(.lang-ar) .vision-support__overlay {
-  background: linear-gradient(
-    270deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(255, 255, 255, 0.90) 24%,
-    rgba(255, 255, 255, 0.50) 38%,
-    rgba(255, 255, 255, 0.10) 48%,
-    transparent 58%
-  );
-}
-
-:host-context(html[dir="rtl"]) .vision-support__container,
-:host-context(.lang-ar) .vision-support__container {
-  padding: 16px 5.3% 14px clamp(150px, 14vw, 220px);
 }

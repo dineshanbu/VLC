@@ -22,13 +22,23 @@ export class SmoothScrollService implements OnDestroy {
   constructor() {
     if (typeof window === 'undefined') return;
 
-    // Listen to route changes to automatically scroll to top smoothly
+    // Respect section links instead of overriding them with a scroll to top.
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe(event => {
         setTimeout(() => {
-          this.scrollToTop(0.4);
+          if (this.destroyed || this.router.url !== event.urlAfterRedirects) return;
           this.resize();
+          const fragment = this.router.parseUrl(event.urlAfterRedirects).fragment;
+          if (fragment) {
+            const target = document.getElementById(fragment);
+            if (target) {
+              const headerBottom = document.querySelector('.navbar')?.getBoundingClientRect().bottom || 88;
+              this.scrollTo(target, -(headerBottom + 16), 0.65);
+            }
+          } else {
+            this.scrollToTop(0.4);
+          }
         }, 50);
       });
 
@@ -105,7 +115,8 @@ export class SmoothScrollService implements OnDestroy {
         const el = typeof target === 'string' ? document.querySelector<HTMLElement>(target) : target;
         if (el) {
           const top = el.getBoundingClientRect().top + window.scrollY + offset;
-          window.scrollTo({ top, behavior: 'smooth' });
+          const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+          window.scrollTo({ top, behavior });
         }
       }
     }

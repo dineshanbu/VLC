@@ -412,6 +412,10 @@ export class CareersManagementComponent implements OnInit {
     if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
       return trimmed;
     }
+    if (trimmed.startsWith('/backend/uploads/')) {
+      const base = (environment.serverUrl || '').replace(/\/backend\/?$/, '');
+      return `${base}${trimmed}`;
+    }
     if (trimmed.startsWith('/uploads/')) {
       return `${environment.serverUrl}${trimmed}`;
     }

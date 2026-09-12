@@ -43,9 +43,15 @@ app-news-detail {
    ==================================================== */
 
 .news-detail .news-detail-nav {
-  padding: calc(86px + 16px) 0 16px;
+  padding: clamp(124px, 10vw, 142px) 0 18px !important;
   background-color: #F8FAFC;
   border-bottom: 1px solid #E2E8F0;
+}
+
+@media (max-width: 767px) {
+  .news-detail .news-detail-nav {
+    padding: clamp(96px, 20vw, 110px) 0 14px !important;
+  }
 }
 
 .news-detail .news-detail-breadcrumbs {

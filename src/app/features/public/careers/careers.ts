@@ -55,7 +55,8 @@ export class CareersComponent implements OnInit {
   selectedDepartment = signal<string>('All Departments');
   selectedLocation = signal<string>('All Locations');
   selectedExperience = signal<string>('Experience Level');
-  showAllJobs = signal<boolean>(false);
+  jobPage = signal<number>(1);
+  readonly jobsPerPage = 6;
 
   // Modal States
   selectedJob = signal<JobPosition | null>(null);
@@ -380,19 +381,15 @@ export class CareersComponent implements OnInit {
     });
   });
 
-  // Displayed Jobs (first 6 or all)
+  readonly jobPageCount = computed(() => Math.max(1, Math.ceil(this.filteredJobs().length / this.jobsPerPage)));
+  readonly jobPages = computed(() => Array.from({ length: this.jobPageCount() }, (_, index) => index + 1));
+
+  // Displayed jobs for the selected page.
   displayedJobs = computed(() => {
     const all = this.filteredJobs();
-    if (
-      this.showAllJobs() ||
-      this.searchQuery() ||
-      this.selectedDepartment() !== 'All Departments' ||
-      this.selectedLocation() !== 'All Locations' ||
-      this.selectedExperience() !== 'Experience Level'
-    ) {
-      return all;
-    }
-    return all.slice(0, 6);
+    const page = Math.min(this.jobPage(), this.jobPageCount());
+    const start = (page - 1) * this.jobsPerPage;
+    return all.slice(start, start + this.jobsPerPage);
   });
 
   // Action methods
@@ -582,16 +579,23 @@ export class CareersComponent implements OnInit {
   }
 
   viewAllJobs(): void {
-    this.showAllJobs.set(true);
     this.selectedDepartment.set('All Departments');
     this.selectedLocation.set('All Locations');
     this.selectedExperience.set('Experience Level');
     this.searchQuery.set('');
+    this.jobPage.set(1);
     this.scrollToSection('open-positions');
   }
 
-  toggleShowAll(): void {
-    this.showAllJobs.update(v => !v);
+  resetJobPage(): void {
+    this.jobPage.set(1);
+  }
+
+  goToJobPage(page: number): void {
+    if (page >= 1 && page <= this.jobPageCount()) {
+      this.jobPage.set(page);
+      this.scrollToSection('open-positions');
+    }
   }
 
   scrollToSection(sectionId: string): void {

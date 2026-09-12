@@ -21,6 +21,8 @@
 @import './styles/_home-reference.css';
 @import './styles/_motion.css';
 @import './styles/_premium-motion.css';
+@import './styles/_floating-navbar.css';
+@import './styles/_vision-support.css';
 
 /* Home page reveal motion. Smooth premium biotech feel across all sections. */
 .home-reveal {
@@ -93,7 +95,7 @@
 
   .hero__container,
   .about-vic__curved-media,
-  .hero__mouse::after,
+  .hero__scroll-arrow-wrap,
   .hero__video,
   .hero__banner-content {
     animation: none;

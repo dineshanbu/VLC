@@ -71,13 +71,14 @@
 }
 
 :host .products-hero__container,
-:host .vic-hero__container {
+:host .vic-hero__container,
+:host .partner-hero__container {
   position: relative;
   z-index: 5;
   width: 100%;
-  max-width: var(--container-content, 1280px);
+  max-width: var(--container-content, 1440px);
   margin: 0 auto;
-  padding: calc(86px + 24px) var(--container-padding, 36px) clamp(68px, 6vw, 100px);
+  padding: clamp(134px, 11vw, 160px) var(--container-padding, 36px) clamp(68px, 6vw, 100px) !important;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -359,15 +360,17 @@
 @media (max-width:767px) {
   :host { --vic-gutter: 24px; --vic-heading: clamp(30px, 8vw, 38px); --vic-copy: 15px; }
   :host .products-hero,
-  :host .vic-hero {
-    padding-top: 64px;
+  :host .vic-hero,
+  :host .partner-hero {
+    padding-top: clamp(84px, 18vw, 96px);
   }
   :host .products-hero__bg,
   :host .vic-hero__media {
     height: 200px;
   }
   :host .products-hero__container,
-  :host .vic-hero__container {
+  :host .vic-hero__container,
+  :host .partner-hero__container {
     padding: 20px 20px 16px;
   }
   :host .products-hero__heading,
@@ -395,9 +398,11 @@
 }
 
 /* Shared dark scientific hero used by all interior pages. */
-:host .products-hero {
-  min-height: clamp(420px, 33vw, 540px);
-  background: #031d42;
+:host .products-hero,
+:host .vic-hero,
+:host .partner-hero {
+  min-height: clamp(480px, 36vw, 560px);
+  /* background: #031d42; */
 }
 
 :host .products-hero__bg {
@@ -418,11 +423,13 @@
     linear-gradient(0deg, rgba(0,10,34,.28), transparent 55%);
 }
 
-:host .products-hero__container {
+:host .products-hero__container,
+:host .vic-hero__container,
+:host .partner-hero__container {
   z-index: 2;
   max-width: 1440px;
   min-height: inherit;
-  padding: clamp(90px, 7.2vw, 118px) clamp(32px, 8vw, 120px) clamp(86px, 7vw, 112px);
+  padding: clamp(134px, 11vw, 160px) clamp(32px, 8vw, 120px) clamp(86px, 7vw, 112px) !important;
 }
 
 :host .products-hero__content { max-width: min(48vw, 545px); }
@@ -512,13 +519,15 @@
     display: block;
     background: linear-gradient(90deg, rgba(1,20,53,.94) 0%, rgba(1,24,58,.82) 57%, rgba(1,22,55,.48) 100%);
   }
-  :host .products-hero__container {
+  :host .products-hero__container,
+  :host .vic-hero__container,
+  :host .partner-hero__container {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: center;
     min-height: 430px;
-    padding: 92px 20px 66px;
+    padding: clamp(96px, 22vw, 114px) 20px 66px !important;
     background: transparent;
   }
   :host .products-hero__content { max-width: 100%; }

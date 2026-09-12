@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../../core/services/translation.service';
 
 interface PlatformCard {
@@ -15,7 +16,7 @@ interface PlatformCard {
 
 @Component({
   selector: 'app-our-platform',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './our-platform.html',
   styleUrl: './our-platform.css'
 })
@@ -36,7 +37,7 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
       description: this.translationService.translate('platform.card1.desc'),
       image: 'banner_home.png',
       alt: 'Biomanufacturing — VIC Facility Aerial View',
-      route: '/platform',
+      route: '/about',
       imagePosition: 'right 45%'
     },
     {
@@ -47,7 +48,7 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
       description: this.translationService.translate('platform.card2.desc'),
       image: 'purple_glove_vial_needle_macro.jpg',
       alt: 'Research & Development — Vaccine Innovations',
-      route: '/platform',
+      route: '/about',
       imagePosition: 'right center'
     },
     {
@@ -58,7 +59,7 @@ export class OurPlatformComponent implements OnInit, OnDestroy {
       description: this.translationService.translate('platform.card3.desc'),
       image: 'p4.png',
       alt: 'Targeted Products — Industrial Vaccine Solutions',
-      route: '/products',
+      route: '/about',
       imagePosition: '85% center'
     }
   ]);

@@ -124,6 +124,8 @@
   filter: brightness(1.05);
 }
 
+.home-product__link--mobile { display: none; }
+
 .home-product__visual {
   min-width: 0;
   height: clamp(320px, 30vw, 460px);
@@ -335,12 +337,61 @@
     gap: 22px;
   }
 
-  .home-product__visual {
-    height: 220px;
-  }
+  .home-product__copy { order: 1; }
+  .home-product__copy > .home-product__link { display: none; }
 
   .home-product__features {
+    display: flex;
+    order: 2;
+    gap: 9px;
+  }
+
+  .home-product__feature {
+    gap: 8px;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .home-product__feature-icon {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    box-shadow: none;
+    background: linear-gradient(135deg, #2fd6d0, #48bfe4);
+    color: #fff;
+  }
+
+  .home-product__feature-icon svg {
     display: none;
+  }
+
+  .home-product__feature-icon::after {
+    content: '✓';
+    font-family: Arial, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .home-product__feature-text {
+    /* Exact Product page checklist typography. */
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #405580;
+  }
+
+  .home-product__visual { order: 3; }
+
+  .home-product__link--mobile {
+    display: inline-flex;
+    order: 4;
+    justify-self: start;
+    margin-top: -10px;
+  }
+
+  .home-product__visual {
+    height: 220px;
   }
 
   .home-partners__logos {

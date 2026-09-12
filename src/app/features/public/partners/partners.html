@@ -7,26 +7,53 @@
 <!-- ====================================================
      SECTION 1 — HERO BANNER (MATCHING REFERENCE DESIGN)
      ==================================================== -->
-<section class="partner-hero vic-hero">
+<section class="partner-hero vic-hero" id="partners-hero">
+  <div class="partner-hero__ambient" aria-hidden="true"></div>
 
-  <!-- Master Background Image: Team Handshake & World Map -->
-  <div class="partner-hero__image-wrapper vic-hero__media">
+  <!-- Master High-Res Signing Image (CSL Seqirus & VIC) -->
+  <div class="partner-hero__media vic-hero__media">
     <img
-      src="partner_banner.jpg"
+      src="home_banner.png"
       alt="VIC Strategic Partnerships — Global executive and medical collaboration"
       class="partner-hero__image"
     />
-    <div class="partner-hero__overlay vic-hero__overlay" aria-hidden="true"></div>
+    <div class="partner-hero__media-blend" aria-hidden="true"></div>
+    <div class="partner-hero__media-bottom" aria-hidden="true"></div>
   </div>
 
-  <!-- Left Content -->
+  <!-- Floating Live Strategic Badge -->
+  <div class="partner-hero__badge" aria-label="Global Strategic Alliance">
+    <div class="partner-hero__badge-pulse" aria-hidden="true"></div>
+    <div>
+      <span class="partner-hero__badge-text">Global Strategic Alliance</span>
+      <span class="partner-hero__badge-sub">VIC Biotech × CSL Seqirus</span>
+    </div>
+  </div>
+
+  <!-- Left Content Column -->
   <div class="partner-hero__container vic-hero__container vic-container">
     <div class="partner-hero__content vic-hero__content">
 
-      <!-- Eyebrow -->
-      <span class="partner-hero__eyebrow vic-hero__eyebrow">OUR PARTNERS</span>
+      <!-- Breadcrumb Navigation -->
+      <nav class="partner-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="partner-hero__breadcrumb-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Home</span>
+        </a>
+        <span class="partner-hero__breadcrumb-separator">&gt;</span>
+        <span class="partner-hero__breadcrumb-current">Partners</span>
+      </nav>
 
-      <!-- Main Heading -->
+      <!-- Eyebrow Tag -->
+      <div class="partner-hero__eyebrow-wrap">
+        <span class="partner-hero__eyebrow">GLOBAL PARTNERSHIPS</span>
+        <span class="partner-hero__eyebrow-line" aria-hidden="true"></span>
+      </div>
+
+      <!-- Heading -->
       <h1 class="partner-hero__heading vic-hero__heading">
         Stronger Together.<br />
         Building Better <span class="partner-hero__heading-accent">Futures.</span>
@@ -34,10 +61,10 @@
 
       <!-- Description -->
       <p class="partner-hero__description vic-hero__description">
-        Collaboration is at the heart of everything we do. We work with global leaders, research institutions, and government entities to advance vaccine innovation and strengthen global health.
+        Collaboration is at the heart of our mission. We partner with global healthcare innovators, leading research institutions, and national entities to advance vaccine manufacturing and fortify regional health resilience.
       </p>
 
-      <!-- Action Button — Opens Partner With Us Inquiry Modal -->
+      <!-- Actions -->
       <div class="partner-hero__actions">
         <button
           type="button"
@@ -47,8 +74,37 @@
           aria-label="Partner With Us — Open Partnership Inquiry Form"
         >
           <span>Partner With Us</span>
-          <span class="partner-hero__btn-arrow" aria-hidden="true">&rarr;</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
         </button>
+
+        <a href="#strategic-partners" class="partner-hero__btn-secondary">
+          <span>View Strategic Partners</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Trust Metrics / Strategic Pillars -->
+      <div class="partner-hero__stats">
+        <div class="partner-hero__stat-item">
+          <span class="partner-hero__stat-num">Global</span>
+          <span class="partner-hero__stat-label">Tech Transfer</span>
+        </div>
+        <div class="partner-hero__stat-divider" aria-hidden="true"></div>
+        <div class="partner-hero__stat-item">
+          <span class="partner-hero__stat-num">CSL Seqirus</span>
+          <span class="partner-hero__stat-label">Strategic Alliance</span>
+        </div>
+        <div class="partner-hero__stat-divider" aria-hidden="true"></div>
+        <div class="partner-hero__stat-item">
+          <span class="partner-hero__stat-num">Vision 2030</span>
+          <span class="partner-hero__stat-label">National Security</span>
+        </div>
       </div>
 
     </div>
@@ -178,11 +234,11 @@
     >
       <div
         class="partner-ecosystem__track"
-        [style.transform]="isMobileView ? ('translateX(-' + (ecosystemIndex * (100 / ecosystemCardsPerView)) + '%)') : 'none'"
+        [style.transform]="isMobileView ? ('translateX(-' + (ecosystemIndex * 100) + '%)') : 'none'"
       >
         <div
           class="partner-ecosystem__slide"
-          *ngFor="let item of ecosystemItems; trackBy: trackByTitle"
+          *ngFor="let item of displayedEcosystemItems; trackBy: trackByTitle"
         >
           <div class="partner-ecosystem__col">
             <div class="partner-ecosystem__icon-badge" aria-hidden="true">

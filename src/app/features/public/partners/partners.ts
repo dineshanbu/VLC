@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { PartnerService } from '../../../core/services/partner.service';
 import { environment } from '../../../../environments/environment';
 export interface EcosystemItem {
@@ -23,7 +24,7 @@ export interface StrategicPartner {
 @Component({
   selector: 'app-partners',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './partners.html',
   styleUrls: ['./partners.css', '../public-theme.css']
 })
@@ -189,6 +190,7 @@ export class PartnersComponent implements OnInit, OnDestroy {
   resolveImg(path: string | undefined | null, fallback = 'logo_navbar.png'): string {
     if (!path) return fallback;
     if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (path.startsWith('/backend/uploads/')) return `${(environment.serverUrl || '').replace(/\/backend\/?$/, '')}${path}`;
     if (path.startsWith('/uploads/')) return `${environment.serverUrl}${path}`;
     return path;
   }
@@ -308,9 +310,7 @@ export class PartnersComponent implements OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       const width = window.innerWidth;
       this.isMobileView = width <= 768;
-      if (width <= 480) {
-        this.ecosystemCardsPerView = 1;
-      } else if (width <= 768) {
+      if (width <= 768) {
         this.ecosystemCardsPerView = 2;
       } else {
         this.ecosystemCardsPerView = 6;
@@ -327,7 +327,11 @@ export class PartnersComponent implements OnInit, OnDestroy {
   }
 
   get maxEcosystemIndex(): number {
-    return Math.max(0, this.ecosystemItems.length - this.ecosystemCardsPerView);
+    return Math.max(0, Math.ceil(this.ecosystemItems.length / this.ecosystemCardsPerView) - 1);
+  }
+
+  get displayedEcosystemItems(): EcosystemItem[] {
+    return this.ecosystemItems;
   }
 
   get ecosystemPages(): number[] {

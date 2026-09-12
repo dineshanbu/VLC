@@ -122,18 +122,6 @@
     <!-- Section Header -->
     <div class="careers-positions-header">
       <span class="careers-positions-eyebrow">OPEN POSITIONS</span>
-      <button
-        type="button"
-        class="careers-positions-view-all-link"
-        (click)="viewAllJobs()"
-        aria-label="View all open job postings"
-      >
-        <span>View All Jobs</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </button>
     </div>
 
     <!-- Filter & Search Toolbar (Exact from Image 2) -->
@@ -149,6 +137,7 @@
           placeholder="Search by title, keyword or location..."
           class="careers-search-field"
           [(ngModel)]="searchQuery"
+          (ngModelChange)="resetJobPage()"
           aria-label="Search job positions"
         />
       </div>
@@ -158,6 +147,7 @@
         <select
           class="careers-select-field"
           [(ngModel)]="selectedDepartment"
+          (ngModelChange)="resetJobPage()"
           aria-label="Filter by department"
         >
           <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
@@ -172,6 +162,7 @@
         <select
           class="careers-select-field"
           [(ngModel)]="selectedLocation"
+          (ngModelChange)="resetJobPage()"
           aria-label="Filter by location"
         >
           <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
@@ -186,6 +177,7 @@
         <select
           class="careers-select-field"
           [(ngModel)]="selectedExperience"
+          (ngModelChange)="resetJobPage()"
           aria-label="Filter by experience level"
         >
           <option *ngFor="let exp of experienceLevels" [value]="exp">{{ exp }}</option>
@@ -258,28 +250,25 @@
       </div>
     </div>
 
+    <nav class="careers-pagination" *ngIf="jobPageCount() > 1" aria-label="Open positions pages">
+      <button type="button" class="careers-pagination__button" (click)="goToJobPage(jobPage() - 1)" [disabled]="jobPage() === 1" aria-label="Previous jobs page">&larr;</button>
+      <button
+        *ngFor="let page of jobPages()"
+        type="button"
+        class="careers-pagination__button careers-pagination__page"
+        [class.careers-pagination__page--active]="page === jobPage()"
+        [attr.aria-current]="page === jobPage() ? 'page' : null"
+        (click)="goToJobPage(page)"
+      >{{ page }}</button>
+      <button type="button" class="careers-pagination__button" (click)="goToJobPage(jobPage() + 1)" [disabled]="jobPage() === jobPageCount()" aria-label="Next jobs page">&rarr;</button>
+    </nav>
+
     <!-- Empty State if no jobs match filters -->
     <div *ngIf="displayedJobs().length === 0" class="careers-empty-state">
       <p class="careers-empty-state__title">No open positions matching your filter criteria.</p>
       <p class="careers-empty-state__desc">Try adjusting your department, location, or search keywords.</p>
       <button type="button" class="careers-empty-reset-btn" (click)="viewAllJobs()">
         Reset All Filters
-      </button>
-    </div>
-
-    <!-- Explore All Opportunities Button (Image 2) -->
-    <div class="careers-explore-more-wrap" *ngIf="jobPositions.length > 6">
-      <button
-        type="button"
-        class="careers-explore-btn"
-        (click)="toggleShowAll()"
-        aria-label="Toggle all job opportunities"
-      >
-        <span>{{ showAllJobs() ? 'Show Fewer Positions' : 'Explore All Opportunities' }}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
       </button>
     </div>
 

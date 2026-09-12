@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ContactService } from '../../../core/services/contact.service';
+import { PharmacovigilanceService } from '../../../core/services/pharmacovigilance.service';
 import { TranslationService } from '../../../core/services/translation.service';
 import { resolveImageUrl } from '../../../core/utils/image-url.util';
 
@@ -25,7 +25,7 @@ export interface PharmacovigilanceReportForm {
 })
 export class PharmacovigilanceComponent {
   public readonly translationService = inject(TranslationService);
-  private readonly contactService = inject(ContactService);
+  private readonly pharmacovigilanceService = inject(PharmacovigilanceService);
 
   readonly formModel: PharmacovigilanceReportForm = {
     reporterName: '',
@@ -89,39 +89,14 @@ export class PharmacovigilanceComponent {
     this.isSubmitting.set(true);
     this.submissionError.set('');
 
-    const formattedMessage = [
-      `Product Name: ${this.formModel.productName.trim()}`,
-      `Occupation: ${this.formModel.occupation || 'Not Specified'}`,
-      `Reporter Name: ${this.formModel.reporterName.trim()}`,
-      `Contact Phone: ${this.formModel.contactNumber.trim()}`,
-      `Reporter Email: ${this.formModel.email.trim() || 'Not Provided'}`,
-      '',
-      '--- SIDE EFFECT EXPERIENCE DESCRIPTION ---',
-      this.formModel.sideEffectDescription.trim(),
-      '',
-      this.formModel.otherInfo.trim()
-        ? `--- ANY OTHER INFORMATION ---\n${this.formModel.otherInfo.trim()}`
-        : ''
-    ].filter(Boolean).join('\n');
-
-    const payload = {
-      fullName: this.formModel.reporterName.trim(),
-      email: this.formModel.email.trim() || 'mpv@mesned.com',
-      phone: this.formModel.contactNumber.trim(),
-      company: this.formModel.occupation || 'Pharmacovigilance Reporter',
-      subject: `[Pharmacovigilance] Adverse Event Report - ${this.formModel.productName.trim()}`,
-      message: formattedMessage
-    };
-
-    this.contactService.submitInquiry(payload).subscribe({
+    this.pharmacovigilanceService.submitReport({ ...this.formModel }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.formSubmitted.set(true);
       },
       error: () => {
-        // Fallback display success confirmation
         this.isSubmitting.set(false);
-        this.formSubmitted.set(true);
+        this.submissionError.set(this.translationService.isRtl() ? 'تعذر إرسال البلاغ. يرجى المحاولة مرة أخرى.' : 'Your report could not be submitted. Please try again.');
       }
     });
   }

@@ -252,6 +252,13 @@
   .facility-gallery__grid { display:block; }
   .facility-gallery__photo { height:54vw; }
   .facility-gallery__photo:not(:first-child) { display:none; }
+  .facility-gallery__photo:first-child {
+    background:#005f9f;
+  }
+  .facility-gallery__photo:first-child img {
+    object-fit:contain;
+    object-position:center;
+  }
   .facility-gallery__arrow { width:40px; height:40px; top:calc(50% - 20px); font-size:36px; }
   .facility-gallery__arrow--prev { left:-14px; }
   .facility-gallery__arrow--next { right:-14px; }
@@ -264,10 +271,14 @@
   .home-product__description,.home-partners__description { font-size:14px; line-height:1.5; }
   .home-product__link { margin-top:18px; min-height:44px; font-size:13px; padding:12px 22px; gap:20px; }
   .home-product__visual { height:230px; max-width:420px; width:100%; margin:auto; }
-  .home-product__features { display:flex; flex-direction:column; gap:0; }
-  .home-product__feature { display:flex; align-items:center; gap:16px; padding:15px 0; border-bottom:1px solid rgba(0,160,215,.16); font-size:15px; font-weight:600; }
+  /* Match the Product page checklist in the mobile home-product section. */
+  .home-product__features { display:flex; flex-direction:column; gap:9px; }
+  .home-product__feature { display:flex; align-items:center; gap:8px; padding:0; border-bottom:0; }
   .home-product__feature:last-child { border-bottom:none; }
-  .home-product__feature-icon { width:52px; height:52px; padding:0; flex-shrink:0; }
+  .home-product__feature-icon { width:20px; height:20px; padding:0; flex-shrink:0; border:0; box-shadow:none; background:linear-gradient(135deg,#2fd6d0,#48bfe4); color:#fff; }
+  .home-product__feature-icon svg { display:none; }
+  .home-product__feature-icon::after { content:'✓'; font:700 12px/1 Arial,sans-serif; }
+  .home-product__feature-text { font:500 14px/1.4 var(--font-body, 'Inter', sans-serif); color:#405580; }
   .home-partners__title { font-size:32px; margin-bottom:12px; }
   .home-partners__logos { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; padding:0; margin:0; overflow:visible; }
   .home-partners__logo { height:85px; padding:10px; border:0; border-inline-start:1px solid #d2ecfb; box-shadow:none; border-radius:0; }
@@ -429,12 +440,32 @@
 @media(max-width:767px) {
   :root:root:root body:has(app-home) {
     .navbar:not(.navbar--scrolled) { height:70px; }
-    .hero { height:clamp(390px,82vw,520px); padding-top:70px; box-sizing:border-box; }
+    .hero { height:clamp(500px,100vw,640px); padding-top:70px; box-sizing:border-box; }
     .hero__media-wrapper { position:absolute; inset:0; height:auto; max-height:none; }
     .hero__banner-content { width:min(86%,420px); flex-direction:column; gap:18px; text-align:center; }
     .hero__banner-logo { width:180px; }
     .hero__banner-divider { width:74px; height:1px; }
     .hero__banner-title { max-width:18ch; font-size:clamp(26px,7.2vw,40px); }
+    .hero__btn-video {
+      position:relative;
+      top:24px;
+      align-self:flex-start;
+      margin-top:235px;
+      margin-inline-start:-32px;
+      animation:none !important;
+      transform:none !important;
+      transition:none !important;
+      white-space:nowrap;
+    }
+    .hero__btn-video:active,
+    .hero__btn-video:hover {
+      transform:none !important;
+      filter:none !important;
+      box-shadow:0 6px 24px rgba(0, 180, 203, 0.4) !important;
+    }
+    .hero__btn-video::after {
+      display:none !important;
+    }
     .about-vic__brand-mark { left:auto; right:-36px; top:10px; width:142px; opacity:.3; }
   }
 }
@@ -482,6 +513,21 @@
   }
 }
 
+/* Keep the Corporate Film action calm and stationary on every Home layout. */
+:root:root:root body:has(app-home) .hero__btn-video,
+:root:root:root body:has(app-home) .hero__btn-video:hover,
+:root:root:root body:has(app-home) .hero__btn-video:active {
+  animation:none !important;
+  transition:none !important;
+  transform:none !important;
+  filter:none !important;
+  box-shadow:0 6px 24px rgba(0, 180, 203, 0.4) !important;
+}
+
+:root:root:root body:has(app-home) .hero__btn-video::after {
+  display:none !important;
+}
+
 /* Keep the film action visible in the video-led banner. */
 :root:root:root body:has(app-home) {
   .hero { display:grid; }
@@ -489,6 +535,22 @@
   .hero__banner-content { display:flex; }
   .hero__banner-copy { display:flex; }
   .hero__btn-video { display:inline-flex; }
+}
+
+/* Keep the film action anchored at the bottom-left of the banner on larger screens. */
+@media(min-width:768px) {
+  :root:root:root body:has(app-home) {
+    .hero__banner-content { position:static; }
+    .hero__btn-video {
+      position:absolute;
+      inset:auto auto clamp(28px,3vw,60px) clamp(30px,6vw,112px);
+      margin:0;
+    }
+  }
+
+  :root:root:root body:has(app-home)[dir="rtl"] .hero__btn-video {
+    inset:auto clamp(30px,6vw,112px) clamp(28px,3vw,60px) auto;
+  }
 }
 
 @media(max-width:767px) {

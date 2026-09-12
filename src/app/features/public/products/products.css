@@ -3119,7 +3119,7 @@
 
 /* Products hero — dark scientific treatment and curved lower edge. */
 .products-hero {
-  min-height: clamp(420px, 33vw, 540px);
+  min-height: clamp(480px, 36vw, 560px);
   background: #031d42;
 }
 
@@ -3146,7 +3146,7 @@
   z-index: 2;
   max-width: 1440px;
   min-height: inherit;
-  padding: clamp(90px, 7.2vw, 118px) clamp(32px, 8vw, 120px) clamp(86px, 7vw, 112px);
+  padding: clamp(134px, 11vw, 160px) clamp(32px, 8vw, 120px) clamp(86px, 7vw, 112px) !important;
 }
 
 .products-hero__content { max-width: min(48vw, 545px); }
@@ -3258,7 +3258,7 @@
     min-height: auto;
     height: auto;
     flex-direction: column;
-    padding-top: 64px;
+    padding-top: clamp(84px, 18vw, 96px);
     background-color: #FFFFFF;
   }
 

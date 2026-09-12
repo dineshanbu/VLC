@@ -1,4 +1,4 @@
-<nav class="navbar" [class.navbar--scrolled]="isScrolled()" [class.navbar--transparent]="!isScrolled()" [class.navbar--home]="isHomePage()">
+<nav class="navbar navbar--floating" [class.navbar--scrolled]="isScrolled()" [class.navbar--transparent]="!isScrolled()" [class.navbar--home]="isHomePage()">
   <div class="navbar__container">
 
     <!-- Brand Logo (Compact & Refined) -->
@@ -40,9 +40,6 @@
           (click)="switchLanguage('ar')"
         >العربية</button>
       </div>
-      <button type="button" class="navbar__search" aria-label="Search">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
-      </button>
     </div>
 
     <!-- Mobile Hamburger Button -->

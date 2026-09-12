@@ -1,0 +1,646 @@
+/* ==========================================================================
+   SAUDI VISION 2030 & SAUDI FLAG THEME SECTION
+   Precision-engineered responsive architecture across:
+   1920px, 1440px, 1366px, 1024px, 768px, 430px, 390px, 375px
+   Guarantees Saudi Vision 2030 Emblem & Saudi Flag are prominent,
+   unobstructed, and uncropped on every screen size.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. MAIN SECTION CONTAINER (Desktop / Wide Screen)
+   -------------------------------------------------------------------------- */
+.vision-support,
+section.vision-support,
+body .vision-support {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-height: clamp(380px, 25vw, 460px) !important;
+  background-color: #f5f9fd !important;
+  background-image: url('/saudi-vision-skyline-bg.jpg') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 28% !important;
+  background-size: cover !important;
+  overflow: hidden !important;
+  border-top: 1px solid rgba(205, 226, 245, 0.75) !important;
+  border-bottom: 1px solid rgba(205, 226, 245, 0.75) !important;
+  box-sizing: border-box !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. REFINED MULTI-STOP GRADIENT OVERLAY
+   Provides WCAG AAA contrast for text while keeping the Riyadh skyline,
+   trees, and Saudi flag clearly visible in the open atmosphere.
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__overlay,
+body .vision-support .vision-support__overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.95) 28%,
+    rgba(255, 255, 255, 0.84) 44%,
+    rgba(255, 255, 255, 0.45) 62%,
+    rgba(255, 255, 255, 0.12) 76%,
+    rgba(255, 255, 255, 0) 88%
+  ) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. HORIZONTAL SECTION FLEX CONTAINER
+   Left: Copy Block | Center: 4 Pillars | Right: Vision 2030 Mark
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__container,
+body .vision-support .vision-support__container {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: clamp(20px, 2.8vw, 48px) !important;
+  min-height: clamp(380px, 25vw, 460px) !important;
+  width: 100% !important;
+  max-width: 1720px !important;
+  margin: 0 auto !important;
+  padding: clamp(32px, 3.5vw, 60px) clamp(24px, 4vw, 72px) !important;
+  box-sizing: border-box !important;
+  direction: ltr !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. COPY BLOCK (Left)
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__copy {
+  flex: 0 1 clamp(320px, 29vw, 480px) !important;
+  max-width: 480px !important;
+  min-width: 270px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.vision-support .vision-support__eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-bottom: 12px !important;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif) !important;
+  font-size: clamp(11.5px, 0.84vw, 13.5px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #008ea6 !important;
+}
+
+.vision-support .vision-support__eyebrow .reference-index {
+  color: #008ea6 !important;
+  font-weight: 800 !important;
+  margin-right: 6px !important;
+}
+
+.vision-support .vision-support__eyebrow-line {
+  display: inline-block !important;
+  width: clamp(28px, 2.4vw, 38px) !important;
+  height: 2px !important;
+  background-color: #00bcd4 !important;
+  margin-left: 12px !important;
+  vertical-align: middle !important;
+  border-radius: 2px !important;
+}
+
+.vision-support .vision-support__heading {
+  margin: 0 !important;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif) !important;
+  font-size: clamp(24px, 2.15vw, 36px) !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.02em !important;
+  color: #0a1b44 !important;
+  text-transform: uppercase !important;
+}
+
+.vision-support .vision-support__desc {
+  margin: 14px 0 0 !important;
+  max-width: 460px !important;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif) !important;
+  font-size: clamp(13px, 0.94vw, 15px) !important;
+  font-weight: 500 !important;
+  line-height: 1.6 !important;
+  color: #1f3764 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. FOUR STRATEGIC PILLARS (Center / Bottom)
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__pillars {
+  flex: 1 1 auto !important;
+  max-width: 580px !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: clamp(14px, 2vw, 30px) !important;
+  align-items: flex-start !important;
+  justify-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.vision-support .vision-support__pillar {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-align: center !important;
+  cursor: default !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease !important;
+}
+
+.vision-support .vision-support__pillar:hover {
+  transform: translateY(-3px) !important;
+}
+
+.vision-support .vision-support__pillar-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: clamp(40px, 3vw, 50px) !important;
+  height: clamp(40px, 3vw, 50px) !important;
+  flex-shrink: 0 !important;
+}
+
+.vision-support .vision-support__pillar-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+  stroke: #122b68 !important;
+  transition: stroke 0.25s ease, transform 0.25s ease !important;
+}
+
+.vision-support .vision-support__pillar:hover .vision-support__pillar-icon svg {
+  stroke: #00bcd4 !important;
+  transform: scale(1.06) !important;
+}
+
+.vision-support .vision-support__pillar-label {
+  display: block !important;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif) !important;
+  font-size: clamp(11px, 0.82vw, 13px) !important;
+  font-weight: 600 !important;
+  line-height: 1.34 !important;
+  color: #10265a !important;
+  max-width: 135px !important;
+  word-break: normal !important;
+  transition: color 0.25s ease !important;
+}
+
+.vision-support .vision-support__pillar:hover .vision-support__pillar-label {
+  color: #008ea6 !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. RIGHT VISUAL IDENTITY (Vision 2030 Emblem in Open Sky)
+   Right margin provides clear line-of-sight to the waving Saudi flag
+   at the right edge of the panoramic background.
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__identity {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: auto !important;
+  margin-right: clamp(140px, 14vw, 220px) !important;
+}
+
+.vision-support .vision-support__mark {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: clamp(130px, 10.5vw, 175px) !important;
+  min-width: 110px !important;
+  flex-shrink: 0 !important;
+}
+
+.vision-support .vision-support__mark img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.95)) drop-shadow(0 2px 8px rgba(10, 27, 68, 0.08)) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.vision-support .vision-support__mark img:hover {
+  transform: scale(1.04) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. DEDICATED MOBILE SCENERY (Hidden on Desktop & Laptop)
+   -------------------------------------------------------------------------- */
+.vision-support .vision-support__mobile-scene {
+  display: none !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   LAPTOP / COMPACT DESKTOP (1100px - 1366px)
+   Maintains horizontal hierarchy without crowding right-side flag
+   -------------------------------------------------------------------------- */
+@media (max-width: 1366px) and (min-width: 1025px) {
+  .vision-support,
+  section.vision-support,
+  body .vision-support {
+    min-height: 360px !important;
+    background-position: right 28% !important;
+  }
+
+  .vision-support .vision-support__container,
+  body .vision-support .vision-support__container {
+    gap: 16px !important;
+    padding: 24px 3vw !important;
+    min-height: 360px !important;
+  }
+
+  .vision-support .vision-support__copy {
+    flex: 0 1 340px !important;
+    max-width: 350px !important;
+  }
+
+  .vision-support .vision-support__heading {
+    font-size: 23px !important;
+  }
+
+  .vision-support .vision-support__desc {
+    font-size: 13px !important;
+    margin-top: 8px !important;
+  }
+
+  .vision-support .vision-support__pillars {
+    gap: 12px !important;
+    max-width: 420px !important;
+  }
+
+  .vision-support .vision-support__pillar-icon {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .vision-support .vision-support__pillar-label {
+    font-size: 11px !important;
+    max-width: 100px !important;
+  }
+
+  .vision-support .vision-support__identity {
+    margin-right: clamp(110px, 11vw, 150px) !important;
+  }
+
+  .vision-support .vision-support__mark {
+    width: 120px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLET (768px - 1024px)
+   Balanced multi-row composition:
+   Row 1: Copy (Left) + Vision 2030 Emblem (Right with clear view of flag)
+   Row 2: 4 Strategic Features in a clean row/grid across the mist
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .vision-support,
+  section.vision-support,
+  body .vision-support {
+    min-height: auto !important;
+    background-position: right 24% !important;
+  }
+
+  .vision-support .vision-support__overlay,
+  body .vision-support .vision-support__overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(255, 255, 255, 0.92) 50%,
+      rgba(255, 255, 255, 0.70) 100%
+    ) !important;
+  }
+
+  .vision-support .vision-support__container,
+  body .vision-support .vision-support__container {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    min-height: auto !important;
+    padding: 36px 36px 32px !important;
+    gap: 28px 20px !important;
+  }
+
+  .vision-support .vision-support__copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    flex: none !important;
+    max-width: 440px !important;
+  }
+
+  .vision-support .vision-support__heading {
+    font-size: 24px !important;
+  }
+
+  .vision-support .vision-support__desc {
+    font-size: 13.5px !important;
+  }
+
+  .vision-support .vision-support__identity {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    flex: none !important;
+    margin: 0 110px 0 auto !important;
+    align-self: center !important;
+  }
+
+  .vision-support .vision-support__mark {
+    width: 130px !important;
+  }
+
+  /* 4 Pillars in a balanced clean row without heavy cards */
+  .vision-support .vision-support__pillars {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    flex: none !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px 12px !important;
+    padding: 18px 0 0 !important;
+    margin: 0 !important;
+    border-top: 1px solid rgba(200, 225, 245, 0.65) !important;
+  }
+
+  .vision-support .vision-support__pillar {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 8px !important;
+  }
+
+  .vision-support .vision-support__pillar-icon {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .vision-support .vision-support__pillar-label {
+    max-width: 120px !important;
+    font-size: 11.5px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE PHONES (< 768px: 430px, 390px, 375px)
+   Dedicated vertical responsive layout:
+   1. “08 / SUPPORTING” at top
+   2. “SAUDI VISION 2030” heading
+   3. Supporting paragraph
+   4. Official Vision 2030 Identity clearly visible & prominent
+   5. 4 feature icons arranged in a clean 2x2 grid
+   6. Saudi landscape integrated naturally toward the bottom
+   7. Saudi flag clearly visible in a dedicated right/bottom visual area
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .vision-support,
+  section.vision-support,
+  body .vision-support {
+    min-height: auto !important;
+    background-image: none !important;
+    background-color: #f6fafe !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .vision-support .vision-support__overlay,
+  body .vision-support .vision-support__overlay {
+    display: none !important;
+  }
+
+  .vision-support .vision-support__container,
+  body .vision-support .vision-support__container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: auto !important;
+    padding: 28px clamp(16px, 4.5vw, 24px) 16px !important;
+    gap: 18px !important;
+  }
+
+  /* 1. Copy Column (Top) */
+  .vision-support .vision-support__copy {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .vision-support .vision-support__eyebrow {
+    margin-bottom: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .vision-support .vision-support__heading {
+    font-size: clamp(21px, 6vw, 26px) !important;
+    line-height: 1.2 !important;
+  }
+
+  .vision-support .vision-support__desc {
+    font-size: 13.5px !important;
+    line-height: 1.54 !important;
+    margin-top: 8px !important;
+    color: #243c68 !important;
+  }
+
+  /* 2. Official Vision 2030 Identity (Unified with Saudi flag in mobile scene) */
+  .vision-support .vision-support__identity,
+  body .vision-support .vision-support__identity {
+    display: none !important;
+  }
+
+  /* Strategic pillars are desktop-only. */
+  .vision-support .vision-support__pillars {
+    display: none !important;
+  }
+
+  .vision-support .vision-support__pillar {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 8px !important;
+  }
+
+  .vision-support .vision-support__pillar-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .vision-support .vision-support__pillar-label {
+    font-size: 11.5px !important;
+    line-height: 1.3 !important;
+    max-width: 125px !important;
+  }
+
+  /* 4. Dedicated Scenic Area (Unified Saudi Landscape, Flag & Vision 2030 Emblem) */
+  .vision-support .vision-support__mobile-scene {
+    order: 4 !important;
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: hidden !important;
+    margin-top: 12px !important;
+  }
+
+  .vision-support .vision-support__mobile-scene-gradient {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+      180deg,
+      #f6fafe 0%,
+      rgba(246, 250, 254, 0.7) 8%,
+      rgba(246, 250, 254, 0) 24%
+    ) !important;
+  }
+
+  .vision-support .vision-support__mobile-scene-img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   EXTRA-COMPACT MOBILE SCREENS (<= 375px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 375px) {
+  .vision-support .vision-support__container {
+    padding: 24px 14px 12px !important;
+    gap: 16px !important;
+  }
+
+  .vision-support .vision-support__heading {
+    font-size: 20.5px !important;
+  }
+
+  .vision-support .vision-support__desc {
+    font-size: 13px !important;
+  }
+
+  .vision-support .vision-support__pillars {
+    gap: 12px 8px !important;
+    padding: 14px 10px !important;
+  }
+
+  .vision-support .vision-support__pillar-label {
+    font-size: 11px !important;
+  }
+
+  .vision-support .vision-support__mobile-scene {
+    height: 220px !important;
+  }
+}
+
+/* ==========================================================================
+   ARABIC (RTL) SUPPORT
+   Full mirrored alignment and typography for Arabic language
+   ========================================================================== */
+html:root:root:root[dir="rtl"] .vision-support,
+:host-context(html[dir="rtl"]) .vision-support,
+:host-context(.lang-ar) .vision-support {
+  background-position: left 28% !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__overlay,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__overlay,
+:host-context(.lang-ar) .vision-support .vision-support__overlay {
+  background: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.95) 28%,
+    rgba(255, 255, 255, 0.84) 44%,
+    rgba(255, 255, 255, 0.45) 62%,
+    rgba(255, 255, 255, 0.12) 76%,
+    rgba(255, 255, 255, 0) 88%
+  ) !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__container,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__container,
+:host-context(.lang-ar) .vision-support .vision-support__container {
+  direction: rtl !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__copy,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__copy,
+:host-context(.lang-ar) .vision-support .vision-support__copy {
+  text-align: right !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__eyebrow-line,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__eyebrow-line,
+:host-context(.lang-ar) .vision-support .vision-support__eyebrow-line {
+  margin-left: 0 !important;
+  margin-right: 12px !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__eyebrow .reference-index,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__eyebrow .reference-index,
+:host-context(.lang-ar) .vision-support .vision-support__eyebrow .reference-index {
+  margin-right: 0 !important;
+  margin-left: 6px !important;
+}
+
+html:root:root:root[dir="rtl"] .vision-support .vision-support__identity,
+:host-context(html[dir="rtl"]) .vision-support .vision-support__identity,
+:host-context(.lang-ar) .vision-support .vision-support__identity {
+  margin-left: clamp(140px, 14vw, 220px) !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 1366px) and (min-width: 1025px) {
+  html:root:root:root[dir="rtl"] .vision-support .vision-support__identity,
+  :host-context(html[dir="rtl"]) .vision-support .vision-support__identity,
+  :host-context(.lang-ar) .vision-support .vision-support__identity {
+    margin-left: clamp(110px, 11vw, 150px) !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  html:root:root:root[dir="rtl"] .vision-support .vision-support__identity,
+  :host-context(html[dir="rtl"]) .vision-support .vision-support__identity,
+  :host-context(.lang-ar) .vision-support .vision-support__identity {
+    margin-left: 110px !important;
+    margin-right: auto !important;
+  }
+
+  html:root:root:root[dir="rtl"] .vision-support .vision-support__pillar,
+  :host-context(html[dir="rtl"]) .vision-support .vision-support__pillar,
+  :host-context(.lang-ar) .vision-support .vision-support__pillar {
+    text-align: right !important;
+  }
+}
+
+@media (max-width: 767px) {
+  html:root:root:root[dir="rtl"] .vision-support .vision-support__identity,
+  :host-context(html[dir="rtl"]) .vision-support .vision-support__identity,
+  :host-context(.lang-ar) .vision-support .vision-support__identity {
+    display: none !important;
+  }
+
+  html:root:root:root[dir="rtl"] .vision-support .vision-support__mobile-scene-img,
+  :host-context(html[dir="rtl"]) .vision-support .vision-support__mobile-scene-img,
+  :host-context(.lang-ar) .vision-support .vision-support__mobile-scene-img {
+    object-position: center top !important;
+  }
+}

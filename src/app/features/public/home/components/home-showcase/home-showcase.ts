@@ -53,13 +53,22 @@ export class HomeShowcaseComponent implements OnInit {
     const features = this.translationService.isRtl() && product?.features_ar?.length
       ? product.features_ar
       : product?.features;
-    return (features || []).slice(0, 4);
+    return (features || []).slice(0, 3);
   });
 
   ngOnInit(): void {
     this.productService.getProducts({ category: 'our-products', status: 'Active' }).subscribe({
       next: response => {
-        if (response.success) this.product.set(response.products?.[0] || null);
+        const apiProduct = response.products?.[0];
+        if (response.success && apiProduct) {
+          const fallbackProduct = this.product();
+          this.product.set({
+            ...apiProduct,
+            // Keep the homepage checklist visible when its API record has no points configured.
+            features: apiProduct.features?.length ? apiProduct.features : (fallbackProduct?.features || []),
+            features_ar: apiProduct.features_ar?.length ? apiProduct.features_ar : fallbackProduct?.features_ar
+          });
+        }
       },
       error: () => { /* Keep the reference content available when the API is unreachable. */ }
     });

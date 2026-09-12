@@ -6,6 +6,11 @@ export function resolveImageUrl(url?: string | null, fallback = ''): string {
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
     return trimmed;
   }
+  if (trimmed.startsWith('/backend/uploads/') || trimmed.startsWith('backend/uploads/')) {
+    const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+    const baseHost = (environment.serverUrl || '').replace(/\/backend\/?$/, '');
+    return `${baseHost}${cleanPath}`;
+  }
   if (trimmed.startsWith('/uploads/') || trimmed.startsWith('uploads/')) {
     const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
     return environment.serverUrl ? `${environment.serverUrl}${cleanPath}` : cleanPath;

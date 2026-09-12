@@ -1,7 +1,7 @@
 -- VIC (Vaccine Industrial Company) Database Schema for XAMPP MySQL
 
-CREATE DATABASE IF NOT EXISTS vic_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE vic_db;
+-- CREATE DATABASE IF NOT EXISTS vic_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE vic_db;
 
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
@@ -64,6 +64,22 @@ CREATE TABLE IF NOT EXISTS contact_inquiries (
   message TEXT NOT NULL,
   status ENUM('New', 'In Progress', 'Resolved', 'Archived') DEFAULT 'New',
   is_starred TINYINT(1) DEFAULT 0,
+  notes TEXT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Pharmacovigilance adverse-event reports (kept separate from general inquiries)
+CREATE TABLE IF NOT EXISTS pharmacovigilance_reports (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  reporter_name VARCHAR(150) NOT NULL,
+  contact_number VARCHAR(50) NOT NULL,
+  email VARCHAR(150) DEFAULT NULL,
+  product_name VARCHAR(200) NOT NULL,
+  occupation VARCHAR(150) DEFAULT NULL,
+  side_effect_description TEXT NOT NULL,
+  other_info TEXT DEFAULT NULL,
+  status ENUM('New', 'Under Review', 'Follow-up Required', 'Closed') DEFAULT 'New',
   notes TEXT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -271,7 +287,6 @@ CREATE TABLE IF NOT EXISTS products_page_settings (
   page_resources JSON NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 
 

@@ -1,13 +1,11 @@
 <app-hero />
-<app-about-vic />
-<app-our-platform />
 <section class="facility-gallery" aria-labelledby="facility-heading">
   <div class="facility-gallery__pattern" aria-hidden="true"></div>
   <img class="facility-gallery__watermark" src="v-floating-mark.png" alt="" aria-hidden="true" />
   <img class="facility-gallery__floating-v facility-gallery__floating-v--left" src="v-floating-mark.png" alt="" aria-hidden="true" />
   <img class="facility-gallery__floating-v facility-gallery__floating-v--right" src="v-floating-mark.png" alt="" aria-hidden="true" />
   <div class="facility-gallery__container">
-    <div class="reference-eyebrow"><span>04</span><span>/</span><span>{{ translationService.isRtl() ? 'الأول من نوعه' : 'FIRST OF ITS KIND' }}</span><i aria-hidden="true"></i></div>
+    <div class="reference-eyebrow"><span>{{ translationService.isRtl() ? 'الأول من نوعه' : 'FIRST OF ITS KIND' }}</span><i aria-hidden="true"></i></div>
     <h2 id="facility-heading">{{ translationService.isRtl() ? 'الأول من نوعه في المملكة العربية السعودية' : 'First of its Kind in Saudi Arabia' }}</h2>
     <div class="facility-gallery__carousel">
       <button class="facility-gallery__arrow facility-gallery__arrow--prev" type="button" (click)="moveFacility(-1)" aria-label="Previous facility image">‹</button>
@@ -34,5 +32,22 @@
     </div>
   </div>
 }
+<app-our-platform />
+<app-about-vic />
+<section class="home-partner-showcase" aria-labelledby="home-partners-heading">
+  <div class="home-partner-showcase__container">
+    <div class="home-partner-showcase__header">
+      <div><span id="home-partners-heading" class="home-partner-showcase__eyebrow">OUR PARTNERS</span></div>
+      <a routerLink="/partners" class="home-partner-showcase__toggle">View All Partners <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="home-partner-showcase__grid">
+      @for (partner of homePartners; track partner.name) {
+        <a routerLink="/partners" class="home-partner-showcase__card" [attr.aria-label]="'View ' + partner.name + ' partnership'">
+          <img [src]="partner.logo" [alt]="partner.name" loading="lazy" />
+        </a>
+      }
+    </div>
+  </div>
+</section>
 <app-home-showcase />
 <app-latest-news />

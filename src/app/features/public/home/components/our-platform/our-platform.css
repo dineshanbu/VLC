@@ -89,6 +89,11 @@
   box-shadow: 0 16px 36px rgba(7, 24, 43, 0.18);
 }
 
+.platform__card:focus-visible {
+  outline: 3px solid #00D5DF;
+  outline-offset: 4px;
+}
+
 /* Full Bleed Card Background Image */
 .platform__image {
   position: absolute;

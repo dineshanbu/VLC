@@ -137,6 +137,10 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'pharmacovigilance',
+        loadComponent: () => import('./features/admin/pharmacovigilance-management/pharmacovigilance-management').then(m => m.PharmacovigilanceManagementComponent),
+      },
+      {
         path: 'careers',
         loadComponent: () =>
           import('./features/admin/careers-management/careers-management').then(

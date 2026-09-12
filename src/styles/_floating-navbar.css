@@ -1,0 +1,110 @@
+/* Floating glass header, shared by every public route. */
+html:root:root:root body app-public-layout .navbar.navbar--floating {
+  top: 12px;
+  inset-inline: 10px;
+  margin-inline: 0;
+  width: auto;
+  max-width: none;
+  height: 90px !important;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, .78) !important;
+  border-radius: 999px;
+  background: rgba(248, 253, 255, .78) !important;
+  backdrop-filter: blur(14px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(145%) !important;
+  box-shadow: 0 10px 32px rgba(0, 35, 64, .13), inset 0 1px 0 rgba(255, 255, 255, .7) !important;
+  transition: background-color 280ms ease, box-shadow 280ms ease !important;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating.navbar--scrolled {
+  background: rgba(248, 253, 255, .86) !important;
+  box-shadow: 0 10px 32px rgba(0, 35, 64, .13), inset 0 1px 0 rgba(255, 255, 255, .65) !important;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating::before {
+  content: none !important;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+  max-width: none;
+  width: 100%;
+  padding-inline: clamp(20px, 2vw, 32px);
+  gap: 16px;
+  translate: none;
+  transform: none;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+  height: 68px !important;
+  max-width: 204px;
+  scale: 1;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links {
+  gap: clamp(12px, 1.3vw, 22px);
+  min-width: 0;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__link {
+  white-space: nowrap;
+}
+
+@media (max-width: 1199px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links { display: none; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__hamburger { display: flex; flex-shrink: 0; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__right { margin-inline-start: auto; margin-inline-end: 0; }
+}
+
+/* Keep navigation and language controls together in the glass capsule. */
+@media (min-width: 1200px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+    padding-inline: 26px;
+    gap: 26px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    max-width: 204px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links {
+    margin-inline: 0;
+    gap: 14px;
+    padding: 0;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__link {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__right {
+    position: static;
+    margin: 0;
+    padding: 0;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang-btn { font-size: 14px; }
+}
+
+@media (max-width: 767px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    top: 8px;
+    inset-inline: 10px;
+    max-width: none;
+    height: 72px !important;
+    border-radius: 36px;
+    backdrop-filter: blur(10px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(135%) !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container { padding-inline: 14px; gap: 8px; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img { height: 54px !important; max-width: 168px; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__right { gap: 6px; }
+}
+
+@media (max-width: 360px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img { max-width: 136px; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container { padding-inline: 10px; gap: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating { transition: none !important; }
+}

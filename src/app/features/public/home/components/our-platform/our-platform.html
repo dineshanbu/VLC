@@ -3,7 +3,7 @@
 
     <div class="platform__header">
       <div class="platform__heading-group">
-        <span class="platform__label"><span class="reference-index">03 /</span> {{ translationService.translate('platform.eyebrow') }}</span>
+        <span class="platform__label">{{ translationService.translate('platform.eyebrow') }}</span>
         <h2 class="platform__heading">
           @if (translationService.isRtl()) {
             {{ translationService.translate('platform.heading') }}
@@ -41,7 +41,7 @@
         (mouseleave)="resumeAutoplay()"
       >
         @for (card of cards(); track card.tag; let idx = $index) {
-          <div class="platform__card">
+          <a class="platform__card" [routerLink]="card.route" fragment="facility-heading">
             <!-- Card Full Background Image -->
             <img
               [src]="card.image"
@@ -76,7 +76,7 @@
               </div>
 
             </div>
-          </div>
+          </a>
         }
       </div>
 

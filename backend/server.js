@@ -1,7 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const morgan = require('morgan');
+let morgan;
+try {
+  morgan = require('morgan');
+} catch (e) {
+  // morgan optional in production
+}
 require('dotenv').config();
 
 const { initDatabase } = require('./config/db');
@@ -17,41 +22,65 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const partnerRoutes = require('./routes/partnerRoutes');
 const aboutRoutes = require('./routes/aboutRoutes');
 const productRoutes = require('./routes/productRoutes');
+const pharmacovigilanceRoutes = require('./routes/pharmacovigilanceRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for Angular frontend (localhost:4200, etc.)
+// Enable CORS for Angular frontend & external clients
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['*'],
+  exposedHeaders: ['Authorization']
 }));
+
+// Explicit preflight and CORS header fallback for Passenger / Apache
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', '*');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
 
 // Body Parsers
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
-app.use(morgan('dev'));
+if (morgan) {
+  app.use(morgan('dev'));
+}
 
-// Static uploads directory
+// Create unified API router
+const apiRouter = express.Router();
+
+// Static uploads directory (served on /uploads and /api/uploads)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+apiRouter.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check
-app.get('/api/health', (req, res) => {
+apiRouter.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'VIC Biotech API Server is running.', timestamp: new Date() });
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/news', newsRoutes);
-app.use('/api/media', mediaRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/careers', careerRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/partners', partnerRoutes);
-app.use('/api/about', aboutRoutes);
-app.use('/api/products', productRoutes);
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/users', userRoutes);
+apiRouter.use('/news', newsRoutes);
+apiRouter.use('/media', mediaRoutes);
+apiRouter.use('/contacts', contactRoutes);
+apiRouter.use('/careers', careerRoutes);
+apiRouter.use('/dashboard', dashboardRoutes);
+apiRouter.use('/partners', partnerRoutes);
+apiRouter.use('/about', aboutRoutes);
+apiRouter.use('/products', productRoutes);
+apiRouter.use('/pharmacovigilance', pharmacovigilanceRoutes);
+
+// Mount under both /api and / for seamless cPanel passenger sub-path compatibility
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
@@ -62,16 +91,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server and Database
-async function startServer() {
-  await initDatabase();
-  app.listen(PORT, () => {
-    console.log(`=========================================`);
-    console.log(`  VIC API Server running on port ${PORT}`);
-    console.log(`  API Base: http://localhost:${PORT}/api`);
-    console.log(`  Uploads: http://localhost:${PORT}/uploads`);
-    console.log(`=========================================`);
-  });
-}
+// Start Server immediately so Passenger connects, then init DB
+const server = app.listen(PORT, () => {
+  console.log(`=========================================`);
+  console.log(`  VIC API Server running on port ${PORT}`);
+  console.log(`  API Base: http://localhost:${PORT}/api`);
+  console.log(`=========================================`);
+});
 
-startServer();
+initDatabase().catch(err => {
+  console.error('[DB Init Warning]', err.message);
+});

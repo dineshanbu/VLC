@@ -503,6 +503,9 @@ export class HomeMotionDirective implements AfterViewInit, OnDestroy {
     // Vision 2030 logo: respectful soft fade + subtle scale
     this.reveal('.vision-support__mark', { opacity: 0, scale: 0.97 }, 0.25, 0.95);
 
+    // Dedicated mobile scene reveal
+    this.reveal('.vision-support__mobile-scene', { opacity: 0, y: 18 }, 0.2, 0.8);
+
     // ------------------------------------------------------------------------
     // 11. FOOTER SECTION
     // ------------------------------------------------------------------------

@@ -3,7 +3,6 @@
     <div class="home-showcase__container home-product__grid">
       <div class="home-product__copy">
         <span class="home-showcase__eyebrow">
-          <span class="reference-index">05 /</span>
           <span>{{ translationService.translate('homeProduct.eyebrow') }}</span>
         </span>
         <h2 class="home-product__title">{{ productName() }}</h2>
@@ -21,6 +20,11 @@
           [alt]="productName()"
         />
       </div>
+
+      <a routerLink="/products" class="home-product__link home-product__link--mobile">
+        {{ translationService.translate('homeProduct.link') }} {{ productName() }}
+        <span aria-hidden="true">→</span>
+      </a>
 
       <div class="home-product__features">
         @for (feature of productFeatures(); track feature; let idx = $index) {

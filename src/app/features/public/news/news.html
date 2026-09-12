@@ -93,55 +93,31 @@
 
 
 <!-- ====================================================
-     SECTION 2 — BROWSE BY CATEGORY (IMAGE 1 EXACT DESIGN)
-     With "MOU" Extra Category Added
-     ==================================================== -->
-<section class="news-category-section vic-section" id="browse-categories">
-  <div class="news-category-section__container vic-container">
-
-    <!-- Category Label -->
-    <h2 class="news-category-section__eyebrow">BROWSE BY CATEGORY</h2>
-
-    <!-- Category Button Pills Row -->
-    <div class="news-category-pills" role="tablist" aria-label="Browse by category">
-      <button
-        type="button"
-        *ngFor="let cat of categories"
-        class="news-category-btn"
-        [class.news-category-btn--active]="selectedCategory() === cat"
-        (click)="setCategory(cat)"
-        role="tab"
-        [attr.aria-selected]="selectedCategory() === cat"
-      >
-        <span>{{ cat }}</span>
-        <span class="news-category-btn__count">({{ getCategoryCount(cat) }})</span>
-      </button>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ====================================================
-     SECTION 3 — LATEST NEWS (IMAGE 2 TOP SECTION EXACT DESIGN)
+     SECTION 2 — LATEST NEWS
      4-Card Row with Image, Teal Badge, Date, Title, Excerpt, Read More
      ==================================================== -->
 <section class="latest-news-section vic-section" id="latest-news-section">
   <img class="vic-floating-v" src="v-floating-mark.png" alt="" aria-hidden="true" />
   <div class="latest-news-section__container vic-container">
 
-    <!-- Header: LATEST NEWS on Left, View All News on Right -->
+    <!-- Header: category filter above the View All News control -->
     <div class="latest-news-section__header">
       <h2 class="latest-news-section__label">LATEST NEWS</h2>
 
-      <button
-        type="button"
-        class="latest-news-section__view-all"
-        (click)="toggleViewAllNews()"
-      >
-        <span>{{ showAllNews() ? 'Show Less' : 'View All News' }}</span>
-        <span class="latest-news-section__view-all-arrow" aria-hidden="true">&rarr;</span>
-      </button>
+      <div class="latest-news-section__actions">
+        <label class="latest-news-section__category-label" for="news-category-filter">Category</label>
+        <select
+          id="news-category-filter"
+          class="latest-news-section__category-select"
+          [ngModel]="selectedCategory()"
+          (ngModelChange)="setCategory($event)"
+          aria-label="Filter news by category"
+        >
+          <option *ngFor="let cat of categories" [value]="cat">
+            {{ cat === 'All' ? 'All Categories' : cat }} ({{ getCategoryCount(cat) }})
+          </option>
+        </select>
+      </div>
     </div>
 
     <!-- Empty State if filter yields no news -->
@@ -198,6 +174,18 @@
 
       </article>
     </div>
+
+    <nav class="latest-news-pagination" *ngIf="newsPageCount() > 1" aria-label="Latest news pages">
+      <button type="button" (click)="previousNewsPage()" [disabled]="newsPage() === 1" aria-label="Previous page">&larr;</button>
+      <button
+        type="button"
+        *ngFor="let page of newsPages()"
+        [class.latest-news-pagination__page--active]="page === newsPage()"
+        [attr.aria-current]="page === newsPage() ? 'page' : null"
+        (click)="goToNewsPage(page)"
+      >{{ page }}</button>
+      <button type="button" (click)="nextNewsPage()" [disabled]="!hasMoreNews()" aria-label="Next page">&rarr;</button>
+    </nav>
 
   </div>
 </section>

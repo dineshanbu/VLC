@@ -20,27 +20,18 @@ let pool = null;
 
 async function initDatabase() {
   try {
-    // 1. First connect without DB specified to create database if not exists
-    const rootConnection = await mysql.createConnection({
-      host: dbConfig.host,
-      port: dbConfig.port,
-      user: dbConfig.user,
-      password: dbConfig.password
-    });
-
     const dbName = process.env.DB_NAME || 'vic_db';
-    await rootConnection.query(
-      `CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
-    );
-    await rootConnection.end();
 
-    // 2. Now create the connection pool with the database
+    // Directly create the connection pool with the database (safe for cPanel)
     pool = mysql.createPool({
       ...dbConfig,
       database: dbName
     });
 
+    const testConn = await pool.getConnection();
     console.log(`[DB] Connected to MySQL Database: ${dbName}`);
+    testConn.release();
+
 
     // 3. Execute tables creation
     await createTables(pool);
