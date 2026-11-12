@@ -1,0 +1,183 @@
+<main class="executive-admin">
+  <header class="executive-admin__header">
+    <div>
+      <span class="executive-admin__eyebrow">SEPARATE CONTENT MODEL</span>
+      <h1>Executive Team</h1>
+      <p>Manage the Executive Team page and its leadership profiles independently from About Us.</p>
+    </div>
+    <a class="executive-admin__preview" routerLink="/about/executive-team" target="_blank">Preview public page ↗</a>
+  </header>
+
+  <div *ngIf="successMessage()" class="executive-admin__alert executive-admin__alert--success">{{ successMessage() }}<button type="button" (click)="clearAlerts()">×</button></div>
+  <div *ngIf="errorMessage()" class="executive-admin__alert executive-admin__alert--error">{{ errorMessage() }}<button type="button" (click)="clearAlerts()">×</button></div>
+
+  <nav class="executive-admin__tabs" aria-label="Executive Team sections">
+    <button type="button" [class.active]="activeTab() === 'members'" (click)="activeTab.set('members')">Team members</button>
+    <button type="button" [class.active]="activeTab() === 'banner'" (click)="activeTab.set('banner')">Hero banner</button>
+    <button type="button" [class.active]="activeTab() === 'page'" (click)="activeTab.set('page')">Page content &amp; RDI committee</button>
+  </nav>
+
+  <section *ngIf="activeTab() === 'members'" class="executive-admin__panel">
+    <div class="executive-admin__panel-heading">
+      <div><h2>Leadership profiles</h2><p>These profiles are stored separately and appear on the Executive Team page.</p></div>
+      <div class="executive-admin__tools">
+        <select aria-label="Filter by status" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+          <option value="All">All statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option>
+        </select>
+        <button type="button" class="executive-admin__primary" (click)="openAddMember()">＋ Add profile</button>
+      </div>
+    </div>
+
+    <p *ngIf="isLoading()" class="executive-admin__empty">Loading Executive Team profiles…</p>
+    <div *ngIf="!isLoading() && !filteredMembers().length" class="executive-admin__empty">No Executive Team profiles yet. Add a profile to start building this page.</div>
+    <div *ngIf="!isLoading() && filteredMembers().length" class="executive-admin__table-scroll" role="region" aria-label="Executive Team profiles table; scroll horizontally to see all columns" tabindex="0">
+      <table class="executive-admin__table">
+        <thead><tr><th>Order</th><th>Photo</th><th>Name &amp; title</th><th>Board / committee</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let member of filteredMembers(); let i = index">
+            <td><div class="executive-admin__order"><button type="button" aria-label="Move profile up" (click)="moveMember(member, -1)">↑</button><span>{{ member.order_index }}</span><button type="button" aria-label="Move profile down" (click)="moveMember(member, 1)">↓</button></div></td>
+            <td><img *ngIf="member.image" class="executive-admin__avatar" [src]="imageUrl(member.image)" [alt]="member.name" /><span *ngIf="!member.image" class="executive-admin__avatar executive-admin__avatar--initials">{{ member.initials || '—' }}</span></td>
+            <td class="executive-admin__person"><strong>{{ member.name }}</strong><span>{{ member.title }}</span></td>
+            <td><span class="executive-admin__badge">{{ member.badge || '—' }}</span></td>
+            <td><button type="button" class="executive-admin__status" [class.inactive]="member.status !== 'Active'" (click)="toggleStatus(member)">{{ member.status }}</button></td>
+            <td><div class="executive-admin__actions"><button type="button" (click)="openEditMember(member)">Edit</button><button type="button" class="danger" (click)="deleteMember(member)">Remove</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section *ngIf="activeTab() === 'banner'" class="executive-admin__panel">
+    <div class="executive-admin__panel-heading"><div><h2>Hero banner</h2><p>Update the Executive Team page banner description and backdrop image in English and Arabic.</p></div></div>
+    <form class="executive-admin__form" (ngSubmit)="saveHero()">
+      <div class="field-managed-notice" style="grid-column: 1 / -1; background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+        <span>ℹ️</span>
+        <span><strong>Eyebrow &amp; Heading</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+      </div>
+      <div class="executive-admin__form-grid">
+        <label>Subtitle (English)<input [(ngModel)]="heroForm.subtitle" name="hero_subtitle" /></label>
+        <label class="rtl">العنوان الفرعي (العربية)<input [(ngModel)]="heroForm.subtitle_ar" name="hero_subtitle_ar" /></label>
+        <label class="wide">Description (English)<textarea [(ngModel)]="heroForm.description" name="hero_description" rows="3"></textarea></label>
+        <label class="wide rtl">الوصف (العربية)<textarea [(ngModel)]="heroForm.description_ar" name="hero_description_ar" rows="3"></textarea></label>
+      </div>
+      <div class="executive-admin__image-row"><img *ngIf="heroPreview" [src]="heroPreview" alt="English banner preview" /><label>Banner image (English)<input type="file" accept="image/*" (change)="onHeroImageSelected($event, 'en')" /></label></div>
+      <app-media-image-picker (selected)="selectHeroImageFromLibrary('en', $event)" />
+      <div class="executive-admin__image-row"><img *ngIf="heroPreviewAr" [src]="heroPreviewAr" alt="Arabic banner preview" /><label>Banner image (Arabic / Saudi)<input type="file" accept="image/*" (change)="onHeroImageSelected($event, 'ar')" /></label><small>Initially uses the English banner image.</small></div>
+      <app-media-image-picker (selected)="selectHeroImageFromLibrary('ar', $event)" />
+      <button class="executive-admin__primary" type="submit" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save banner' }}</button>
+    </form>
+  </section>
+
+  <section *ngIf="activeTab() === 'page'" class="executive-admin__panel">
+    <div class="executive-admin__panel-heading"><div><h2>Page content &amp; RDI committee</h2><p>Manage the copy and committee roster used by the Executive Team page.</p></div></div>
+    <form class="executive-admin__form" (ngSubmit)="savePage()">
+      <div class="executive-admin__form-grid">
+        <div class="field-managed-notice" style="grid-column: 1 / -1; background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75;">Section labels, headings, and section descriptions are managed in <a routerLink="/admin/section-headings">Section Title Studio</a>.</div>
+        <label>Hero button<input [(ngModel)]="pageForm.meetButton" name="meet_button" /></label>
+        <label class="wide">Chairman quote<textarea [(ngModel)]="pageForm.chairmanQuote" name="chairman_quote" rows="2"></textarea></label>
+        <label>Quote attribution<input [(ngModel)]="pageForm.quoteAttribution" name="quote_attribution" /></label>
+        <label>Read More button<input [(ngModel)]="pageForm.readMoreButton" name="read_more" /></label>
+        <label>Contact button<input [(ngModel)]="pageForm.contactButton" name="contact_button" /></label>
+        <label class="wide">Contact description<textarea [(ngModel)]="pageForm.contactDescription" name="contact_description" rows="2"></textarea></label>
+      </div>
+      <div class="executive-admin__roster-heading"><div><h3>RDI Supreme Committee roster</h3><p>Add or update committee names shown in the popup.</p></div><button type="button" (click)="addCommitteeMember()">＋ Add member</button></div>
+      <div class="executive-admin__roster">
+        <div *ngFor="let member of committeeMembers; let i = index" class="executive-admin__roster-row">
+          <label>Name<input [(ngModel)]="member.name" [name]="'committee_name_' + i" /></label>
+          <label>Role / title<input [(ngModel)]="member.role" [name]="'committee_role_' + i" /></label>
+          <label>Image URL<input [(ngModel)]="member.image" [name]="'committee_image_' + i" /></label>
+          <button type="button" aria-label="Remove committee member" (click)="removeCommitteeMember(i)">×</button>
+        </div>
+      </div>
+      <button class="executive-admin__primary" type="submit" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save page content' }}</button>
+    </form>
+  </section>
+
+  <div *ngIf="isMemberModalOpen()" class="executive-admin__backdrop" (click)="isMemberModalOpen.set(false)">
+    <section class="executive-admin__modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title" (click)="$event.stopPropagation()">
+      <button type="button" class="executive-admin__modal-close" aria-label="Close" (click)="isMemberModalOpen.set(false)">×</button>
+      <h2 id="member-modal-title">{{ isEditing() ? 'Edit Executive Team profile' : 'Add Executive Team profile' }}</h2>
+      <p class="executive-admin__modal-intro">This profile belongs to the Executive Team model and will not change About Us leadership.</p>
+      <form class="executive-admin__form" (ngSubmit)="saveMember()">
+        <div class="executive-admin__form-grid">
+          <label>Name (English)<input [(ngModel)]="memberForm.name" name="member_name" required /></label>
+          <label>Executive title (English)<input [(ngModel)]="memberForm.title" name="member_title" required /></label>
+          <label>Board / committee badge<input [(ngModel)]="memberForm.badge" name="member_badge" placeholder="Type a new board or committee name" /></label>
+          <label>Role summary (English)<textarea [(ngModel)]="memberForm.role" name="member_role" rows="2"></textarea></label>
+          <label class="rtl">الاسم (العربية)<input class="rtl" [(ngModel)]="memberForm.name_ar" name="member_name_ar" /></label>
+          <label class="rtl">المسمى التنفيذي (العربية)<input class="rtl" [(ngModel)]="memberForm.title_ar" name="member_title_ar" /></label>
+          <label class="rtl">شارة المجلس / اللجنة (العربية)<input class="rtl" [(ngModel)]="memberForm.badge_ar" name="member_badge_ar" /></label>
+          <label class="rtl">ملخص الدور (العربية)<textarea class="rtl" [(ngModel)]="memberForm.role_ar" name="member_role_ar" rows="2"></textarea></label>
+          <div class="wide executive-bio-editor">
+            <div class="editor-header-bar">
+              <label class="form-label m-0" for="member_bio_editor">Detailed biography (English)</label>
+              <div class="editor-mode-toggle">
+                <button type="button" class="btn-mode-pill" [class.active]="bioEditorModeEn() === 'visual'" (click)="toggleBioEditorMode('visual', 'en')">Visual Editor</button>
+                <button type="button" class="btn-mode-pill" [class.active]="bioEditorModeEn() === 'html'" (click)="toggleBioEditorMode('html', 'en')">&lt;/&gt; HTML Source</button>
+              </div>
+            </div>
+            @if (bioEditorModeEn() === 'visual') {
+              <div class="editor-toolbar">
+                <select class="toolbar-select" (change)="formatBioBlock($any($event.target).value, 'en'); $any($event.target).value=''">
+                  <option value="" disabled selected>Formatting</option><option value="p">Normal Text (Paragraph)</option><option value="h2">Heading 2 (Section Title)</option><option value="h3">Heading 3 (Sub-heading)</option><option value="h4">Heading 4 (Minor Title)</option>
+                </select>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('bold', 'en')" title="Bold"><strong>B</strong></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('italic', 'en')" title="Italic"><em>I</em></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('underline', 'en')" title="Underline"><u>U</u></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('strikeThrough', 'en')" title="Strikethrough"><s>S</s></button>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('insertUnorderedList', 'en')" title="Bullet List">• List</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('insertOrderedList', 'en')" title="Numbered List">1. List</button>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioCallout('en')" title="Insert Callout Quote">❝</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioLink('en')" title="Insert Link">↗</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioImage('en')" title="Insert Image URL">▧</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('removeFormat', 'en')" title="Clear Formatting">×</button>
+              </div>
+              <div #bioEditorEn id="member_bio_editor" class="visual-editor-canvas" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Detailed biography in English" dir="ltr" (mouseup)="rememberBioSelection('en')" (keyup)="rememberBioSelection('en')" (paste)="pasteBioContent($event, 'en')" (input)="syncBioHtmlFromVisualEditor('en')"></div>
+            } @else {
+              <textarea class="raw-html-area" rows="12" [(ngModel)]="bioText" name="member_bio_html" (ngModelChange)="bioChanged = true" placeholder="<p>Enter biography content as HTML...</p>"></textarea>
+            }
+          </div>
+          <div class="wide executive-bio-editor executive-bio-editor--rtl rtl">
+            <div class="editor-header-bar">
+              <label class="form-label m-0" for="member_bio_editor_ar">السيرة الذاتية (العربية)</label>
+              <div class="editor-mode-toggle">
+                <button type="button" class="btn-mode-pill" [class.active]="bioEditorModeAr() === 'visual'" (click)="toggleBioEditorMode('visual', 'ar')">محرر مرئي</button>
+                <button type="button" class="btn-mode-pill" [class.active]="bioEditorModeAr() === 'html'" (click)="toggleBioEditorMode('html', 'ar')">&lt;/&gt; HTML</button>
+              </div>
+            </div>
+            @if (bioEditorModeAr() === 'visual') {
+              <div class="editor-toolbar">
+                <select class="toolbar-select" (change)="formatBioBlock($any($event.target).value, 'ar'); $any($event.target).value=''">
+                  <option value="" disabled selected>تنسيق</option><option value="p">نص عادي</option><option value="h2">عنوان 2</option><option value="h3">عنوان 3</option><option value="h4">عنوان 4</option>
+                </select>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('bold', 'ar')" title="Bold"><strong>B</strong></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('italic', 'ar')" title="Italic"><em>I</em></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('underline', 'ar')" title="Underline"><u>U</u></button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('strikeThrough', 'ar')" title="Strikethrough"><s>S</s></button>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('insertUnorderedList', 'ar')" title="قائمة نقطية">• قائمة</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('insertOrderedList', 'ar')" title="قائمة مرقمة">1. قائمة</button>
+                <div class="toolbar-divider"></div>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioCallout('ar')" title="إضافة اقتباس">❝</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioLink('ar')" title="إضافة رابط">↗</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="insertBioImage('ar')" title="إضافة صورة">▧</button>
+                <button type="button" class="toolbar-btn" (mousedown)="$event.preventDefault()" (click)="execBioCmd('removeFormat', 'ar')" title="مسح التنسيق">×</button>
+              </div>
+              <div #bioEditorAr id="member_bio_editor_ar" class="visual-editor-canvas rtl" contenteditable="true" role="textbox" aria-multiline="true" aria-label="السيرة الذاتية باللغة العربية" dir="rtl" (mouseup)="rememberBioSelection('ar')" (keyup)="rememberBioSelection('ar')" (paste)="pasteBioContent($event, 'ar')" (input)="syncBioHtmlFromVisualEditor('ar')"></div>
+            } @else {
+              <textarea class="raw-html-area rtl" rows="12" [(ngModel)]="bioTextAr" name="member_bio_html_ar" (ngModelChange)="bioChangedAr = true" dir="rtl" placeholder="<p>أدخل محتوى السيرة الذاتية بتنسيق HTML...</p>"></textarea>
+            }
+          </div>
+          <label>Profile status<select [(ngModel)]="memberForm.status" name="member_status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></label>
+          <label>Display order<input type="number" [(ngModel)]="memberForm.order_index" name="member_order" min="1" /></label>
+        </div>
+        <div class="executive-admin__image-row"><img *ngIf="memberImagePreview" [src]="memberImagePreview" alt="Profile preview" /><label>Profile photo<input type="file" accept="image/*" (change)="onMemberImageSelected($event)" /></label></div>
+        <div class="executive-admin__modal-actions"><button type="button" class="secondary" (click)="isMemberModalOpen.set(false)">Cancel</button><button type="submit" class="executive-admin__primary" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save profile' }}</button></div>
+      </form>
+    </section>
+  </div>
+</main>

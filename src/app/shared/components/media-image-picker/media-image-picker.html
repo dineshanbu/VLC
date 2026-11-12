@@ -1,0 +1,38 @@
+<button class="media-picker-trigger" type="button" (click)="open()">
+  <span class="media-picker-trigger__plus" aria-hidden="true">＋</span>
+  Choose from Media &amp; Upload
+</button>
+
+@if (isOpen()) {
+  <div class="media-picker-backdrop" (click)="close()">
+    <section class="media-picker-modal" role="dialog" aria-modal="true" aria-labelledby="media-picker-title" (click)="$event.stopPropagation()">
+      <header class="media-picker-header">
+        <div><span class="media-picker-eyebrow">MEDIA &amp; UPLOAD</span><h2 id="media-picker-title">Choose a banner image</h2><p>Select an existing image or upload one here.</p></div>
+        <button class="media-picker-close" type="button" (click)="close()" aria-label="Close">×</button>
+      </header>
+
+      <div class="media-picker-toolbar">
+        <input type="search" placeholder="Search images..." [ngModel]="search()" (ngModelChange)="search.set($event)" aria-label="Search images" />
+        <label class="media-picker-upload" [class.uploading]="isUploading()">
+          <span class="media-picker-upload__plus">＋</span>
+          {{ isUploading() ? 'Uploading…' : 'Upload image' }}
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="uploadAndSelect($event)" [disabled]="isUploading()" />
+        </label>
+      </div>
+
+      @if (errorMessage()) { <p class="media-picker-error" role="alert">{{ errorMessage() }}</p> }
+      @if (isLoading()) { <div class="media-picker-state">Loading images…</div> }
+      @else if (!filteredImages().length) { <div class="media-picker-state">No images found. Upload one to add it to Media &amp; Upload and select it.</div> }
+      @else {
+        <div class="media-picker-grid">
+          @for (image of filteredImages(); track image.id || image.file_url) {
+            <button class="media-picker-item" type="button" (click)="selectImage(image)" [attr.aria-label]="'Select ' + image.title">
+              <img [src]="imageUrl(image.file_url)" [alt]="image.title" />
+              <span>{{ image.title || image.file_name }}</span>
+            </button>
+          }
+        </div>
+      }
+    </section>
+  </div>
+}

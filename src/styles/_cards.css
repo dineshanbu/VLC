@@ -1,0 +1,169 @@
+/* ============================================
+   VIC DESIGN SYSTEM — CARDS
+   ============================================ */
+
+/* --- Base Card --- */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition:
+    box-shadow var(--transition-base),
+    transform var(--transition-smooth);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* --- Card Body --- */
+.card-body {
+  padding: var(--space-24);
+}
+
+.card-body-lg {
+  padding: var(--space-32);
+}
+
+.card-body-sm {
+  padding: var(--space-16);
+}
+
+/* --- Card Image --- */
+.card-image {
+  width: 100%;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.card:hover .card-image img {
+  transform: scale(1.03);
+}
+
+/* --- Card Title --- */
+.card-title {
+  font-family: var(--font-body);
+  font-size: var(--text-h5);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-8);
+  line-height: var(--leading-snug);
+}
+
+/* --- Card Text --- */
+.card-text {
+  font-size: var(--text-body);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+/* --- Card Link (arrow link) --- */
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary);
+  text-decoration: none;
+  margin-top: var(--space-16);
+  transition: gap var(--transition-base), color var(--transition-base);
+}
+
+.card-link::after {
+  content: '→';
+  transition: transform var(--transition-base);
+}
+
+.card-link:hover {
+  color: var(--color-secondary-dark);
+}
+
+.card-link:hover::after {
+  transform: translateX(4px);
+}
+
+
+/* ==========================================
+   CARD VARIANTS
+   ========================================== */
+
+/* --- Flat Card (no hover lift) --- */
+.card-flat {
+  box-shadow: none;
+  border: 1px solid var(--color-border);
+}
+
+.card-flat:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- Icon Card (with circular icon at top) --- */
+.card-icon {
+  text-align: center;
+  padding: var(--space-32) var(--space-24);
+}
+
+.card-icon .icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-16);
+  color: var(--color-secondary);
+  font-size: 1.5rem;
+}
+
+/* --- Feature Card (image on top, content below) --- */
+.card-feature .card-image {
+  height: 200px;
+}
+
+.card-feature .card-body {
+  padding: var(--space-24);
+}
+
+/* --- News Card --- */
+.card-news .card-image {
+  height: 180px;
+}
+
+.card-news .card-date {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+}
+
+.card-news .card-title {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+}
+
+/* --- Dark Card (for dark backgrounds) --- */
+.card-dark {
+  background-color: var(--color-primary-light);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-inverse);
+}
+
+.card-dark .card-title {
+  color: var(--color-text-inverse);
+}
+
+.card-dark .card-text {
+  color: var(--color-text-on-dark);
+}

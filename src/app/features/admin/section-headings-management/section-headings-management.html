@@ -1,0 +1,28 @@
+<main class="heading-studio">
+  <header class="heading-studio__header">
+    <div><span class="heading-studio__eyebrow">BILINGUAL SITE COPY</span><h1>Section Title Studio</h1><p>Update section headings page by page. English and Saudi Arabic are saved separately.</p></div>
+    <div class="heading-studio__actions"><button type="button" class="heading-studio__reset" (click)="resetPage()">Reset this page</button><button type="button" class="heading-studio__save" [disabled]="isSaving() || isLoading()" (click)="save()">{{ isSaving() ? 'Saving…' : 'Save page headings' }}</button></div>
+  </header>
+
+  @if (success()) { <div class="heading-studio__notice heading-studio__notice--success">{{ success() }}</div> }
+  @if (error()) { <div class="heading-studio__notice heading-studio__notice--error">{{ error() }}</div> }
+
+  <nav class="heading-studio__pages" aria-label="Choose a page">
+    @for (page of pages; track page.key) { <button type="button" [class.active]="activePage() === page.key" (click)="activePage.set(page.key)">{{ page.label }}</button> }
+  </nav>
+
+  @if (isLoading()) { <div class="heading-studio__loading">Loading saved headings…</div> }
+  @else {
+    <section class="heading-studio__list">
+      @for (heading of pageHeadings(); track heading.key; let i = $index) {
+        <article class="heading-studio__card">
+          <div class="heading-studio__section"><span>{{ (i + 1).toString().padStart(2, '0') }}</span><h2>{{ heading.section }}</h2></div>
+          <div class="heading-studio__fields">
+            <label>English {{ heading.valueType || 'heading' }}<input [(ngModel)]="values[heading.key].en" [name]="heading.key + '_en'" /></label>
+            <label class="heading-studio__rtl" dir="rtl">{{ heading.valueType === 'description' ? 'الوصف' : heading.valueType === 'label' ? 'العبارة التعريفية' : 'العنوان' }} بالعربية (السعودية)<input dir="rtl" [(ngModel)]="values[heading.key].ar" [name]="heading.key + '_ar'" /></label>
+          </div>
+        </article>
+      }
+    </section>
+  }
+</main>

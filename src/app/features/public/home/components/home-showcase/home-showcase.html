@@ -1,0 +1,99 @@
+@if (product(); as item) {
+  <section class="home-product">
+    <div class="home-showcase__container home-product__grid">
+      <div class="home-product__copy">
+        <span class="home-showcase__eyebrow section-eyebrow">
+          <span>{{ 'home.product.eyebrow' | sectionHeading:'OUR PRODUCT':'منتجنا' }}</span>
+        </span>
+        <h2 class="home-product__title">{{ 'home.product.title' | sectionHeading:productName():'فلوسيلفاكس®' }}</h2>
+        <p class="home-product__description">{{ productDescription() }}</p>
+        <a routerLink="/products" class="home-product__link">
+          {{ translationService.translate('homeProduct.link') }} {{ productName() }}
+        </a>
+      </div>
+
+      <div class="home-product__visual">
+        <img
+          [src]="image(item.featured_image || (item.image === 'flucelvax_featured.webp' ? 'flucelvax_featured-cutout.webp' : item.image), 'flucelvax_featured-cutout.webp')"
+          [alt]="productName()"
+        />
+      </div>
+
+      <a routerLink="/products" class="home-product__link home-product__link--mobile">
+        {{ translationService.translate('homeProduct.link') }} {{ productName() }}
+      </a>
+
+      <div class="home-product__aside">
+        <div class="home-product__features">
+        @for (feature of productFeatures(); track feature; let idx = $index) {
+          <div class="home-product__feature">
+            <span class="home-product__feature-icon" aria-hidden="true">
+              @switch (idx) {
+                @case (0) { <svg viewBox="0 0 32 32"><circle cx="16" cy="7" r="3"></circle><circle cx="8" cy="15" r="3"></circle><circle cx="24" cy="15" r="3"></circle><circle cx="12" cy="24" r="3"></circle><circle cx="20" cy="24" r="3"></circle><path d="M14 9l-4 4m8-4 4 4m-12 5 2 3m10-3-2 3m-5-7h2"></path></svg> }
+                @case (1) { <svg viewBox="0 0 32 32"><path d="M16 3l10 4v7c0 7-4 12-10 15C10 26 6 21 6 14V7l10-4Z"></path><path d="m11 16 3 3 7-7"></path></svg> }
+                @case (2) { <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"></circle><path d="m12 16 3 3 6-7M16 2v3M16 27v3M2 16h3M27 16h3"></path></svg> }
+                @default { <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="10"></circle><path d="M16 6v20M6 16h20M9 9c4 3 10 3 14 0M9 23c4-3 10-3 14 0"></path></svg> }
+              }
+            </span>
+            <span class="home-product__feature-text">{{ feature }}</span>
+          </div>
+        }
+        </div>
+          <div class="home-product__video-actions">
+            <button type="button" class="csl-intro-button csl-intro-button--about" (click)="openAboutCslVideo()">
+              <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+              <span>{{ translationService.translate('products.btn.aboutCsl') }}</span>
+            </button>
+            <button type="button" class="csl-intro-button csl-intro-button--facility" (click)="openCslIntroVideo()">
+              <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+              <span>{{ translationService.translate('products.btn.cslFacility') }}</span>
+            </button>
+          </div>
+      </div>
+
+      <div class="home-product__partner-strip" [dir]="translationService.isRtl() ? 'rtl' : 'ltr'">
+        @if (cslPartnerLogo) {
+          <div class="home-product__partner-logo">
+            <img [src]="cslPartnerLogo" alt="CSL Seqirus" />
+          </div>
+          <span class="home-product__partner-divider" aria-hidden="true"></span>
+        }
+        <div class="home-product__partner-copy">
+          @if (cslPartnerTitle) {
+            <h3>{{ cslPartnerTitle }}</h3>
+          }
+          @if (cslPartnerDescription) {
+            <p>{{ cslPartnerDescription }}</p>
+          }
+        </div>
+        <div class="home-product__partner-actions">
+          <button type="button" class="csl-intro-button" (click)="openAboutCslVideo()">
+            <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+            <span>{{ translationService.translate('products.btn.aboutCsl') }}</span>
+          </button>
+          <button type="button" class="csl-intro-button" (click)="openCslIntroVideo()">
+            <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+            <span>{{ translationService.translate('products.btn.cslFacility') }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
+@if (isCslIntroVideoOpen()) {
+  <div class="csl-intro-video-modal" role="dialog" aria-modal="true" [attr.aria-label]="translationService.translate(isAboutCslVideoOpen() ? 'products.btn.aboutCsl' : 'products.btn.introductionToCsl')">
+    <button class="csl-intro-video-modal__backdrop" type="button" aria-label="Close video" (click)="closeCslIntroVideo()"></button>
+    <div class="csl-intro-video-modal__dialog">
+      <div class="csl-intro-video-modal__header">
+        <h2>{{ translationService.translate(isAboutCslVideoOpen() ? 'products.btn.aboutCsl' : 'products.btn.introductionToCsl') }}</h2>
+        <button type="button" class="csl-intro-video-modal__close" aria-label="Close video" (click)="closeCslIntroVideo()">×</button>
+      </div>
+      @if (cslIntroVideoModalUrl()) {
+        <video #cslIntroVideoPlayer [src]="cslIntroVideoModalUrl()" autoplay controls playsinline></video>
+      } @else {
+        <p class="csl-intro-video-modal__message">{{ translationService.translate('products.video.notConfigured') }}</p>
+      }
+    </div>
+  </div>
+}

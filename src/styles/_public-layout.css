@@ -1,0 +1,86 @@
+/* Shared public footer geometry. Keep the same column alignment on every route. */
+html:root:root:root body app-public-layout app-footer .footer__container {
+  width: 100% !important;
+  max-width: 1480px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(24px, 5vw, 80px) !important;
+  box-sizing: border-box !important;
+}
+
+html:root:root:root body app-public-layout app-footer .footer__grid {
+  display: grid !important;
+  grid-template-columns: minmax(170px, .85fr) minmax(340px, 1.3fr) minmax(300px, 1.15fr) !important;
+  gap: clamp(28px, 3vw, 48px) !important;
+  align-items: start !important;
+}
+
+html:root:root:root body app-public-layout app-footer .footer__list--nav {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) !important;
+  column-gap: clamp(20px, 2vw, 30px) !important;
+}
+
+html:root:root:root body app-public-layout app-footer .footer__col--brand {
+  min-width: 0;
+  padding-inline: 0 !important;
+}
+
+html:root:root:root body app-public-layout app-footer :is(.footer__col--nav, .footer__col--contact) {
+  min-width: 0;
+  padding-inline-start: clamp(20px, 2.5vw, 40px) !important;
+  padding-inline-end: 0 !important;
+  border-inline-start: 1px solid #087aa0 !important;
+}
+
+@media (min-width: 1025px) {
+  html:root:root:root body app-public-layout app-footer .footer__logo-link {
+    margin-inline-start: clamp(12px, 1.2vw, 20px) !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__col--contact {
+    padding-inline-start: clamp(28px, 3vw, 48px) !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  html:root:root:root body app-public-layout app-footer .footer__container {
+    padding-inline: 28px !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 32px !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__list--nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 16px !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__col--brand {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html:root:root:root body app-public-layout app-footer .footer__container {
+    padding-inline: 20px !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer :is(.footer__col--brand, .footer__col--nav, .footer__col--contact) {
+    grid-column: auto !important;
+    padding-inline: 0 !important;
+    border: 0 !important;
+  }
+
+  html:root:root:root body app-public-layout app-footer .footer__logo {
+    width: min(230px, 100%) !important;
+    height: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+  }
+}

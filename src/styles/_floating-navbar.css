@@ -1,0 +1,244 @@
+/* ============================================
+   FLOATING PILL NAVBAR — Global visual styles
+   Layout (padding/grid) is handled in navbar.css
+   This file only handles: position, shape, glass bg
+   ============================================ */
+
+/* The admin preview uses the same navbar component, placed in-flow in a landing scene. */
+html:root:root:root body app-logo-replacement app-navbar .navbar.navbar--logo-preview {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: min(calc(100% - 40px), 1220px) !important;
+  max-width: 1220px !important;
+  height: 76px !important;
+  margin: 0 auto !important;
+  border: 1px solid rgba(74, 174, 205, .28) !important;
+  border-radius: 9999px !important;
+  background: rgba(7, 43, 69, .84) !important;
+  backdrop-filter: blur(22px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+  box-shadow: 0 10px 32px rgba(0, 15, 29, .32) !important;
+}
+
+html:root:root:root body app-logo-replacement app-navbar .navbar.navbar--logo-preview .navbar__container {
+  height: 100% !important;
+  padding: 0 18px !important;
+}
+
+html:root:root:root body app-logo-replacement app-navbar .navbar.navbar--logo-preview .navbar__links {
+  min-width: 0;
+  gap: 2px;
+  padding: 0;
+}
+
+html:root:root:root body app-logo-replacement app-navbar .navbar.navbar--logo-preview .navbar__link {
+  padding: 3px 2px;
+  font-size: clamp(10px, .76vw, 12px);
+}
+
+html:root:root:root body app-logo-replacement app-navbar .navbar.navbar--logo-preview :is(.navbar__link, .navbar__lang-btn, .navbar__hamburger) {
+  color: #effbff !important;
+}
+
+/* ── Pill shape & glass background ── */
+html:root:root:root body app-public-layout .navbar.navbar--floating {
+  position: fixed;
+  top: 20px;
+  inset-inline: 0 !important;
+  margin-inline: auto !important;
+  width: min(calc(100% - 64px), 1220px) !important;
+  max-width: 1220px !important;
+  height: 76px !important;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 9999px !important;
+  background: color-mix(in srgb, var(--color-surface-elevated), transparent 30%) !important;
+  backdrop-filter: blur(22px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+  box-shadow: 0 10px 32px rgba(0, 35, 64, 0.22) !important;
+  transition: background-color 280ms ease, box-shadow 280ms ease, height 280ms ease !important;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating.navbar--scrolled {
+  background: color-mix(in srgb, var(--color-surface-elevated), transparent 24%) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+html:root:root:root body app-public-layout .navbar.navbar--floating::before {
+  content: none !important;
+}
+
+/* ── Logo size ── */
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+  height: 50px !important;
+  max-width: 175px;
+}
+
+/* ── Container padding ── */
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+  padding: 0 24px !important;
+  height: 100%;
+}
+
+/* ── Link style ── */
+html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__link {
+  white-space: nowrap;
+}
+
+/* Keep the public navigation at the same readable scale on every route.
+   The homepage reference stylesheet used to enlarge these values only while
+   app-home was present, making the shared navbar visibly shrink on subpages. */
+@media (min-width: 1200px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    height: clamp(48px, 4.55vw, 64px) !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links {
+    gap: clamp(8px, 1.1vw, 22px) !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__link {
+    font-size: clamp(14px, 1.05vw, 22px) !important;
+    padding: 8px 3px !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang-btn {
+    font-size: clamp(14px, 1.05vw, 22px) !important;
+  }
+}
+
+/* Give the full navigation room on wide desktop and TV viewports. */
+@media (min-width: 1600px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    width: min(calc(100% - 96px), 1600px) !important;
+    max-width: 1600px !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links {
+    min-width: 0;
+    gap: clamp(8px, .8vw, 16px) !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__link {
+    font-size: clamp(14px, .84vw, 17px) !important;
+    padding: 7px 2px !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang-btn {
+    font-size: clamp(14px, .84vw, 17px) !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    height: clamp(48px, 3vw, 58px) !important;
+  }
+}
+
+/* ── Mobile: hide links, show hamburger ── */
+@media (max-width: 1199px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    width: calc(100% - 32px) !important;
+    top: 12px;
+    height: 72px !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+    padding: 0 18px !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__links { display: none; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__hamburger { display: flex; flex-shrink: 0; }
+}
+
+/* ── Small screens ── */
+@media (max-width: 767px) {
+  html:root:root:root body app-public-layout .mobile-menu__panel {
+    background: color-mix(in srgb, var(--color-surface-elevated), transparent 42%) !important;
+    backdrop-filter: blur(24px) saturate(165%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+  }
+
+  html:root:root:root body app-public-layout .mobile-menu__header,
+  html:root:root:root body app-public-layout .mobile-menu__lang {
+    background: color-mix(in srgb, var(--color-surface-elevated), transparent 24%) !important;
+    backdrop-filter: blur(22px) saturate(165%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+    border-color: rgba(151, 221, 235, 0.18) !important;
+  }
+
+  html:root:root:root body app-public-layout .mobile-menu__link--active {
+    background: rgba(0, 203, 213, 0.14) !important;
+  }
+
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    top: 8px;
+    width: calc(100% - 20px) !important;
+    height: 68px !important;
+    border-radius: 9999px !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img { height: 42px !important; max-width: 138px; }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__container {
+    padding: 0 14px !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    direction: ltr !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: center !important;
+    align-self: center !important;
+    min-width: 0;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__right {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    margin: 0 !important;
+    min-width: 0;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__hamburger {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    width: clamp(92px, 21vw, 138px);
+    height: auto !important;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating {
+    height: 66px !important;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__logo-img {
+    width: clamp(82px, 25vw, 104px);
+    height: auto !important;
+    max-width: 100%;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang-btn {
+    padding: 2px 3px;
+    font-size: 12px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__lang {
+    gap: 2px;
+  }
+  html:root:root:root body app-public-layout .navbar.navbar--floating .navbar__hamburger {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root:root:root body app-public-layout .navbar.navbar--floating { transition: none !important; }
+}

@@ -1,0 +1,92 @@
+<section class="platform" id="platform">
+  <div class="platform__container">
+
+    <div class="platform__header">
+      <div class="platform__heading-group">
+        <span class="platform__label section-eyebrow" dir="auto">{{ 'home.platform.eyebrow' | sectionHeading:eyebrow:'منصتنا' }}</span>
+        <h2 class="platform__heading" dir="auto">{{ 'home.platform.title' | sectionHeading:heading:'ثلاث ركائز لأثر أكبر.' }}</h2>
+        <p class="platform__intro" dir="auto">{{ intro }}</p>
+      </div>
+    </div>
+
+    <!-- Carousel Outer Wrapper for Floating Side Arrows -->
+    <div class="platform__carousel-wrapper">
+
+      <!-- Floating Glass Prev Arrow (Left Side) -->
+      <button type="button" class="platform__floating-btn platform__floating-btn--prev" (click)="prevSlide()"
+        aria-label="Previous platform slide">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- 3 Cards Grid (Desktop: 3 in row | Mobile: Swipeable Carousel) -->
+      <div #carouselTrack class="platform__grid" (scroll)="onScroll($event)" (touchstart)="pauseAutoplay()"
+        (touchend)="resumeAutoplay()" (mouseenter)="pauseAutoplay()" (mouseleave)="resumeAutoplay()">
+        @for (card of cards(); track card.tag; let idx = $index) {
+        <article class="platform__card" [class.platform__card--localize]="idx === 0">
+          <!-- Card Full Background Image -->
+          <img [src]="card.image" [alt]="card.alt" class="platform__image"
+            [style.object-position]="card.imagePosition || 'center'" />
+
+          <!-- Dark Left Gradient Overlay for High Text Readability -->
+          <div class="platform__overlay" aria-hidden="true"></div>
+
+          <!-- Card Content Layer -->
+          <div class="platform__content">
+
+            <div class="platform__card-icon" aria-hidden="true">
+              @switch (idx) {
+              @case (0) {
+              <svg viewBox="0 0 48 48">
+                <circle cx="24" cy="10" r="6"></circle>
+                <path d="M15 42V29a9 9 0 0 1 18 0v13M9 42h30M15 31H9v11M33 31h6v11"></path>
+              </svg>
+              }
+              @case (1) {
+              <svg viewBox="0 0 48 48">
+                <path
+                  d="M16 25a12 12 0 1 1 16 0c-3 2.5-4 5-4 8h-8c0-3-1-5.5-4-8ZM20 38h8M21 43h6M24 2v4M7 19h5M36 19h5M11 7l4 4M37 7l-4 4">
+                </path>
+              </svg>
+              }
+              @default {
+              <svg viewBox="0 0 48 48">
+                <path d="M7 42h35M10 37V27h7v10M21 37V19h7v18M32 37V10h7v27M10 21l9-8 7 2 12-11M33 4h5v5"></path>
+              </svg>
+              }
+              }
+            </div>
+
+            <div class="platform__card-body">
+              <span class="platform__card-tag" dir="auto">{{ card.tag }}</span>
+              <div class="platform__card-details">
+                <p class="platform__card-desc" dir="auto">{{ card.description }}</p>
+                <button type="button" class="platform__card-expand" aria-label="Show full description"
+                  (click)="toggleDescription($event)">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="m3 6 5 5 5-5"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </article>
+        }
+      </div>
+
+      <!-- Floating Glass Next Arrow (Right Side) -->
+      <button type="button" class="platform__floating-btn platform__floating-btn--next" (click)="nextSlide()"
+        aria-label="Next platform slide">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+    </div>
+
+  </div>
+</section>

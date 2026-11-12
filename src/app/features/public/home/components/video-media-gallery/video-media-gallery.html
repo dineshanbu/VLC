@@ -1,0 +1,75 @@
+<section class="video-media" id="media" [attr.aria-labelledby]="showHeading ? 'video-media-title' : null" [attr.aria-label]="showHeading ? null : 'Media videos'">
+  <div class="video-media__container">
+    <header class="video-media__header" [class.video-media__header--glass]="glassHeader">
+      @if (showHeading || showEyebrow) {
+        <div>
+          @if (showEyebrow) {
+            <span class="video-media__eyebrow section-eyebrow">{{ 'home.media.eyebrow' | sectionHeading:'MEDIA':'الوسائط' }}</span>
+          }
+          @if (showHeading) {
+          <h2 class="video-media__title" id="video-media-title">{{ 'home.media.title' | sectionHeading:'Media':'الوسائط الإعلامية' }}</h2>
+          }
+        </div>
+      }
+      @if (showViewAll && videos().length > 3) {
+        <a class="video-media__view-all" routerLink="/news" fragment="media">
+          <span>{{ displayViewAllLabel() }}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <polyline points="13 5 20 12 13 19"></polyline>
+          </svg>
+        </a>
+      }
+    </header>
+
+    @if (videos().length > 0) {
+      <div class="video-media__frame" [class.video-media__frame--mobile-carousel]="useMobileCarousel">
+      @if (glassHeader && showHeading) {
+        <h2 class="video-media__mobile-title">{{ 'home.media.title' | sectionHeading:'Media':'الوسائط الإعلامية' }}</h2>
+      }
+      <div class="video-media__grid" [class.video-media__grid--mobile-carousel]="useMobileCarousel" (touchstart)="onMobileTouchStart($event)" (touchend)="onMobileTouchEnd($event)">
+        @for (item of visibleVideos(); track item.id ?? item.file_url) {
+          <article class="video-media__card">
+            <video class="video-media__player" controls playsinline preload="metadata" [poster]="posterUrl(item)" [src]="videoUrl(item.file_url)" (loadedmetadata)="seekToPreviewFrame($event)" (seeked)="showVideoFrame($event)" [attr.aria-label]="displayTitle(item)">
+              Your browser does not support video playback.
+            </video>
+            <h3 class="video-media__card-title" [attr.dir]="isArabicText(displayTitle(item)) ? 'rtl' : 'ltr'">{{ displayTitle(item) }}</h3>
+          </article>
+        }
+      </div>
+      @if (useMobileCarousel && videos().length > 1) {
+        <button type="button" class="video-media__mobile-arrow video-media__mobile-arrow--prev" (click)="previousPage()" aria-label="Previous media video">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+        </button>
+        <button type="button" class="video-media__mobile-arrow video-media__mobile-arrow--next" (click)="nextPage()" aria-label="Next media video">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      }
+      </div>
+
+      @if (useMobileCarousel && videos().length > 1) {
+        <nav class="video-media__mobile-dots" aria-label="Media carousel pages">
+          @for (video of videos(); track video.id ?? video.file_url; let index = $index) {
+            <button type="button" [class.is-active]="index === currentPage() - 1" [attr.aria-label]="'Show media video ' + (index + 1)" [attr.aria-current]="index === currentPage() - 1 ? 'true' : null" (click)="goToPage(index + 1)"></button>
+          }
+        </nav>
+      }
+
+      @if (showPagination && !useMobileCarousel && pageCount() > 1) {
+        <nav class="video-media__pagination" aria-label="Media pages">
+          <button type="button" (click)="previousPage()" [disabled]="currentPage() === 1" aria-label="Previous page">←</button>
+          @for (page of pages(); track page) {
+            <button type="button" [class.is-active]="page === currentPage()" [attr.aria-current]="page === currentPage() ? 'page' : null" (click)="goToPage(page)">{{ page }}</button>
+          }
+          <button type="button" (click)="nextPage()" [disabled]="currentPage() === pageCount()" aria-label="Next page">→</button>
+        </nav>
+      }
+    } @else if (loading()) {
+      <p class="video-media__status" role="status">{{ translationService.translate('media.loading') }}</p>
+    } @else if (loadFailed()) {
+      <p class="video-media__status" role="status">{{ translationService.translate('media.unavailable') }}</p>
+    } @else {
+      <p class="video-media__status">{{ translationService.translate('media.empty') }}</p>
+    }
+  </div>
+</section>

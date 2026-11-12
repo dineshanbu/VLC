@@ -1,0 +1,884 @@
+/* ============================================
+   OUR PLATFORM — VIC DESIGN SYSTEM
+   Exact Match to Reference Mockup
+   ============================================ */
+
+.platform {
+  position: relative;
+  width: 100%;
+  padding: clamp(34px, 4.2vw, 76px) 0 clamp(42px, 5vw, 88px);
+  background: radial-gradient(circle at 7% 5%, #c8f4f134 0, transparent 24%), linear-gradient(180deg, #fff 0%, #effafa 100%);
+
+}
+
+.platform__container {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0 5.3%;
+  box-sizing: border-box;
+}
+
+/* Reference-style heading row */
+.platform__header {
+  display: block;
+  margin-bottom: clamp(18px, 2vw, 28px);
+}
+
+.platform__label {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: var(--text-caption, 0.75rem);
+  font-weight: var(--weight-bold, 700);
+  letter-spacing: var(--tracking-wider, 0.08em);
+  text-transform: uppercase;
+  color: var(--color-secondary, #0D8A8A);
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.platform__heading {
+  margin: 8px 0 0;
+  font-family: var(--font-heading, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2rem, 2.2vw, 3.3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--color-primary, #0B2A4A);
+  letter-spacing: -0.02em;
+}
+
+.platform__intro {
+  max-width: 650px;
+  margin: 0 0 4px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(.96rem, 1vw, 1.18rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #53637b;
+}
+
+/* 3 Cards Grid (Desktop: 3 in 1 row, Widescreen Landscape Ratio) */
+.platform__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 1.6vw, 28px);
+  align-items: stretch;
+}
+
+/* Individual Platform Card */
+.platform__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: clamp(230px, 20vw, 265px);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(7, 24, 43, 0.1);
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #07192C;
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.platform__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(7, 24, 43, 0.18);
+}
+
+.platform__card:focus-visible {
+  outline: 3px solid #00D5DF;
+  outline-offset: 4px;
+}
+
+/* Full Bleed Card Background Image */
+.platform__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.platform__card:hover .platform__image {
+  transform: scale(1.04);
+}
+
+/* Dark Left-to-Right Gradient Overlay for Crystal Clear Text */
+.platform__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+      rgba(7, 24, 43, 0.95) 0%,
+      rgba(7, 24, 43, 0.88) 36%,
+      rgba(7, 24, 43, 0.48) 60%,
+      rgba(7, 24, 43, 0.15) 85%,
+      transparent 100%);
+  transition: background 0.3s ease;
+}
+
+.platform__card:hover .platform__overlay {
+  background: linear-gradient(90deg,
+      rgba(7, 24, 43, 0.96) 0%,
+      rgba(7, 24, 43, 0.85) 38%,
+      rgba(7, 24, 43, 0.4) 62%,
+      rgba(7, 24, 43, 0.1) 85%,
+      transparent 100%);
+}
+
+/* Content Container Layer */
+.platform__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 22px 20px 20px 22px;
+  box-sizing: border-box;
+}
+
+/* Card Header: 01 / 02 / 03 + Tag */
+.platform__card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.platform__card-num {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 1.85rem;
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.02em;
+}
+
+.platform__card-tag {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+/* Card Body: Title & Description */
+.platform__card-body {
+  margin-top: auto;
+  padding-right: 40px;
+}
+
+.platform__card-title {
+  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin: 12px 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.platform__card-desc {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  max-width: 220px;
+}
+
+/* Sleek Circular Arrow Button at Bottom Right (Matching Screenshot) */
+.platform__card-arrow {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.2px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.platform__card-arrow svg {
+  transition: transform 0.25s ease;
+}
+
+.platform__card:hover .platform__card-arrow {
+  background: #00E5C9;
+  border-color: #00E5C9;
+  color: #07192C;
+  transform: scale(1.08);
+  box-shadow: 0 0 14px rgba(0, 229, 201, 0.55);
+}
+
+.platform__card:hover .platform__card-arrow svg {
+  transform: translateX(2px);
+}
+
+/* Carousel Wrapper for Floating Side Buttons */
+.platform__card {
+  height: clamp(230px, 18vw, 280px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, .55);
+}
+
+.platform__overlay,
+.platform__card:hover .platform__overlay {
+  background: linear-gradient(180deg, transparent 34%, rgba(5, 35, 58, 0.72) 58%, #062F4B 100%);
+}
+
+.platform__content {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 26px;
+}
+
+.platform__card-icon {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  color: #bafff6;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid rgba(186, 255, 246, .45);
+  border-radius: 14px;
+  background: rgba(7, 47, 75, .34);
+}
+
+.platform__card-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.platform__card-body {
+  margin: 0;
+  padding: 0;
+  max-width: 290px;
+}
+
+.platform__card-tag {
+  display: block;
+  margin: 0 0 8px;
+  color: #FFFFFF;
+  letter-spacing: 0.12em;
+  font-size: .75rem;
+}
+
+.platform__card-desc {
+  max-width: none;
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.platform__carousel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.platform__floating-btn {
+  display: none;
+}
+
+.platform__mobile-dots {
+  display: none;
+}
+
+
+/* ============================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ============================================ */
+
+/* Laptop / Medium Desktop (1024px – 1280px) */
+@media (max-width: 1280px) {
+  .platform__grid {
+    gap: 16px;
+  }
+
+  .platform__card {
+    height: 225px;
+  }
+
+  .platform__card-desc {
+    max-width: 200px;
+  }
+}
+
+/* Tablet (768px – 1023px) */
+@media (max-width: 1023px) {
+  .platform__header {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 14px;
+  }
+
+  .platform__intro {
+    max-width: 680px;
+  }
+
+  .platform__card {
+    height: 220px;
+  }
+
+  .platform__content {
+    padding: 18px 16px 16px 18px;
+  }
+
+  .platform__card-num {
+    font-size: 1.6rem;
+  }
+
+  .platform__card-tag {
+    font-size: 1.05rem;
+  }
+
+  .platform__card-title {
+    font-size: 0.98rem;
+  }
+
+  .platform__card-desc {
+    font-size: 0.78rem;
+    max-width: 180px;
+  }
+}
+
+/* Tablet & Mobile (< 1024px) */
+@media (max-width: 1023px) {
+  .platform__container {
+    padding: 0 20px;
+  }
+}
+
+/* Mobile Carousel (< 768px) */
+@media (max-width: 767px) {
+  .platform {
+    padding-top: 38px;
+    padding-bottom: 42px;
+    overflow: hidden;
+  }
+
+  .platform__container {
+    padding: 0 18px;
+  }
+
+  .platform__heading {
+    font-size: 2rem;
+  }
+
+  .platform__intro {
+    font-size: 0.875rem;
+  }
+
+  /* Carousel Track with smooth horizontal snap-scroll */
+  .platform__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 14px;
+    padding: 6px 4px 12px 4px;
+  }
+
+  .platform__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .platform__card {
+    flex: 0 0 88%;
+    min-width: 88%;
+    height: 215px;
+    scroll-snap-align: center;
+  }
+
+  .platform__content {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .platform__card-icon {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+  }
+
+  .platform__card-title {
+    font-size: 1.05rem;
+  }
+
+  .platform__card-desc {
+    font-size: 0.8125rem;
+    max-width: 220px;
+  }
+
+  /* Floating Side Glass Arrows (Biotech Dark Glass Theme) */
+  .platform__floating-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(7, 25, 44, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(0, 229, 201, 0.5);
+    color: #00E5C9;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .platform__floating-btn--prev {
+    left: 2px;
+  }
+
+  .platform__floating-btn--next {
+    right: 2px;
+  }
+
+  .platform__floating-btn:hover,
+  .platform__floating-btn:active {
+    background: #00E5C9;
+    color: #07192C;
+    border-color: #00E5C9;
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 0 16px rgba(0, 229, 201, 0.6);
+  }
+
+  /* Mobile Indicator Dots Underneath */
+  .platform__mobile-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .platform__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #CBD5E1;
+    border: none;
+    cursor: pointer;
+    transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-radius 0.28s ease;
+  }
+
+  .platform__dot--active {
+    width: 22px;
+    height: 8px;
+    border-radius: 6px;
+    background-color: var(--color-secondary);
+    box-shadow: 0 0 8px rgba(13, 138, 138, 0.4);
+  }
+}
+
+/* ============================================
+   ARABIC (RTL) OUR PLATFORM STYLING
+   ============================================ */
+:host-context(html[dir="rtl"]) .platform__card,
+:host-context(.lang-ar) .platform__card {
+  text-align: right;
+}
+
+:host-context(html[dir="rtl"]) .platform__overlay,
+:host-context(.lang-ar) .platform__overlay {
+  background: linear-gradient(180deg, transparent 34%, rgba(5, 35, 58, 0.72) 58%, #062F4B 100%);
+}
+
+:host-context(html[dir="rtl"]) .platform__card-header,
+:host-context(.lang-ar) .platform__card-header {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-title,
+:host-context(.lang-ar) .platform__card-title {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-desc,
+:host-context(.lang-ar) .platform__card-desc {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-arrow,
+:host-context(.lang-ar) .platform__card-arrow {
+  right: auto;
+  left: 18px;
+}
+
+:host-context(html[dir="rtl"]) .platform__card-arrow svg,
+:host-context(.lang-ar) .platform__card-arrow svg {
+  transform: scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .platform__card:hover .platform__card-arrow svg,
+:host-context(.lang-ar) .platform__card:hover .platform__card-arrow svg {
+  transform: scaleX(-1) translateX(2px);
+}
+
+:host-context(html[dir="rtl"]) .platform__floating-btn--prev,
+:host-context(.lang-ar) .platform__floating-btn--prev {
+  left: auto;
+  right: -4px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+:host-context(html[dir="rtl"]) .platform__floating-btn--next,
+:host-context(.lang-ar) .platform__floating-btn--next {
+  right: auto;
+  left: -4px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+/* Deep-blue platform composition, matching the supplied reference. */
+.platform {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 48% 100%, rgba(0, 120, 190, .58), transparent 42%),
+    radial-gradient(circle at 50% 0%, #08619b 0%, #003966 38%, #001d42 100%);
+}
+
+.platform::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .42;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 86% 15%, rgba(72, 210, 239, .6) 0 1px, transparent 1.5px) 0 0/7px 7px,
+    linear-gradient(112deg, transparent 0 79%, rgba(0, 221, 240, .22) 80%, transparent 81%);
+  mask-image: linear-gradient(90deg, transparent 0 62%, #000 75% 100%);
+}
+
+.platform::after {
+  content: '';
+  position: absolute;
+  inset: auto -8% -42% -8%;
+  height: 48%;
+  z-index: -1;
+  border: 1px solid rgba(38, 212, 235, .34);
+  border-radius: 50% 50% 0 0 / 28% 28% 0 0;
+  box-shadow: 0 -18px 45px rgba(0, 153, 224, .2);
+  transform: rotate(-4deg);
+}
+
+.platform__label {
+  color: #e3f6ff;
+}
+
+.platform__heading {
+  color: #fff;
+}
+
+.platform__heading-accent {
+  color: #29e7ef;
+  text-shadow: 0 0 22px rgba(41, 231, 239, .2);
+}
+
+.platform__intro {
+  color: #e3f2fa;
+}
+
+.platform__mobile-dots::before {
+  display: none;
+}
+
+.platform__card {
+  cursor: default;
+  height: clamp(340px, 26.5vw, 510px);
+  border: 2px solid #00bde0;
+  border-radius: 18px;
+  background: #002a4d;
+  box-shadow: 0 15px 34px rgba(0, 10, 35, .32), inset 0 1px 0 rgba(255, 255, 255, .22);
+}
+
+.platform__overlay,
+.platform__card:hover .platform__overlay {
+  background: linear-gradient(180deg, transparent 28%, rgba(0, 38, 69, .2) 48%, rgba(0, 38, 69, .9) 71%, #002746 100%);
+}
+
+.platform__content {
+  min-height: 42%;
+  padding: 0 clamp(18px, 1.6vw, 30px) clamp(20px, 1.7vw, 32px);
+  gap: clamp(14px, 1.35vw, 26px);
+  align-items: flex-end;
+}
+
+.platform__card-icon {
+  width: clamp(42px, 3.4vw, 64px);
+  height: clamp(54px, 4.1vw, 76px);
+  flex-basis: clamp(42px, 3.4vw, 64px);
+  margin-bottom: 2px;
+  padding: 0;
+  padding-inline-end: clamp(13px, 1.1vw, 22px);
+  border: 0;
+  border-inline-end: 1px solid rgba(225, 247, 255, .85);
+  border-radius: 0;
+  background: transparent;
+  color: #f4fbff;
+}
+
+.platform__card-body {
+  max-width: none;
+}
+
+.platform__card-tag {
+  color: #fff;
+  font-size: clamp(17px, 1.55vw, 26px);
+  letter-spacing: .02em;
+}
+
+.platform__card-desc {
+  color: #e4f0fa;
+  font-size: clamp(13px, 1.12vw, 17px);
+  line-height: 1.45;
+}
+
+.platform__card-arrow {
+  position: absolute;
+  right: clamp(18px, 1.7vw, 32px);
+  bottom: clamp(58px, 6.1vw, 116px);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: clamp(42px, 3.4vw, 64px);
+  height: clamp(42px, 3.4vw, 64px);
+  border: 1px solid #22e7ef;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(4, 133, 187, .72);
+  box-shadow: 0 0 20px rgba(0, 223, 237, .35);
+  font-size: clamp(26px, 2vw, 38px);
+  line-height: 1;
+  transition: transform .3s ease, background .3s ease;
+}
+
+.platform__card:hover .platform__card-arrow {
+  transform: translateX(7px) scale(1.08);
+  background: #00cbd5;
+}
+
+@media (max-width:767px) {
+  .platform__heading {
+    font-size: clamp(34px, 9vw, 46px);
+  }
+
+  .platform__card {
+    height: 340px;
+    border-radius: 14px;
+  }
+
+  .platform__card-arrow {
+    right: 18px;
+    bottom: 96px;
+  }
+}
+
+/* Keep the wide facility banner fully visible in the Localize platform card. */
+.platform__card--localize {
+  background-color: #061a2b;
+}
+
+.platform__card--localize .platform__image,
+.platform__card--localize:hover .platform__image {
+  object-fit: cover;
+  object-position: center 42% !important;
+  transform: none !important;
+}
+
+.platform__card--localize .platform__overlay,
+.platform__card--localize:hover .platform__overlay {
+  background: linear-gradient(90deg,
+    rgba(7, 24, 43, .78) 0%,
+    rgba(7, 24, 43, .66) 34%,
+    rgba(7, 24, 43, .26) 68%,
+    rgba(7, 24, 43, .08) 100%);
+}
+
+/* Keep card content aligned and reveal longer descriptions on demand. */
+.platform__content {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.platform__card-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.platform__card-details {
+  color: #e4f0fa;
+}
+
+.platform__card-details:not(.platform__card-details--expanded) .platform__card-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.platform__card-expand {
+  display: none;
+  position: absolute;
+  inset-inline-end: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: #002746;
+  color: #7debf2;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.platform__card-expand svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s ease;
+}
+
+.platform__card-details--expanded .platform__card-expand svg {
+  transform: rotate(180deg);
+}
+
+.platform__card-details--long .platform__card-expand {
+  display: flex;
+}
+
+.platform__card-desc {
+  max-width: 34ch;
+  margin-top: 0;
+}
+
+
+.platform__card:has(.platform__card-details--expanded) .platform__content {
+  min-height: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, transparent 15%, rgba(0, 29, 53, .76) 50%, #002746 100%);
+}
+
+.platform__card-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.platform__card-details--expanded .platform__card-desc {
+  display: block !important;
+  overflow: visible !important;
+}
+
+.platform__card-details--long:not(.platform__card-details--expanded) .platform__card-desc {
+  padding-inline-end: 0;
+}
+
+.platform__card-details--long:not(.platform__card-details--expanded) {
+  position: relative;
+  padding-inline-end: 20px;
+}
+
+.platform__card-details--long:not(.platform__card-details--expanded) .platform__card-expand {
+  inset-inline-end: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.platform__card-details--expanded .platform__card-expand {
+  position: static;
+  display: inline-flex;
+  margin-top: 6px;
+  color: #7debf2;
+  background: transparent;
+}
+
+/* The platform background follows the same deep-navy VIC branding. */
+.platform { background-color:#001526 !important; }
+.platform {
+  background:#001526 !important;
+  background-image:none !important;
+}
+.platform::before {
+  opacity:.12;
+  background:radial-gradient(circle at 85% 18%, rgba(72,210,239,.35) 0 1px, transparent 1.5px) 0 0/9px 9px;
+  mask-image:linear-gradient(90deg, transparent 0 68%, #000 82% 100%);
+}
+.platform::after { opacity:.35; box-shadow:0 -10px 24px rgba(0,153,224,.1); }
+.platform__heading, .platform__intro { font-family:var(--font-body, Arial, sans-serif); }
+
+/* Keep Google Translate / RTL text from reversing the visual card sequence. */
+.platform__container,
+.platform__grid,
+.platform__card,
+.platform__content,
+.platform__card-body {
+  direction: ltr;
+}
+
+.platform__heading-group {
+  min-width: 0;
+  text-align: left;
+}
+
+:host-context(html[dir="rtl"]) .platform__heading-group,
+:host-context(.lang-ar) .platform__heading-group {
+  direction: rtl;
+  text-align: right;
+}
+
+.platform__heading,
+.platform__intro,
+.platform__card-tag,
+.platform__card-desc {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+
+.platform__card-tag { white-space: normal; }

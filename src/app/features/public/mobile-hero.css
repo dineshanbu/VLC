@@ -1,0 +1,109 @@
+/* Consistent mobile image-backed banners, matching About Us. */
+@media (max-width: 768px) {
+  :host :is(.products-hero.products-hero, .partner-hero.partner-hero) {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    background-size: cover !important;
+    background-position: 62% center !important;
+  }
+  :host .products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) {
+    /* These banners contain important artwork along the bottom edge. */
+    background-size: 100% auto !important;
+    background-position: center bottom !important;
+    background-repeat: no-repeat !important;
+  }
+  :host .products-hero.products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+  :host .products-hero.products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) > .products-hero__container {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-bottom: calc(38vw + 24px) !important;
+  }
+  :host .products-hero.products-hero::before {
+    display: block;
+    background: linear-gradient(90deg, rgba(2,28,54,.94) 0%, rgba(2,28,54,.76) 46%, rgba(2,28,54,.24) 100%),
+      linear-gradient(180deg, rgba(2,28,54,.4), transparent 55%, rgba(2,28,54,.3));
+  }
+  :host .products-hero.products-hero > .products-hero__container,
+  :host .partner-hero.partner-hero > .partner-hero__container {
+    width: 100%;
+    min-height: clamp(440px, 72svh, 580px) !important;
+    height: auto !important;
+    padding: 120px 20px 48px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start !important;
+    box-sizing: border-box;
+  }
+  :host :is(.products-hero__content, .partner-hero__content) {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+  }
+  :host .products-hero.products-hero .products-hero__heading,
+  :host .partner-hero.partner-hero .partner-hero__heading {
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(34px, 9vw, 44px) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 16px;
+    overflow-wrap: anywhere;
+  }
+  :host .products-hero.products-hero :is(.products-hero__action, .careers-hero__actions, .contact-hero__quick-links) {
+    margin-top: 24px;
+  }
+  :host .products-hero.products-hero :is(.careers-hero__btn-primary, .careers-hero__btn-secondary, .news-hero__btn-primary, .pv-hero-cta, .contact-quick-link) {
+    min-height: 44px;
+    padding: 10px 20px;
+    font-size: 13px;
+    gap: 10px;
+  }
+  :host .partner-hero.partner-hero .partner-hero__description {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  :host .partner-hero.partner-hero .partner-hero__media {
+    width: 100%;
+    margin-top: 24px !important;
+  }
+
+  /* Keep subpage banner artwork filling the full mobile hero instead of
+     appearing as a cropped strip below the copy. */
+  :host .products-hero.products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) {
+    background-size: cover !important;
+    background-position: 72% center !important;
+  }
+  :host .products-hero.products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) > .products-hero__container {
+    padding-bottom: 40px !important;
+  }
+  /* Keep subpage mobile banner titles compact and consistent. */
+  :host .products-hero.products-hero:is(.news-hero, .careers-hero, .pharmacovigilance-hero, .contact-hero) .products-hero__heading {
+    font-size: clamp(30px, 8vw, 38px) !important;
+    line-height: 1.08 !important;
+  }
+  /* Products has a longer four-line headline; keep its mobile hero compact. */
+  :host .products-hero.products-hero:not(.about-hero):not(.news-hero):not(.careers-hero):not(.pharmacovigilance-hero):not(.contact-hero) > .products-hero__container {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: clamp(140px, 18svh, 160px) 20px 32px !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* Final Arabic leading for these banners; this follows the compact mobile
+   title rules above so their 1.08 line-height cannot collapse the spacing. */
+:host-context(html[dir="rtl"]) .products-hero.products-hero.careers-hero .careers-hero__heading,
+:host-context(.lang-ar) .products-hero.products-hero.careers-hero .careers-hero__heading {
+  line-height: 1.65 !important;
+}
+
+:host-context(html[dir="rtl"]) .products-hero.products-hero.contact-hero .contact-hero__heading,
+:host-context(.lang-ar) .products-hero.products-hero.contact-hero .contact-hero__heading {
+  line-height: 1.55 !important;
+}
+
+

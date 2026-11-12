@@ -1,0 +1,154 @@
+/* ====================================================
+   VIC FLOATING SCROLL-TO-TOP BUTTON
+   Circular Glowing Progress Ring + Levitation Animation
+   ==================================================== */
+
+:host {
+  display: contents;
+}
+
+.vic-scroll-top-btn {
+  position: fixed;
+  bottom: clamp(22px, 3vw, 40px);
+  inset-inline-end: clamp(20px, 2.6vw, 36px);
+  z-index: 9999;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: radial-gradient(circle at 35% 35%, #05264c 0%, #02142a 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  user-select: none;
+  touch-action: manipulation;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(18px) scale(0.85);
+  box-shadow: 0 8px 24px rgba(1, 14, 34, 0.6), 0 0 16px rgba(0, 229, 255, 0.3);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+/* Visible state with continuous floating levitation */
+.vic-scroll-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: vic-scroll-float 3.6s ease-in-out infinite;
+}
+
+/* Hover Interaction: enhanced cyan aura and slight scale */
+.vic-scroll-top-btn:hover {
+  animation-play-state: paused;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(1, 14, 34, 0.75), 0 0 28px rgba(0, 229, 255, 0.75), inset 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.vic-scroll-top-btn:hover .vic-scroll-top__icon {
+  transform: translateY(-2px);
+  color: #00f2ff;
+}
+
+/* Tactile press */
+.vic-scroll-top-btn:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 4px 16px rgba(1, 14, 34, 0.8), 0 0 14px rgba(0, 229, 255, 0.4);
+  transition-duration: 0.1s;
+}
+
+.vic-scroll-top-btn:focus-visible {
+  outline: 2.5px solid #00e5ff;
+  outline-offset: 4px;
+}
+
+/* Circular SVG Progress Ring */
+.vic-scroll-top__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* Starts fill from the top (12 o'clock) */
+  pointer-events: none;
+}
+
+/* Inactive background track ring */
+.vic-scroll-top__track {
+  fill: none;
+  stroke: rgba(0, 213, 223, 0.22);
+  stroke-width: 3.5;
+}
+
+/* Active glowing cyan progress fill */
+.vic-scroll-top__bar {
+  fill: none;
+  stroke: #00e5ff;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 125.66; /* 2 * PI * 20 */
+  filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.85));
+  transition: stroke-dashoffset 0.18s ease-out;
+}
+
+/* White Upward Arrow in Center */
+.vic-scroll-top__icon {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+}
+
+.vic-scroll-top__icon svg {
+  display: block;
+}
+
+/* Floating Levitation Animation */
+@keyframes vic-scroll-float {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 8px 24px rgba(1, 14, 34, 0.6), 0 0 16px rgba(0, 229, 255, 0.3);
+  }
+  50% {
+    transform: translateY(-7px);
+    box-shadow: 0 16px 32px rgba(1, 14, 34, 0.7), 0 0 24px rgba(0, 229, 255, 0.55);
+  }
+}
+
+/* Responsive Sizing */
+@media (max-width: 767px) {
+  .vic-scroll-top-btn {
+    bottom: 18px;
+    inset-inline-end: 16px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .vic-scroll-top__icon svg {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .vic-scroll-top-btn {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+
+  .vic-scroll-top-btn.is-visible {
+    transform: none !important;
+  }
+
+  .vic-scroll-top__bar {
+    transition: none !important;
+  }
+}

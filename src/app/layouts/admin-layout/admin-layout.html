@@ -1,0 +1,305 @@
+<div class="admin-wrapper" [class.sidebar-collapsed]="!isSidebarOpen()">
+  
+  <!-- Backdrop for mobile sidebar -->
+  @if (isSidebarOpen()) {
+    <div class="sidebar-backdrop" (click)="toggleSidebar()"></div>
+  }
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="admin-sidebar">
+    <!-- Brand Header -->
+    <div class="sidebar-header">
+      <a routerLink="/admin/dashboard" class="brand-link" title="VIC Dashboard">
+        <img src="logo_navbar_white.webp" alt="Vaccine Industrial Company" class="sidebar-logo-img" />
+      </a>
+      <button class="btn-close-sidebar" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="sidebar-body">
+      <div class="nav-section-label">MAIN NAVIGATION</div>
+      <nav class="sidebar-nav">
+
+        <a routerLink="/admin/home" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span>
+          <span class="nav-label">Home Page</span>
+        </a>
+
+        <a routerLink="/admin/section-headings" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h10M4 19h16"/><path d="M18 10v7m-3.5-3.5h7"/></svg></span>
+          <span class="nav-label">Section Title Studio</span>
+        </a>
+        
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="9" rx="1"/>
+              <rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/>
+              <rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+
+        <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </span>
+          <span class="nav-label">User Management</span>
+        </a>
+
+        <a routerLink="/admin/product" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </span>
+          <span class="nav-label">Products &amp; Portfolio</span>
+        </a>
+
+        <a routerLink="/admin/manufacturing-platform" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l6 4V8l6 4V4h6v17z"/><path d="M7 17h2m3 0h2m3 0h2M17 8h1"/></svg></span>
+          <span class="nav-label">Manufacturing Platform</span>
+        </a>
+
+        <a routerLink="/admin/news" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m4 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9"/>
+              <path d="M9 9h4m-4 4h4m-4 4h2"/>
+            </svg>
+          </span>
+          <span class="nav-label">News & Updates</span>
+        </a>
+
+        <a routerLink="/admin/media" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+          </span>
+          <span class="nav-label">Media & Uploads</span>
+        </a>
+
+        <a routerLink="/admin/contacts" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+          <span class="nav-label">Contact Inquiries</span>
+        </a>
+
+        <a routerLink="/admin/pharmacovigilance" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6M12 9v6"/></svg></span>
+          <span class="nav-label">Pharmacovigilance</span>
+        </a>
+
+        <a routerLink="/admin/careers" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </span>
+          <span class="nav-label">Careers & Jobs</span>
+        </a>
+
+        <a routerLink="/admin/partners" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
+              <path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l2.8-2.8a1 1 0 0 0 0-1.4l-2.8-2.8a1 1 0 0 0-1.4 0L14 12"></path>
+              <path d="M7 11 4.7 8.7a1 1 0 0 1 0-1.4l2.8-2.8a1 1 0 0 1 1.4 0L11.4 7"></path>
+              <path d="M2 13.5V19a2 2 0 0 0 2 2h3.5a1 1 0 0 0 .7-.3L13 16"></path>
+              <path d="M16 2h3.5a2 2 0 0 1 2 2v5.5a1 1 0 0 1-.3.7L16 15"></path>
+            </svg>
+          </span>
+          <span class="nav-label">Partners &amp; Alliances</span>
+        </a>
+
+        <a routerLink="/admin/about" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </span>
+          <span class="nav-label">About Us &amp; Leadership</span>
+        </a>
+
+        <a routerLink="/admin/executive-team" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19h16M6 19V9l6-5 6 5v10"></path>
+              <path d="M9 19v-5h6v5M9 10h.01M15 10h.01"></path>
+            </svg>
+          </span>
+          <span class="nav-label">Executive Team Page</span>
+        </a>
+
+
+        <div class="nav-section-label mt-4">PREFERENCES</div>
+
+        <a routerLink="/admin/settings" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </a>
+
+        <a routerLink="/admin/logo-replacement" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 5h16v14H4z"/><path d="M7 15l3-3 2 2 3-4 3 5H7z"/><circle cx="9" cy="9" r="1"/>
+            </svg>
+          </span>
+          <span class="nav-label">Brand &amp; Footer</span>
+        </a>
+
+        <a routerLink="/" target="_blank" class="nav-item external-site">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </span>
+          <span class="nav-label">View Live Website</span>
+        </a>
+
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer with User Info -->
+    <div class="sidebar-footer">
+      <div class="user-quick-card">
+        <div class="user-avatar-circle">
+          {{ currentUser()?.name?.charAt(0) || 'A' }}
+        </div>
+        <div class="user-quick-details">
+          <span class="user-name">{{ currentUser()?.name || 'Administrator' }}</span>
+          <span class="user-role-tag">{{ currentUser()?.role || 'Admin' }}</span>
+        </div>
+        <button (click)="logout()" class="btn-sidebar-logout" title="Sign Out">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="admin-main">
+    
+    <!-- TOP HEADER NAVBAR -->
+    <header class="admin-header">
+      <div class="header-left">
+        <button class="btn-toggle-menu" (click)="toggleSidebar()" title="Toggle Sidebar">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+
+        <a routerLink="/admin/dashboard" class="header-logo-link" title="VIC Admin Dashboard">
+          <img src="logo_navbar.webp" alt="Vaccine Industrial Company" class="header-logo-img" />
+        </a>
+
+        <div class="header-divider-v"></div>
+
+        <div class="header-breadcrumb">
+          <span class="portal-badge">VIC BIOTECH</span>
+          <span class="separator">/</span>
+          <span class="current-crumb">Admin Console</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- View Landing Page Link -->
+        <a routerLink="/" target="_blank" class="btn-view-site" title="View Public Landing Page">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span class="view-site-text">View Landing Page</span>
+        </a>
+
+        <!-- System Status Badge -->
+        <div class="status-indicator-badge">
+          <span class="status-dot online"></span>
+          <span class="status-text">Database Connected</span>
+        </div>
+
+        <!-- User Dropdown Menu -->
+        <div class="profile-dropdown-wrapper">
+          <button class="btn-profile-trigger" (click)="toggleProfileMenu()">
+            <div class="profile-avatar">
+              {{ currentUser()?.name?.charAt(0) || 'A' }}
+            </div>
+            <div class="profile-text">
+              <span class="profile-name">{{ currentUser()?.name || 'Administrator' }}</span>
+              <span class="profile-dept">{{ currentUser()?.department || 'Executive' }}</span>
+            </div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" class="chevron-icon">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+
+          @if (isProfileMenuOpen()) {
+            <div class="profile-dropdown-menu" (click)="closeMenus()">
+              <div class="dropdown-header">
+                <span class="signed-as">Signed in as</span>
+                <span class="signed-email">{{ currentUser()?.email || 'admin@vic.com.sa' }}</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a routerLink="/admin/settings" class="dropdown-item">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Account Settings
+              </a>
+              <a routerLink="/" target="_blank" class="dropdown-item">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Public Site
+              </a>
+              <div class="dropdown-divider"></div>
+              <button (click)="logout()" class="dropdown-item text-danger">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY (ROUTER OUTLET) -->
+    <main class="admin-content-area">
+      <router-outlet />
+    </main>
+
+    <app-scroll-top />
+  </div>
+</div>

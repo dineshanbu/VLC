@@ -1,0 +1,195 @@
+<nav class="navbar navbar--floating" [class.navbar--logo-preview]="logoPreviewMode" [class.navbar--scrolled]="isScrolled()" [class.navbar--transparent]="!isScrolled()" [class.navbar--home]="logoPreviewMode || isHomePage()">
+  <div class="navbar__container">
+
+    <!-- Brand Logo (Compact & Refined) -->
+    <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
+      <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+    </a>
+
+    <!-- Desktop Nav Links (Centered, Refined Typography) -->
+    <ul class="navbar__links">
+      <li><a routerLink="/" routerLinkActive="navbar__link--active" [routerLinkActiveOptions]="{exact:true}" class="navbar__link">{{ translationService.translate('nav.home') }}</a></li>
+      <li class="navbar__about" [class.navbar__about--open]="isAboutMenuOpen()"
+        (mouseenter)="openAboutMenu()" (mouseleave)="closeAboutMenu()">
+        <button type="button" class="navbar__link navbar__about-trigger"
+          [class.navbar__link--active]="isAboutRouteActive()"
+          [attr.aria-expanded]="isAboutMenuOpen()" aria-haspopup="true"
+          (mouseenter)="openAboutMenu()" (click)="openAboutMenu()">
+          {{ translationService.translate('nav.about') }}
+          <svg class="navbar__about-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3 3.5-3" /></svg>
+        </button>
+        <div class="navbar__about-dropdown" [class.navbar__about-dropdown--open]="isAboutMenuOpen()" role="menu">
+          <a routerLink="/about" routerLinkActive="navbar__about-item--active" [routerLinkActiveOptions]="{exact:true}"
+            class="navbar__about-item" role="menuitem" (click)="closeAboutMenu()">
+            <span>{{ translationService.translate('about.organization') }}</span>
+          </a>
+          <a routerLink="/about/executive-team" routerLinkActive="navbar__about-item--active"
+            class="navbar__about-item" role="menuitem" (click)="closeAboutMenu()">
+            <span>{{ translationService.translate('about.executiveTeam') }}</span>
+          </a>
+        </div>
+      </li>
+      <li class="navbar__about navbar__products" [class.navbar__about--open]="isProductsMenuOpen()"
+        (mouseenter)="openProductsMenu()" (mouseleave)="closeProductsMenu()">
+        <button type="button" class="navbar__link navbar__about-trigger"
+          [class.navbar__link--active]="isProductsRouteActive()"
+          [attr.aria-expanded]="isProductsMenuOpen()" aria-haspopup="true"
+          (mouseenter)="openProductsMenu()" (click)="openProductsMenu()">
+          {{ translationService.translate('nav.products') }}
+          <svg class="navbar__about-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3 3.5-3" /></svg>
+        </button>
+        <div class="navbar__about-dropdown" [class.navbar__about-dropdown--open]="isProductsMenuOpen()" role="menu">
+          <a routerLink="/products" routerLinkActive="navbar__about-item--active" [routerLinkActiveOptions]="{exact:true}"
+            class="navbar__about-item" role="menuitem" (click)="closeProductsMenu()">
+            <span>{{ translationService.translate('products.breadcrumb.products') }}</span>
+          </a>
+          <a routerLink="/products/manufacturing-platform" routerLinkActive="navbar__about-item--active"
+            class="navbar__about-item" role="menuitem" (click)="closeProductsMenu()">
+            <span>{{ translationService.translate('products.manufacturingPlatform') }}</span>
+          </a>
+        </div>
+      </li>
+      @for (link of navLinks(); track link.route) {
+        <li>
+          <a
+            [routerLink]="link.route"
+            routerLinkActive="navbar__link--active"
+            [routerLinkActiveOptions]="{exact: link.route === '/'}"
+            class="navbar__link"
+          >
+            {{ link.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <!-- Right Side Actions (Language Switcher) -->
+    <div class="navbar__right">
+      <!-- Language Switcher -->
+      <div class="navbar__lang">
+        <button
+          type="button"
+          class="navbar__lang-btn"
+          [class.navbar__lang-btn--active]="currentLang() === 'en'"
+          (click)="switchLanguage('en')"
+        >EN</button>
+        <span class="navbar__lang-separator">|</span>
+        <button
+          type="button"
+          class="navbar__lang-btn"
+          [class.navbar__lang-btn--active]="currentLang() === 'ar'"
+          (click)="switchLanguage('ar')"
+        >العربية</button>
+      </div>
+    </div>
+
+    <!-- Mobile Hamburger Button -->
+    <button
+      class="navbar__hamburger"
+      [class.navbar__hamburger--open]="isMobileMenuOpen()"
+      (click)="toggleMobileMenu()"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="navbar__hamburger-line"></span>
+      <span class="navbar__hamburger-line"></span>
+      <span class="navbar__hamburger-line"></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+@if (isMobileMenuOpen()) {
+  <div class="mobile-menu" (click)="closeMobileMenu()">
+    <div class="mobile-menu__panel" (click)="$event.stopPropagation()">
+
+      <!-- Mobile Header -->
+      <div class="mobile-menu__header">
+        <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
+          <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+        </a>
+        <button class="mobile-menu__close" (click)="closeMobileMenu()" aria-label="Close menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Links -->
+      <ul class="mobile-menu__links">
+        <li><a routerLink="/" routerLinkActive="mobile-menu__link--active" [routerLinkActiveOptions]="{exact:true}" class="mobile-menu__link" (click)="closeMobileMenu()">{{ translationService.translate('nav.home') }}</a></li>
+        <li class="mobile-menu__about" (mouseenter)="openMobileAboutMenu()" (mouseleave)="closeAboutMenu()">
+          <button type="button" class="mobile-menu__link mobile-menu__about-trigger"
+            [class.mobile-menu__link--active]="isAboutRouteActive()"
+            [class.mobile-menu__about-trigger--open]="isMobileAboutMenuOpen()"
+            [attr.aria-expanded]="isMobileAboutMenuOpen()" (click)="toggleMobileAboutMenu()">
+            <span>{{ translationService.translate('nav.about') }}</span>
+            <svg class="navbar__about-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3 3.5-3" /></svg>
+          </button>
+          @if (isMobileAboutMenuOpen()) {
+            <div class="mobile-menu__about-items">
+              <a routerLink="/about" routerLinkActive="mobile-menu__link--active" [routerLinkActiveOptions]="{exact:true}"
+                class="mobile-menu__link mobile-menu__about-item" (click)="closeMobileMenu()">
+                {{ translationService.translate('about.organization') }}
+              </a>
+              <a routerLink="/about/executive-team" routerLinkActive="mobile-menu__link--active"
+                class="mobile-menu__link mobile-menu__about-item" (click)="closeMobileMenu()">
+                {{ translationService.translate('about.executiveTeam') }}
+              </a>
+            </div>
+          }
+        </li>
+        <li class="mobile-menu__about mobile-menu__products" (mouseenter)="openMobileProductsMenu()" (mouseleave)="closeProductsMenu()">
+          <button type="button" class="mobile-menu__link mobile-menu__about-trigger"
+            [class.mobile-menu__link--active]="isProductsRouteActive()"
+            [class.mobile-menu__about-trigger--open]="isMobileProductsMenuOpen()"
+            [attr.aria-expanded]="isMobileProductsMenuOpen()" (click)="toggleMobileProductsMenu()">
+            <span>{{ translationService.translate('nav.products') }}</span>
+            <svg class="navbar__about-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m2.5 4.5 3.5 3 3.5-3" /></svg>
+          </button>
+          @if (isMobileProductsMenuOpen()) {
+            <div class="mobile-menu__about-items">
+              <a routerLink="/products" routerLinkActive="mobile-menu__link--active" [routerLinkActiveOptions]="{exact:true}"
+                class="mobile-menu__link mobile-menu__about-item" (click)="closeMobileMenu()">
+                {{ translationService.translate('products.breadcrumb.products') }}
+              </a>
+              <a routerLink="/products/manufacturing-platform" routerLinkActive="mobile-menu__link--active"
+                class="mobile-menu__link mobile-menu__about-item" (click)="closeMobileMenu()">
+                {{ translationService.translate('products.manufacturingPlatform') }}
+              </a>
+            </div>
+          }
+        </li>
+        @for (link of navLinks(); track link.route) {
+          <li>
+            <a
+              [routerLink]="link.route"
+              routerLinkActive="mobile-menu__link--active"
+              [routerLinkActiveOptions]="{exact: link.route === '/'}"
+              class="mobile-menu__link"
+              (click)="closeMobileMenu()"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+
+      <!-- Mobile Language -->
+      <div class="mobile-menu__lang">
+        <button
+          class="mobile-menu__lang-btn"
+          [class.mobile-menu__lang-btn--active]="currentLang() === 'en'"
+          (click)="switchLanguage('en')"
+        >EN</button>
+        <span class="mobile-menu__lang-separator">/</span>
+        <button
+          class="mobile-menu__lang-btn"
+          [class.mobile-menu__lang-btn--active]="currentLang() === 'ar'"
+          (click)="switchLanguage('ar')"
+        >العربية</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,499 @@
+<div class="partners-mgmt-container">
+
+  <!-- ==========================================
+       HEADER & ACTIONS BAR
+       ========================================== -->
+  <header class="mgmt-header">
+    <div class="mgmt-header__left">
+      <div class="mgmt-header__title-row">
+        <h1 class="mgmt-header__title">Strategic Partners Management</h1>
+        <span class="mgmt-badge">VIC ALLIANCES</span>
+      </div>
+      <p class="mgmt-header__subtitle">
+        Manage company strategic partners, technology transfer agreements, production lines, and academic research collaborations.
+      </p>
+    </div>
+
+    <div class="mgmt-header__actions">
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="openAddPartnerModal()"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Partner</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       ALERTS & NOTIFICATIONS
+       ========================================== -->
+  <div *ngIf="successMessage()" class="alert-banner alert-banner--success">
+    <div class="alert-icon">&#10003;</div>
+    <div class="alert-text">{{ successMessage() }}</div>
+    <button type="button" class="alert-close" (click)="successMessage.set('')">&times;</button>
+  </div>
+
+  <div *ngIf="errorMessage()" class="alert-banner alert-banner--danger">
+    <div class="alert-icon">!</div>
+    <div class="alert-text">{{ errorMessage() }}</div>
+    <button type="button" class="alert-close" (click)="errorMessage.set('')">&times;</button>
+  </div>
+
+  <section class="partner-banner-editor">
+    <div class="partner-banner-editor__intro">
+      <div><span class="section-badge-label">PUBLIC PAGE CONTENT</span><h2>Partners Page Hero Banner</h2><p>These fields control the banner heading, description, and image shown at the top of the public Partners page.</p></div>
+      <button type="button" class="btn-primary" (click)="saveBanner()" [disabled]="bannerSaving()">{{ bannerSaving() ? 'Saving…' : 'Save banner' }}</button>
+    </div>
+    <div class="partner-banner-editor__layout">
+      <form class="partner-banner-editor__fields" (ngSubmit)="saveBanner()">
+        <div class="field-managed-notice" style="grid-column: 1 / -1; background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px;">
+          <span>ℹ️</span>
+          <span><strong>Hero Eyebrow &amp; Headings</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        <label class="partner-banner-editor__wide">Description (English)<textarea name="hero-description" rows="4" [(ngModel)]="pageSettings.hero_description"></textarea></label>
+        <label class="partner-banner-editor__wide" dir="rtl">الوصف (السعودية)<textarea name="hero-description-ar" dir="rtl" rows="4" [(ngModel)]="pageSettings.hero_description_ar"></textarea></label>
+        <label class="partner-banner-editor__wide">Banner image (English)<input type="file" accept="image/*" (change)="onBannerImage($event, 'en')" /></label>
+        <app-media-image-picker (selected)="selectBannerFromLibrary('en', $event)" />
+        <span class="partner-banner-editor__path">English image: {{ pageSettings.hero_image }}</span>
+        <label class="partner-banner-editor__wide">Banner image (Arabic / Saudi)<input type="file" accept="image/*" (change)="onBannerImage($event, 'ar')" /></label>
+        <app-media-image-picker (selected)="selectBannerFromLibrary('ar', $event)" />
+        <span class="partner-banner-editor__path">Arabic image: {{ pageSettings.hero_image_ar || pageSettings.hero_image }}</span>
+      </form>
+      <div class="partner-banner-editor__preview"><span>English banner preview</span><img [src]="bannerImageUrl('en')" alt="Partners English banner preview" /></div>
+      <div class="partner-banner-editor__preview"><span>Arabic banner preview</span><img [src]="bannerImageUrl('ar')" alt="Partners Arabic banner preview" /></div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       KPI METRIC SUMMARY CARDS
+       ========================================== -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--teal">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"></path>
+          <path d="M16 2h3.5a2 2 0 0 1 2 2v5.5a1 1 0 0 1-.3.7L16 15"></path>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ totalPartnersCount() }}</span>
+        <span class="kpi-label">Total Partners</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--emerald">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ activePartnersCount() }}</span>
+        <span class="kpi-label">Active on Public Page</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--indigo">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ uniqueCategories().length }}</span>
+        <span class="kpi-label">Categories</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon kpi-icon--amber">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div class="kpi-info">
+        <span class="kpi-value">{{ uniqueTiers().length }}</span>
+        <span class="kpi-label">Strategic Tiers</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       TOOLBAR (SEARCH & FILTERS)
+       ========================================== -->
+  <div class="toolbar">
+    <div class="toolbar__search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search partner name, category, or scope..."
+        [ngModel]="partnerSearch()"
+        (ngModelChange)="partnerSearch.set($event)"
+        class="search-input"
+      />
+    </div>
+
+    <div class="toolbar__filters">
+      <select
+        [ngModel]="selectedTier()"
+        (ngModelChange)="selectedTier.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Tiers</option>
+        <option *ngFor="let t of uniqueTiers()" [value]="t">{{ t }}</option>
+      </select>
+
+      <select
+        [ngModel]="selectedCategory()"
+        (ngModelChange)="selectedCategory.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Categories</option>
+        <option *ngFor="let c of uniqueCategories()" [value]="c">{{ c }}</option>
+      </select>
+
+      <select
+        [ngModel]="selectedStatus()"
+        (ngModelChange)="selectedStatus.set($event)"
+        class="filter-select"
+      >
+        <option value="All">All Status</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       PARTNERS DATA TABLE
+       ========================================== -->
+  <div class="table-card">
+    <div *ngIf="isLoading()" class="loading-state">
+      <div class="spinner"></div>
+      <span>Loading strategic partners...</span>
+    </div>
+
+    <div *ngIf="!isLoading() && filteredPartners().length === 0" class="empty-state">
+      <div class="empty-icon">🤝</div>
+      <h3>No Partners Found</h3>
+      <p>No partners match the current search or filters. Try adjusting your query or add a new partner.</p>
+      <button type="button" class="btn-primary" (click)="openAddPartnerModal()">+ Add Partner</button>
+    </div>
+
+    <div *ngIf="!isLoading() && filteredPartners().length > 0" class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th style="width: 100px;">Logo</th>
+            <th>Partner Name &amp; Tier</th>
+            <th>Category</th>
+            <th>Partnership Scope</th>
+            <th style="width: 120px;">Status</th>
+            <th style="width: 130px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredPartners(); let i = index">
+            <!-- Order Index & Up/Down -->
+            <td>
+              <div class="order-cell">
+                <span class="order-num">{{ p.order_index || (i + 1) }}</span>
+                <div class="order-btns">
+                  <button type="button" class="btn-micro" (click)="movePartner(p, 'up')" title="Move Up">&uarr;</button>
+                  <button type="button" class="btn-micro" (click)="movePartner(p, 'down')" title="Move Down">&darr;</button>
+                </div>
+              </div>
+            </td>
+
+            <!-- Logo Thumbnail -->
+            <td>
+              <div class="logo-thumb-wrapper">
+                <img
+                  [src]="resolveImg(p.logo)"
+                  [alt]="p.name"
+                  class="logo-thumb"
+                  (error)="$any($event.target).src = 'logo_navbar.webp'"
+                />
+              </div>
+            </td>
+
+            <!-- Name & Tier -->
+            <td>
+              <div class="partner-name-col">
+                <strong class="partner-name">{{ p.name }}</strong>
+                <span class="tier-tag">{{ p.tier || 'Strategic Alliance' }}</span>
+                <a *ngIf="p.website" [href]="p.website" target="_blank" class="web-link" title="Visit website">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span>Website</span>
+                </a>
+              </div>
+            </td>
+
+            <!-- Category -->
+            <td>
+              <span class="category-badge">{{ p.category }}</span>
+            </td>
+
+            <!-- Scope Description -->
+            <td>
+              <p class="scope-text" [title]="p.description">{{ p.description }}</p>
+            </td>
+
+            <!-- Status Toggle -->
+            <td>
+              <button
+                type="button"
+                class="status-pill"
+                [class.status-pill--active]="p.status === 'Active'"
+                [class.status-pill--inactive]="p.status === 'Inactive'"
+                (click)="togglePartnerStatus(p)"
+                title="Click to toggle status"
+              >
+                <span class="status-dot"></span>
+                <span>{{ p.status }}</span>
+              </button>
+            </td>
+
+            <!-- Actions -->
+            <td style="text-align: right;">
+              <div class="actions-group">
+                <button
+                  type="button"
+                  class="btn-icon"
+                  (click)="openEditPartnerModal(p)"
+                  title="Edit Partner"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  class="btn-icon btn-icon--danger"
+                  (click)="confirmDelete(p.id!, p.name)"
+                  title="Delete Partner"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ==========================================
+     MODAL: ADD / EDIT STRATEGIC PARTNER
+     ========================================== -->
+<div *ngIf="isPartnerModalOpen()" class="modal-backdrop" (click)="closePartnerModal()">
+  <div class="modal-container modal-container--md" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">{{ isEditingPartner() ? 'Edit Strategic Partner' : 'Add New Strategic Partner' }}</h2>
+        <p class="modal-sub">Configure partner details, logo, tier classification, and collaboration description.</p>
+      </div>
+      <button type="button" class="btn-close" (click)="closePartnerModal()">&times;</button>
+    </div>
+
+    <form (ngSubmit)="savePartner()" class="modal-body">
+      
+      <!-- Logo Upload Section -->
+      <div class="form-group">
+        <label class="form-label">Partner Logo</label>
+        <div class="logo-upload-wrapper">
+          <div class="logo-upload-preview" *ngIf="partnerLogoPreview">
+            <img [src]="partnerLogoPreview" alt="Partner Logo Preview" />
+          </div>
+          <div class="logo-upload-actions">
+            <label for="partner-logo-input" class="btn-secondary btn-sm">Upload Logo File</label>
+            <input
+              id="partner-logo-input"
+              type="file"
+              accept="image/*"
+              class="hidden-file-input"
+              (change)="onPartnerLogoSelected($event)"
+            />
+            <span class="help-text">Images are saved as WebP and kept under 600 KB.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Partner Name (English) *</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="partnerForm.name"
+            name="p_name"
+            placeholder="e.g. CSL Seqirus"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" dir="rtl">اسم الشريك (بالعربية)</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="partnerForm.name_ar"
+            name="p_name_ar"
+            dir="rtl"
+            placeholder="اسم الشريك بالعربية"
+          />
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Category (Public Badge) — English *</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="partnerForm.category"
+            name="p_category"
+            placeholder="e.g. Technology Transfers Partner"
+            required
+          />
+        </div>
+
+        <div class="form-group" dir="rtl">
+          <label class="form-label">التصنيف (شارة الصفحة بالعربية)</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="partnerForm.category_ar"
+            name="p_category_ar"
+            dir="rtl"
+            placeholder="التصنيف بالعربية"
+          />
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Website URL</label>
+          <input type="url" class="form-control" [(ngModel)]="partnerForm.website" name="p_website" placeholder="https://..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Strategic Tier</label>
+          <select class="form-control" [(ngModel)]="partnerForm.tier" name="p_tier">
+            <option value="Strategic Alliance">Strategic Alliance</option>
+            <option value="Production Lines & Automation">Production Lines &amp; Automation</option>
+            <option value="Academic Research & Clinical R&D">Academic Research &amp; Clinical R&amp;D</option>
+            <option value="Academic Research & Developments">Academic Research &amp; Developments</option>
+            <option value="Bioprocess & Workforce Training">Bioprocess &amp; Workforce Training</option>
+            <option value="Project Management & Engineering">Project Management &amp; Engineering</option>
+            <option value="Supply Chain & Commercial Distribution">Supply Chain &amp; Commercial Distribution</option>
+            <option value="Strategic Advisory & Consulting">Strategic Advisory &amp; Consulting</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Partnership Scope &amp; Description (English) *</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          [(ngModel)]="partnerForm.description"
+          name="p_desc"
+          placeholder="Detailed scope of agreement, localized vaccine technology, or clinical partnership..."
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group" dir="rtl">
+        <label class="form-label">نطاق الشراكة والوصف (بالعربية)</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          [(ngModel)]="partnerForm.description_ar"
+          name="p_desc_ar"
+          dir="rtl"
+          placeholder="أدخل تفاصيل الشراكة باللغة العربية"
+        ></textarea>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control" [(ngModel)]="partnerForm.status" name="p_status">
+            <option value="Active">Active (Visible on public site)</option>
+            <option value="Inactive">Inactive (Hidden)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Display Order</label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="partnerForm.order_index"
+            name="p_order"
+            min="0"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closePartnerModal()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="isSaving()">
+          {{ isSaving() ? 'Saving...' : (isEditingPartner() ? 'Update Partner' : 'Create Partner') }}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ==========================================
+     MODAL: DELETE CONFIRMATION MODAL
+     ========================================== -->
+<div *ngIf="isDeleteModalOpen()" class="modal-backdrop" (click)="closeDeleteModal()">
+  <div class="modal-container modal-container--sm" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h2 class="modal-title modal-title--danger">Confirm Deletion</h2>
+      <button type="button" class="btn-close" (click)="closeDeleteModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <p>Are you sure you want to delete <strong>{{ itemToDeleteName() }}</strong>?</p>
+      <p class="text-muted">This action will permanently remove this partner from the database.</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+      <button type="button" class="btn-danger" (click)="executeDelete()">Yes, Delete</button>
+    </div>
+
+  </div>
+</div>

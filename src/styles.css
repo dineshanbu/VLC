@@ -1,0 +1,517 @@
+/* ============================================
+   VIC — GLOBAL STYLESHEET
+   Vaccine Industrial Company
+   ============================================
+   Import order matters:
+   1. Variables (tokens)
+   2. Reset (base normalization)
+   3. Typography
+   4. Layout (containers, grid)
+   5. Components (buttons, cards)
+   6. Utilities (overrides, helpers)
+   ============================================ */
+
+@import './styles/_variables.css';
+@import './styles/_themes.css';
+@import './styles/_reset.css';
+@import './styles/_typography.css';
+@import './styles/_layout.css';
+@import './styles/_buttons.css';
+@import './styles/_cards.css';
+@import './styles/_utilities.css';
+@import './styles/_home-reference.css';
+@import './styles/_motion.css';
+@import './styles/_premium-motion.css';
+@import './styles/_floating-navbar.css';
+@import './styles/_vision-support.css';
+@import './styles/_home-mobile.css'; /* Final phone layout overrides. */
+@import './styles/_public-layout.css'; /* Shared public-page footer alignment. */
+
+/* One shared type scale for section category/eyebrow labels site-wide. */
+:root:root:root .section-eyebrow {
+  font-size: clamp(12px, 0.85vw, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* Client homepage branding overrides. Keep these after the global theme
+   imports so Our Platform keeps its original deep-navy color without an image. */
+html:root:root:root[data-theme='dark'] app-home app-our-platform .platform {
+  background: #001526 !important;
+  background-image: none !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support {
+  background-color: #f5f9fd !important;
+  background-image: url('/saudi-vision-support-bg.webp') !important;
+  background-position: center 62% !important;
+  background-size: cover !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__overlay {
+  background: linear-gradient(90deg, rgba(1,28,48,.84) 0%, rgba(2,38,63,.76) 34%, rgba(3,43,69,.45) 52%, rgba(3,43,69,.12) 72%, rgba(3,43,69,0) 100%) !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__heading,
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__desc {
+  color: #f2fdff !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__eyebrow {
+  color: #20c8d2 !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-label {
+  color: #dffaff !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-icon svg {
+  stroke: #20c8d2 !important;
+}
+
+@media (min-width: 1025px) {
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__container {
+    display: grid !important;
+    grid-template-columns: minmax(280px, .9fr) minmax(340px, 1.2fr) minmax(150px, .45fr) !important;
+    gap: clamp(20px, 2vw, 34px) !important;
+    padding-right: clamp(32px, 4vw, 72px) !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__copy {
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillars {
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__identity {
+    justify-content: flex-end !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding-right: clamp(40px, 4.5vw, 72px) !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__mark {
+    width: min(100%, 156px) !important;
+    min-width: 0 !important;
+  }
+}
+
+html:root:root:root[data-theme='dark'] app-home .home-partner-showcase__card {
+  background: #fff !important;
+  border-color: #d8e5ec !important;
+  color: #082238 !important;
+  filter: none !important;
+}
+
+/* Shared transparent teal CTA styling across public pages. */
+:root:root:root app-public-layout :is(
+  .vic-btn,
+  .hero__btn-video,
+  .about-vic__btn,
+  .home-product__link,
+  .news__view-all,
+  .video-media__view-all,
+  .about-hero__read-more-btn,
+  .careers-hero__btn-primary,
+  .partner-hero__btn-primary,
+  .news-hero__btn-primary,
+  .pv-hero-cta
+) {
+  border-radius: 99px !important;
+  color: #ffffff !important;
+  background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important;
+  border: 1px solid #12cbd4 !important;
+  box-shadow: 0 6px 24px rgba(0, 180, 203, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+:root:root:root app-public-layout :is(
+  .vic-btn,
+  .hero__btn-video,
+  .about-vic__btn,
+  .home-product__link,
+  .news__view-all,
+  .video-media__view-all,
+  .about-hero__read-more-btn,
+  .careers-hero__btn-primary,
+  .partner-hero__btn-primary,
+  .news-hero__btn-primary,
+  .pv-hero-cta
+):hover {
+  background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important;
+  border-color: #66f2f5 !important;
+  filter: brightness(1.08);
+}
+
+/* Keep the homepage product section category teal over every theme override. */
+:root:root:root app-home app-home-showcase .home-product .home-showcase__eyebrow,
+:root:root:root app-home app-home-showcase .home-product .home-showcase__eyebrow > span {
+  color: #42e4ea !important;
+  -webkit-text-fill-color: #42e4ea !important;
+}
+
+/* Saudi Vision section now pairs the supporting copy with the supplied
+   Vision 2030 / National Biotechnology Strategy artwork. */
+html:root:root:root[data-theme='dark'] app-home .vision-support {
+  min-height: 0 !important;
+  padding: 30px 0 !important;
+  background-color: #062847 !important;
+  background-image:
+    radial-gradient(ellipse at 78% 50%, rgba(0, 112, 190, 0.26) 0%, rgba(0, 70, 128, 0.16) 42%, transparent 74%),
+    linear-gradient(108deg, #082b4a 0%, #07345d 54%, #052440 100%) !important;
+  overflow: hidden !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__container {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 0.62fr) minmax(0, 1.38fr) !important;
+  align-items: center !important;
+  gap: clamp(24px, 4vw, 64px) !important;
+  min-height: 0 !important;
+  padding: 0 clamp(20px, 4vw, 64px) !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__copy {
+  min-width: 0 !important;
+  max-width: 500px !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__heading,
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__desc {
+  color: #f2fdff !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__artwork {
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(49, 197, 230, 0.4) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 24px 52px rgba(0, 10, 28, 0.58), 0 10px 26px rgba(0, 18, 42, 0.42), 0 0 34px rgba(0, 174, 220, 0.2) !important;
+}
+
+html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__artwork img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 330px !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 767px) {
+  html:root:root:root[data-theme='dark'] app-home .vision-support {
+    padding: 28px 0 !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__container {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 22px !important;
+    padding-inline: 18px !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__artwork img {
+    max-height: none !important;
+  }
+}
+
+/* Keep the main headline size consistent across every public page banner. */
+html:root:root:root :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+  :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+  font-size: clamp(22px, 2.4vw, 48px) !important;
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+}
+
+/* Keep the English banner treatment above while giving Arabic its own font
+   metrics. The responsive size remains shared between languages. */
+html:root:root:root[lang="en"] :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+  :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  letter-spacing: -0.035em !important;
+}
+
+html:root:root:root[lang="ar"] app-public-layout :is(
+  h1, h2, h3, h4, h5, h6,
+  p, li, a, button, label, input, textarea, select,
+  .section-eyebrow, .section-label,
+  .hero__banner-title, .products-hero__heading, .partner-hero__heading
+) {
+  font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+html:root:root:root[lang="ar"] app-public-layout :is(h1, h2, h3, h4, h5, h6, .hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
+  font-weight: 700;
+}
+
+html:root:root:root[lang="ar"] app-public-layout :is(.products-hero, .vic-hero, .partner-hero) {
+  direction: rtl;
+  text-align: start;
+}
+
+html:root:root:root[lang="ar"] app-public-layout :is(.products-hero__container, .vic-hero__container, .partner-hero__container) {
+  justify-content: flex-start;
+}
+
+@media (max-width: 767px) {
+  html:root:root:root :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+    :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+    font-size: clamp(30px, 8.8vw, 44px) !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+  }
+
+  html:root:root:root[lang="en"] :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+    :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+    font-family: Arial, Helvetica, sans-serif !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  html:root:root:root[lang="ar"] app-public-layout :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+    :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+    font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif !important;
+    letter-spacing: 0 !important;
+  }
+}
+
+/* Remove the decorative underline below interior-page banner headings. */
+html:root:root:root :is(app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+  .products-hero .products-hero__heading::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* The Vision section uses one scenic image on phones, with its four pillars
+   kept visible in a compact grid. Avoid stacking the desktop photo behind the
+   dedicated mobile Vision 2030 artwork. */
+@media (max-width: 767px) {
+  html:root:root:root[data-theme='dark'] app-home .vision-support,
+  html:root:root:root[data-theme='dark'] app-home section.vision-support {
+    min-height: 0 !important;
+    padding: 0 !important;
+    background: #001526 !important;
+    overflow: hidden !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: 0 !important;
+    gap: 18px !important;
+    padding: 28px 20px 20px !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__copy {
+    order: 1 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__heading {
+    color: #f2fdff !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__desc {
+    color: #c5dfee !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillars {
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px 16px !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-icon svg {
+    stroke: #20c8d2 !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar {
+    min-height: 72px !important;
+    padding: 6px 4px !important;
+    gap: 7px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-label {
+    max-width: 140px !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__pillar-label {
+    color: #e6f8fc !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__identity,
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__flag {
+    display: none !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__mobile-scene {
+    display: block !important;
+    width: 100% !important;
+    height: clamp(180px, 58vw, 230px) !important;
+    max-height: 230px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html:root:root:root[data-theme='dark'] app-home .vision-support .vision-support__mobile-scene-img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 47% !important;
+  }
+}
+
+/* Home page reveal motion. Smooth premium biotech feel across all sections. */
+.home-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 720ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--home-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.home-reveal--visual {
+  opacity: 0;
+  transform: translateY(36px) scale(0.97);
+  transition:
+    opacity 820ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 850ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-reveal.home-reveal--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes home-v-float {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -12px; }
+}
+
+@keyframes hero-panel-in {
+  from { opacity: 0; transform: translateX(-42px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes about-curve-in {
+  from { opacity: 0; transform: translate(32px, 18px) scale(.98); }
+  to { opacity: 1; transform: translate(0) scale(1); }
+}
+
+@keyframes scroll-cue {
+  0%, 100% { opacity: .5; transform: translate(-50%, 0); }
+  50% { opacity: 1; transform: translate(-50%, 6px); }
+}
+
+@media (max-width: 767px) {
+  .home-reveal {
+    transform: translateY(20px);
+    transition-duration: 580ms, 620ms;
+  }
+
+  .home-reveal--visual {
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-reveal,
+  .home-reveal--visual,
+  .home-reveal.home-reveal--visible {
+    opacity: 1;
+    translate: none;
+    scale: 1;
+    transition: none;
+  }
+
+  .facility-gallery__floating-v {
+    animation: none;
+  }
+
+  .hero__container,
+  .about-vic__curved-media,
+  .hero__scroll-arrow-wrap,
+  .hero__video,
+  .hero__banner-content {
+    animation: none;
+  }
+}
+
+/* ============================================
+   SUBPAGE HERO BANNER OVERRIDES
+   Remove breadcrumbs and subtitle descriptions across all subpage banners
+   ============================================ */
+.products-hero__breadcrumb,
+.partner-hero__breadcrumb,
+.products-hero__description,
+.about-hero__description,
+.partner-hero__description,
+.news-hero__description,
+.careers-hero__description,
+.contact-hero__description {
+  display: none !important;
+}
+
+/* Final shared headline scale for every public page banner. */
+html:root:root:root :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+  :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+  font-size: clamp(22px, 2.4vw, 48px) !important;
+}
+
+@media (max-width: 767px) {
+  html:root:root:root :is(app-home, app-about, app-products, app-partners, app-news, app-careers, app-contact, app-pharmacovigilance)
+    :is(.hero__banner-title, .products-hero__heading, .partner-hero__heading) {
+    font-size: clamp(30px, 8.8vw, 44px) !important;
+  }
+
+  html:root:root:root app-about .about-hero__heading {
+    font-size: clamp(28px, 7.6vw, 38px) !important;
+  }
+
+  html:root:root:root app-products .products-hero__heading {
+    font-size: clamp(28px, 7.6vw, 38px) !important;
+  }
+}
+
+/* Final Arabic line spacing, after all shared and responsive banner rules. */
+html:root:root:root[lang='ar'] :is(
+  .products-hero__heading,
+  .about-hero__heading,
+  .news-hero__heading,
+  .careers-hero__heading,
+  .contact-hero__heading,
+  .partner-hero__heading,
+  .products-hero h1,
+  .vic-hero h1,
+  .manufacturing-hero h1,
+  .manufacturing-section-heading h2,
+  .hero__banner-title
+) {
+  line-height: 1.65 !important;
+}

@@ -1,0 +1,199 @@
+<main class="executive-page" [class.executive-page--rtl]="translationService.currentLang() === 'ar'">
+  <section class="products-hero about-hero executive-page__hero" aria-labelledby="executive-hero-title">
+    <div class="products-hero__bg" aria-hidden="true">
+      @if (heroContentLoaded && heroImageUrl()) { <img [src]="heroImageUrl()" alt="" class="products-hero__image" loading="eager" (error)="onHeroImageError($event)" /> }
+      <div class="products-hero__overlay"></div>
+    </div>
+    <div class="products-hero__container about-hero-content">
+      <div class="products-hero__content">
+        <div class="about-hero__eyebrow-row">
+          <span class="products-hero__eyebrow about-hero__eyebrow section-eyebrow">{{ 'executive.hero.badge' | sectionHeading:'EXECUTIVE LEADERSHIP':'القيادة التنفيذية' }}</span>
+        </div>
+        <h1 id="executive-hero-title" class="about-hero__heading products-hero__heading">{{ 'executive.hero.title' | sectionHeading:'Senior Management':'الإدارة العليا' }}</h1>
+        <p *ngIf="heroText('subtitle')" class="about-hero__subheading">{{ heroText('subtitle') }}</p>
+        <p *ngIf="heroText('description')" class="about-hero__description products-hero__description">{{ heroText('description') }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="executive-chairman" class="executive-section executive-section--spotlight">
+    <div class="executive-container">
+      @if (isLoading()) {
+        <p class="executive-message" role="status">Loading leadership profiles…</p>
+      } @else if (chairman; as leader) {
+        <div class="executive-kicker">{{ 'executive.chairman.label' | sectionHeading:pageCopy().chairmanLabel:'رئيس مجلس الإدارة' }}</div>
+        <div class="executive-chairman">
+          <div class="executive-chairman__photo-wrap">
+            @if (leader.image) {
+              <img [src]="imageUrl(leader.image)" [alt]="leaderName(leader)" class="executive-chairman__photo" (error)="onImageError($event)" />
+              <span class="executive-image-fallback">{{ initials(leader) }}</span>
+            } @else {
+              <div class="executive-chairman__initials">{{ initials(leader) }}</div>
+            }
+          </div>
+          <div class="executive-chairman__content">
+            <h2>{{ leaderName(leader) }}</h2>
+            <div class="executive-leader-badge" *ngIf="showLeaderBadge(leader)">{{ leaderBadge(leader) }}</div>
+            <div class="executive-role">{{ leaderTitle(leader) }}</div>
+            <p *ngIf="leaderRole(leader)">{{ leader.name.includes('Khaled') ? ('executive.khaled.role' | sectionHeading:leaderRole(leader):'رائد في التقنية الحيوية وتصنيع اللقاحات') : leaderRole(leader) }}</p>
+            <div *ngFor="let section of leaderBioSections(leader) | slice:0:1" class="executive-chairman__bio">
+              <p *ngFor="let paragraph of section.paragraphs" [innerHTML]="paragraph"></p>
+              <ul *ngIf="section.items?.length">
+                <li *ngFor="let item of section.items | slice:0:4" [innerHTML]="item"></li>
+              </ul>
+              <ol *ngIf="section.ordered_items?.length">
+                <li *ngFor="let item of section.ordered_items | slice:0:4" [innerHTML]="item"></li>
+              </ol>
+            </div>
+            <button type="button" class="executive-text-button" (click)="openLeaderProfile(leader)">
+              {{ pageCopy().readMoreButton }}
+            </button>
+          </div>
+        </div>
+
+        <div class="executive-rdi-callout">
+          <div class="executive-rdi-callout__icon" aria-hidden="true">
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/f5/Saudi_Vision_2030_logo.svg?utm_source=en.wikipedia.org&amp;utm_campaign=imageinfo&amp;utm_content=original" alt="" loading="lazy" />
+          </div>
+          <div class="executive-rdi-callout__copy">
+            <h3>{{ 'executive.rdiCallout.title' | sectionHeading:pageCopy().rdiCalloutTitle:'القيادة الوطنية' }}</h3>
+            <p>{{ 'executive.rdiCallout.description' | sectionHeading:pageCopy().rdiDescription:'الإسهام في أجندة الابتكار الوطنية للمملكة العربية السعودية من خلال البحث والتطوير والابتكار.' }}</p>
+          </div>
+        </div>
+      } @else {
+        <p class="executive-message">Leadership profiles will be added soon.</p>
+      }
+    </div>
+  </section>
+
+  <section class="executive-section executive-section--associate" *ngIf="associate as leader">
+    <div class="executive-container">
+      <div class="executive-kicker">{{ 'executive.associate.label' | sectionHeading:pageCopy().associateLabel:'الرئيس التنفيذي المشارك' }}</div>
+      <div class="executive-associate">
+        <div class="executive-associate__photo-wrap">
+          @if (leader.image) {
+            <img [src]="imageUrl(leader.image)" [alt]="leaderName(leader)" class="executive-associate__photo" loading="lazy" (error)="onImageError($event)" />
+            <span class="executive-image-fallback">{{ initials(leader) }}</span>
+          } @else {
+            <div class="executive-chairman__initials">{{ initials(leader) }}</div>
+          }
+        </div>
+        <div class="executive-associate__content">
+          <h2>{{ leaderName(leader) }}</h2>
+          <div class="executive-leader-badge" *ngIf="showLeaderBadge(leader)">{{ leaderBadge(leader) }}</div>
+          <div class="executive-role">{{ leaderTitle(leader) }}</div>
+          <p *ngIf="leaderRole(leader)">{{ leader.name.includes('Khaled') ? ('executive.khaled.role' | sectionHeading:leaderRole(leader):'رائد في التقنية الحيوية وتصنيع اللقاحات') : leaderRole(leader) }}</p>
+          <div class="executive-associate__bio">
+            @for (section of leaderBioSections(leader); track $index) {
+              <section class="executive-associate__bio-section">
+                <h3 *ngIf="section.heading">{{ section.heading }}</h3>
+                <div *ngFor="let paragraph of section.paragraphs" class="executive-bio-rich-content" [innerHTML]="paragraph"></div>
+                <ul *ngIf="section.items?.length"><li *ngFor="let item of section.items">{{ item }}</li></ul>
+                <ol *ngIf="section.ordered_items?.length"><li *ngFor="let item of section.ordered_items">{{ item }}</li></ol>
+              </section>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="executive-section executive-section--team" id="executive-team-grid">
+    <div class="executive-container">
+      <div class="executive-team-heading">
+            <h2>{{ 'executive.team.title' | sectionHeading:'Executive Leadership Team':'فريق القيادة التنفيذية' }}</h2>
+        <p>{{ 'executive.team.description' | sectionHeading:pageCopy().teamDescription:'قادة ذوو خبرة يشرفون على التصنيع والجودة والعمليات والتميز التجاري واستراتيجية الشركة.' }}</p>
+      </div>
+      <div class="executive-team-carousel-wrap" *ngIf="teamLeaders.length">
+        <button type="button" class="executive-carousel-arrow executive-carousel-arrow--prev" aria-label="Previous leaders" (click)="scrollTeam(-1)">‹</button>
+        <div class="executive-team-grid" #teamCarousel (scroll)="onTeamCarouselScroll()">
+        @for (leader of teamLeaders; track leader.id || leader.name) {
+          <article class="executive-team-card">
+            <div class="executive-team-card__photo-wrap">
+              @if (leader.image) {
+                <img [src]="imageUrl(leader.image)" [alt]="leaderName(leader)" loading="lazy" (error)="onImageError($event)" />
+                <span class="executive-image-fallback">{{ initials(leader) }}</span>
+              } @else {
+                <span class="executive-team-card__initials">{{ initials(leader) }}</span>
+              }
+            </div>
+            <div class="executive-team-card__copy">
+              <div class="executive-team-card__content">
+                <h3>{{ leaderName(leader) }}</h3>
+                <div class="executive-leader-badge" *ngIf="showLeaderBadge(leader)">{{ leaderBadge(leader) }}</div>
+                <div class="executive-role">{{ leaderTitle(leader) }}</div>
+                <p *ngIf="leaderRole(leader)">{{ leader.name.includes('Khaled') ? ('executive.khaled.role' | sectionHeading:leaderRole(leader):'رائد في التقنية الحيوية وتصنيع اللقاحات') : leaderRole(leader) }}</p>
+              </div>
+              <div class="executive-team-card__details">
+                @for (section of leaderBioSections(leader); track $index) {
+                  <section class="executive-team-card__detail-section">
+                    <h4 *ngIf="section.heading">{{ section.heading }}</h4>
+                    <div *ngFor="let paragraph of section.paragraphs" class="executive-bio-rich-content" [innerHTML]="paragraph"></div>
+                    <ul *ngIf="section.items?.length"><li *ngFor="let item of section.items">{{ item }}</li></ul>
+                    <ol *ngIf="section.ordered_items?.length"><li *ngFor="let item of section.ordered_items">{{ item }}</li></ol>
+                  </section>
+                }
+              </div>
+            </div>
+          </article>
+        }
+        </div>
+        <button type="button" class="executive-carousel-arrow executive-carousel-arrow--next" aria-label="Next leaders" (click)="scrollTeam(1)">›</button>
+        <div class="executive-carousel-dots" aria-label="Leadership carousel pages">
+          @for (leader of teamLeaders; track leader.id || leader.name; let i = $index) {
+            <button type="button" [class.active]="teamSlide() === i" [attr.aria-label]="'Go to leader ' + (i + 1)" (click)="goToTeamSlide(i)"></button>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @if (isCommitteeModalOpen()) {
+    <div class="executive-modal-backdrop" (click)="isCommitteeModalOpen.set(false)">
+      <section class="executive-modal executive-modal--committee" role="dialog" aria-modal="true" aria-labelledby="rdi-modal-title" (click)="$event.stopPropagation()">
+        <button type="button" class="executive-modal__close" aria-label="Close" (click)="isCommitteeModalOpen.set(false)">×</button>
+        <h2 id="rdi-modal-title">{{ 'executive.rdi.title' | sectionHeading:'Research, Development & Innovation (RDI) Supreme Committee':'اللجنة العليا للبحث والتطوير والابتكار' }}</h2>
+        <p class="executive-modal__intro">{{ 'executive.rdi.description' | sectionHeading:pageCopy().rdiIntro:'تقود اللجنة العليا للبحث والتطوير والابتكار أجندة الابتكار الوطنية للمملكة، وتوفر التوجيه الاستراتيجي لتطوير البحث والتقنية والتنمية الصناعية في القطاعات الحيوية.' }}</p>
+        <div class="executive-committee-grid">
+          @for (member of committeeMembers(); track member.name) {
+            <article class="executive-committee-member">
+              @if (member.image) {
+                <img [src]="imageUrl(member.image)" [alt]="member.name" loading="lazy" (error)="onImageError($event)" />
+                <span class="executive-image-fallback">{{ committeeInitials(member.name) }}</span>
+              } @else {
+                <span class="executive-committee-member__initials">{{ committeeInitials(member.name) }}</span>
+              }
+              <div><h3>{{ member.name }}</h3><p>{{ member.name === 'Dr. Khaled Al-Mosa' ? ('executive.khaled.role' | sectionHeading:member.role:'رائد في التقنية الحيوية وتصنيع اللقاحات') : member.role }}</p></div>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  }
+
+  @if (selectedLeader(); as leader) {
+    <div class="executive-modal-backdrop" (click)="closeLeaderProfile()">
+      <section class="executive-modal executive-modal--profile" role="dialog" aria-modal="true" [attr.aria-label]="leaderName(leader)" (click)="$event.stopPropagation()">
+        <button type="button" class="executive-modal__close" aria-label="Close" (click)="closeLeaderProfile()">×</button>
+        <header class="executive-profile-header">
+          @if (leader.image) { <img class="executive-profile-photo" [src]="imageUrl(leader.image)" [alt]="leaderName(leader)" (error)="onImageError($event)" /> }
+          <div class="executive-profile-header__copy">
+            <h2>{{ leaderName(leader) }}</h2>
+            <div class="executive-role">{{ leaderTitle(leader) }}</div>
+            <p>{{ leaderRole(leader) }}</p>
+          </div>
+        </header>
+        <div class="executive-profile-body">
+          @for (section of leaderBioSections(leader); track $index) {
+            <section class="executive-profile-section">
+              <h3 *ngIf="section.heading">{{ section.heading }}</h3>
+              <div *ngFor="let paragraph of section.paragraphs" class="executive-bio-rich-content" [innerHTML]="paragraph"></div>
+              <ul *ngIf="section.items?.length"><li *ngFor="let item of section.items">{{ item }}</li></ul>
+              <ol *ngIf="section.ordered_items?.length"><li *ngFor="let item of section.ordered_items">{{ item }}</li></ol>
+            </section>
+          }
+        </div>
+      </section>
+    </div>
+  }
+</main>

@@ -1,0 +1,157 @@
+/* ============================================
+   VIC DESIGN SYSTEM — BUTTONS
+   ============================================ */
+
+/* --- Base Button --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  line-height: 1;
+  padding: var(--space-12) var(--space-24);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* --- Primary Button (Deep Navy) --- */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Secondary Button (Outlined) --- */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+/* --- Teal Button --- */
+.btn-teal {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-secondary);
+}
+
+.btn-teal:hover {
+  background-color: var(--color-secondary-dark);
+  border-color: var(--color-secondary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Ghost Button (minimal) --- */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: transparent;
+  padding: var(--space-8) var(--space-16);
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+/* --- White Button (for dark backgrounds) --- */
+.btn-white {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border-color: var(--color-surface);
+}
+
+.btn-white:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- White Outlined Button (for dark backgrounds) --- */
+.btn-white-outline {
+  background-color: transparent;
+  color: var(--color-text-inverse);
+  border-color: var(--color-text-inverse);
+}
+
+.btn-white-outline:hover {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+}
+
+
+/* ==========================================
+   BUTTON SIZES
+   ========================================== */
+
+.btn-sm {
+  padding: var(--space-8) var(--space-16);
+  font-size: var(--text-caption);
+}
+
+.btn-lg {
+  padding: var(--space-16) var(--space-32);
+  font-size: var(--text-body);
+}
+
+
+/* ==========================================
+   BUTTON WITH ARROW
+   ========================================== */
+
+.btn .btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  transition: transform var(--transition-base);
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn .btn-arrow::after {
+  content: '→';
+  font-size: 1.1em;
+}
+
+
+/* ==========================================
+   BUTTON WITH PLAY ICON
+   ========================================== */
+
+.btn .btn-play::before {
+  content: '▶';
+  font-size: 0.75em;
+}

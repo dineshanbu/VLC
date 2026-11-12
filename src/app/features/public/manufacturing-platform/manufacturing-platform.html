@@ -1,0 +1,195 @@
+<main class="manufacturing-page" [attr.dir]="isArabic ? 'rtl' : 'ltr'">
+  <section class="manufacturing-hero" aria-labelledby="manufacturing-title">
+    <div class="manufacturing-hero__media" aria-hidden="true">
+      @if (heroContentLoaded && heroImageUrl) { <img [src]="heroImageUrl" alt="" (error)="onHeroImageError($event)" /> }
+      <div class="manufacturing-hero__shade"></div>
+    </div>
+    <div class="manufacturing-hero__content">
+      <div class="manufacturing-hero__eyebrow">{{ 'manufacturing.hero.badge' | sectionHeading:'MANUFACTURING PLATFORM':'منصة التصنيع' }}</div>
+      <h1 id="manufacturing-title">
+        <span>{{ 'manufacturing.hero.line1' | sectionHeading:'Integrated Manufacturing':'التصنيع المتكامل' }}</span>
+        <span>{{ 'manufacturing.hero.line2' | sectionHeading:'Build for Tomorrow':'نبني للمستقبل' }}</span>
+      </h1>
+    </div>
+  </section>
+
+  <section class="manufacturing-journey" #journeySection aria-labelledby="journey-title">
+    <header class="manufacturing-section-heading">
+      <h2 id="journey-title">{{ 'manufacturing.journey.title' | sectionHeading:'Our Manufacturing Journey':'رحلتنا في التصنيع' }}</h2>
+      <p>{{ localized(content().journey.subtitle, content().journey.subtitle_ar) }}</p>
+    </header>
+
+    <div class="manufacturing-journey__steps" role="tablist" aria-label="Manufacturing journey stages"
+      [style.--journey-stage-count]="content().journey.stages.length">
+      @for (stage of content().journey.stages; track stage.name) {
+        <button type="button" class="manufacturing-stage-step" role="tab"
+          [class.active]="activeStage() === $index" [attr.aria-selected]="activeStage() === $index"
+          [attr.aria-controls]="'stage-panel-' + $index" (click)="setActiveStage($index)">
+          <span class="manufacturing-stage-step__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              @for (path of stageIcon($index); track path) { <path [attr.d]="path"></path> }
+            </svg>
+          </span>
+          <span class="manufacturing-stage-step__name">{{ localized(stage.name, stage.name_ar) }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="manufacturing-journey__detail-carousel">
+      <button type="button" class="manufacturing-journey__carousel-arrow" (click)="moveCarousel(-1)"
+        [attr.aria-label]="localized('Previous stage', 'المرحلة السابقة')">‹</button>
+      <div class="manufacturing-journey__detail" [class.is-changing]="stageTransitioning()" role="tabpanel" [id]="'stage-panel-' + activeStage()">
+        @if (content().journey.stages[activeStage()]; as stage) {
+          <img class="manufacturing-journey__image" [src]="imageUrl(stage.image_url)" [alt]="localized(stage.name, stage.name_ar)" loading="lazy" (error)="onStageImageError($event)" />
+          <div class="manufacturing-journey__copy">
+            <h3>{{ localized(stage.name, stage.name_ar) }}</h3>
+            <p *ngIf="localized(stage.description, stage.description_ar)">{{ localized(stage.description, stage.description_ar) }}</p>
+            <ul>
+              @for (bullet of stage.bullets; track bullet; let i = $index) {
+                <li>{{ localized(bullet, stage.bullets_ar[i]) }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+      <button type="button" class="manufacturing-journey__carousel-arrow" (click)="moveCarousel(1)"
+        [attr.aria-label]="localized('Next stage', 'المرحلة التالية')">›</button>
+    </div>
+
+    <nav class="manufacturing-journey__carousel" [attr.aria-label]="localized('Journey carousel controls', 'عناصر التحكم في مراحل الرحلة')">
+      <div class="manufacturing-journey__carousel-dots" role="group"
+        [attr.aria-label]="localized('Choose a journey stage', 'اختر مرحلة من الرحلة')">
+        @for (stage of content().journey.stages; track stage.name; let i = $index) {
+          <button type="button" class="manufacturing-journey__carousel-dot" [class.active]="activeStage() === i"
+            [attr.aria-current]="activeStage() === i ? 'step' : null"
+            [attr.aria-label]="localized('Show stage ' + (i + 1), 'عرض المرحلة ' + (i + 1))"
+            (click)="setActiveStage(i)"><span class="manufacturing-sr-only">0{{ i + 1 }}</span></button>
+        }
+      </div>
+    </nav>
+
+    <div class="manufacturing-journey__mobile-accordion"
+      [attr.aria-label]="localized('Manufacturing stages', 'مراحل التصنيع')">
+      @for (stage of content().journey.stages; track stage.name; let i = $index) {
+        <article class="manufacturing-mobile-stage" [class.is-open]="expandedStage() === i">
+          <button type="button" class="manufacturing-mobile-stage__trigger"
+            [id]="'mobile-stage-trigger-' + i"
+            [attr.aria-expanded]="expandedStage() === i"
+            [attr.aria-controls]="'mobile-stage-panel-' + i"
+            (click)="toggleStage(i)">
+            <span class="manufacturing-mobile-stage__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                @for (path of stageIcon(i); track path) { <path [attr.d]="path"></path> }
+              </svg>
+            </span>
+            <span class="manufacturing-mobile-stage__number">0{{ i + 1 }}</span>
+            <span class="manufacturing-mobile-stage__name">{{ localized(stage.name, stage.name_ar) }}</span>
+            <svg class="manufacturing-mobile-stage__chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="manufacturing-mobile-stage__panel" role="region" [hidden]="expandedStage() !== i"
+            [id]="'mobile-stage-panel-' + i" [attr.aria-labelledby]="'mobile-stage-trigger-' + i">
+              <img [src]="imageUrl(stage.image_url)" [alt]="localized(stage.name, stage.name_ar)" loading="lazy" />
+              <div class="manufacturing-mobile-stage__copy">
+                <h3>{{ localized(stage.name, stage.name_ar) }}</h3>
+                <p *ngIf="localized(stage.description, stage.description_ar)">{{ localized(stage.description, stage.description_ar) }}</p>
+                <ul>
+                  @for (bullet of stage.bullets; track bullet; let j = $index) {
+                    <li>{{ localized(bullet, stage.bullets_ar[j]) }}</li>
+                  }
+                </ul>
+              </div>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="manufacturing-formats" aria-labelledby="formats-title">
+    <div class="manufacturing-formats__inner">
+      <header class="manufacturing-formats__intro">
+        <span class="manufacturing-section-heading__eyebrow">{{ 'manufacturing.formats.eyebrow' | sectionHeading:'SUPPORTED FORMATS':'الأشكال المدعومة' }}</span>
+        <h2 id="formats-title">{{ 'manufacturing.formats.title' | sectionHeading:'Supported formats':'الأشكال المدعومة' }}</h2>
+      </header>
+      <div class="manufacturing-formats__list">
+        @for (format of content().journey.supported_formats.items; track $index; let i = $index) {
+          <article class="manufacturing-format">
+            @switch (i) {
+              @case (0) {
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 35 19-19m-22 25 7-7m-1-17 13 13m-7-19 13 13m-9-19 19 19m-3-22-7 7m14 14-7 7" /></svg>
+              }
+              @case (1) {
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 5h12v5l-2 2v5l9 17a5 5 0 0 1-4 8H15a5 5 0 0 1-4-8l9-17v-5l-2-2zM18 10h12m-11 14h10m-16 8h22" /></svg>
+              }
+              @default {
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10h24v28H12zM17 5h14v5H17zm0 33v5m14-5v5M18 17h12m-12 6h12m-12 6h8" /></svg>
+              }
+            }
+            <span>{{ localized(format.name, format.name_ar) }}</span>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="manufacturing-overview" aria-labelledby="overview-title">
+    <div class="manufacturing-overview__image" [style.backgroundImage]="'url(' + imageUrl(content().overview.image_url) + ')'" aria-hidden="true"></div>
+    <div class="manufacturing-overview__inner">
+      <header class="manufacturing-section-heading manufacturing-section-heading--left">
+          <span class="manufacturing-section-heading__eyebrow">{{ 'manufacturing.overview.eyebrow' | sectionHeading:'CAPACITY & CAPABILITY':'الطاقة والإمكانات' }}</span>
+        <h2 id="overview-title">{{ 'manufacturing.overview.title' | sectionHeading:'Platform Overview':'نظرة عامة على المنصة' }}</h2>
+        <p>{{ localized(content().overview.subtitle, content().overview.subtitle_ar) }}</p>
+      </header>
+      <div class="manufacturing-metrics">
+        @for (metric of content().overview.metrics; track metric.label; let i = $index) {
+          <article class="manufacturing-metric">
+            <span class="manufacturing-metric__icon" aria-hidden="true">
+              @switch (i) {
+                @case (0) { <svg viewBox="0 0 40 40"><path d="M14 4h12M16 4v10L8 31a3 3 0 0 0 3 5h18a3 3 0 0 0 3-5l-8-17V4M12 27h16M15 22h10" /></svg> }
+                @case (1) { <svg viewBox="0 0 40 40"><path d="M4 35h32M8 35V14h24v21M5 14 20 4l15 10M14 20v4M20 20v4M26 20v4M14 29v6M20 29v6M26 29v6" /></svg> }
+                @default { <svg viewBox="0 0 40 40"><path d="M15 4h10v5h-2v22h5v5H12v-5h5V9h-2zM14 17h12M14 24h12" /></svg> }
+              }
+            </span>
+            <div><strong>{{ metric.value }}</strong><span class="manufacturing-metric__label">{{ localized(metric.label, metric.label_ar) }}</span><p>{{ localized(metric.description, metric.description_ar) }}</p></div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="manufacturing-growth" aria-labelledby="growth-title">
+    <header class="manufacturing-section-heading manufacturing-section-heading--left">
+      <span class="manufacturing-section-heading__eyebrow">{{ 'manufacturing.growth.eyebrow' | sectionHeading:'FUTURE-READY INFRASTRUCTURE':'بنية تحتية جاهزة للمستقبل' }}</span>
+      <h2 id="growth-title">{{ 'manufacturing.growth.title' | sectionHeading:'Built for Growth':'مصمم للنمو' }}</h2>
+      <p>{{ localized(content().growth.subtitle, content().growth.subtitle_ar) }}</p>
+    </header>
+    <div class="manufacturing-growth__grid" #growthCarousel role="region"
+      [attr.aria-label]="localized('Build for Growth carousel', 'عرض مراحل النمو')" (scroll)="onGrowthCarouselScroll()">
+      @for (phase of content().growth.phases; track phase.title; let i = $index) {
+        <article class="manufacturing-growth-card">
+          <div class="manufacturing-growth-card__image"><img [src]="imageUrl(phase.image_url)" [alt]="localized(phase.title, phase.title_ar)" loading="lazy" /></div>
+          <div class="manufacturing-growth-card__content">
+            <h3>{{ localized(phase.title, phase.title_ar) }}</h3>
+            <p>{{ localized(phase.description, phase.description_ar) }}</p>
+            <ul>@for (bullet of phase.bullets; track bullet; let j = $index) { <li>{{ localized(bullet, phase.bullets_ar[j]) }}</li> }</ul>
+          </div>
+        </article>
+      }
+    </div>
+    <div class="manufacturing-growth__carousel-controls" [attr.aria-label]="localized('Growth stages', 'مراحل النمو')">
+      <button type="button" class="manufacturing-growth__carousel-arrow" (click)="moveGrowthSlide(-1)"
+        [attr.aria-label]="localized('Previous growth stage', 'مرحلة النمو السابقة')">‹</button>
+      <div class="manufacturing-growth__carousel-dots">
+        @for (phase of content().growth.phases; track phase.title; let i = $index) {
+          <button type="button" [class.active]="growthSlide() === i"
+            [attr.aria-label]="localized('Go to growth stage ', 'انتقل إلى مرحلة النمو ') + (i + 1)"
+            [attr.aria-current]="growthSlide() === i ? 'true' : null" (click)="goToGrowthSlide(i)"></button>
+        }
+      </div>
+      <button type="button" class="manufacturing-growth__carousel-arrow" (click)="moveGrowthSlide(1)"
+        [attr.aria-label]="localized('Next growth stage', 'مرحلة النمو التالية')">›</button>
+    </div>
+  </section>
+</main>

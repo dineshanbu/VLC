@@ -1,0 +1,148 @@
+<main class="logo-replacement">
+  <header class="logo-page-header">
+    <div>
+      <span class="eyebrow">BRAND ASSETS</span>
+      <h1>Brand &amp; Footer Settings</h1>
+      <p>Update public logos and footer contact and copyright content in one place.</p>
+    </div>
+    <button class="save-button" type="button" (click)="saveLogos()" [disabled]="!hasChanges() || isSaving()">
+      {{ isSaving() ? 'Saving…' : 'Save logo changes' }}
+    </button>
+  </header>
+
+  @if (successMessage()) {
+    <div class="notice notice--success" role="status">{{ successMessage() }}</div>
+  }
+  @if (errorMessage()) {
+    <div class="notice notice--error" role="alert">{{ errorMessage() }}</div>
+  }
+
+  <section class="landing-header-preview" aria-label="Live landing page header preview">
+    <div class="landing-header-preview__heading">
+      <div>
+        <strong>Landing page header</strong>
+        <p>The real public navigation, rendered with your current header logo.</p>
+      </div>
+      <span>Live preview</span>
+    </div>
+    <div class="landing-header-preview__scene">
+      <app-navbar [logoPreviewMode]="true" [logoPreviewSrc]="preview('header_logo')" />
+    </div>
+    <p class="landing-header-preview__note">Choose a replacement header logo below. It appears here immediately and applies to the live site when saved.</p>
+  </section>
+
+  <section class="landing-footer-preview" aria-label="Live landing page footer preview">
+    <div class="landing-header-preview__heading">
+      <div>
+        <strong>Landing page footer</strong>
+        <p>The real public footer, rendered with your current footer logo.</p>
+      </div>
+      <span>Live preview</span>
+    </div>
+    <div class="landing-footer-preview__scene">
+      <app-footer [logoPreviewMode]="true" [logoPreviewSrc]="preview('footer_logo')" />
+    </div>
+    <p class="landing-header-preview__note">The public footer updates with the saved footer content and logo settings.</p>
+  </section>
+
+  <section class="footer-content-editor" aria-labelledby="footer-content-heading">
+    <div class="footer-content-editor__header">
+      <div>
+        <span class="eyebrow">PUBLIC WEBSITE</span>
+        <h2 id="footer-content-heading">Footer content</h2>
+        <p>Edit all public footer labels and content in English and Arabic. Quick Links supports up to 8 items.</p>
+      </div>
+      <button class="save-button" type="button" (click)="saveFooterSettings()" [disabled]="isSavingFooter()">
+        {{ isSavingFooter() ? 'Saving…' : 'Save footer content' }}
+      </button>
+    </div>
+    @if (footerSuccessMessage()) { <div class="notice notice--success" role="status">{{ footerSuccessMessage() }}</div> }
+    @if (footerErrorMessage()) { <div class="notice notice--error" role="alert">{{ footerErrorMessage() }}</div> }
+    <div class="footer-content-editor__fields">
+      <label>Quick Links heading (English)<input type="text" name="footer-quick-heading-en" [(ngModel)]="footerSettings.quick_links_title_en" /></label>
+      <label>Quick Links heading (Arabic)<input type="text" name="footer-quick-heading-ar" dir="rtl" [(ngModel)]="footerSettings.quick_links_title_ar" /></label>
+      <label>How We Can Help heading (English)<input type="text" name="footer-help-heading-en" [(ngModel)]="footerSettings.how_we_can_help_en" /></label>
+      <label>How We Can Help heading (Arabic)<input type="text" name="footer-help-heading-ar" dir="rtl" [(ngModel)]="footerSettings.how_we_can_help_ar" /></label>
+      <label>Footer email address<input type="email" name="footer-email" [(ngModel)]="footerSettings.email" /></label>
+      <label>Query label (English)<input type="text" name="footer-query-en" [(ngModel)]="footerSettings.query_label_en" /></label>
+      <label>Query label (Arabic)<input type="text" name="footer-query-ar" dir="rtl" [(ngModel)]="footerSettings.query_label_ar" /></label>
+      <label>Address (English)<textarea name="footer-address-en" rows="3" [(ngModel)]="footerSettings.address_en"></textarea></label>
+      <label>Address (Arabic)<textarea name="footer-address-ar" rows="3" dir="rtl" [(ngModel)]="footerSettings.address_ar"></textarea></label>
+      <label>Copyright text (English, after © current year)<textarea name="footer-copyright-en" rows="2" [(ngModel)]="footerSettings.copyright_en"></textarea></label>
+      <label>Copyright text (Arabic, after © current year)<textarea name="footer-copyright-ar" rows="2" dir="rtl" [(ngModel)]="footerSettings.copyright_ar"></textarea></label>
+    </div>
+    <div class="footer-quick-links-editor">
+      <div class="footer-quick-links-editor__heading">
+        <div><h3>Quick Links</h3><p>{{ footerSettings.quick_links.length }} of 8 links</p></div>
+        <button class="save-button" type="button" (click)="addFooterQuickLink()" [disabled]="footerSettings.quick_links.length >= 8">Add quick link</button>
+      </div>
+      @for (link of footerSettings.quick_links; track $index; let idx = $index) {
+        <article class="footer-quick-link-row">
+          <div class="footer-quick-link-row__header"><strong>Link {{ idx + 1 }}</strong><button type="button" class="footer-quick-link-row__remove" (click)="removeFooterQuickLink(idx)">Remove</button></div>
+          <div class="footer-quick-link-row__fields">
+            <label>Label (English)<input type="text" [name]="'footer-link-en-' + idx" [(ngModel)]="link.label_en" /></label>
+            <label>Label (Arabic)<input type="text" dir="rtl" [name]="'footer-link-ar-' + idx" [(ngModel)]="link.label_ar" /></label>
+            <label>Link URL<input type="text" [name]="'footer-link-url-' + idx" [(ngModel)]="link.url" placeholder="/about or https://example.com" /></label>
+          </div>
+        </article>
+      }
+    </div>
+    <p class="landing-header-preview__note">The current copyright wording is shown until the team provides its preferred note. You can update both language versions here.</p>
+  </section>
+
+  <section class="logo-slots" aria-label="Website logo locations">
+    @for (slot of slots; track slot.key) {
+      <article class="logo-card">
+        <div class="logo-card__heading">
+          <div>
+            <h2>{{ slot.title }}</h2>
+            <p>{{ slot.description }}</p>
+          </div>
+          <span class="location-tag">Website</span>
+        </div>
+
+        @if (slot.key === 'home_banner_logo') {
+          <section class="size-editor" [attr.aria-label]="slot.title + ' size controls'">
+            <label class="size-control">
+              <span>Width <output>{{ dimension('home_banner_logo', 'width') }} px</output></span>
+              <input type="range" min="100" max="600" step="2" [value]="dimension('home_banner_logo', 'width')" (input)="setDimension('home_banner_logo', 'width', $event)" />
+            </label>
+            <label class="size-control">
+              <span>Height <output>{{ dimension('home_banner_logo', 'height') }} px</output></span>
+              <input type="range" min="40" max="240" step="2" [value]="dimension('home_banner_logo', 'height')" (input)="setDimension('home_banner_logo', 'height', $event)" />
+            </label>
+          </section>
+          <div class="home-banner-logo-preview" [class.logo-preview--selected]="!!previews()[slot.key]">
+            <div class="home-banner-logo-preview__crop" [style.width.px]="dimension('home_banner_logo', 'width')" [style.height.px]="dimension('home_banner_logo', 'height')">
+              <img [src]="preview('home_banner_logo')" [alt]="slot.title + ' preview'" [style.height.px]="dimension('home_banner_logo', 'height')" />
+            </div>
+          </div>
+        } @else {
+          <div class="logo-preview" [class.logo-preview--selected]="!!previews()[slot.key]">
+            <img [src]="preview(slot.key)" [alt]="slot.title + ' preview'" />
+          </div>
+        }
+
+        <label class="file-picker" [for]="'logo-file-' + slot.key">
+          <span class="file-picker__icon" aria-hidden="true">＋</span>
+          <span>{{ files()[slot.key]?.name || 'Choose replacement logo' }}</span>
+        </label>
+        <input
+          class="visually-hidden-input"
+          [id]="'logo-file-' + slot.key"
+          type="file"
+          accept=".png,.jpg,.jpeg,.webp,.svg,image/png,image/jpeg,image/webp,image/svg+xml"
+          (change)="onFileSelected($event, slot.key)"
+        />
+        <p class="file-guidance">{{ slot.guidance }} Maximum file size: 10 MB.</p>
+      </article>
+    }
+  </section>
+
+  <footer class="logo-page-footer">
+    <p>Only the selected logo locations will change. The other logos will keep their current files.</p>
+    <button class="save-button" type="button" (click)="saveLogos()" [disabled]="!hasChanges() || isSaving()">
+      {{ isSaving() ? 'Saving…' : 'Save logo changes' }}
+    </button>
+  </footer>
+</main>

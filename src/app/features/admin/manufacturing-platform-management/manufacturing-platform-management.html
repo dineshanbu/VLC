@@ -1,0 +1,97 @@
+<main class="manufacturing-admin">
+  <header class="manufacturing-admin__header">
+    <div><span class="manufacturing-admin__eyebrow">SEPARATE CONTENT MODEL</span><h1>Manufacturing Platform</h1><p>Edit the dedicated manufacturing page, journey stages, capacity metrics and growth phases.</p></div>
+    <a routerLink="/products/manufacturing-platform" target="_blank" class="manufacturing-admin__preview">Preview public page ↗</a>
+  </header>
+
+  <div *ngIf="successMessage" class="manufacturing-admin__alert success">{{ successMessage }}<button type="button" (click)="clearAlerts()">×</button></div>
+  <div *ngIf="errorMessage" class="manufacturing-admin__alert error">{{ errorMessage }}<button type="button" (click)="clearAlerts()">×</button></div>
+  <p *ngIf="isLoading" class="manufacturing-admin__loading">Loading Manufacturing Platform content…</p>
+
+  <ng-container *ngIf="!isLoading">
+    <nav class="manufacturing-admin__tabs" aria-label="Manufacturing Platform sections">
+      <button type="button" [class.active]="activeTab === 'hero'" (click)="activeTab = 'hero'">Hero banner</button>
+      <button type="button" [class.active]="activeTab === 'journey'" (click)="activeTab = 'journey'">Manufacturing journey</button>
+      <button type="button" [class.active]="activeTab === 'overview'" (click)="activeTab = 'overview'">Platform overview</button>
+      <button type="button" [class.active]="activeTab === 'growth'" (click)="activeTab = 'growth'">Built for growth</button>
+    </nav>
+
+    <form class="manufacturing-admin__panel" (ngSubmit)="save()">
+      <section *ngIf="activeTab === 'hero'">
+        <div class="manufacturing-admin__panel-heading"><div><h2>Hero banner</h2><p>Uses the same public design system as About and Executive; this page’s content is managed separately.</p></div></div>
+        <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span>ℹ️</span>
+          <span><strong>Hero Eyebrow &amp; Heading</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        <div class="manufacturing-admin__form-grid">
+          <label class="wide">Description (English)<textarea rows="3" [(ngModel)]="contentData.hero.description" name="hero_description"></textarea></label>
+          <label class="wide rtl">Description (Arabic)<textarea class="rtl" rows="3" [(ngModel)]="contentData.hero.description_ar" name="hero_description_ar"></textarea></label>
+          <label>Button text<input [(ngModel)]="contentData.hero.button_text" name="hero_button" /></label>
+          <label>Button text (Arabic)<input class="rtl" [(ngModel)]="contentData.hero.button_text_ar" name="hero_button_ar" /></label>
+          <label>Button link<input [(ngModel)]="contentData.hero.button_url" name="hero_button_url" /></label>
+        </div>
+        <div class="manufacturing-admin__image-editor"><img [src]="previewUrl('hero_image', contentData.hero.image_url)" alt="English hero preview" /><label>Banner image (English)<input type="file" accept="image/*" (change)="selectImage('hero_image', $event)" /></label></div>
+        <app-media-image-picker (selected)="selectHeroImageFromLibrary('en', $event)" />
+        <div class="manufacturing-admin__image-editor"><img [src]="previewUrl('hero_image_ar', contentData.hero.image_url_ar || contentData.hero.image_url)" alt="Arabic hero preview" /><label>Banner image (Arabic / Saudi)<input type="file" accept="image/*" (change)="selectImage('hero_image_ar', $event)" /></label><small>Initially uses the English banner image.</small></div>
+        <app-media-image-picker (selected)="selectHeroImageFromLibrary('ar', $event)" />
+      </section>
+
+      <section *ngIf="activeTab === 'journey'">
+        <div class="manufacturing-admin__panel-heading"><div><h2>Our Manufacturing Journey</h2><p>Edit the process stages and supported formats displayed on the manufacturing page.</p></div></div>
+        <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span>ℹ️</span>
+          <span><strong>Section Heading &amp; Formats Headings</strong> are managed in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        <div class="manufacturing-admin__form-grid"><label>Section introduction (English)<textarea rows="2" [(ngModel)]="contentData.journey.subtitle" name="journey_subtitle"></textarea></label><label class="rtl">المقدمة (العربية)<textarea class="rtl" rows="2" [(ngModel)]="contentData.journey.subtitle_ar" name="journey_subtitle_ar"></textarea></label></div>
+        <article class="manufacturing-admin__item" *ngFor="let stage of contentData.journey.stages; let i = index">
+          <h3>Stage {{ i + 1 }} · {{ stage.name }}</h3>
+          <div class="manufacturing-admin__form-grid"><label>Stage name (English)<input [(ngModel)]="stage.name" [name]="'stage_name_' + i" /></label><label class="rtl">اسم المرحلة (العربية)<input class="rtl" [(ngModel)]="stage.name_ar" [name]="'stage_name_ar_' + i" /></label><label>Description (English)<textarea rows="2" [(ngModel)]="stage.description" [name]="'stage_description_' + i"></textarea></label><label class="rtl">الوصف (العربية)<textarea class="rtl" rows="2" [(ngModel)]="stage.description_ar" [name]="'stage_description_ar_' + i"></textarea></label></div>
+          <div class="manufacturing-admin__image-editor"><img [src]="previewUrl('journey_image_' + i, stage.image_url)" [alt]="stage.name + ' preview'" /><label>Stage image<input type="file" accept="image/*" (change)="selectImage('journey_image_' + i, $event)" /></label></div>
+          <div class="manufacturing-admin__bullets"><div class="manufacturing-admin__subheading"><h4>Stage highlights / أبرز النقاط</h4><button type="button" (click)="addBullet(stage.bullets, stage.bullets_ar)">＋ Add highlight</button></div><div *ngFor="let bullet of stage.bullets; let j = index" class="manufacturing-admin__bullet-row manufacturing-admin__bullet-row--stage"><input [(ngModel)]="stage.bullets[j]" [name]="'stage_bullet_' + i + '_' + j" aria-label="Highlight in English" /><input class="rtl" [(ngModel)]="stage.bullets_ar[j]" [name]="'stage_bullet_ar_' + i + '_' + j" aria-label="النقطة بالعربية" /><button type="button" aria-label="Remove highlight" (click)="removeBullet(stage.bullets, stage.bullets_ar, j)">×</button></div></div>
+        </article>
+        <article class="manufacturing-admin__item">
+          <h3>Supported formats</h3>
+          <div class="manufacturing-admin__bullets">
+            <div class="manufacturing-admin__subheading"><h4>Formats / الأشكال</h4><button type="button" (click)="addSupportedFormat()">＋ Add format</button></div>
+            <div *ngFor="let format of contentData.journey.supported_formats.items; let i = index" class="manufacturing-admin__bullet-row">
+              <input [(ngModel)]="format.name" [name]="'supported_format_' + i" aria-label="Format in English" />
+              <input class="rtl" [(ngModel)]="format.name_ar" [name]="'supported_format_ar_' + i" aria-label="الصيغة بالعربية" />
+              <button type="button" aria-label="Remove format" (click)="removeSupportedFormat(i)">×</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section *ngIf="activeTab === 'overview'">
+        <div class="manufacturing-admin__panel-heading"><div><h2>Platform Overview</h2><p>Manage the capacity metrics and facility image shown on the overview band.</p></div></div>
+        <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span>ℹ️</span>
+          <span><strong>Overview Eyebrow &amp; Heading</strong> are managed in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        <div class="manufacturing-admin__form-grid"><label>Introduction (English)<textarea rows="2" [(ngModel)]="contentData.overview.subtitle" name="overview_subtitle"></textarea></label><label class="rtl">المقدمة (العربية)<textarea class="rtl" rows="2" [(ngModel)]="contentData.overview.subtitle_ar" name="overview_subtitle_ar"></textarea></label></div>
+        <div class="manufacturing-admin__image-editor"><img [src]="previewUrl('overview_image', contentData.overview.image_url)" alt="Platform overview preview" /><label>Facility image<input type="file" accept="image/*" (change)="selectImage('overview_image', $event)" /></label></div>
+        <article class="manufacturing-admin__item" *ngFor="let metric of contentData.overview.metrics; let i = index">
+          <h3>Capability {{ i + 1 }}</h3>
+          <div class="manufacturing-admin__form-grid"><label>Value<input [(ngModel)]="metric.value" [name]="'metric_value_' + i" /></label><label>Label (English)<input [(ngModel)]="metric.label" [name]="'metric_label_' + i" /></label><label class="rtl">التسمية (العربية)<input class="rtl" [(ngModel)]="metric.label_ar" [name]="'metric_label_ar_' + i" /></label><label>Description (English)<textarea rows="2" [(ngModel)]="metric.description" [name]="'metric_description_' + i"></textarea></label><label class="rtl">الوصف (العربية)<textarea class="rtl" rows="2" [(ngModel)]="metric.description_ar" [name]="'metric_description_ar_' + i"></textarea></label></div>
+        </article>
+      </section>
+
+      <section *ngIf="activeTab === 'growth'">
+        <div class="manufacturing-admin__panel-heading"><div><h2>Built for Growth</h2><p>Edit the current platform, expansion-ready and future capability panels.</p></div></div>
+        <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span>ℹ️</span>
+          <span><strong>Growth Eyebrow &amp; Heading</strong> are managed in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        <div class="manufacturing-admin__form-grid"><label>Introduction (English)<textarea rows="2" [(ngModel)]="contentData.growth.subtitle" name="growth_subtitle"></textarea></label><label class="rtl">المقدمة (العربية)<textarea class="rtl" rows="2" [(ngModel)]="contentData.growth.subtitle_ar" name="growth_subtitle_ar"></textarea></label></div>
+        <article class="manufacturing-admin__item" *ngFor="let phase of contentData.growth.phases; let i = index">
+          <h3>Phase {{ i + 1 }}</h3>
+          <div class="manufacturing-admin__form-grid"><label>Heading (English)<input [(ngModel)]="phase.title" [name]="'phase_title_' + i" /></label><label class="rtl">العنوان (العربية)<input class="rtl" [(ngModel)]="phase.title_ar" [name]="'phase_title_ar_' + i" /></label><label>Description (English)<textarea rows="2" [(ngModel)]="phase.description" [name]="'phase_description_' + i"></textarea></label><label class="rtl">الوصف (العربية)<textarea class="rtl" rows="2" [(ngModel)]="phase.description_ar" [name]="'phase_description_ar_' + i"></textarea></label></div>
+          <div class="manufacturing-admin__image-editor"><img [src]="previewUrl('growth_image_' + i, phase.image_url)" [alt]="phase.title + ' preview'" /><label>Phase image<input type="file" accept="image/*" (change)="selectImage('growth_image_' + i, $event)" /></label></div>
+          <div class="manufacturing-admin__bullets"><div class="manufacturing-admin__subheading"><h4>Capabilities / الإمكانات</h4><button type="button" (click)="addBullet(phase.bullets, phase.bullets_ar)">＋ Add capability</button></div><div *ngFor="let bullet of phase.bullets; let j = index" class="manufacturing-admin__bullet-row"><input [(ngModel)]="phase.bullets[j]" [name]="'phase_bullet_' + i + '_' + j" aria-label="Capability in English" /><input class="rtl" [(ngModel)]="phase.bullets_ar[j]" [name]="'phase_bullet_ar_' + i + '_' + j" aria-label="الإمكانات بالعربية" /><button type="button" aria-label="Remove capability" (click)="removeBullet(phase.bullets, phase.bullets_ar, j)">×</button></div></div>
+        </article>
+      </section>
+
+      <footer class="manufacturing-admin__savebar"><button type="submit" [disabled]="isSaving">{{ isSaving ? 'Saving…' : 'Save Manufacturing Platform page' }}</button></footer>
+    </form>
+  </ng-container>
+</main>

@@ -1,0 +1,222 @@
+import { Routes } from '@angular/router';
+import { adminAuthGuard } from './core/guards/admin-auth.guard';
+
+export const routes: Routes = [
+  // ==========================================
+  // PUBLIC ROUTES
+  // ==========================================
+  {
+    path: '',
+    loadComponent: () =>
+      import('./layouts/public-layout/public-layout').then(m => m.PublicLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/public/home/home').then(m => m.HomeComponent),
+      },
+      {
+        path: 'platform',
+        loadComponent: () =>
+          import('./features/public/platform/platform').then(m => m.PlatformComponent),
+      },
+      {
+        path: 'products/manufacturing-platform',
+        loadComponent: () =>
+          import('./features/public/manufacturing-platform/manufacturing-platform').then(m => m.ManufacturingPlatformComponent),
+      },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import('./features/public/products/products').then(m => m.ProductsComponent),
+      },
+      {
+        path: 'about/executive-team',
+        loadComponent: () =>
+          import('./features/public/executive-team/executive-team').then(m => m.ExecutiveTeamComponent),
+      },
+      {
+        path: 'about',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./features/public/about/about').then(m => m.AboutComponent),
+      },
+      {
+        path: 'partners',
+        loadComponent: () =>
+          import('./features/public/partners/partners').then(m => m.PartnersComponent),
+      },
+      {
+        path: 'investors',
+        loadComponent: () =>
+          import('./features/public/investors/investors').then(m => m.InvestorsComponent),
+      },
+      {
+        path: 'news',
+        loadComponent: () =>
+          import('./features/public/news/news').then(m => m.NewsComponent),
+      },
+      {
+        path: 'news/:slug',
+        loadComponent: () =>
+          import('./features/public/news/news-detail/news-detail').then(m => m.NewsDetailComponent),
+      },
+      {
+        path: 'careers',
+        loadComponent: () =>
+          import('./features/public/careers/careers').then(m => m.CareersComponent),
+      },
+      {
+        path: 'pharmacovigilance',
+        loadComponent: () =>
+          import('./features/public/pharmacovigilance/pharmacovigilance').then(m => m.PharmacovigilanceComponent),
+      },
+      {
+        path: 'contact',
+        loadComponent: () =>
+          import('./features/public/contact/contact').then(m => m.ContactComponent),
+      },
+    ],
+  },
+
+  // ==========================================
+  // ADMIN AUTH ROUTE
+  // ==========================================
+  {
+    path: 'admin/login',
+    loadComponent: () =>
+      import('./features/admin/auth/login/login').then(m => m.AdminLoginComponent),
+  },
+
+  // ==========================================
+  // ADMIN PORTAL ROUTES (GUARDED)
+  // ==========================================
+  {
+    path: 'admin',
+    canActivate: [adminAuthGuard],
+    loadComponent: () =>
+      import('./layouts/admin-layout/admin-layout').then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent),
+      },
+      {
+        path: 'home',
+        loadComponent: () => import('./features/admin/home-management/home-management').then(m => m.HomeManagementComponent),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/admin/user-management/user-management').then(
+            m => m.UserManagementComponent
+          ),
+      },
+      {
+        path: 'product',
+        loadComponent: () =>
+          import('./features/admin/product-management/product-management').then(
+            m => m.ProductManagementComponent
+          ),
+      },
+      {
+        path: 'products',
+        redirectTo: 'product',
+        pathMatch: 'full',
+      },
+      {
+        path: 'news',
+        loadComponent: () =>
+          import('./features/admin/news-management/news-management').then(
+            m => m.NewsManagementComponent
+          ),
+      },
+      {
+        path: 'media',
+        loadComponent: () =>
+          import('./features/admin/media-management/media-management').then(
+            m => m.MediaManagementComponent
+          ),
+      },
+      {
+        path: 'facility-gallery',
+        loadComponent: () =>
+          import('./features/admin/facility-gallery-management/facility-gallery-management').then(
+            m => m.FacilityGalleryManagementComponent
+          ),
+      },
+      {
+        path: 'contacts',
+        loadComponent: () =>
+          import('./features/admin/contact-management/contact-management').then(
+            m => m.ContactManagementComponent
+          ),
+      },
+      {
+        path: 'pharmacovigilance',
+        loadComponent: () => import('./features/admin/pharmacovigilance-management/pharmacovigilance-management').then(m => m.PharmacovigilanceManagementComponent),
+      },
+      {
+        path: 'careers',
+        loadComponent: () =>
+          import('./features/admin/careers-management/careers-management').then(
+            m => m.CareersManagementComponent
+          ),
+      },
+      {
+        path: 'partners',
+        loadComponent: () =>
+          import('./features/admin/partners-management/partners-management').then(
+            m => m.PartnersManagementComponent
+          ),
+      },
+      {
+        path: 'about',
+        loadComponent: () =>
+          import('./features/admin/about-management/about-management').then(
+            m => m.AboutManagementComponent
+          ),
+      },
+      {
+        path: 'executive-team',
+        loadComponent: () =>
+          import('./features/admin/executive-team-management/executive-team-management').then(
+            m => m.ExecutiveTeamManagementComponent
+          ),
+      },
+      {
+        path: 'manufacturing-platform',
+        loadComponent: () =>
+          import('./features/admin/manufacturing-platform-management/manufacturing-platform-management').then(m => m.ManufacturingPlatformManagementComponent),
+      },
+      {
+        path: 'section-headings',
+        loadComponent: () => import('./features/admin/section-headings-management/section-headings-management').then(m => m.SectionHeadingsManagementComponent),
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/admin/settings/settings').then(m => m.SettingsComponent),
+      },
+      {
+        path: 'logo-replacement',
+        loadComponent: () =>
+          import('./features/admin/logo-replacement/logo-replacement').then(m => m.LogoReplacementComponent),
+      },
+    ],
+  },
+
+  // ==========================================
+  // FALLBACK
+  // ==========================================
+  {
+    path: '**',
+    redirectTo: '',
+  },
+];

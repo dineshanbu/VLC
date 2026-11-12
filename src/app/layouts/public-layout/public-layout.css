@@ -1,0 +1,3 @@
+/* public-layout styles */
+ .public-theme-switcher { position: fixed; right: 24px; bottom: 88px; z-index: var(--z-modal); }
+ @media (max-width: 640px) { .public-theme-switcher { right: 16px; bottom: 74px; } }

@@ -1,0 +1,1430 @@
+<div class="about-mgmt-wrapper">
+
+  <!-- ====================================================
+       PAGE HEADER & NAVIGATION ACTIONS
+       ==================================================== -->
+  <div class="about-header-card">
+    <div class="header-left">
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>CONTENT MANAGEMENT</span>
+      </div>
+      <h1 class="header-title">About Us Management</h1>
+      <p class="header-subtitle">
+        Manage the About page, founding leadership, vision and mission, and the facility section shown below.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <a
+        routerLink="/about"
+        target="_blank"
+        class="btn btn-outline"
+        title="View live public about page in new tab"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Live About Page</span>
+      </a>
+      <button
+        *ngIf="activeTab() === 'leaders'"
+        type="button"
+        class="btn btn-primary"
+        (click)="openAddLeaderModal()"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Add Leader</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div *ngIf="successMessage()" class="alert alert-success">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <div class="alert-text">{{ successMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <div *ngIf="errorMessage()" class="alert alert-danger">
+    <div class="alert-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <div class="alert-text">{{ errorMessage() }}</div>
+    <button type="button" class="alert-close" (click)="clearAlerts()">&times;</button>
+  </div>
+
+  <!-- ====================================================
+       SECTION NAVIGATION TABS
+       ==================================================== -->
+  <div class="section-tabs-bar">
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'leaders'"
+      (click)="switchTab('leaders')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Founding Leadership</span>
+      <span class="tab-badge">{{ totalLeadersCount() }}</span>
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'hero'"
+      (click)="switchTab('hero')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+      <span>Hero Banner &amp; Story Modal</span>
+    </button>
+
+
+
+    <button
+      type="button"
+      class="tab-btn"
+      [class.active]="activeTab() === 'vision_mission'"
+      (click)="switchTab('vision_mission')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      <span>Vision &amp; Mission</span>
+    </button>
+
+    
+  </div>
+
+  <!-- LOADING SPINNER -->
+  <div *ngIf="isLoading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading About Us content and leadership profiles...</p>
+  </div>
+
+  <!-- ====================================================
+       TAB 1: FOUNDING LEADERSHIP PROFILES
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'leaders'" class="tab-content-panel">
+    
+    <!-- Filter & Search Toolbar -->
+    <div class="toolbar-card">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search leaders by name, title, board or specialty..."
+          [ngModel]="leaderSearch()"
+          (ngModelChange)="leaderSearch.set($event)"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Board / Badge:</label>
+        <select [ngModel]="selectedBadgeFilter()" (ngModelChange)="selectedBadgeFilter.set($event)">
+          <option value="All">All Boards</option>
+          <option *ngFor="let badge of uniqueBadges()" [value]="badge">{{ badge }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select [ngModel]="selectedStatusFilter()" (ngModelChange)="selectedStatusFilter.set($event)">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active Only</option>
+          <option value="Inactive">Inactive Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Leaders Table / Grid -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 70px;">Order</th>
+            <th style="width: 80px;">Photo</th>
+            <th>Name &amp; Executive Title</th>
+            <th>Role &amp; Background</th>
+            <th>Board Badge</th>
+            <th style="width: 100px;">Status</th>
+            <th style="width: 180px; text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leader of filteredLeaders(); let i = index">
+            <!-- Order Buttons -->
+            <td>
+              <div class="order-reorder-btns">
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveLeader(leader, 'up')"
+                  title="Move Up"
+                >
+                  ▲
+                </button>
+                <span class="order-index-pill">{{ leader.order_index }}</span>
+                <button
+                  type="button"
+                  class="btn-icon-tiny"
+                  (click)="moveLeader(leader, 'down')"
+                  title="Move Down"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+
+            <!-- Portrait / Avatar -->
+            <td>
+              <div class="table-portrait">
+                <img
+                  *ngIf="leader.image"
+                  [src]="resolveImg(leader.image)"
+                  [alt]="leader.name"
+                  class="portrait-img"
+                  (error)="leader.image = ''"
+                />
+                <div *ngIf="!leader.image" class="avatar-fallback">
+                  {{ leader.initials || 'VP' }}
+                </div>
+              </div>
+            </td>
+
+            <!-- Name & Title -->
+            <td>
+              <div class="leader-name-cell">
+                <div class="name-text">{{ leader.name }}</div>
+                <div class="title-text">{{ leader.title }}</div>
+              </div>
+            </td>
+
+            <!-- Role Summary -->
+            <td>
+              <div class="role-desc-cell" [title]="leader.role">
+                {{ leader.role || '—' }}
+              </div>
+            </td>
+
+            <!-- Board Badge -->
+            <td>
+              <span class="badge-chip">{{ leader.badge || 'Executive' }}</span>
+            </td>
+
+            <!-- Status Switch -->
+            <td>
+              <button
+                type="button"
+                class="status-toggle-pill"
+                [class.active]="leader.status === 'Active'"
+                (click)="toggleLeaderStatus(leader)"
+                title="Click to toggle status"
+              >
+                <span class="status-indicator"></span>
+                <span>{{ leader.status }}</span>
+              </button>
+            </td>
+
+            <!-- Action Buttons -->
+            <td>
+              <div class="table-actions">
+                <!-- Live Preview Modal -->
+                <button
+                  type="button"
+                  class="action-btn btn-view"
+                  (click)="openPreviewLeader(leader)"
+                  title="Live Preview Profile Modal"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <span>Preview</span>
+                </button>
+
+                <!-- Edit Profile -->
+                <button
+                  type="button"
+                  class="action-btn btn-edit"
+                  (click)="openEditLeaderModal(leader)"
+                  title="Edit Leader Details"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                  <span>Edit</span>
+                </button>
+
+                <!-- Delete -->
+                <button
+                  type="button"
+                  class="action-btn btn-delete"
+                  (click)="confirmDeleteLeader(leader.id!, leader.name)"
+                  title="Delete Leader Profile"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="filteredLeaders().length === 0">
+            <td colspan="7" class="empty-cell">
+              <div class="empty-box">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <h3>No Leaders Found</h3>
+                <p>No founding leaders match your search or filter criteria.</p>
+                <button type="button" class="btn btn-primary btn-sm" (click)="openAddLeaderModal()">
+                  Add New Leader
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       TAB 2: HERO BANNER & COMPANY OVERVIEW MODAL
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'hero'" class="tab-content-panel">
+    
+    <!-- 2-COL GRID: Left Form, Right Live Preview -->
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Hero Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">HERO BANNER</div>
+          <h2 class="panel-title">Top Header Section</h2>
+          <p class="panel-subtitle">Controls the banner title, badge, and hero facility backdrop.</p>
+        </div>
+
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="heroEditLang() === 'en'" (click)="heroEditLang.set('en')">
+            <span>🇬🇧</span> English Content
+          </button>
+          <button type="button" class="pill-btn" [class.active]="heroEditLang() === 'ar'" (click)="heroEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
+        <form (ngSubmit)="saveHeroSection()" class="form-body">
+          <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <span>ℹ️</span>
+            <span><strong>Eyebrow Badge &amp; Main Heading</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+          </div>
+
+          <!-- ENGLISH CONTENT -->
+          <ng-container *ngIf="heroEditLang() === 'en'">
+            <div class="form-group">
+              <label>Subheading (EN)</label>
+              <input type="text" [(ngModel)]="heroForm.subtitle" name="hero_subtitle" class="form-input" placeholder="e.g. Leading the Charge in Vaccine Innovation..." />
+            </div>
+
+            <div class="form-group">
+              <label>Short Description Paragraph (EN)</label>
+              <textarea [(ngModel)]="heroForm.description" name="hero_desc" rows="3" class="form-textarea" placeholder="Optional short summary..."></textarea>
+            </div>
+          </ng-container>
+
+          <!-- ARABIC CONTENT -->
+          <ng-container *ngIf="heroEditLang() === 'ar'">
+            <div class="form-group">
+              <label>العنوان الفرعي (Subheading AR)</label>
+              <input type="text" [(ngModel)]="heroForm.subtitle_ar" name="hero_subtitle_ar" class="form-input rtl-input" placeholder="مثال: ريادة الابتكار وتوطين صناعة اللقاحات..." />
+            </div>
+
+            <div class="form-group">
+              <label>الوصف الموجز (Short Description AR)</label>
+              <textarea [(ngModel)]="heroForm.description_ar" name="hero_desc_ar" rows="3" class="form-textarea rtl-input" placeholder="الوصف باللغة العربية..."></textarea>
+            </div>
+          </ng-container>
+
+          <div class="form-group">
+            <label>Hero Banner Image (English)</label>
+            <div class="file-upload-box">
+              <input type="file" (change)="onHeroImageSelected($event, 'en')" accept="image/*" id="heroImgInputEn" />
+              <label for="heroImgInputEn" class="file-upload-label">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span>Upload English Hero Image</span>
+              </label>
+            </div>
+            <app-media-image-picker (selected)="selectHeroImageFromLibrary('en', $event)" />
+            <small>Saved path: {{ heroForm.image_url }}</small>
+            <img *ngIf="heroImagePreview" class="preview-hero-img" [src]="heroImagePreview" alt="English hero preview" />
+          </div>
+
+          <div class="form-group">
+            <label>Hero Banner Image (Arabic / Saudi)</label>
+            <div class="file-upload-box">
+              <input type="file" (change)="onHeroImageSelected($event, 'ar')" accept="image/*" id="heroImgInputAr" />
+              <label for="heroImgInputAr" class="file-upload-label">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span>Upload Arabic Hero Image</span>
+              </label>
+            </div>
+            <app-media-image-picker (selected)="selectHeroImageFromLibrary('ar', $event)" />
+            <small>Initially uses the English image. Saved path: {{ heroForm.image_url_ar || heroForm.image_url }}</small>
+            <img *ngIf="heroImagePreviewAr" class="preview-hero-img" [src]="heroImagePreviewAr" alt="Arabic hero preview" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving Banner...' : 'Save Hero Banner' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Hero Live Visual Preview -->
+      <div class="panel-card preview-card">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+            <h2 class="panel-title">Hero Banner Preview</h2>
+          </div>
+          <div class="lang-switch-pills" style="margin-bottom: 0;">
+            <button type="button" class="pill-btn" [class.active]="heroPreviewLang() === 'en'" (click)="heroPreviewLang.set('en')">🇬🇧 EN</button>
+            <button type="button" class="pill-btn" [class.active]="heroPreviewLang() === 'ar'" (click)="heroPreviewLang.set('ar')">🇸🇦 AR</button>
+          </div>
+        </div>
+
+        <div class="hero-live-preview-box">
+          <div class="preview-hero-left" [class.rtl-preview]="heroPreviewLang() === 'ar'">
+            <span class="preview-eyebrow">{{ (heroPreviewLang() === 'ar' ? (heroForm.badge_ar || heroForm.badge) : heroForm.badge) || 'ABOUT VIC' }}</span>
+            <h2 class="preview-heading">{{ (heroPreviewLang() === 'ar' ? (heroForm.title_ar || heroForm.title) : heroForm.title) || 'Vaccine Industrial Holding LLC' }}</h2>
+            <p class="preview-subheading">{{ (heroPreviewLang() === 'ar' ? (heroForm.subtitle_ar || heroForm.subtitle) : heroForm.subtitle) || 'Leading the Charge in Vaccine Innovation' }}</p>
+            <p class="preview-desc">{{ (heroPreviewLang() === 'ar' ? (heroForm.description_ar || heroForm.description) : heroForm.description) }}</p>
+            <button type="button" class="preview-btn-mock" (click)="openOverviewPreview()">
+              <span>{{ heroPreviewLang() === 'ar' ? 'اقرأ المزيد' : 'Read More' }}</span>
+              <span>{{ heroPreviewLang() === 'ar' ? '&larr;' : '&rarr;' }}</span>
+            </button>
+          </div>
+          <div class="preview-hero-right">
+            <img
+              [src]="heroPreviewLang() === 'ar' ? (heroImagePreviewAr || resolveImg(heroForm.image_url_ar || heroForm.image_url, 'home_banner.webp')) : (heroImagePreview || resolveImg(heroForm.image_url, 'home_banner.webp'))"
+              alt="Preview Hero Facility"
+              class="preview-hero-img"
+            />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOWER SECTION: Company Overview Story Modal Editor -->
+    <div class="panel-card mt-4">
+      <div class="panel-header-with-actions">
+        <div>
+          <div class="panel-badge">POPUP MODAL CONTENT</div>
+          <h2 class="panel-title">Company Overview Modal Story ("Read More")</h2>
+          <p class="panel-subtitle">Full biography and historical narrative shown when clicking "Read More".</p>
+        </div>
+        <button type="button" class="btn btn-outline" (click)="openOverviewPreview()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Preview Popup Modal</span>
+        </button>
+      </div>
+
+      <div class="lang-switch-pills">
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'en'" (click)="overviewEditLang.set('en')">
+          <span>🇬🇧</span> English Story
+        </button>
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'ar'" (click)="overviewEditLang.set('ar')">
+          <span>🇸🇦</span> Saudi Arabic Story (العربية)
+        </button>
+      </div>
+
+      <form (ngSubmit)="saveOverviewModal()" class="form-body">
+        <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <span>ℹ️</span>
+          <span><strong>Overview Eyebrow &amp; Heading</strong> are managed in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>. Only story paragraphs are managed below.</span>
+        </div>
+
+        <!-- ENGLISH OVERVIEW -->
+        <ng-container *ngIf="overviewEditLang() === 'en'">
+          <div class="form-group">
+            <label class="section-subheading-label">Story Narrative Paragraphs (EN: {{ overviewForm.paragraphs.length }})</label>
+            
+            <div class="paragraph-list">
+              <div *ngFor="let p of overviewForm.paragraphs; let pIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                <div class="p-index-num">#{{ pIdx + 1 }}</div>
+                <textarea
+                  [(ngModel)]="overviewForm.paragraphs[pIdx]"
+                  [name]="'ov_p_' + pIdx"
+                  rows="3"
+                  class="form-textarea flex-1"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-circle"
+                  (click)="removeOverviewParagraph(pIdx)"
+                  title="Remove paragraph"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Add new paragraph -->
+            <div class="add-paragraph-box">
+              <textarea
+                [(ngModel)]="overviewForm.newParagraphText"
+                name="ov_new_p"
+                rows="2"
+                placeholder="Type new English story paragraph and click 'Add Paragraph'..."
+                class="form-textarea"
+              ></textarea>
+              <button
+                type="button"
+                class="btn btn-secondary mt-2"
+                (click)="addOverviewParagraph()"
+                [disabled]="!overviewForm.newParagraphText.trim()"
+              >
+                + Add Paragraph
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- ARABIC OVERVIEW -->
+        <ng-container *ngIf="overviewEditLang() === 'ar'">
+          <div class="form-group">
+            <label class="section-subheading-label">فقرات القصة التعريفية (AR: {{ overviewForm.paragraphs_ar.length }})</label>
+            
+            <div class="paragraph-list">
+              <div *ngFor="let p of overviewForm.paragraphs_ar; let pIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                <div class="p-index-num">#{{ pIdx + 1 }}</div>
+                <textarea
+                  [(ngModel)]="overviewForm.paragraphs_ar[pIdx]"
+                  [name]="'ov_par_' + pIdx"
+                  rows="3"
+                  class="form-textarea flex-1 rtl-input"
+                ></textarea>
+                <button
+                  type="button"
+                  class="btn-delete-circle"
+                  (click)="removeOverviewParagraphAr(pIdx)"
+                  title="Remove paragraph"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Add new Arabic paragraph -->
+            <div class="add-paragraph-box">
+              <textarea
+                [(ngModel)]="overviewForm.newParagraphTextAr"
+                name="ov_new_par"
+                rows="2"
+                placeholder="اكتب فقرة جديدة باللغة العربية واضغط 'إضافة فقرة'..."
+                class="form-textarea rtl-input"
+              ></textarea>
+              <button
+                type="button"
+                class="btn btn-secondary mt-2"
+                (click)="addOverviewParagraphAr()"
+                [disabled]="!overviewForm.newParagraphTextAr.trim()"
+              >
+                + إضافة فقرة (Add Arabic Paragraph)
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Saving Overview...' : 'Save Overview Modal Story' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ====================================================
+       TAB 3: VISION & MISSION
+       ==================================================== -->
+  <div *ngIf="!isLoading() && activeTab() === 'vision_mission'" class="tab-content-panel">
+    
+    <div class="split-preview-layout">
+      
+      <!-- LEFT: Vision & Mission Form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-badge">OUR PURPOSE</div>
+          <h2 class="panel-title">Vision &amp; Mission Statements</h2>
+          <p class="panel-subtitle">Edit the two cards rendered below the hero section on the public About page.</p>
+        </div>
+
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'en'" (click)="vmEditLang.set('en')">
+            <span>🇬🇧</span> English Statements
+          </button>
+          <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'ar'" (click)="vmEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic (العربية)
+          </button>
+        </div>
+
+        <form (ngSubmit)="saveVisionMission()" class="form-body">
+          <div class="field-managed-notice" style="background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <span>ℹ️</span>
+            <span><strong>Vision &amp; Mission Titles</strong> are managed in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>. Statements and narrative paragraphs are managed below.</span>
+          </div>
+
+          <!-- ENGLISH CONTENT -->
+          <ng-container *ngIf="vmEditLang() === 'en'">
+            <!-- VISION SECTION EN -->
+            <div class="form-section-box">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>Our Vision (EN)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>Vision Paragraphs ({{ vmForm.vision_paragraphs.length }})</label>
+                <div *ngFor="let vp of vmForm.vision_paragraphs; let vIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                  <div class="p-index-num">#{{ vIdx + 1 }}</div>
+                  <textarea
+                    [(ngModel)]="vmForm.vision_paragraphs[vIdx]"
+                    [name]="'vp_' + vIdx"
+                    rows="2"
+                    class="form-textarea flex-1"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-circle"
+                    (click)="removeVisionParagraph(vIdx)"
+                    title="Remove"
+                  >
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Add vision p -->
+                <div class="add-sub-box">
+                  <textarea
+                    [(ngModel)]="vmForm.newVisionText"
+                    name="new_vp"
+                    rows="2"
+                    placeholder="Add additional vision paragraph..."
+                    class="form-textarea"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary mt-1"
+                    (click)="addVisionParagraph()"
+                    [disabled]="!vmForm.newVisionText.trim()"
+                  >
+                    + Add Vision Paragraph
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- MISSION SECTION EN -->
+            <div class="form-section-box mt-4">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>Our Mission (EN)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>Mission Statement Text</label>
+                <textarea
+                  [(ngModel)]="vmForm.mission_text"
+                  name="mission_text"
+                  rows="4"
+                  class="form-textarea"
+                ></textarea>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- ARABIC CONTENT -->
+          <ng-container *ngIf="vmEditLang() === 'ar'">
+            <!-- VISION SECTION AR -->
+            <div class="form-section-box">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>رؤيتنا (Vision AR)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>فقرات الرؤية ({{ vmForm.vision_paragraphs_ar.length }})</label>
+                <div *ngFor="let vp of vmForm.vision_paragraphs_ar; let vIdx = index; trackBy: trackByIndex" class="paragraph-item-row">
+                  <div class="p-index-num">#{{ vIdx + 1 }}</div>
+                  <textarea
+                    [(ngModel)]="vmForm.vision_paragraphs_ar[vIdx]"
+                    [name]="'vpar_' + vIdx"
+                    rows="2"
+                    class="form-textarea flex-1 rtl-input"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-circle"
+                    (click)="removeVisionParagraphAr(vIdx)"
+                    title="Remove"
+                  >
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Add vision p AR -->
+                <div class="add-sub-box">
+                  <textarea
+                    [(ngModel)]="vmForm.newVisionTextAr"
+                    name="new_vpar"
+                    rows="2"
+                    placeholder="أضف فقرة جديدة للرؤية باللغة العربية..."
+                    class="form-textarea rtl-input"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary mt-1"
+                    (click)="addVisionParagraphAr()"
+                    [disabled]="!vmForm.newVisionTextAr.trim()"
+                  >
+                    + إضافة فقرة رؤية بالعربية
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- MISSION SECTION AR -->
+            <div class="form-section-box mt-4">
+              <h3 class="box-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>رسالتنا (Mission AR)</span>
+              </h3>
+
+              <div class="form-group">
+                <label>نص بيان الرسالة (Mission Statement AR)</label>
+                <textarea
+                  [(ngModel)]="vmForm.mission_text_ar"
+                  name="mission_text_ar"
+                  rows="4"
+                  class="form-textarea rtl-input"
+                  placeholder="اكتب بيان رسالة الشركة باللغة العربية..."
+                ></textarea>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              {{ isSaving() ? 'Saving Changes...' : 'Save Vision & Mission' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Visual Preview -->
+      <div class="panel-card preview-card">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="panel-badge badge-teal">LIVE PREVIEW</div>
+            <h2 class="panel-title">Public Card Layout</h2>
+          </div>
+          <div class="lang-switch-pills" style="margin-bottom: 0;">
+            <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'en'" (click)="vmEditLang.set('en')">🇬🇧 EN</button>
+            <button type="button" class="pill-btn" [class.active]="vmEditLang() === 'ar'" (click)="vmEditLang.set('ar')">🇸🇦 AR</button>
+          </div>
+        </div>
+
+        <div class="vm-live-preview-grid" [class.rtl-preview]="vmEditLang() === 'ar'">
+          <!-- Vision Card Preview -->
+          <div class="vm-preview-card vm-preview-vision">
+            <div class="vm-preview-header">
+              <div class="vm-icon-circle">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+              <span class="vm-preview-label">{{ (vmEditLang() === 'ar' ? (vmForm.vision_title_ar || vmForm.vision_title) : vmForm.vision_title) || 'OUR VISION' }}</span>
+            </div>
+            <div class="vm-preview-content">
+              <p *ngFor="let p of (vmEditLang() === 'ar' && vmForm.vision_paragraphs_ar.length ? vmForm.vision_paragraphs_ar : vmForm.vision_paragraphs)">{{ p }}</p>
+            </div>
+          </div>
+
+          <!-- Mission Card Preview -->
+          <div class="vm-preview-card vm-preview-mission">
+            <div class="vm-preview-header">
+              <div class="vm-icon-circle">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+              </div>
+              <span class="vm-preview-label">{{ (vmEditLang() === 'ar' ? (vmForm.mission_title_ar || vmForm.mission_title) : vmForm.mission_title) || 'OUR MISSION' }}</span>
+            </div>
+            <div class="vm-preview-content">
+              <p>{{ (vmEditLang() === 'ar' ? (vmForm.mission_text_ar || vmForm.mission_text) : vmForm.mission_text) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="about-facility-admin-section">
+    <app-facility-gallery-management></app-facility-gallery-management>
+  </div>
+
+  <section class="group-companies-admin panel-card">
+    <div class="panel-header group-companies-admin__header">
+      <div>
+        <span class="panel-badge badge-teal">ABOUT PAGE · BELOW STATE-OF-THE-ART</span>
+        <h2 class="panel-title">Our Group Of Biotech Companies</h2>
+        <p class="group-companies-admin__hint">Manage the company names, descriptions, and logos displayed beneath the facility section.</p>
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="addGroupCompany()">+ Add Company</button>
+    </div>
+
+    <form (ngSubmit)="saveGroupCompanies()" class="group-companies-admin__form">
+      <p class="field-managed-notice">Section label and title are managed in <a routerLink="/admin/section-headings">Section Title Studio</a>.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Optional Subtitle (EN)</label>
+          <input class="form-input" [(ngModel)]="groupCompaniesForm.subtitle" name="groupSubtitle" />
+        </div>
+        <div class="form-group">
+          <label>Optional Subtitle (AR)</label>
+          <input class="form-input" [(ngModel)]="groupCompaniesForm.subtitle_ar" name="groupSubtitleAr" dir="rtl" />
+        </div>
+      </div>
+
+      <article *ngFor="let company of groupCompaniesForm.companies; let i = index; trackBy: trackByIndex" class="group-company-edit-card">
+        <div class="group-company-edit-card__top">
+          <h3>Company {{ i + 1 }}</h3>
+          <button type="button" class="btn btn-danger group-company-edit-card__remove" (click)="removeGroupCompany(i)">Remove</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Name (EN)</label><input class="form-input" [(ngModel)]="company.name" [name]="'groupName' + i" /></div>
+          <div class="form-group"><label>Name (AR)</label><input class="form-input" [(ngModel)]="company.name_ar" [name]="'groupNameAr' + i" dir="rtl" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Description (EN)</label><textarea class="form-textarea" rows="4" [(ngModel)]="company.description" [name]="'groupDescription' + i"></textarea></div>
+          <div class="form-group"><label>Description (AR)</label><textarea class="form-textarea" rows="4" [(ngModel)]="company.description_ar" [name]="'groupDescriptionAr' + i" dir="rtl"></textarea></div>
+        </div>
+        <div class="form-group group-company-edit-card__logo-field">
+          <label>Logo image path or URL (optional)</label>
+          <input class="form-input" [(ngModel)]="company.logo_url" [name]="'groupLogo' + i" placeholder="e.g. logo_navbar.webp or /uploads/company-logo.png" />
+          <img *ngIf="company.logo_url" [src]="resolveImg(company.logo_url)" [alt]="company.name + ' logo preview'" />
+        </div>
+      </article>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="isSaving()">{{ isSaving() ? 'Saving Changes...' : 'Save Group Companies' }}</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ====================================================
+       MODAL 1: ADD / EDIT LEADER PROFILE MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isLeaderModalOpen()"
+    (click)="closeLeaderModal()"
+  >
+    <div
+      class="modal-box modal-lg"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">{{ isEditingLeader() ? 'EDIT LEADER' : 'NEW LEADER' }}</span>
+          <h2 class="modal-title">
+            {{ isEditingLeader() ? 'Edit ' + leaderForm.name : 'Add Founding Leader Profile' }}
+          </h2>
+        </div>
+        <button type="button" class="btn-close-modal" (click)="closeLeaderModal()">&times;</button>
+      </div>
+
+      <form (ngSubmit)="saveLeader()" class="modal-body-scroll">
+        
+        <div class="lang-switch-pills">
+          <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'en'" (click)="leaderEditLang.set('en')">
+            <span>🇬🇧</span> English Profile
+          </button>
+          <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'ar'" (click)="leaderEditLang.set('ar')">
+            <span>🇸🇦</span> Saudi Arabic Profile (العربية)
+          </button>
+        </div>
+
+        <!-- ENGLISH PROFILE FIELDS -->
+        <ng-container *ngIf="leaderEditLang() === 'en'">
+          <!-- ROW 1: Name & Initials -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>Full Name (EN) *</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.name"
+                name="l_name"
+                placeholder="e.g. Dr. Khaled Almosa"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>Initials / Avatar Code</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.initials"
+                name="l_initials"
+                placeholder="e.g. KA"
+                class="form-input"
+                maxlength="4"
+              />
+            </div>
+          </div>
+
+          <!-- ROW 2: Title & Board -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>Executive Title (EN) *</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.title"
+                name="l_title"
+                placeholder="e.g. Founder and Chairman of Vaccine Industrial Company"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>Board / Committee Badge</label>
+              <select [(ngModel)]="leaderForm.badge" name="l_badge" class="form-select">
+                <option value="Founder &amp; Chairman">Founder &amp; Chairman</option>
+                <option value="Executive Board">Executive Board</option>
+                <option value="Advisory Board">Advisory Board</option>
+                <option value="Scientific Board">Scientific Board</option>
+                <option value="Medical Board">Medical Board</option>
+                <option value="Board Member">Board Member</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ROW 3: Role Summary -->
+          <div class="form-group">
+            <label>Role Summary (EN - Displayed on Card)</label>
+            <textarea
+              [(ngModel)]="leaderForm.role"
+              name="l_role"
+              rows="2"
+              placeholder="Brief 1-2 sentence overview of professional leadership"
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <!-- SECTION: Comprehensive Bio Sections (Modal Content) EN -->
+          <div class="bio-builder-section">
+            <div class="bio-builder-header">
+              <div>
+                <h3 class="bio-title">Detailed Profile Biography &amp; Credentials (EN)</h3>
+                <p class="bio-subtitle">Configure structured sections (paragraphs or bullet points) shown in the full profile modal.</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSection()">
+                + Add Bio Section
+              </button>
+            </div>
+
+            <div *ngFor="let sec of leaderForm.bio_sections; let sIdx = index; trackBy: trackByIndex" class="bio-section-box">
+              <div class="bio-sec-header">
+                <input
+                  type="text"
+                  [(ngModel)]="sec.heading"
+                  [name]="'sec_h_' + sIdx"
+                  placeholder="Section Heading (e.g. Government Policy & Innovation Leadership)"
+                  class="form-input bio-heading-input"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioSection(sIdx)"
+                  title="Remove Section"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Paragraphs -->
+              <div class="bio-paragraphs-block">
+                <label class="sub-label">Paragraphs:</label>
+                <div *ngFor="let p of sec.paragraphs; let pIdx = index; trackBy: trackByIndex" class="bio-p-row">
+                  <textarea
+                    [(ngModel)]="sec.paragraphs![pIdx]"
+                    [name]="'sec_p_' + sIdx + '_' + pIdx"
+                    rows="2"
+                    class="form-textarea flex-1"
+                    placeholder="Enter paragraph text..."
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioParagraph(sec, pIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <button type="button" class="btn-link-sm" (click)="addBioParagraph(sec)">
+                  + Add Paragraph
+                </button>
+              </div>
+
+              <!-- Bullet Items -->
+              <div class="bio-items-block mt-2">
+                <label class="sub-label">Bullet Items / Key Achievements:</label>
+                <div *ngFor="let itm of sec.items; let iIdx = index; trackBy: trackByIndex" class="bio-item-row">
+                  <input
+                    type="text"
+                    [(ngModel)]="sec.items![iIdx]"
+                    [name]="'sec_i_' + sIdx + '_' + iIdx"
+                    class="form-input flex-1 text-sm"
+                    placeholder="Achievement or credential bullet..."
+                  />
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioItem(sec, iIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div class="d-flex align-center gap-2 mt-1">
+                  <input
+                    #newItemInput
+                    type="text"
+                    placeholder="Type new bullet item..."
+                    class="form-input flex-1 text-sm"
+                    (keyup.enter)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    (click)="addBioItem(sec, newItemInput.value); newItemInput.value = ''"
+                  >
+                    Add Item
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- ARABIC PROFILE FIELDS -->
+        <ng-container *ngIf="leaderEditLang() === 'ar'">
+          <!-- ROW 1: Name & Badge AR -->
+          <div class="form-row">
+            <div class="form-group col-8">
+              <label>الاسم الكامل (Full Name AR)</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.name_ar"
+                name="l_name_ar"
+                placeholder="مثال: د. خالد الموسى"
+                class="form-input rtl-input"
+              />
+            </div>
+            <div class="form-group col-4">
+              <label>شارة المجلس بالعربية (Badge AR)</label>
+              <input
+                type="text"
+                [(ngModel)]="leaderForm.badge_ar"
+                name="l_badge_ar"
+                placeholder="مثال: المؤسس ورئيس مجلس الإدارة"
+                class="form-input rtl-input"
+              />
+            </div>
+          </div>
+
+          <!-- ROW 2: Title AR -->
+          <div class="form-group">
+            <label>المسمى التنفيذي (Executive Title AR)</label>
+            <input
+              type="text"
+              [(ngModel)]="leaderForm.title_ar"
+              name="l_title_ar"
+              placeholder="مثال: المؤسس ورئيس مجلس إدارة شركة اللقاحات الصناعية"
+              class="form-input rtl-input"
+            />
+          </div>
+
+          <!-- ROW 3: Role Summary AR -->
+          <div class="form-group">
+            <label>ملخص الدور القيادي (Role Summary AR - بطاقة العرض)</label>
+            <textarea
+              [(ngModel)]="leaderForm.role_ar"
+              name="l_role_ar"
+              rows="2"
+              placeholder="نبذة موجزة عن الدور القيادي باللغة العربية..."
+              class="form-textarea rtl-input"
+            ></textarea>
+          </div>
+
+          <!-- SECTION: Comprehensive Bio Sections (Modal Content) AR -->
+          <div class="bio-builder-section">
+            <div class="bio-builder-header">
+              <div>
+                <h3 class="bio-title">السيرة الذاتية المفصلة والمؤهلات (AR)</h3>
+                <p class="bio-subtitle">الأقسام والفقرات المعروضة داخل النافذة المنبثقة بالعربية.</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="addBioSectionAr()">
+                + إضافة قسم جديد
+              </button>
+            </div>
+
+            <div *ngFor="let sec of leaderForm.bio_sections_ar; let sIdx = index; trackBy: trackByIndex" class="bio-section-box">
+              <div class="bio-sec-header">
+                <input
+                  type="text"
+                  [(ngModel)]="sec.heading"
+                  [name]="'sec_ar_h_' + sIdx"
+                  placeholder="عنوان القسم (مثال: القيادة والسياسات الصحية والابتكار)"
+                  class="form-input bio-heading-input rtl-input"
+                />
+                <button
+                  type="button"
+                  class="btn-delete-tiny"
+                  (click)="removeBioSectionAr(sIdx)"
+                  title="حذف القسم"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Paragraphs AR -->
+              <div class="bio-paragraphs-block">
+                <label class="sub-label">الفقرات:</label>
+                <div *ngFor="let p of sec.paragraphs; let pIdx = index; trackBy: trackByIndex" class="bio-p-row">
+                  <textarea
+                    [(ngModel)]="sec.paragraphs![pIdx]"
+                    [name]="'sec_ar_p_' + sIdx + '_' + pIdx"
+                    rows="2"
+                    class="form-textarea flex-1 rtl-input"
+                    placeholder="نص الفقرة بالعربية..."
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioParagraphAr(sec, pIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <button type="button" class="btn-link-sm" (click)="addBioParagraphAr(sec)">
+                  + إضافة فقرة
+                </button>
+              </div>
+
+              <!-- Bullet Items AR -->
+              <div class="bio-items-block mt-2">
+                <label class="sub-label">النقاط والإنجازات الرئيسية:</label>
+                <div *ngFor="let itm of sec.items; let iIdx = index; trackBy: trackByIndex" class="bio-item-row">
+                  <input
+                    type="text"
+                    [(ngModel)]="sec.items![iIdx]"
+                    [name]="'sec_ar_i_' + sIdx + '_' + iIdx"
+                    class="form-input flex-1 text-sm rtl-input"
+                    placeholder="إنجاز أو مؤهل..."
+                  />
+                  <button
+                    type="button"
+                    class="btn-delete-tiny"
+                    (click)="removeBioItemAr(sec, iIdx)"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div class="d-flex align-center gap-2 mt-1">
+                  <input
+                    #newItemInputAr
+                    type="text"
+                    placeholder="اكتب نقطة جديدة..."
+                    class="form-input flex-1 text-sm rtl-input"
+                    (keyup.enter)="addBioItemAr(sec, newItemInputAr.value); newItemInputAr.value = ''"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary"
+                    (click)="addBioItemAr(sec, newItemInputAr.value); newItemInputAr.value = ''"
+                  >
+                    إضافة
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- SHARED: Photo Upload -->
+        <div class="form-row align-center">
+          <div class="form-group col-4">
+            <div class="leader-upload-preview">
+              <img
+                *ngIf="leaderPhotoPreview"
+                [src]="leaderPhotoPreview"
+                alt="Leader preview"
+                class="photo-preview-img"
+              />
+              <div *ngIf="!leaderPhotoPreview" class="photo-preview-placeholder">
+                {{ leaderForm.initials || 'PIC' }}
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-8">
+            <label>Upload Official Portrait Photo</label>
+            <input type="file" (change)="onLeaderPhotoSelected($event)" accept="image/*" class="form-input-file" />
+            <span class="field-hint">PNG, JPG, WEBP. High quality portrait recommended.</span>
+          </div>
+        </div>
+
+        <!-- SHARED: Status & Order -->
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Display Status</label>
+            <select [(ngModel)]="leaderForm.status" name="l_status" class="form-select">
+              <option value="Active">Active (Visible on public carousel)</option>
+              <option value="Inactive">Inactive (Hidden)</option>
+            </select>
+          </div>
+          <div class="form-group col-6">
+            <label>Sort Order Index</label>
+            <input
+              type="number"
+              [(ngModel)]="leaderForm.order_index"
+              name="l_order"
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="closeLeaderModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+            {{ isSaving() ? 'Saving Leader...' : (isEditingLeader() ? 'Update Leader Profile' : 'Create Leader') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 2: LIVE PREVIEW OF LEADER MODAL (EXACT PUBLIC REPLICA)
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isPreviewLeaderModalOpen() && previewLeader()"
+    (click)="closePreviewLeader()"
+  >
+    <div
+      class="about-modal about-leader-modal preview-modal-scale"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Top-Right Close Button -->
+      <button
+        type="button"
+        class="about-modal__close-btn"
+        (click)="closePreviewLeader()"
+        aria-label="Close leader profile"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="lang-switch-pills" style="margin: 0.5rem 1.5rem 0;">
+        <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'en'" (click)="leaderEditLang.set('en')">🇬🇧 English</button>
+        <button type="button" class="pill-btn" [class.active]="leaderEditLang() === 'ar'" (click)="leaderEditLang.set('ar')">🇸🇦 Saudi Arabic</button>
+      </div>
+
+      <!-- Leader Modal Header: Photo + Name + Title -->
+      <div class="about-leader-modal__header" [class.rtl-preview]="leaderEditLang() === 'ar'">
+        <div class="about-leader-modal__portrait">
+          <img
+            *ngIf="previewLeader()?.image"
+            [src]="resolveImg(previewLeader()?.image)"
+            [alt]="previewLeader()?.name"
+            class="about-leader-modal__photo"
+          />
+          <div *ngIf="!previewLeader()?.image" class="about-leader-card__avatar">
+            <span class="about-leader-card__initials">{{ previewLeader()?.initials || 'VP' }}</span>
+          </div>
+        </div>
+        <div class="about-leader-modal__meta">
+          <span class="about-modal__eyebrow">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.badge_ar || previewLeader()?.badge) : previewLeader()?.badge) || 'LEADERSHIP' }}</span>
+          <h2 class="about-leader-modal__name">
+            {{ (leaderEditLang() === 'ar' ? (previewLeader()?.name_ar || previewLeader()?.name) : previewLeader()?.name) }}
+          </h2>
+          <p class="about-leader-modal__title">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.title_ar || previewLeader()?.title) : previewLeader()?.title) }}</p>
+          <p class="about-leader-modal__role-tag">{{ (leaderEditLang() === 'ar' ? (previewLeader()?.role_ar || previewLeader()?.role) : previewLeader()?.role) }}</p>
+        </div>
+      </div>
+
+      <!-- Leader Modal Body: Detailed Bio Sections -->
+      <div class="about-modal__body about-leader-modal__body" [class.rtl-preview]="leaderEditLang() === 'ar'">
+        <div
+          *ngFor="let section of (leaderEditLang() === 'ar' && previewLeader()?.bio_sections_ar && previewLeader()!.bio_sections_ar!.length > 0 ? previewLeader()?.bio_sections_ar : previewLeader()?.bio_sections)"
+          class="about-leader-modal__section"
+        >
+          <h3 class="about-leader-modal__section-heading">{{ section.heading }}</h3>
+
+          <p *ngFor="let p of section.paragraphs" class="about-leader-modal__text">
+            {{ p }}
+          </p>
+
+          <ul *ngIf="section.items && section.items.length > 0" class="about-leader-modal__list">
+            <li *ngFor="let item of section.items" class="about-leader-modal__list-item">
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 3: PREVIEW COMPANY OVERVIEW STORY MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isOverviewPreviewModalOpen()"
+    (click)="closeOverviewPreview()"
+  >
+    <div
+      class="about-modal preview-modal-scale"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="about-modal__close-btn"
+        (click)="closeOverviewPreview()"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="lang-switch-pills" style="margin: 0.5rem 1.5rem 0;">
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'en'" (click)="overviewEditLang.set('en')">🇬🇧 English</button>
+        <button type="button" class="pill-btn" [class.active]="overviewEditLang() === 'ar'" (click)="overviewEditLang.set('ar')">🇸🇦 Saudi Arabic</button>
+      </div>
+
+      <div class="about-modal__header" [class.rtl-preview]="overviewEditLang() === 'ar'">
+        <span class="about-modal__eyebrow">{{ (overviewEditLang() === 'ar' ? (overviewForm.badge_ar || overviewForm.badge) : overviewForm.badge) || 'COMPANY OVERVIEW' }}</span>
+        <h2 class="about-modal__heading">
+          {{ (overviewEditLang() === 'ar' ? (overviewForm.title_ar || overviewForm.title) : overviewForm.title) || 'Pioneering Biotechnology in Saudi Arabia' }}
+        </h2>
+      </div>
+
+      <div class="about-modal__body" [class.rtl-preview]="overviewEditLang() === 'ar'">
+        <ng-container *ngIf="overviewEditLang() === 'ar'">
+          <p *ngFor="let p of (overviewForm.paragraphs_ar.length ? overviewForm.paragraphs_ar : overviewForm.paragraphs)">{{ p }}</p>
+        </ng-container>
+        <ng-container *ngIf="overviewEditLang() === 'en'">
+          <p *ngFor="let p of overviewForm.paragraphs">{{ p }}</p>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MODAL 4: DELETE CONFIRMATION MODAL
+       ==================================================== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="isDeleteModalOpen()"
+    (click)="closeDeleteModal()"
+  >
+    <div class="modal-box modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title text-danger">Delete Leader Profile</h3>
+        <button type="button" class="btn-close-modal" (click)="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete <strong>{{ itemToDeleteName() }}</strong>?</p>
+        <p class="text-sm text-muted mt-2">This action cannot be undone and will immediately remove this leader from the public about carousel.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="executeDeleteLeader()">
+          Delete Permanently
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

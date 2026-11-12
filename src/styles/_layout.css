@@ -1,0 +1,196 @@
+/* ============================================
+   VIC DESIGN SYSTEM — CONTAINERS & LAYOUT
+   ============================================ */
+
+/* --- Main Container --- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* --- Content Container (narrower) --- */
+.container-content {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* --- Narrow Container --- */
+.container-narrow {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* --- Full Width (no max) --- */
+.container-fluid {
+  width: 100%;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+
+/* ==========================================
+   SECTION SPACING
+   ========================================== */
+
+.section {
+  padding-top: var(--space-80);
+  padding-bottom: var(--space-80);
+}
+
+.section-sm {
+  padding-top: var(--space-48);
+  padding-bottom: var(--space-48);
+}
+
+.section-lg {
+  padding-top: var(--space-120);
+  padding-bottom: var(--space-120);
+}
+
+
+/* ==========================================
+   GRID SYSTEM
+   ========================================== */
+
+.grid {
+  display: grid;
+  gap: var(--space-24);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+
+/* ==========================================
+   FLEX UTILITIES
+   ========================================== */
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-8   { gap: var(--space-8); }
+.gap-12  { gap: var(--space-12); }
+.gap-16  { gap: var(--space-16); }
+.gap-24  { gap: var(--space-24); }
+.gap-32  { gap: var(--space-32); }
+.gap-40  { gap: var(--space-40); }
+.gap-48  { gap: var(--space-48); }
+
+
+/* ==========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+/* Tablet - ≤1024px */
+@media (max-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .section {
+    padding-top: var(--space-64);
+    padding-bottom: var(--space-64);
+  }
+
+  .section-lg {
+    padding-top: var(--space-80);
+    padding-bottom: var(--space-80);
+  }
+}
+
+/* Tablet Small - ≤768px */
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section {
+    padding-top: var(--space-48);
+    padding-bottom: var(--space-48);
+  }
+}
+
+/* Mobile - ≤640px */
+@media (max-width: 640px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section {
+    padding-top: var(--space-40);
+    padding-bottom: var(--space-40);
+  }
+
+  .section-lg {
+    padding-top: var(--space-64);
+    padding-bottom: var(--space-64);
+  }
+}

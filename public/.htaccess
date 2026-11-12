@@ -1,0 +1,13 @@
+Options -MultiViews
+RewriteEngine On
+
+# Leave API, backend, and uploaded-media requests to their existing handlers.
+RewriteRule ^(?:api|backend|uploads)(?:/|$) - [L,NC]
+
+# Serve real files such as JavaScript bundles, stylesheets, and images directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Angular handles browser routes such as /admin and /partners.
+RewriteRule ^ index.html [L]

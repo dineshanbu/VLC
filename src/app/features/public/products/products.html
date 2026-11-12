@@ -1,0 +1,589 @@
+<!-- Hero Banner Section -->
+<section class="products-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    @if (heroSettingsLoaded && heroImageUrl) { <img
+      [src]="heroImageUrl"
+      alt="Innovative Vaccines and Trusted Protection — Vaccine Industrial Company"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    /> }
+    <div class="products-hero__overlay"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
+
+      @if (false) {
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('products.breadcrumb.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('products.breadcrumb.products') }}</span>
+      </nav>
+      }
+
+      <span class="products-hero__eyebrow section-eyebrow">{{ 'products.hero.badge' | sectionHeading:'PRODUCTS':'منتجاتنا' }}</span>
+
+      <!-- Main Headline (Matching Homepage Hero Scale) -->
+      <h1 class="products-hero__heading">
+        {{ 'products.hero.line1' | sectionHeading:'Innovative Vaccines.':'لقاحات مبتكرة.' }}<br />
+        {{ 'products.hero.line2' | sectionHeading:'Trusted ':'حماية ' }}<span class="products-hero__heading-accent">{{ 'products.hero.accent' | sectionHeading:'Protection.':'موثوقة.' }}</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="products-hero__description">
+        {{ heroDescription() }}
+      </p>
+
+    </div>
+  </div>
+
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon (Matching About & Contact Screens) -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
+    <svg
+      class="products-hero__wave-svg"
+      viewBox="0 0 1440 120"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="productsTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C9A7" />
+          <stop offset="35%" stop-color="#00E5C9" />
+          <stop offset="70%" stop-color="#0D8A8A" />
+          <stop offset="100%" stop-color="#075E60" />
+        </linearGradient>
+      </defs>
+
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
+      <path
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
+        fill="url(#productsTealWaveGrad)"
+      />
+
+      <!-- Clean Seamless Base Matching Products Section -->
+      <path
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
+        fill="#001526"
+      />
+    </svg>
+  </div>
+
+</section>
+
+<!-- ============================================
+     OUR PRODUCTS SECTION (Featured Showcase Carousel)
+     Matching User Attached Reference
+     ============================================ -->
+<section class="products-section" id="our-products">
+  <img class="section-floating-v section-floating-v--products" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="products-section__container">
+
+    <!-- Section Header — Matching Home Page (OUR PLATFORM / LATEST NEWS) -->
+    <div class="products-section__header">
+      <span class="products-section__label section-eyebrow">{{ 'products.section.eyebrow' | sectionHeading:'OUR PRODUCTS':'منتجاتنا' }}</span>
+    </div>
+
+    <!-- Main Showcase Carousel Frame -->
+    <div
+      class="showcase-carousel"
+      (mouseenter)="pauseAutoplay()"
+      (mouseleave)="resumeAutoplay()"
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
+      
+      <!-- Left Carousel Arrow -->
+      @if (currentProductList.length > 1) {
+      <button
+        type="button"
+        class="showcase-carousel__arrow showcase-carousel__arrow--prev"
+        (click)="prevProduct()"
+        aria-label="Previous Product"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      }
+
+      <!-- Featured Product Card (Left Content + Centre Image + Right Features) -->
+      <div class="showcase-card">
+        
+        <!-- Left Column: Content -->
+        <div class="showcase-card__content">
+          <h2 class="showcase-card__title"><span dir="ltr">{{ currentProduct.name }}</span></h2>
+          <h3 class="showcase-card__subtitle">{{ currentProduct.subtitle }}</h3>
+
+          <p class="showcase-card__description">
+            {{ currentProduct.description }}
+          </p>
+
+          <button
+            type="button"
+            class="showcase-card__btn"
+            (click)="openProductModal(currentProduct)"
+          >
+            <span>{{ translationService.translate('products.btn.viewDetails') }}</span>
+          </button>
+        </div>
+
+        <!-- Centre Column: Product Image in Studio Frame -->
+        <div
+          class="showcase-card__media"
+        >
+          <div class="showcase-card__image-wrap">
+            <img
+              [src]="currentProduct.featuredImage || currentProduct.image"
+              [alt]="currentProduct.name + ' — ' + currentProduct.subtitle"
+              class="showcase-card__image"
+              (error)="$any($event.target).src = 'flucelvax_featured.webp'"
+            />
+          </div>
+        </div>
+
+        <!-- Dynamic feature panel with the matching partner mark when applicable. -->
+        <div class="showcase-card__partner-column">
+          <aside class="showcase-card__feature-panel" [attr.aria-label]="currentProduct.name + ' features'">
+            @for (feature of currentProduct.features; track feature; let idx = $index) {
+              <div class="showcase-card__feature-panel-item">
+                <span class="showcase-card__feature-panel-icon" aria-hidden="true">
+                  @switch (idx) {
+                    @case (0) { <svg viewBox="0 0 32 32"><circle cx="16" cy="7" r="3"></circle><circle cx="8" cy="15" r="3"></circle><circle cx="24" cy="15" r="3"></circle><circle cx="12" cy="24" r="3"></circle><circle cx="20" cy="24" r="3"></circle><path d="M14 9l-4 4m8-4 4 4m-12 5 2 3m10-3-2 3m-5-7h2"></path></svg> }
+                    @case (1) { <svg viewBox="0 0 32 32"><path d="M16 3l10 4v7c0 7-4 12-10 15C10 26 6 21 6 14V7l10-4Z"></path><path d="m11 16 3 3 7-7"></path></svg> }
+                    @default { <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"></circle><path d="m12 16 3 3 6-7M16 2v3M16 27v3M2 16h3M27 16h3"></path></svg> }
+                  }
+                </span>
+                <span>{{ feature }}</span>
+              </div>
+            }
+          </aside>
+          @if (isCslProduct(currentProduct)) {
+            <div class="showcase-carousel__csl-actions">
+              <div class="showcase-carousel__csl-actions-inner">
+                <button type="button" class="csl-intro-button" (click)="openAboutCslVideoModal()">
+                  <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+                  <span>{{ translationService.translate('products.btn.aboutCsl') }}</span>
+                </button>
+                <button type="button" class="csl-intro-button" (click)="openCslIntroVideoModal()">
+                  <span class="csl-intro-button__play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+                  <span>{{ translationService.translate('products.btn.cslFacility') }}</span>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- Right Carousel Arrow -->
+      @if (currentProductList.length > 1) {
+      <button
+        type="button"
+        class="showcase-carousel__arrow showcase-carousel__arrow--next"
+        (click)="nextProduct()"
+        aria-label="Next Product"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      }
+
+    </div>
+
+    <!-- ============================================
+         TECHNOLOGY TRANSFER PARTNER STRIP
+         Sits inside the same container as the carousel
+         so it aligns with the showcase-card edges.
+         Visible on desktop & laptop only (≥ 768 px).
+         Mobile layout is intentionally untouched.
+         ============================================ -->
+    <div class="products-partner-strip" [dir]="translationService.isRtl() ? 'rtl' : 'ltr'">
+      @if (cslPartnerLogo) {
+        <div class="products-partner-strip__logo">
+          <img [src]="cslPartnerLogo" alt="CSL Seqirus" />
+        </div>
+        <span class="products-partner-strip__divider" aria-hidden="true"></span>
+      }
+      <div class="products-partner-strip__copy">
+        @if (cslPartnerTitle) {
+          <h3>{{ cslPartnerTitle }}</h3>
+        }
+        @if (cslPartnerDescription) {
+          <p>{{ cslPartnerDescription }}</p>
+        }
+      </div>
+      <div class="products-partner-strip__actions">
+        <button type="button" class="products-partner-strip__btn" (click)="openAboutCslVideoModal()">
+          <span class="products-partner-strip__btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+          <span>{{ translationService.translate('products.btn.aboutCsl') }}</span>
+        </button>
+        <button type="button" class="products-partner-strip__btn" (click)="openCslIntroVideoModal()">
+          <span class="products-partner-strip__btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m9 6 9 6-9 6V6Z" /></svg></span>
+          <span>{{ translationService.translate('products.btn.cslFacility') }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carousel Indicator Dots -->
+    <div class="showcase-carousel__dots" role="tablist" aria-label="Products Carousel Pagination">
+      @for (product of currentProductList; track product.id; let idx = $index) {
+        <button
+          type="button"
+          class="showcase-carousel__dot"
+          [class.showcase-carousel__dot--active]="activeProductIndex() === idx"
+          (click)="goToProduct(idx)"
+          [attr.aria-label]="'Go to product ' + product.name"
+          role="tab"
+        ></button>
+      }
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     CELL-BASED VACCINE TECHNOLOGY SECTION
+     Matching Homepage About VIC Section Exactly
+     ============================================ -->
+
+<section class="about-vic tech-section" id="technology" aria-labelledby="technology-heading">
+  <img class="section-floating-v section-floating-v--technology" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <svg class="tech-section__wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80H650C850 80 925 8 1100 8S1320 80 1440 80V80H0Z" fill="#001a30"/><path d="M0 80H690C880 80 955 20 1120 20S1340 80 1440 80V80H0Z" fill="#001526"/></svg>
+
+  <div class="about-vic__container">
+
+    <div class="about-vic__grid products-hero-inner">
+
+      <!-- Left Content Column -->
+      <div class="about-vic__content products-copy">
+        <span class="pipeline-section-eyebrow" dir="auto">{{ 'products.tech.eyebrow' | sectionHeading:'CELL-BASED VACCINE TECHNOLOGY':'تقنية اللقاحات الخلوية' }}</span>
+        <h2 class="about-vic__heading" id="technology-heading" dir="auto">
+          {{ 'products.tech.title' | sectionHeading:'Cell-Based Vaccine Technology':'تقنية اللقاحات الخلوية' }}
+        </h2>
+
+        <p class="about-vic__desc" dir="auto">
+          {{ pipelineText('description', 'products.tech.desc') }}
+        </p>
+
+        <!-- Two-column vaccine pipeline list -->
+        <div class="tech-pillars-grid">
+          @for (index of pipelinePillarIndexes; track index) {
+            @if (pipelinePillarText(index); as pillar) {
+              <div class="tech-pillar-item">
+                <div class="tech-pillar-item__badge" aria-hidden="true">{{ pipelinePillarNumber(index) }}</div>
+                <div class="tech-pillar-item__info"><h4 class="tech-pillar-item__title" dir="auto">{{ pillar }}</h4></div>
+              </div>
+            }
+          }
+        </div>
+
+      </div>
+
+      <!-- Right Media Column with curved organic mask & floating badge -->
+      <div class="about-vic__media-wrapper products-visual">
+        @if (pipelineVideo; as videoUrl) {
+          <video class="about-vic__image" [src]="videoUrl" [poster]="pipelineImage" playsinline preload="metadata" [attr.aria-label]="pipelineText('title', 'products.tech.heading')"></video>
+          <button class="about-vic__play-button" type="button" (click)="openPipelineVideoModal()" [attr.aria-label]="translationService.isRtl() ? 'تشغيل الفيديو' : 'Play vaccine pipeline video'">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9 6 9 6-9 6V6Z" /></svg>
+          </button>
+        } @else {
+          <img class="about-vic__image" [src]="pipelineImage" [alt]="pipelineText('title', 'products.tech.heading')" loading="lazy" />
+        }
+        <div class="products-visual-overlay" aria-hidden="true"></div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+@if (isPipelineVideoModalOpen()) {
+  <div class="pipeline-video-modal" role="dialog" aria-modal="true" [attr.aria-label]="pipelineText('title', 'products.tech.heading')">
+    <button class="pipeline-video-modal__backdrop" type="button" aria-label="Close video" (click)="closePipelineVideoModal()"></button>
+    <div class="pipeline-video-modal__dialog">
+      <div class="pipeline-video-modal__header">
+        <div>
+          <span class="pipeline-video-modal__tag">{{ translationService.isRtl() ? 'تقنية اللقاحات' : 'OUR TECHNOLOGY' }}</span>
+          <h2 class="pipeline-video-modal__title">{{ 'products.tech.title' | sectionHeading:'Cell-Based Vaccine Technology':'تقنية اللقاحات الخلوية' }}</h2>
+        </div>
+        <button class="pipeline-video-modal__close-btn" type="button" [attr.aria-label]="translationService.isRtl() ? 'إغلاق الفيديو' : 'Close video'" (click)="closePipelineVideoModal()">×</button>
+      </div>
+      <div class="pipeline-video-modal__player">
+        <video #pipelineModalVideo class="pipeline-video-modal__video" [src]="pipelineVideoModalUrl()" [poster]="pipelineImage" autoplay controls playsinline></video>
+      </div>
+    </div>
+  </div>
+}
+
+@if (isCslIntroVideoModalOpen()) {
+  <div class="csl-intro-video-modal" role="dialog" aria-modal="true" [attr.aria-label]="translationService.translate(isAboutCslVideoModalOpen() ? 'products.btn.aboutCsl' : 'products.btn.introductionToCsl')">
+    <button class="csl-intro-video-modal__backdrop" type="button" aria-label="Close video" (click)="closeCslIntroVideoModal()"></button>
+    <div class="csl-intro-video-modal__dialog">
+      <div class="csl-intro-video-modal__header">
+        <h2>{{ translationService.translate(isAboutCslVideoModalOpen() ? 'products.btn.aboutCsl' : 'products.btn.introductionToCsl') }}</h2>
+        <button type="button" class="csl-intro-video-modal__close" aria-label="Close video" (click)="closeCslIntroVideoModal()">×</button>
+      </div>
+      @if (cslIntroVideoModalUrl()) {
+        <video #cslIntroModalVideo [src]="cslIntroVideoModalUrl()" autoplay controls playsinline></video>
+      } @else {
+        <p class="csl-intro-video-modal__message">{{ translationService.translate('products.video.notConfigured') }}</p>
+      }
+    </div>
+  </div>
+}
+
+<!-- ============================================
+     RESOURCES & DOWNLOADS SECTION
+     ============================================ -->
+<!-- ============================================
+     PARTNERS BANNER / CTA SECTION
+     ============================================ -->
+<!-- ============================================
+     PRODUCT DETAIL MODAL (100% PRESERVED)
+     ============================================ -->
+@if (isModalOpen() && selectedProduct(); as product) {
+  <div class="modal-backdrop" (click)="closeModal()" role="dialog" aria-modal="true" [attr.aria-label]="product.name + ' Details'">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <!-- Modal Top Header -->
+      <div class="modal-header">
+        <div class="modal-header__brand">
+          <img src="logo_navbar.webp" alt="Vaccine Industrial Company" class="modal-header__logo" />
+        </div>
+
+        <div class="modal-header__actions">
+          <a href="https://www.vaccine.com.sa" target="_blank" rel="noopener noreferrer" class="modal-header__link">
+            www.vaccine.com.sa
+          </a>
+          <button
+            type="button"
+            class="modal-header__close"
+            (click)="closeModal()"
+            aria-label="Close modal"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Breadcrumb -->
+      <div class="modal-breadcrumb">
+        <span class="modal-breadcrumb__link" (click)="closeModal()">{{ translationService.translate('products.breadcrumb.home') }}</span>
+        <span class="modal-breadcrumb__separator">&gt;</span>
+        <span class="modal-breadcrumb__link" (click)="closeModal()">{{ translationService.translate('products.breadcrumb.products') }}</span>
+        <span class="modal-breadcrumb__separator">&gt;</span>
+        <span class="modal-breadcrumb__current"><span dir="ltr">{{ product.name }}</span></span>
+      </div>
+
+      <!-- Modal Top Section: Two Columns (Image Gallery + Summary) -->
+      <div class="modal-hero">
+
+        <!-- Left: Image Preview & Thumbnails -->
+        <div class="modal-gallery">
+          <div class="modal-gallery__preview">
+            <img
+              [src]="product.gallery[activeThumbnailIndex()] || product.featuredImage || product.image"
+              [alt]="product.name"
+              class="modal-gallery__main-img"
+              (error)="$any($event.target).src = 'flucelvax_featured.webp'"
+            />
+          </div>
+
+          <!-- Thumbnail Strip -->
+          @if (product.gallery.length > 1) {
+            <div class="modal-gallery__thumbs">
+              <div class="modal-gallery__strip">
+                @for (thumb of product.gallery; track thumb; let idx = $index) {
+                  <div
+                    class="modal-gallery__thumb"
+                    [class.modal-gallery__thumb--active]="idx === activeThumbnailIndex()"
+                    (click)="selectThumbnail(idx)"
+                    role="button"
+                    tabindex="0"
+                    [attr.aria-label]="'View image ' + (idx + 1)"
+                  >
+                    <img [src]="thumb" [alt]="product.name + ' thumbnail ' + (idx + 1)" (error)="$any($event.target).src = 'flucelvax_featured.webp'" />
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Right: Modal Summary with Features & Action -->
+        <div class="modal-summary">
+          <h2 class="modal-summary__title"><span dir="ltr">{{ product.name }}</span></h2>
+          <p class="modal-summary__subtitle">{{ product.subtitle }}</p>
+          <p class="modal-summary__desc">{{ product.description }}</p>
+
+          <ul class="modal-summary__features">
+            @for (feature of product.features; track feature) {
+              <li class="modal-summary__feature">
+                <span class="modal-summary__check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+                <span>{{ feature }}</span>
+              </li>
+            }
+          </ul>
+
+          <div class="modal-summary__actions">
+            <a href="product_brochure.pdf" download class="btn-download">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>{{ translationService.translate('products.btn.downloadBrochure') }}</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Tabbed Content Navigation -->
+      <div class="modal-tabs" role="tablist" aria-label="Product Information Tabs">
+        @for (tab of tabs(); track tab) {
+          <button
+            type="button"
+            class="modal-tab"
+            [class.modal-tab--active]="activeTab() === tab"
+            (click)="setTab(tab)"
+            role="tab"
+            [attr.aria-selected]="activeTab() === tab"
+          >
+            {{ tab }}
+          </button>
+        }
+      </div>
+
+      <!-- Modal Tab Body Panels -->
+      <div class="modal-tab-content">
+
+        <!-- Tab 1: Overview (2-Column Grid Layout) -->
+        @if (activeTab() === tabs()[0] || activeTab() === 'Overview') {
+          <div class="modal-details-grid">
+            <!-- Left Column: Description + Plant Banner + Quality Standards -->
+            <div class="modal-details-col">
+              <h4 class="modal-details-heading">{{ translationService.translate('products.modal.heading.overview') }}</h4>
+              <p class="modal-desc-paragraph">{{ product.description }}</p>
+
+              <h4 class="modal-details-heading modal-details-heading--spaced">{{ translationService.translate('products.modal.heading.quality') }}</h4>
+              <ul class="modal-checklist">
+                @for (feat of product.features; track feat) {
+                  <li>
+                    <span class="modal-checklist__icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                    <span>{{ feat }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <!-- Right Column: Technical Specifications Table -->
+            <div class="modal-details-col">
+              <h4 class="modal-details-heading">{{ translationService.translate('products.modal.heading.specs') }}</h4>
+              <table class="modal-table">
+                <tbody>
+                  @for (spec of product.specs; track spec.label) {
+                    <tr>
+                      <td class="modal-table__label">{{ spec.label }}</td>
+                      <td class="modal-table__value">{{ spec.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        <!-- Tab 2: Specification -->
+        @if (activeTab() === tabs()[1] || activeTab() === 'Specification') {
+          <table class="modal-table">
+            <tbody>
+              @for (spec of product.specs; track spec.label) {
+                <tr>
+                  <td class="modal-table__label">{{ spec.label }}</td>
+                  <td class="modal-table__value">{{ spec.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 3: Indication -->
+        @if (activeTab() === tabs()[2] || activeTab() === 'Indication') {
+          <p class="modal-desc-paragraph">
+            {{ product.name }} {{ product.indication_desc || translationService.translate('products.modal.indication.desc') }}
+          </p>
+          <table class="modal-table">
+            <tbody>
+              <tr>
+                <td class="modal-table__label">{{ translationService.translate('products.modal.indication.targetPop') }}</td>
+                <td class="modal-table__value">{{ product.indication_target || translationService.translate('products.modal.indication.targetVal') }}</td>
+              </tr>
+              <tr>
+                <td class="modal-table__label">{{ translationService.translate('products.modal.indication.route') }}</td>
+                <td class="modal-table__value">{{ product.indication_route || translationService.translate('products.modal.indication.routeVal') }}</td>
+              </tr>
+              <!-- Dynamic Indication Custom Key-Value Items -->
+              @if (product.indication_items && product.indication_items.length > 0) {
+                @for (item of product.indication_items; track item.label) {
+                  <tr>
+                    <td class="modal-table__label">{{ item.label }}</td>
+                    <td class="modal-table__value">{{ item.value }}</td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 4: Storage & Handling -->
+        @if (activeTab() === tabs()[3] || activeTab() === 'Storage & Handling') {
+          <table class="modal-table">
+            <tbody>
+              @for (item of product.storage; track item.label) {
+                <tr>
+                  <td class="modal-table__label">{{ item.label }}</td>
+                  <td class="modal-table__value">{{ item.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Tab 5: Documents -->
+        @if (activeTab() === tabs()[4] || activeTab() === 'Documents') {
+          <table class="modal-table">
+            <tbody>
+              @for (res of product.resources; track res.name) {
+                <tr>
+                  <td class="modal-table__label">{{ res.name }}</td>
+                  <td class="modal-table__value">{{ res.type }} ({{ res.size }}) &mdash; Available upon official medical request</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+      </div>
+
+    </div>
+  </div>
+}
+
+

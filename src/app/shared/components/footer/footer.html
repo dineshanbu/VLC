@@ -1,0 +1,72 @@
+<footer class="footer" [class.footer--logo-preview]="logoPreviewMode" id="footer">
+  <div class="footer__container">
+
+    <!-- Footer Grid -->
+    <div class="footer__grid">
+
+      <!-- Column 1: Brand Logo, Mission & Social Links -->
+      <div class="footer__col footer__col--brand">
+        <a routerLink="/" class="footer__logo-link">
+          <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('footer_logo')" alt="Vaccine Industrial Company" class="footer__logo" />
+        </a>
+
+      </div>
+
+      <!-- Column 2: Editable Quick Links -->
+      <div class="footer__col footer__col--nav">
+        <h4 class="footer__heading">{{ text(branding.footerSettings().quick_links_title_en, branding.footerSettings().quick_links_title_ar) }}</h4>
+        <ul class="footer__list footer__list--nav">
+          @for (link of branding.footerSettings().quick_links; track $index) {
+            <li>
+              @if (isInternalLink(link.url)) {
+                <a [routerLink]="link.url" class="footer__link">{{ text(link.label_en, link.label_ar) }}</a>
+              } @else {
+                <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="footer__link">{{ text(link.label_en, link.label_ar) }}</a>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Column 3: How we can help (Contact Details) -->
+      <div class="footer__col footer__col--contact">
+        <h4 class="footer__heading">{{ text(branding.footerSettings().how_we_can_help_en, branding.footerSettings().how_we_can_help_ar) }}</h4>
+        <ul class="footer__contact-list">
+          <!-- Email -->
+          <li class="footer__contact-item">
+            <svg class="footer__contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <div class="footer__contact-text">
+              <span>{{ text(branding.footerSettings().query_label_en, branding.footerSettings().query_label_ar) }}</span>
+              <a [href]="'mailto:' + branding.footerSettings().email" class="footer__contact-link">{{ branding.footerSettings().email }}</a>
+            </div>
+          </li>
+
+          <!-- Address -->
+          <li class="footer__contact-item">
+            <svg class="footer__contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <div class="footer__contact-text">
+              {{ text(branding.footerSettings().address_en, branding.footerSettings().address_ar) }}
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright Divider & Bar -->
+    <div class="footer__bottom">
+      <p class="footer__copyright">
+        &copy; {{ currentYear }}
+        {{ translationService.isRtl() ? branding.footerSettings().copyright_ar : branding.footerSettings().copyright_en }}
+      </p>
+    </div>
+
+  </div>
+</footer>
+

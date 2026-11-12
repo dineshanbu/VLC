@@ -1,0 +1,35 @@
+<div class="about-modal-backdrop" (click)="closed.emit()" role="presentation">
+  <div class="about-modal about-leader-modal" role="dialog" aria-modal="true"
+    [attr.aria-labelledby]="headingId" (click)="$event.stopPropagation()">
+    <button type="button" class="about-modal__close-btn" (click)="closed.emit()" aria-label="Close leader profile">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="about-leader-modal__header">
+      <div class="about-leader-modal__portrait">
+        <img *ngIf="profile.image" [src]="profile.image" [alt]="profile.name" class="about-leader-modal__photo" />
+        <span *ngIf="!profile.image" class="about-leader-modal__initials">{{ profile.initials || 'VIC' }}</span>
+      </div>
+      <div class="about-leader-modal__meta">
+        <span class="about-modal__eyebrow">{{ profile.badge }}</span>
+        <h2 [id]="headingId" class="about-leader-modal__name">{{ profile.name }}</h2>
+        <p class="about-leader-modal__title">{{ profile.title }}</p>
+        <p class="about-leader-modal__role-tag">{{ profile.role }}</p>
+      </div>
+    </div>
+
+    <div class="about-modal__body about-leader-modal__body">
+      <div *ngFor="let section of profile.bioSections" class="about-leader-modal__section">
+        <h3 class="about-leader-modal__section-heading">{{ section.heading }}</h3>
+        <p *ngFor="let paragraph of section.paragraphs" class="about-leader-modal__text">{{ paragraph }}</p>
+        <ul *ngIf="section.items?.length" class="about-leader-modal__list">
+          <li *ngFor="let item of section.items" class="about-leader-modal__list-item">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<app-hero #hero />
+
+<app-our-platform />
+<app-about-vic (watchVideo)="hero.openVideoModal($event)" />
+<section class="home-partner-showcase" aria-labelledby="home-partners-heading">
+  <div class="home-partner-showcase__container">
+    <div class="home-partner-showcase__header">
+      <div class="home-partner-showcase__header-text">
+        <span class="home-partner-showcase__eyebrow section-eyebrow">{{ 'home.partners.eyebrow' | sectionHeading:'OUR PARTNERS':'شركاؤنا' }}</span>
+        <h2 id="home-partners-heading">{{ 'home.partners.title' | sectionHeading:'Stronger Together.':'معاً نصنع الفرق.' }}</h2>
+        <p>{{ translationService.translate('homePartners.description') }}</p>
+      </div>
+      @if (homePartners().length > 1) {
+      <div class="home-partner-showcase__controls" role="group" [attr.aria-label]="translationService.translate('homePartners.carouselControls')">
+        <button type="button" class="home-partner-showcase__arrow" (click)="movePartnerCarousel(-1)" [attr.aria-label]="translationService.translate('homePartners.previous')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+        </button>
+        <button type="button" class="home-partner-showcase__arrow" (click)="movePartnerCarousel(1)" [attr.aria-label]="translationService.translate('homePartners.next')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      </div>
+      }
+    </div>
+    <div #homePartnerTrack class="home-partner-showcase__grid">
+      @for (partner of homePartners(); track partner.id ?? partner.code ?? partner.name) {
+        <article class="home-partner-showcase__card">
+          <div class="home-partner-showcase__portrait">
+            <div class="home-partner-showcase__logo-frame">
+              <img [src]="partnerImageUrl(partner.logo)" [alt]="partnerDisplayName(partner)" loading="lazy" />
+            </div>
+          </div>
+          <div class="home-partner-showcase__body">
+            <div class="home-partner-showcase__title-row">
+              <h3>{{ partnerDisplayName(partner) }}</h3>
+              @if (partnerWebsiteUrl(partner); as website) {
+              <a class="home-partner-showcase__website-arrow" [href]="website" target="_blank" rel="noopener noreferrer" [attr.aria-label]="translationService.translate('partners.aria.visitWebsite').replace('{name}', partnerDisplayName(partner))">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7M8 7h9v9" />
+                </svg>
+              </a>
+              }
+            </div>
+            <p class="home-partner-showcase__category">{{ partnerDisplayCategory(partner) }}</p>
+            <p class="home-partner-showcase__description">{{ partnerDisplayDescription(partner) }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+<app-home-showcase />
+<app-founding-partners [profileOpen]="isLeaderModalOpen" (viewProfile)="openLeaderProfile($event)" />
+<app-latest-news />
+
+<app-leader-profile-modal
+  *ngIf="isLeaderModalOpen && selectedLeaderModalProfile as profile"
+  [profile]="profile"
+  (closed)="closeLeaderProfile()"
+></app-leader-profile-modal>

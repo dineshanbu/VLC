@@ -1,0 +1,393 @@
+<!-- ====================================================
+     ABOUT US PAGE
+     STEP 1 Design System Consistency (Exact Home Scale)
+     Vaccine Industrial Company
+     ==================================================== -->
+
+<!-- ====================================================
+     SECTION 1 — ABOUT HERO BANNER (APPROVED SPLIT COMPOSITION)
+     ==================================================== -->
+<section class="products-hero about-hero" aria-labelledby="about-hero-title">
+  <div class="products-hero__bg" aria-hidden="true">
+    @if (heroContentLoaded && aboutHeroImageUrl()) { <img
+      [src]="aboutHeroImageUrl()"
+      alt=""
+      class="products-hero__image"
+      loading="eager"
+      (error)="onHeroImgError($event)"
+    /> }
+    <div class="products-hero__overlay"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div class="products-hero__container about-hero-content">
+    <div class="products-hero__content">
+
+      <div class="about-hero__eyebrow-row">
+        <span class="products-hero__eyebrow about-hero__eyebrow section-eyebrow">{{ 'about.hero.badge' | sectionHeading:'ABOUT VIC':'عن الشركة' }}</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 id="about-hero-title" class="about-hero__heading products-hero__heading">
+        {{ 'about.hero.title' | sectionHeading:'Vaccine Industrial Holding LLC':'شركة اللقاحات الصناعية القابضة' }}
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p *ngIf="heroText('subtitle')" class="about-hero__subheading">{{ heroText('subtitle') }}</p>
+
+      <p *ngIf="heroText('description')" class="about-hero__description products-hero__description">{{ heroText('description') }}</p>
+
+      <!-- Read More Action Button (Opens Company Overview Modal) -->
+      <div class="products-hero__action">
+        <button type="button" class="about-hero__read-more-btn" (click)="openOverviewModal()" aria-haspopup="dialog"
+          aria-label="Read full company overview story in modal popup">
+          <span>{{ translationService.translate('about.hero.readMore') }}</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ====================================================
+     SECTION 2 — OUR PURPOSE: VISION & MISSION
+     Exact Layout matching Reference (media_1788803647218.png)
+     ==================================================== -->
+<section class="about-purpose vic-section">
+  <img class="vic-floating-v" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="about-purpose__container vic-container">
+
+    <!-- Section Header: Our Purpose -->
+    <div class="about-purpose__header">
+      <span class="about-purpose__eyebrow section-eyebrow">
+        {{ 'about.purpose.eyebrow' | sectionHeading:'OUR PURPOSE':'غايتنا' }}
+      </span>
+    </div>
+
+    <!-- 2-Column Grid with Center Divider Line -->
+    <div class="about-purpose__grid">
+
+      <!-- Column 1: Our Vision -->
+      <div class="about-purpose__col about-purpose__col--vision">
+        <!-- Soft Cyan Circular Badge with Eye Icon -->
+        <div class="about-purpose__badge" aria-hidden="true">
+          <svg class="about-purpose__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+
+        <div class="about-purpose__content">
+          <h3 class="about-purpose__title">{{ 'about.vision.title' | sectionHeading:'Our Vision':'رؤيتنا' }}</h3>
+          <!-- Teal accent dash -->
+          <div class="about-purpose__line" aria-hidden="true"></div>
+
+          <!-- Vision text clipped, expandable -->
+          <div class="about-purpose__clip" [class.about-purpose__clip--open]="isVisionExpanded">
+            <div class="about-purpose__body">
+              <p *ngFor="let p of purposeParagraphs('vision')" class="about-purpose__text">{{ p }}</p>
+            </div>
+            <!-- Soft fade gradient when collapsed with multiple paragraphs -->
+            <div class="about-purpose__fade" aria-hidden="true"></div>
+          </div>
+
+          <!-- Arrow Toggle button (arrow alone, no text) -->
+          <div class="about-purpose__action">
+            <button type="button" class="about-purpose__arrow-btn" (click)="toggleVision()"
+              [class.about-purpose__arrow-btn--open]="isVisionExpanded" [attr.aria-expanded]="isVisionExpanded"
+              [attr.aria-label]="isVisionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore')">
+              <svg class="about-purpose__arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Vertical Divider -->
+      <div class="about-purpose__divider" aria-hidden="true"></div>
+
+      <!-- Column 2: Our Mission -->
+      <div class="about-purpose__col about-purpose__col--mission">
+        <!-- Soft Cyan Circular Badge with Bullseye/Target Icon -->
+        <div class="about-purpose__badge" aria-hidden="true">
+          <svg class="about-purpose__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <line x1="22" y1="2" x2="13.5" y2="10.5"></line>
+            <polygon points="12 12 16 11 13 15" fill="currentColor"></polygon>
+          </svg>
+        </div>
+
+        <div class="about-purpose__content">
+          <h3 class="about-purpose__title">{{ 'about.mission.title' | sectionHeading:'Our Mission':'رسالتنا' }}</h3>
+          <!-- Teal accent dash -->
+          <div class="about-purpose__line" aria-hidden="true"></div>
+
+          <!-- Mission text clipped, expandable -->
+          <div class="about-purpose__clip" [class.about-purpose__clip--open]="isMissionExpanded">
+            <div class="about-purpose__body">
+              <p *ngFor="let p of purposeParagraphs('mission')" class="about-purpose__text">{{ p }}</p>
+            </div>
+            <!-- Soft fade gradient when collapsed -->
+            <div class="about-purpose__fade" aria-hidden="true"></div>
+          </div>
+
+          <!-- Arrow Toggle button (arrow alone, no text) -->
+          <div class="about-purpose__action">
+            <button type="button" class="about-purpose__arrow-btn" (click)="toggleMission()"
+              [class.about-purpose__arrow-btn--open]="isMissionExpanded" [attr.aria-expanded]="isMissionExpanded"
+              [attr.aria-label]="isMissionExpanded ? translationService.translate('about.btn.readLess') : translationService.translate('about.btn.readMore')">
+              <svg class="about-purpose__arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================
+     COMPANY OVERVIEW — PREMIUM MODAL POPUP
+     ==================================================== -->
+<div class="about-modal-backdrop" *ngIf="isOverviewModalOpen" (click)="closeOverviewModal()" role="presentation">
+  <div class="about-modal" role="dialog" aria-modal="true" aria-labelledby="overview-modal-heading"
+    (click)="$event.stopPropagation()">
+
+    <!-- Top-Right Close "X" Button -->
+    <button type="button" class="about-modal__close-btn" (click)="closeOverviewModal()"
+      aria-label="Close Company Overview popup">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Modal Header -->
+    <div class="about-modal__header">
+      <span class="about-modal__eyebrow">{{ translationService.currentLang() === 'ar' ?
+        (pageContent().overview_modal?.badge_ar || pageContent().overview_modal?.badge ||
+        translationService.translate('about.overview.badge')) : (pageContent().overview_modal?.badge ||
+        translationService.translate('about.overview.badge')) }}</span>
+      <h2 id="overview-modal-heading" class="about-modal__heading">
+        {{ translationService.currentLang() === 'ar' ? (pageContent().overview_modal?.title_ar ||
+        pageContent().overview_modal?.title || translationService.translate('about.overview.title')) :
+        (pageContent().overview_modal?.title || translationService.translate('about.overview.title')) }}
+      </h2>
+    </div>
+
+    <!-- Modal Body with Smooth Independent Scroll -->
+    <div class="about-modal__body">
+
+      <!-- Arabic Dynamic Paragraphs -->
+      <ng-container *ngIf="translationService.currentLang() === 'ar'; else englishOverviewText">
+        <ng-container
+          *ngIf="pageContent().overview_modal?.content_json_ar && pageContent().overview_modal?.content_json_ar.length > 0; else defaultOverviewText">
+          <p *ngFor="let p of pageContent().overview_modal?.content_json_ar">
+            {{ p }}
+          </p>
+        </ng-container>
+      </ng-container>
+
+      <!-- English Dynamic Paragraphs -->
+      <ng-template #englishOverviewText>
+        <ng-container
+          *ngIf="pageContent().overview_modal?.content_json && pageContent().overview_modal?.content_json.length > 0; else defaultOverviewText">
+          <p *ngFor="let p of pageContent().overview_modal?.content_json">
+            {{ p }}
+          </p>
+        </ng-container>
+      </ng-template>
+
+      <!-- Default Official Story Fallback -->
+      <ng-template #defaultOverviewText>
+        <p>
+          {{ translationService.translate('about.overview.p1') }}
+        </p>
+
+        <p>
+          {{ translationService.translate('about.overview.p2') }}
+        </p>
+
+        <p>
+          {{ translationService.translate('about.overview.p3') }}
+        </p>
+
+        <p>
+          {{ translationService.translate('about.overview.p4') }}
+        </p>
+
+        <p>
+          {{ translationService.translate('about.overview.p5') }}
+        </p>
+
+        <div class="about-modal__highlight">
+          <p>
+            {{ translationService.translate('about.overview.highlight') }}
+          </p>
+        </div>
+      </ng-template>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ====================================================
+     SECTION 4 — OUR LEADERSHIP (RESPONSIVE CAROUSEL)
+     ==================================================== -->
+<section #leadershipSection class="about-leadership vic-section vic-section--soft">
+  <img class="vic-floating-v vic-floating-v--right" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="about-leadership__container vic-container">
+
+    <!-- Header with Controls -->
+    <div class="about-leadership__header-row">
+      <div class="about-leadership__header-text">
+        <span class="about-leadership__eyebrow section-eyebrow">{{ 'about.leadership.eyebrow' | sectionHeading:'LEADERSHIP & FOUNDING TEAM':'فريق القيادة والشركاء المؤسسون' }}</span>
+        <h2 class="about-leadership__heading">{{ 'about.leadership.title' | sectionHeading:'Founding Partners':'الشركاء المؤسسون' }}</h2>
+        <p class="about-leadership__subheading">
+          {{ 'about.leadership.subtitle' | sectionHeading:translationService.translate('about.leadership.subtitle'):'نخبة من القادة والأطباء وخبراء التقنية الحيوية والرواد التنفيذيين يقودون مسيرة شركة اللقاحات الصناعية.' }}
+        </p>
+      </div>
+
+      <!-- Carousel Navigation Arrows -->
+      <div class="about-leadership__controls" aria-label="Leadership Carousel Navigation">
+        <button type="button" class="about-leadership__nav-btn" (click)="prevLeader()"
+          aria-label="Previous Leadership Slide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="about-leadership__nav-btn" (click)="nextLeader()"
+          aria-label="Next Leadership Slide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Responsive carousel; mobile autoplay advances every 4s. -->
+    <div class="about-leadership__carousel-window" (mouseenter)="stopAutoPlay()" (mouseleave)="startAutoPlay()"
+      (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+      <div class="about-leadership__track"
+        [style.transform]="'translateX(' + (translationService.currentLang() === 'ar' ? '' : '-') + (leaderIndex * (100 / cardsPerView)) + '%)'">
+        <div class="about-leadership__slide" *ngFor="let leader of leaders">
+          <div class="about-leader-card">
+
+            <!-- Portrait Image with Real Doctor Photo -->
+            <div class="about-leader-card__portrait">
+              <img *ngIf="leader.image" [src]="leader.image" [alt]="getLeaderName(leader)"
+                class="about-leader-card__photo" loading="lazy" />
+              <div *ngIf="!leader.image" class="about-leader-card__avatar">
+                <span class="about-leader-card__initials">{{ leader.initials }}</span>
+              </div>
+              <span class="about-leader-card__badge">{{ getLeaderBadge(leader) }}</span>
+            </div>
+
+            <!-- Leader Details -->
+            <div class="about-leader-card__body">
+              <h3 class="about-leader-card__name">{{ getLeaderName(leader) }}</h3>
+              <p class="about-leader-card__title">{{ getLeaderTitle(leader) }}</p>
+              <p class="about-leader-card__role">{{ getLeaderRole(leader) }}</p>
+
+              <div class="about-leader-card__footer">
+                <button type="button" class="about-leader-card__link" (click)="openLeaderModal(leader)"
+                  [attr.aria-label]="'View profile of ' + getLeaderName(leader)">
+                  <span>{{ translationService.translate('about.leadership.viewProfile') }}</span>
+                  <span class="about-leader-card__arrow" aria-hidden="true">&rarr;</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Dots -->
+    <div class="about-leadership__dots" *ngIf="leaderPages.length > 1">
+      <button type="button" *ngFor="let page of leaderPages; let i = index" class="about-leadership__dot"
+        [class.about-leadership__dot--active]="i === leaderIndex" (click)="goToLeader(i)"
+        [attr.aria-label]="'Go to leadership slide ' + (i + 1)"></button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 5 — STATE-OF-THE-ART FACILITY
+     ==================================================== -->
+<section class="about-facility" aria-labelledby="facility-heading">
+  <div class="about-facility__container">
+      <div class="about-facility__gallery" aria-label="Vaccine Industrial Company facility gallery" tabindex="0">
+      <figure *ngFor="let image of facilityImages; let i = index"
+        class="about-facility__image" [ngClass]="facilityImageClass(i)">
+        <img [src]="resolveImg(image.image_url)" [alt]="image.alt_text || image.title" loading="lazy" />
+      </figure>
+    </div>
+
+    <div class="about-facility__content">
+      <h2 id="facility-heading" class="about-facility__heading">{{ 'about.facilities.title' | sectionHeading:'Our Facilities':'مرافقنا' }}</h2>
+      <p class="about-facility__lead" *ngIf="facilityText('lead')">{{ facilityText('lead') }}</p>
+      <p *ngIf="facilityText('paragraph_one')">{{ facilityText('paragraph_one') }}</p>
+      <p *ngIf="facilityText('paragraph_two')">{{ facilityText('paragraph_two') }}</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 6 — GROUP OF BIOTECH COMPANIES -->
+<section class="about-group-companies" aria-labelledby="group-companies-heading" [attr.dir]="translationService.currentLang() === 'ar' ? 'rtl' : 'ltr'">
+  <div class="about-group-companies__container">
+    <header class="about-group-companies__header">
+      <span class="about-group-companies__eyebrow">{{ 'about.groupCompanies.eyebrow' | sectionHeading:'BIOTECH ECOSYSTEM':'منظومة التقنية الحيوية' }}</span>
+      <h2 id="group-companies-heading" class="about-group-companies__title">{{ 'about.groupCompanies.title' | sectionHeading:'Our Group Of Biotech Companies':'مجموعة شركات التقنية الحيوية' }}</h2>
+      <p *ngIf="groupCompaniesSubtitle()" class="about-group-companies__subtitle">{{ groupCompaniesSubtitle() }}</p>
+    </header>
+
+    <div class="about-group-companies__list">
+      <a *ngFor="let company of groupCompanies(); trackBy: trackGroupCompany" class="about-group-companies__row"
+        [href]="groupCompanyWebsite(company)"
+        target="_blank" rel="noopener noreferrer"
+        [attr.aria-label]="(translationService.currentLang() === 'ar' ? 'زيارة الموقع الرسمي لـ ' : 'Visit official website for ') + company.name"
+        [class.about-group-companies__row--anivax]="company.name === 'AniVax' || company.name_ar === 'أنيفاكس'"
+        [class.about-group-companies__row--nibrt]="company.name === 'Saudi NIBRT'">
+        <div *ngIf="company.logo_url" class="about-group-companies__logo-panel">
+          <img class="about-group-companies__logo" [src]="groupCompanyLogo(company)" [alt]="company.name + ' logo'" loading="lazy" />
+        </div>
+        <div class="about-group-companies__copy">
+          <h3>{{ company.name }}</h3>
+          <p>{{ company.description }}</p>
+        </div>
+        <span class="about-group-companies__arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17 17 7M8 7h9v9" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<app-leader-profile-modal
+  *ngIf="isLeaderModalOpen && selectedLeaderModalProfile as profile"
+  [profile]="profile"
+  (closed)="closeLeaderModal()"
+></app-leader-profile-modal>

@@ -1,0 +1,312 @@
+<!-- ====================================================
+     PARTNERS PAGE
+     Exact Home Scale Typography, Colors & Spacing
+     Vaccine Industrial Company
+     ==================================================== -->
+
+<!-- ====================================================
+     SECTION 1 — HERO BANNER (PARTNER NETWORK SHOWCASE)
+     ==================================================== -->
+<section class="partner-hero" id="partners-hero">
+  <!-- Desktop / Mobile Content Container -->
+  <div class="partner-hero__container">
+    <!-- Left Column: Eyebrow, Heading, Description, CTA -->
+    <div class="partner-hero__content">
+      <div class="partner-hero__eyebrow-wrap">
+        <span class="partner-hero__eyebrow section-eyebrow">{{ heroText('badge') }}</span>
+      </div>
+
+      <h1 class="partner-hero__heading">
+        {{ heroText('title') }}<br />
+        {{ heroText('titleLine2') }}<span class="partner-hero__heading-accent">&nbsp;{{ heroText('accent') }}</span>
+      </h1>
+
+      <p class="partner-hero__description">
+        {{ heroText('description') }}
+      </p>
+    </div>
+
+    <!-- Right Column: Partner Logos Visual Grid -->
+    <div class="partner-hero__media">
+      @if (heroSettingsLoaded && heroImageUrl) { <img
+        [src]="heroImageUrl"
+        alt="Strategic Partner Alliances — CSL Seqirus, Uhlmann, Baylor College of Medicine, ROTA, KACST, NIBRT, DVS, Zyme, KeyPlants, ATH"
+        class="partner-hero__image"
+        loading="eager"
+        (error)="onHeroImageError($event)"
+      /> }
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 2 — OUR STRATEGIC PARTNERS (DYNAMIC & EXACT MATCH)
+     ==================================================== -->
+<section class="partner-strategic vic-section" id="strategic-partners">
+  <img class="vic-floating-v" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="partner-strategic__container vic-container">
+
+    <!-- Header with flanking horizontal rules -->
+    <div class="partner-strategic__header">
+      <div class="partner-strategic__line"></div>
+      <h2 class="partner-strategic__title">{{ 'partners.strategic.title' | sectionHeading:'Our Strategic Partners':'شركاؤنا الاستراتيجيون' }}</h2>
+      <div class="partner-strategic__line"></div>
+    </div>
+
+    <!-- Subtitle matching reference design -->
+    <p class="partner-strategic__subtitle">
+      {{ 'partners.strategic.description' | sectionHeading:'We collaborate with world-leading organizations to bring innovative vaccines, advanced technologies, and scientific expertise to the region and beyond.':'نتعاون مع مؤسسات عالمية رائدة لتوفير لقاحات مبتكرة وتقنيات متقدمة وخبرات علمية للمنطقة وخارجها.' }}
+    </p>
+
+    <!-- Partner Cards Grid -->
+    <div class="partner-strategic__carousel-shell">
+    <div #strategicPartnerTrack class="partner-strategic__grid" [attr.aria-label]="translationService.translate('partners.aria.cards')" (scroll)="onStrategicPartnerScroll()">
+      <a
+        class="partner-strategic__item"
+        *ngFor="let partner of displayedPartners"
+        [attr.href]="partnerWebsiteUrl(partner)"
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.aria-label]="translationService.translate('partners.aria.visitWebsite').replace('{name}', partnerDisplayName(partner))"
+      >
+        <div
+          class="partner-strategic__logo-card"
+          [ngClass]="{ 'partner-strategic__logo-card--uhlmann': partnerLogoClass(partner.name) === 'uhlmann-pac-systems' }"
+        >
+          <img
+            [src]="resolveImg(partner.logo, 'cslseqirus_1_logo-e1761739712420.webp')"
+            [alt]="partnerDisplayName(partner)"
+            class="partner-strategic__logo"
+            [ngClass]="'partner-strategic__logo--' + partnerLogoClass(partner.name)"
+            loading="lazy"
+            (error)="$any($event.target).src = 'logo_navbar.webp'"
+          />
+        </div>
+
+        <div class="partner-strategic__card-copy">
+          <h3 class="partner-strategic__partner-name">{{ partnerDisplayName(partner) }}</h3>
+          <span class="partner-strategic__label">{{ partnerCategory(partner) }}</span>
+          <p class="partner-strategic__description">{{ partnerDescription(partner) }}</p>
+          <span class="partner-strategic__website-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17 17 7M8 7h9v9"></path>
+            </svg>
+          </span>
+        </div>
+      </a>
+    </div>
+
+    <button *ngIf="isMobileView && strategicPartners.length > 1" type="button" class="partner-strategic__carousel-arrow partner-strategic__carousel-arrow--prev" (click)="moveStrategicPartner(-1)" [attr.aria-label]="translationService.translate('partners.aria.previous')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+    </button>
+    <button *ngIf="isMobileView && strategicPartners.length > 1" type="button" class="partner-strategic__carousel-arrow partner-strategic__carousel-arrow--next" (click)="moveStrategicPartner(1)" [attr.aria-label]="translationService.translate('partners.aria.next')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
+    </div>
+
+    <div class="partner-strategic__carousel-controls" *ngIf="isMobileView && strategicPartners.length > 1" [attr.aria-label]="translationService.translate('partners.aria.controls')">
+      <div class="partner-strategic__carousel-dots">
+        <button type="button" *ngFor="let partner of strategicPartners; let idx = index" [class.is-active]="idx === activeStrategicPartnerIndex" (click)="goToStrategicPartner(idx)" [attr.aria-label]="translationService.translate('partners.aria.show') + ' ' + (idx + 1)"></button>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- Seamless Wave Transition: Dark → Ecosystem Section Background -->
+  <div class="partner-strategic__wave" aria-hidden="true">
+    <svg
+      class="partner-strategic__wave-svg"
+      viewBox="0 0 1440 80"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="strategicWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#0a1628" />
+          <stop offset="40%"  stop-color="#0e1f38" />
+          <stop offset="100%" stop-color="#0a1628" />
+        </linearGradient>
+      </defs>
+      <!-- Top teal accent wave (subtle, blends with eco section) -->
+      <path
+        d="M0,38 C200,65 420,12 720,28 C980,42 1220,68 1440,36 L1440,80 L0,80 Z"
+        fill="var(--color-surface-alt, #F1F5FA)"
+        opacity="0.18"
+      />
+      <!-- Main fill wave: transitions dark bg to next section color -->
+      <path
+        d="M0,52 C180,78 440,22 760,36 C1040,48 1260,74 1440,48 L1440,80 L0,80 Z"
+        fill="var(--color-surface-alt, #F1F5FA)"
+      />
+    </svg>
+  </div>
+
+</section>
+
+
+<!-- ====================================================
+     SECTION 3 — OUR PARTNERSHIP ECOSYSTEM (CAROUSEL AUTOPLAY)
+     Moved below Our Strategic Partners as requested
+     ==================================================== -->
+<!-- ====================================================
+     SECTION 4 — PARTNER WITH US INQUIRY MODAL POPUP
+     ==================================================== -->
+<div
+  class="partner-modal-backdrop"
+  *ngIf="isInquiryModalOpen"
+  (click)="closeInquiryModal()"
+  role="presentation"
+>
+  <div
+    class="partner-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="partner-modal-title"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Close Button -->
+    <button
+      type="button"
+      class="partner-modal__close-btn"
+      (click)="closeInquiryModal()"
+      [attr.aria-label]="translationService.translate('partners.aria.close')"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Modal Header -->
+    <div class="partner-modal__header">
+      <span class="partner-modal__eyebrow">{{ translationService.translate('partners.modal.badge') }}</span>
+      <h2 id="partner-modal-title" class="partner-modal__title">{{ 'partners.inquiry.title' | sectionHeading:'Partner With Us':'كن شريكاً لنا' }}</h2>
+      <p class="partner-modal__subtitle">
+        {{ translationService.translate('partners.modal.description') }}
+      </p>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="partner-modal__body">
+      <!-- Success State -->
+      <div class="partner-inquiry__success" *ngIf="formSubmitted">
+        <div class="partner-inquiry__success-icon" aria-hidden="true">&#10003;</div>
+        <h3 class="partner-inquiry__success-heading">{{ translationService.translate('partners.modal.successHeading') }}</h3>
+        <p class="partner-inquiry__success-text">
+          {{ translationService.translate('partners.modal.successText').replace('{name}', inquiryForm.full_name) }}
+        </p>
+        <button
+          type="button"
+          class="partner-inquiry__btn-reset"
+          (click)="resetInquiry()"
+        >
+          {{ translationService.translate('partners.modal.submitAnother') }}
+        </button>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="inquiryError" class="partner-inquiry__error">
+        {{ inquiryError }}
+      </div>
+
+      <!-- Inquiry Form -->
+      <form
+        *ngIf="!formSubmitted"
+        (ngSubmit)="submitInquiry()"
+        class="partner-inquiry__form"
+      >
+        <div class="partner-inquiry__field-group">
+          <div class="partner-inquiry__field">
+            <label for="m-fullname">{{ translationService.translate('partners.form.fullName') }}</label>
+            <input
+              id="m-fullname"
+              type="text"
+              name="mFullName"
+              required
+              [placeholder]="translationService.translate('partners.form.fullNamePlaceholder')"
+              [(ngModel)]="inquiryForm.full_name"
+            />
+          </div>
+
+          <div class="partner-inquiry__field">
+            <label for="m-organization">{{ translationService.translate('partners.form.organization') }}</label>
+            <input
+              id="m-organization"
+              type="text"
+              name="mOrganization"
+              required
+              [placeholder]="translationService.translate('partners.form.organizationPlaceholder')"
+              [(ngModel)]="inquiryForm.organization"
+            />
+          </div>
+        </div>
+
+        <div class="partner-inquiry__field-group">
+          <div class="partner-inquiry__field">
+            <label for="m-email">{{ translationService.translate('partners.form.email') }}</label>
+            <input
+              id="m-email"
+              type="email"
+              name="mEmail"
+              required
+              placeholder="name@organization.com"
+              [(ngModel)]="inquiryForm.email"
+            />
+          </div>
+
+          <div class="partner-inquiry__field">
+            <label for="m-phone">{{ translationService.translate('partners.form.phone') }}</label>
+            <input
+              id="m-phone"
+              type="tel"
+              name="mPhone"
+              placeholder="+966 5x xxx xxxx"
+              [(ngModel)]="inquiryForm.phone"
+            />
+          </div>
+        </div>
+
+        <div class="partner-inquiry__field">
+          <label for="m-category">{{ translationService.translate('partners.form.category') }}</label>
+          <select
+            id="m-category"
+            name="mCategory"
+            [(ngModel)]="inquiryForm.category"
+          >
+            <option value="Technology Transfer">{{ translationService.translate('partners.form.option.technology') }}</option>
+            <option value="Clinical Trials">{{ translationService.translate('partners.form.option.clinical') }}</option>
+            <option value="Distribution">{{ translationService.translate('partners.form.option.distribution') }}</option>
+            <option value="Engineering">{{ translationService.translate('partners.form.option.engineering') }}</option>
+            <option value="Academic R&D">{{ translationService.translate('partners.form.option.academic') }}</option>
+            <option value="Other">{{ translationService.translate('partners.form.option.other') }}</option>
+          </select>
+        </div>
+
+        <div class="partner-inquiry__field">
+          <label for="m-message">{{ translationService.translate('partners.form.message') }}</label>
+          <textarea
+            id="m-message"
+            name="mMessage"
+            rows="3"
+            [placeholder]="translationService.translate('partners.form.messagePlaceholder')"
+            [(ngModel)]="inquiryForm.message"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="partner-inquiry__submit-btn vic-btn"
+          [disabled]="isSubmittingInquiry"
+        >
+          <span>{{ translationService.translate(isSubmittingInquiry ? 'partners.form.sending' : 'partners.form.submit') }}</span>
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>

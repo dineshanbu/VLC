@@ -1,0 +1,360 @@
+/* Fluid reference layout for laptop, desktop and TV. */
+:host { display:block; }
+.hero-wrapper { background:var(--color-surface); }
+.hero { position:relative; isolation:isolate; overflow:hidden; min-height:540px; height:49.7vw; border-bottom:2.5px solid #00d5df; box-shadow:0 4px 20px rgba(0,213,223,.32); border-radius:0 0 46% 36px / 0 0 3% 36px; background:#eaf7fc; }
+.hero__media-wrapper { position:absolute; inset:0; z-index:-2; }
+.hero__video { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+.hero__banner-content { position:relative; z-index:2; width:min(78%,1040px); display:flex; align-items:center; justify-content:center; gap:clamp(24px,3vw,56px); color:#fff; animation:heroBannerReveal .9s .12s cubic-bezier(.16,1,.3,1) both; }
+.hero__banner-logo { width:auto; height:clamp(92px,9vw,132px); object-fit:contain; filter:drop-shadow(0 6px 14px rgba(0,0,0,.3)); animation:heroLogoFloat 5.6s 1.1s ease-in-out infinite; }
+.hero__banner-divider { width:1px; height:clamp(68px,8vw,126px); background:linear-gradient(transparent,rgba(78,230,236,.95),transparent); }
+.hero__banner-copy { display:flex; flex-direction:column; align-items:flex-start; gap:clamp(16px,1.5vw,24px); animation:heroCopyFloat 6.4s 1.2s ease-in-out infinite; }
+.hero__banner-title { max-width:min(100%, 1060px); margin:0; color:#fff; font:700 clamp(26px,2.8vw,46px)/1.12 var(--font-body,Arial,sans-serif); letter-spacing:-.035em; text-shadow:0 3px 16px rgba(0,0,0,.4); }
+.hero__banner-title-accent { color:#42e4ea !important; }
+.hero__title-prefix { color:#fff !important; }
+.hero__title-line { display:block; }
+.hero__title-line--secondary { margin-top:.45em; }
+.hero__title-line--mobile { display:none; }
+.hero__banner-title-accent { display:inline; }
+.hero__picture { display:contents; }
+.hero__image { width:100%; height:100%; object-fit:cover; object-position:center; }
+.hero__gradient-overlay { position:absolute; inset:0; overflow:hidden; pointer-events:none; background:linear-gradient(90deg,rgba(2,20,53,.86) 0%,rgba(2,20,53,.64) 38%,rgba(2,20,53,.12) 72%,rgba(2,20,53,.18)),linear-gradient(0deg,rgba(2,20,53,.32),transparent 42%); }
+.hero__loading { position:absolute; z-index:2; inset:50% auto auto 50%; width:28px; height:28px; margin:-14px 0 0 -14px; border:2px solid rgba(255,255,255,.36); border-top-color:#42e4ea; border-radius:50%; animation:heroVideoLoading .8s linear infinite; }
+@keyframes heroVideoLoading { to { transform:rotate(360deg); } }
+.hero__gradient-overlay::after { content:''; position:absolute; inset:-20% -35%; background:linear-gradient(108deg,transparent 42%,rgba(128,247,255,.13) 49%,transparent 56%); transform:translateX(-38%); animation:heroLightSweep 8s 1.4s ease-in-out infinite; }
+.hero__container { position:relative; margin-top:max(118px,10.2vw); width:min(680px,48%); padding:clamp(24px,3vw,58px) 1vw clamp(24px,2.5vw,48px) 6%; color:#fff; }
+.hero__container::before { content:''; position:absolute; inset:7.5% auto 6% 3.2vw; width:1px; background:linear-gradient(#64f0ef,#ffffff30); }
+.hero__eyebrow { display:flex; align-items:center; gap:1.5vw; color:#84f5f3; font-size:clamp(11px,1.3vw,50px); font-weight:700; letter-spacing:.08em; margin-bottom:1vw; }
+.hero__eyebrow i { width:3.6vw; height:1px; background:#84f5f3; }
+.hero__heading { font-family:var(--font-heading,Georgia,serif); font-size:clamp(34px,4.2vw,84px); line-height:1.04; letter-spacing:-.035em; color:#fff; margin:0 0 1.1vw; font-weight:400; text-shadow:0 3px 20px rgba(1,22,54,.28); }
+.hero__heading-line { display:block; }
+.hero__heading-accent { color:#0798a7; }
+.hero__description { max-width:610px; color:rgba(255,255,255,.9); font-size:clamp(13px,1.15vw,22px); line-height:1.5; margin:0 0 1.8vw; }
+.hero__btn-video { position:relative; z-index:3; display:inline-flex; align-items:center; gap:1.5vw; min-height:44px; margin-top:clamp(72px,5vw,100px); padding:.35vw 1.8vw .35vw .35vw; border:0; border-radius:99px; color:white; background:linear-gradient(100deg,#05365b,#00c5ce); box-shadow:0 5px 16px #0086a32e; cursor:pointer; touch-action:manipulation; font-size:clamp(12px,1.35vw,52px); font-weight:600; animation:heroCtaFloat 3.6s 1.4s ease-in-out infinite; }
+.hero__play-icon-circle { display:grid; place-items:center; border:2px solid #00d5df; border-radius:50%; width:3.8vw; height:3.8vw; min-width:34px; min-height:34px; background:#043655; }
+.hero__play-icon-circle svg { width:38%; height:38%; }
+.hero__facility-badge { position:absolute; inset:13vw 3vw auto auto; width:11vw; border-inline-start:2px solid #03c6d5; padding-inline-start:1.4vw; color:white; text-shadow:0 2px 5px #002b50; font-size:clamp(11px,1.35vw,52px); line-height:1.4; font-weight:700; letter-spacing:.12em; animation:floatFacilityBadge 5s ease-in-out infinite; will-change:transform; }
+@keyframes floatFacilityBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.hero__btn-video:hover { filter:brightness(1.1); }
+
+@keyframes heroBannerReveal {
+  from { opacity:0; transform:translateY(24px) scale(.985); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes heroLogoFloat {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-8px); }
+}
+@keyframes heroCopyFloat {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-5px); }
+}
+@keyframes heroLightSweep {
+  0%,28% { transform:translateX(-38%); opacity:0; }
+  38% { opacity:1; }
+  62%,100% { transform:translateX(38%); opacity:0; }
+}
+@keyframes heroCtaFloat {
+  0%,100% { transform:translateY(0); box-shadow:0 5px 16px #0086a32e; }
+  50% { transform:translateY(-5px); box-shadow:0 12px 26px rgba(0,213,223,.34); }
+}
+a:focus-visible,button:focus-visible { outline:3px solid #05bacb; outline-offset:5px; }
+:host-context([dir="rtl"]) .hero__container { margin-inline-start:auto; padding:3vw 6% 2.5vw 1vw; }
+:host-context([dir="rtl"]) .hero__facility-badge { right:auto; left:3vw; }
+:host-context([dir="rtl"]) .hero__heading { font-family:var(--font-body); }
+@media(max-width:767px) {
+ .hero__loading { display:none !important; }
+ .hero {
+   position:relative !important;
+   isolation:isolate !important;
+   overflow:hidden !important;
+   width:100% !important;
+   min-height:100vh !important;
+   min-height:100dvh !important;
+   height:100dvh !important;
+   display:flex !important;
+   flex-direction:column !important;
+   align-items:center !important;
+   justify-content:center !important;
+   padding:clamp(84px, 12vh, 110px) 12px clamp(28px, 4vh, 48px) !important;
+   border-bottom:none !important;
+   box-shadow:none !important;
+   border-radius:0 !important;
+   background:#001526 !important;
+   box-sizing:border-box !important;
+ }
+ .hero__media-wrapper {
+   position:absolute !important;
+   inset:0 !important;
+   width:100% !important;
+   height:100% !important;
+   z-index:-2 !important;
+   overflow:hidden !important;
+ }
+ .hero__video {
+   width:100% !important;
+   height:100% !important;
+   display:block !important;
+   object-fit:cover !important;
+   object-position:center center !important;
+ }
+ .hero__image { object-position:center center; }
+ .hero__gradient-overlay {
+   position:absolute !important;
+   inset:0 !important;
+   z-index:1 !important;
+   pointer-events:none !important;
+   background:linear-gradient(
+     180deg,
+     rgba(0,21,38,.82) 0%,
+     rgba(0,21,38,.45) 25%,
+     rgba(0,21,38,.50) 65%,
+     rgba(0,21,38,.88) 100%
+   ) !important;
+ }
+ .hero__banner-content {
+   position:relative !important;
+   z-index:2 !important;
+   width:100% !important;
+   max-width:none !important;
+   box-sizing:border-box !important;
+   display:flex !important;
+   flex-direction:column !important;
+   align-items:center !important;
+   justify-content:center !important;
+   gap:clamp(18px, 3.6vh, 30px) !important;
+   text-align:center !important;
+   margin:0 auto !important;
+   color:#fff !important;
+ }
+ .hero__banner-logo {
+   width:clamp(250px, 70.5vw, 305px) !important;
+   height:auto !important;
+   max-width:100% !important;
+   max-height:clamp(114px, 16vh, 142px) !important;
+   object-fit:contain !important;
+   filter:drop-shadow(0 6px 22px rgba(0,0,0,.7)) drop-shadow(0 0 12px rgba(0,213,223,.25)) !important;
+ }
+ .hero__banner-divider {
+   display:none !important;
+ }
+ .hero__banner-copy {
+   display:flex !important;
+   flex-direction:column !important;
+   align-items:center !important;
+   gap:clamp(18px, 3vh, 26px) !important;
+   width:100% !important;
+ }
+ .hero__title-line {
+   display:block !important;
+ }
+ .hero__banner-title {
+   width:100% !important;
+   max-width:none !important;
+   font-size:clamp(30px, 8.8vw, 44px) !important;
+   line-height:1.15 !important;
+   letter-spacing:-0.03em !important;
+   font-weight:800 !important;
+   color:#ffffff !important;
+   text-shadow:0 4px 22px rgba(0,0,0,.85), 0 2px 6px rgba(0,0,0,.7) !important;
+   margin:0 !important;
+   text-wrap:balance !important;
+ }
+ .hero__btn-video {
+   display:inline-flex !important;
+   align-items:center !important;
+   gap:clamp(13px, 3.5vw, 17px) !important;
+   margin-top:clamp(14px, 2.8vh, 22px) !important;
+   height:clamp(52px, 7.2vh, 60px) !important;
+   min-height:clamp(52px, 7.2vh, 60px) !important;
+   padding:5px clamp(24px, 5.8vw, 30px) 5px 6px !important;
+   font-size:clamp(16px, 4.4vw, 19px) !important;
+   font-weight:700 !important;
+   letter-spacing:-0.01em !important;
+   color:#ffffff !important;
+   background:linear-gradient(100deg,#05365b,#00c5ce) !important;
+   backdrop-filter:blur(5px) !important;
+   -webkit-backdrop-filter:blur(5px) !important;
+   border:0 !important;
+   border-radius:99px !important;
+   box-shadow:0 6px 24px rgba(0,180,203,.4) !important;
+   cursor:pointer !important;
+   touch-action:manipulation !important;
+   transition:transform 200ms ease, box-shadow 200ms ease !important;
+ }
+ .hero__btn-video:active {
+   transform:scale(0.97) !important;
+ }
+ .hero__play-icon-circle {
+   width:clamp(40px, 10.5vw, 48px) !important;
+   height:clamp(40px, 10.5vw, 48px) !important;
+   min-width:clamp(40px, 10.5vw, 48px) !important;
+   min-height:clamp(40px, 10.5vw, 48px) !important;
+   border-radius:50% !important;
+   background:#043655 !important;
+   border:2px solid #00d5df !important;
+   color:#ffffff !important;
+   box-shadow:none !important;
+   display:grid !important;
+   place-items:center !important;
+   flex-shrink:0 !important;
+ }
+ .hero__play-icon-circle svg {
+   width:clamp(16px, 4.2vw, 19px) !important;
+   height:clamp(16px, 4.2vw, 19px) !important;
+   fill:#ffffff !important;
+   margin-left:2px !important;
+ }
+ .hero__scroll {
+   position:absolute !important;
+   bottom:16px !important;
+   left:50% !important;
+   transform:translateX(-50%) !important;
+   z-index:3 !important;
+   display:flex !important;
+   margin-top:0 !important;
+ }
+}
+
+.hero__heading { font-family:'Times New Roman',Georgia,serif; font-weight:700; }
+.hero__description { font-family:Arial,sans-serif; }
+@media(min-width:768px) { .hero__container { padding-top:3vw; padding-bottom:1.5vw; } }
+@media(min-width:768px) {
+ .hero__container { padding-top:2.6vw; }
+ .hero__description { font-size:1.3vw; margin-bottom:1.5vw; }
+ .hero__scroll { margin-top:2vw; }
+}
+/* A fixed banner anchor keeps the film action clear of the headline at every tablet, laptop and desktop width. */
+@media(min-width:768px) {
+ .hero__banner-content { position:static !important; }
+ .hero__btn-video {
+   position:absolute !important;
+   inset:auto auto clamp(24px,3vw,52px) clamp(24px,5vw,88px) !important;
+   margin:0 !important;
+   z-index:10 !important;
+ }
+ :host-context([dir="rtl"]) .hero__btn-video { inset:auto clamp(24px,5vw,88px) clamp(24px,3vw,52px) auto !important; }
+}
+.hero-video-modal { position:fixed; inset:0; z-index:9999; display:grid; place-items:center; padding:20px; }
+.hero-video-modal__backdrop { position:absolute; inset:0; background:#071e36db; backdrop-filter:blur(10px); }
+.hero-video-modal__dialog { position:relative; width:min(96vw,1440px); background:#071e36; color:#fff; border:1px solid #04b5c3; border-radius:18px; overflow:hidden; box-shadow:0 24px 70px #0007; }
+.hero-video-modal__header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; }
+.hero-video-modal__tag { color:#04d4d9; font-size:11px; letter-spacing:.1em; }
+.hero-video-modal__title { color:white; font-size:22px; }
+.hero-video-modal__close-btn { display:grid; place-items:center; width:44px; height:44px; border:1px solid #ffffff40; border-radius:50%; background:#ffffff15; color:white; cursor:pointer; }
+.hero-video-modal__player { aspect-ratio:16/9; background:#000; }
+.hero-video-modal__video { display:block; width:100%; height:100%; }
+@media (max-width: 640px) { .hero-video-modal { padding:12px; } .hero-video-modal__dialog { width:100%; } }
+@media (prefers-reduced-motion:reduce) {
+ .hero__banner-content,.hero__banner-logo,.hero__banner-copy,.hero__gradient-overlay::after,.hero__btn-video { animation:none; }
+}
+
+/* Approved dark VIC theme: colour-only override, preserving hero layout and motion. */
+:host-context(html[data-theme='dark']) .hero__btn-video {
+  border-radius: 99px !important;
+  background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important;
+  border: 1px solid #12cbd4 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 24px rgba(0, 180, 203, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+:host-context(html[data-theme='dark']) .hero__btn-video:hover { background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important; border-color: #66f2f5 !important; filter: brightness(1.08); }
+:host-context(html[data-theme='dark']) .hero__play-icon-circle { background: #00cbd5 !important; border-color: #70f5f7 !important; color: #002238 !important; }
+
+/* In mobile dark mode, keep the film CTA glass-clear instead of letting the
+   general dark-theme colour override replace its transparent treatment. */
+@media (max-width: 767px) {
+  :host-context(html[data-theme='dark']) .hero__btn-video,
+  :host-context(html[data-theme='dark']) .hero__btn-video:hover,
+  :host-context(html[data-theme='dark']) .hero__btn-video:active {
+    background: linear-gradient(100deg, #05365b 0%, #00c5ce 100%) !important;
+    border: 1px solid #12cbd4 !important;
+    border-radius: 99px !important;
+    color: #fff !important;
+    box-shadow: 0 6px 24px rgba(0, 180, 203, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+
+  :host-context(html[data-theme='dark']) .hero__btn-video .hero__play-icon-circle {
+    background: #00cbd5 !important;
+    border-color: #70f5f7 !important;
+    color: #002238 !important;
+    box-shadow: 0 2px 12px rgba(0, 203, 213, 0.5) !important;
+  }
+
+  :host-context(html[data-theme='dark']) .hero__btn-video .hero__play-icon-circle svg {
+    fill: #002238 !important;
+  }
+}
+
+/* Crop the source lock-up to retain the complete VIC mark and Vaccine wordmark. */
+.hero__banner-logo-crop { flex:0 0 auto; width:clamp(230px,22vw,330px); aspect-ratio:2.58; height:auto; overflow:hidden; display:flex; align-items:center; justify-content:flex-end; direction:ltr; }
+.hero__banner-logo { display:block; width:auto !important; height:100% !important; max-width:none !important; max-height:none !important; object-fit:cover !important; object-position:right center !important; }
+/* Give the copy the full desktop row so each deliberately separated headline
+   phrase stays on one line beside the logo. */
+@media (min-width:768px) {
+  .hero__banner-content { width:min(94%,2200px) !important; max-width:none !important; gap:clamp(20px,2.2vw,48px) !important; }
+  .hero__banner-copy { flex:1 1 auto !important; min-width:0 !important; }
+  .hero__banner-title { width:100% !important; max-width:none !important; font-size:clamp(22px,2.4vw,48px) !important; line-height:1.12 !important; }
+  .hero__title-line,.hero__banner-title-accent { white-space:nowrap; }
+  /* Line 1 alone is allowed to wrap so long text never clips at the right edge.
+     This is a dedicated rule — do not reuse or merge with other title-line rules. */
+  .hero__title-line--banner-line1-wrap {
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    display: block !important;
+  }
+}
+
+/* On laptop widths, let long headline phrases wrap inside the space beside the logo. */
+@media (min-width:768px) and (max-width:1399px) {
+  .hero__banner-title { font-size:clamp(22px,2.2vw,32px) !important; line-height:1.2 !important; }
+  .hero__title-line,.hero__banner-title-accent { white-space:normal; }
+  .hero__title-line--secondary { margin-top:.55em; }
+}
+
+/* Let the Arabic headline wrap naturally so the final word is never clipped. */
+@media (max-width:767px) {
+  .hero__banner-logo-crop { width:clamp(230px,61vw,270px); aspect-ratio:2.58; height:auto; margin-inline:auto; justify-content:center; }
+  .hero__banner-logo { object-position:center center !important; }
+  .hero__banner-content { width:100% !important; max-width:none !important; }
+  .hero__banner-title { width:100% !important; max-width:none !important; align-self:center !important; text-align:center !important; }
+}
+
+/* In Arabic, place the logo on the left and keep the headline right-aligned. */
+:host-context(html[dir="rtl"]) .hero__banner-content,
+:host-context(.lang-ar) .hero__banner-content { direction: ltr; }
+:host-context(html[dir="rtl"]) .hero__banner-copy,
+:host-context(.lang-ar) .hero__banner-copy { direction: rtl; align-items: flex-end; }
+:host-context(html[dir="rtl"]) .hero__banner-title,
+:host-context(.lang-ar) .hero__banner-title { direction: rtl; text-align: right; line-height: 1.2; }
+@media (max-width:767px) {
+  :host-context(html[dir="rtl"]) .hero__banner-title,
+  :host-context(.lang-ar) .hero__banner-title {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-inline: 12px !important;
+    align-self: center !important;
+    text-align: center !important;
+    font-size: clamp(27px, 7.5vw, 38px) !important;
+    line-height: 1.28 !important;
+    letter-spacing: 0 !important;
+    overflow-wrap: break-word !important;
+    text-wrap: pretty !important;
+  }
+  :host-context(html[dir="rtl"]) .hero__banner-copy,
+  :host-context(.lang-ar) .hero__banner-copy {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: center !important;
+  }
+}
+
+/* Final Arabic Home banner leading after the mobile typography overrides. */
+:host-context(html[dir="rtl"]) .hero__banner-title,
+:host-context(.lang-ar) .hero__banner-title {
+  line-height: 1.65 !important;
+}

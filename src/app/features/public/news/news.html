@@ -1,0 +1,197 @@
+<!-- ====================================================
+     NEWS & MEDIA PAGE
+     Exact Typography Scale, Styles & Spacing from About Us
+     Vaccine Industrial Company
+     ==================================================== -->
+
+<!-- ====================================================
+     SECTION 1 — HERO BANNER (SPLIT COMPOSITION)
+     ==================================================== -->
+<section class="products-hero news-hero">
+  <!-- Background Image Container -->
+  <div class="products-hero__bg">
+    @if (heroSettingsLoaded && heroImageUrl()) { <img
+      [src]="heroImageUrl()"
+      alt="Vaccine Industrial Company Headquarters and Manufacturing Facility"
+      class="products-hero__image"
+      (error)="onHeroImgError($event)"
+    /> }
+    <div class="products-hero__overlay"></div>
+  </div>
+
+  <!-- Content Container -->
+  <div class="products-hero__container">
+    <div class="products-hero__content">
+
+      @if (false) {
+      <!-- Breadcrumb -->
+      <nav class="products-hero__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="products-hero__breadcrumb-link">{{ translationService.translate('nav.home') }}</a>
+        <span class="products-hero__breadcrumb-separator">&gt;</span>
+        <span class="products-hero__breadcrumb-current">{{ translationService.translate('nav.news') }}</span>
+      </nav>
+      }
+      <span class="products-hero__eyebrow section-eyebrow">{{ 'news.hero.badge' | sectionHeading:'NEWS & MEDIA':'الأخبار والإعلام' }}</span>
+
+      <!-- Main Heading -->
+      <h1 class="news-hero__heading products-hero__heading">
+        {{ 'news.hero.title' | sectionHeading:'News & Media':'الأخبار والإعلام' }}
+      </h1>
+
+      <div class="news-hero__action">
+        <a href="#latest-news-section" class="news-hero__btn-primary">
+          <span>{{ translationService.isRtl() ? (pageSettings.hero_button_text_ar === 'عرض البيانات الصحفية' ? 'عرض آخر الأخبار' : pageSettings.hero_button_text_ar) : (pageSettings.hero_button_text === 'View Press Releases' ? 'View Latest News' : pageSettings.hero_button_text) }}</span>
+        </a>
+      </div>
+
+      <!-- Subtitle Description -->
+      <p class="news-hero__description products-hero__description">
+        {{ translationService.isRtl() ? pageSettings.hero_description_ar : pageSettings.hero_description }}
+      </p>
+
+      <!-- Action Button — Smoothly navigates to latest news -->
+
+    </div>
+  </div>
+
+  <!-- Fluid Sweeping Curved Teal Wave Ribbon -->
+  <div class="products-hero__wave-wrapper" aria-hidden="true">
+    <svg
+      class="products-hero__wave-svg"
+      viewBox="0 0 1440 120"
+      fill="none"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="newsTealWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C9A7" />
+          <stop offset="35%" stop-color="#00E5C9" />
+          <stop offset="70%" stop-color="#0D8A8A" />
+          <stop offset="100%" stop-color="#075E60" />
+        </linearGradient>
+      </defs>
+
+      <!-- Wave Ribbon Sweeping Up & Coming Down -->
+      <path
+        d="M 0,64 C 240,112 560,28 860,36 C 1120,44 1300,106 1440,62 L 1440,120 L 0,120 Z"
+        fill="url(#newsTealWaveGrad)"
+      />
+
+      <!-- Clean Seamless Base Matching Section 2 (#F8FAFC) -->
+      <path
+        d="M 0,74 C 240,122 560,38 860,46 C 1120,54 1300,116 1440,72 L 1440,120 L 0,120 Z"
+        fill="#001526"
+      />
+    </svg>
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SECTION 2 — LATEST NEWS
+     4-Card Row with Image, Teal Badge, Date, Title, Excerpt, Read More
+     ==================================================== -->
+<section class="latest-news-section vic-section" id="latest-news-section">
+  <img class="vic-floating-v" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="latest-news-section__container vic-container">
+
+    <!-- Header: category filter above the View All News control -->
+    <div class="latest-news-section__header">
+          <h2 class="latest-news-section__label section-eyebrow">{{ 'news.featured.title' | sectionHeading:'Featured News':'أخبار مميزة' }}</h2>
+
+      <div class="latest-news-section__actions">
+        <label class="latest-news-section__category-label" for="news-category-filter">Category</label>
+        <select
+          id="news-category-filter"
+          class="latest-news-section__category-select"
+          [ngModel]="selectedCategory()"
+          (ngModelChange)="setCategory($event)"
+          aria-label="Filter news by category"
+        >
+          <option *ngFor="let cat of categories" [value]="cat">
+            {{ cat === 'All' ? 'All Categories' : cat }} ({{ getCategoryCount(cat) }})
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Empty State if filter yields no news -->
+    <div *ngIf="displayedArticles().length === 0" class="news-empty-state">
+      <p class="news-empty-state__text">
+        No news articles currently listed under "{{ selectedCategory() }}".
+      </p>
+      <button
+        type="button"
+        class="news-empty-state__reset-btn"
+        (click)="setCategory('All')"
+      >
+        View All News
+      </button>
+    </div>
+
+    <!-- 4-Card Grid (Exact layout from Image 2) -->
+    <div class="latest-news-grid" *ngIf="displayedArticles().length > 0">
+      <article
+        *ngFor="let article of displayedArticles(); let i = index"
+        class="latest-news-card"
+      >
+        <!-- Card Image Thumbnail with Teal Badge Overlay -->
+        <a [routerLink]="['/news', article.slug]" class="latest-news-card__image-wrap" [attr.aria-label]="translationService.isRtl() && article.title_ar ? article.title_ar : article.title">
+          <img
+            [src]="getImageUrl(article.image, i)"
+            [alt]="translationService.isRtl() && article.title_ar ? article.title_ar : article.title"
+            class="latest-news-card__image"
+            loading="lazy"
+            (error)="onImgError($event, i)"
+          />
+          <span class="latest-news-card__badge">{{ article.badge }}</span>
+        </a>
+
+        <!-- Card Body -->
+        <div class="latest-news-card__body">
+          <span class="latest-news-card__date">{{ article.formattedDate || article.date }}</span>
+
+          <h3 class="latest-news-card__title">
+            <a [routerLink]="['/news', article.slug]">{{ translationService.isRtl() && article.title_ar ? article.title_ar : article.title }}</a>
+          </h3>
+
+          <p class="latest-news-card__summary" style="color: #fff !important; opacity: 1 !important;">
+            <span [attr.dir]="translationService.isRtl() ? 'rtl' : 'ltr'" style="color: #fff !important; opacity: 1 !important;">
+            {{ translationService.isRtl() && article.summaryAr ? article.summaryAr : article.summary }}
+            </span>
+          </p>
+
+          <div class="latest-news-card__action">
+            <a [routerLink]="['/news', article.slug]" class="latest-news-card__read-more-link">
+              <span class="latest-news-card__read-more">Read More</span>
+              <span class="latest-news-card__arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+      </article>
+    </div>
+
+    <nav class="latest-news-pagination" *ngIf="newsPageCount() > 1" aria-label="Latest news pages">
+      <button type="button" (click)="previousNewsPage()" [disabled]="newsPage() === 1" aria-label="Previous page">&larr;</button>
+      <button
+        type="button"
+        *ngFor="let page of newsPages()"
+        [class.latest-news-pagination__page--active]="page === newsPage()"
+        [attr.aria-current]="page === newsPage() ? 'page' : null"
+        (click)="goToNewsPage(page)"
+      >{{ page }}</button>
+      <button type="button" (click)="nextNewsPage()" [disabled]="!hasMoreNews()" aria-label="Next page">&rarr;</button>
+    </nav>
+
+  </div>
+</section>
+
+<app-video-media-gallery [showHeading]="false" [showPagination]="true" [pageSize]="3" [mobileAutoplay]="true" />
+
+<!-- Floating Download Toast Notice -->
+<div *ngIf="downloadNotice()" class="news-download-toast" role="alert">
+  <div class="news-download-toast__icon">&#10003;</div>
+  <span>{{ downloadNotice() }}</span>
+</div>

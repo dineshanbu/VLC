@@ -1,0 +1,114 @@
+<div class="home-management">
+  <header class="page-header">
+    <div><span class="eyebrow">CONTENT MANAGEMENT</span><h1>Home Page</h1><p>Edit the landing banner, Our Platform cards, and supporting section shown on the public home page.</p></div>
+    <a href="/" target="_blank" rel="noopener">View live page ↗</a>
+  </header>
+  @if (error()) { <p class="notice error">{{ error() }}</p> }
+  @if (success()) { <p class="notice success">{{ success() }}</p> }
+  @if (isLoading()) { <p class="loading">Loading home page content…</p> }
+  @for (section of sections(); track section.section_key) {
+    <section class="edit-card">
+      <div class="card-heading"><div><span class="eyebrow">{{ section.section_key === 'landing' ? 'HERO BANNER' : section.section_key === 'platform' ? 'OUR PLATFORM' : section.section_key === 'about' ? 'ABOUT VIC' : section.section_key === 'our_office' ? 'OUR OFFICE' : 'SAUDI VISION 2030' }}</span><h2>{{ section.section_key === 'landing' ? 'Landing banner' : section.section_key === 'platform' ? 'Our Platform' : section.section_key === 'about' ? 'About VIC' : section.section_key === 'our_office' ? 'Our Office' : 'Supporting section' }}</h2></div></div>
+      <div class="fields">
+        @if (section.section_key === 'our_office') {
+          <p class="hint office-admin-note">Set this section’s description and button here. Leave the button link blank to use Contact Page details. Eyebrow and heading are managed exclusively in Section Title Studio.</p>
+        }
+        <div class="field-managed-notice" style="grid-column: 1 / -1; background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px;">
+          <span>ℹ️</span>
+          <span><strong>Section Headings &amp; Eyebrows</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+        </div>
+        @if (section.section_key === 'about') {
+          <label class="full">
+            <span>Corporate film / section video</span>
+            <input type="file" accept="video/mp4,video/webm,video/quicktime,.mov" (change)="selectVideo(section.section_key, $event)" />
+            <span class="hint">Choose the video opened by the play button in the About VIC section.</span>
+            @if (selectedVideos()[section.section_key]; as file) { <span class="hint">Selected: {{ file.name }}</span> }
+            <span class="asset-path"><strong>Saved video path:</strong> {{ section.video_url || 'Not set' }}</span>
+            @if (selectedVideos()[section.section_key] || section.video_url) { <video class="preview" [src]="previewUrl(section.section_key + '_video', section.video_url || undefined)" controls playsinline></video> }
+          </label>
+        }
+        <label>Description (English)<textarea [(ngModel)]="section.description" rows="3"></textarea></label>
+        <label>Description (Arabic)<textarea [(ngModel)]="section.description_ar" rows="3" dir="rtl"></textarea></label>
+        @if (section.section_key === 'landing' || section.section_key === 'our_office') {
+          <label>Button text (English)<input [(ngModel)]="section.button_text" /></label>
+          <label>Button text (Arabic)<input [(ngModel)]="section.button_text_ar" dir="rtl" /></label>
+          <label>Button link URL<input [(ngModel)]="section.button_url" placeholder="Optional — leave blank to use the default action" /></label>
+        }
+        @if (section.section_key === 'platform') {
+          <div class="platform-cards">
+            <h3>Platform cards</h3>
+            @for (card of section.content_json || []; track $index; let idx = $index) {
+              <div class="platform-card-editor">
+                <h4>Card {{ idx + 1 }}</h4>
+                <div class="fields">
+                  <label>Card label (English)<input [(ngModel)]="card.tag" /></label>
+                  <label>Card label (Arabic)<input [(ngModel)]="card.tag_ar" dir="rtl" /></label>
+                  <label>Description (English)<textarea [(ngModel)]="card.description" rows="2"></textarea></label>
+                  <label>Description (Arabic)<textarea [(ngModel)]="card.description_ar" rows="2" dir="rtl"></textarea></label>
+                  <label class="image-field">Card background image
+                    <input type="file" accept="image/*" (change)="selectCardImage(idx, $event)" />
+                    @if (selectedCardImages()[idx]; as file) { <span class="hint">Selected: {{ file.name }}</span> }
+                    <span class="asset-path"><strong>Saved image path:</strong> {{ card.image_url || 'Not set' }}</span>
+                    @if (selectedCardImages()[idx] || card.image_url) { <img class="preview" [src]="previewUrl('card_' + idx, card.image_url)" alt="Platform card background preview" /> }
+                  </label>
+                </div>
+              </div>
+            }
+          </div>
+        }
+        @if (section.section_key === 'supporting' || section.section_key === 'about' || section.section_key === 'our_office') {
+        <label class="image-field">{{ section.section_key === 'about' ? 'About VIC image' : section.section_key === 'our_office' ? 'Our Office image' : 'Supporting artwork' }}
+          <input type="file" accept="image/*" (change)="selectImage(section.section_key, $event)" />
+          <span class="hint">Choose an image to replace the current artwork.</span>
+          @if (selectedImages()[section.section_key]; as file) { <span class="hint">Selected: {{ file.name }}</span> }
+          <span class="asset-path"><strong>Saved image path:</strong> {{ section.image_url || 'Not set' }}</span>
+          @if (selectedImages()[section.section_key] || section.image_url) {
+            @if (isVideo(selectedImages()[section.section_key]?.name || section.image_url)) { <video class="preview" [src]="previewUrl(section.section_key, section.image_url)" controls muted playsinline></video> }
+            @else { <img class="preview" [src]="previewUrl(section.section_key, section.image_url)" [alt]="section.section_key === 'about' ? 'About VIC image preview' : section.section_key === 'our_office' ? 'Our Office image preview' : 'Supporting artwork preview'" /> }
+          }
+        </label>
+        }
+        @if (section.section_key === 'landing') {
+          <label class="image-field">Banner background media (English)
+            <input type="file" accept="image/*,video/mp4,video/webm" (change)="selectImage(section.section_key, $event)" />
+            <span class="hint">Choose the English banner image or MP4/WebM video.</span>
+            @if (selectedImages()[section.section_key]; as file) { <span class="hint">Selected: {{ file.name }}</span> }
+            <span class="asset-path"><strong>Saved English media path:</strong> {{ section.image_url || 'Not set' }}</span>
+            @if (selectedImages()[section.section_key] || section.image_url) {
+              @if (isVideo(selectedImages()[section.section_key]?.name || section.image_url)) { <video class="preview" [src]="previewUrl(section.section_key, section.image_url)" controls muted playsinline></video> }
+              @else { <img class="preview" [src]="previewUrl(section.section_key, section.image_url)" alt="Banner media preview" /> }
+            }
+          </label>
+          <app-media-image-picker (selected)="selectBannerFromLibrary(section.section_key, 'en', $event)" />
+          <label class="image-field">Banner background image (Arabic / Saudi)
+            <input type="file" accept="image/*,video/mp4,video/webm" (change)="selectImage(section.section_key + '_ar', $event)" />
+            <span class="hint">Initially uses the English banner. Upload a separate Arabic banner when needed.</span>
+            @if (selectedImages()[section.section_key + '_ar']; as file) { <span class="hint">Selected: {{ file.name }}</span> }
+            <span class="asset-path"><strong>Saved Arabic media path:</strong> {{ section.image_url_ar || section.image_url || 'Not set' }}</span>
+            @if (selectedImages()[section.section_key + '_ar'] || section.image_url_ar || section.image_url) {
+              @if (isVideo(selectedImages()[(section.section_key + '_ar')]?.name || section.image_url_ar || section.image_url)) { <video class="preview" [src]="previewUrl(section.section_key + '_ar', section.image_url_ar || section.image_url)" controls muted playsinline></video> }
+              @else { <img class="preview" [src]="previewUrl(section.section_key + '_ar', section.image_url_ar || section.image_url)" alt="Arabic banner media preview" /> }
+            }
+          </label>
+          <app-media-image-picker (selected)="selectBannerFromLibrary(section.section_key, 'ar', $event)" />
+        }
+      </div>
+      <button class="save-button" type="button" (click)="save(section)" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save changes' }}</button>
+    </section>
+  }
+  <section class="edit-card corporate-video-card">
+    <div class="card-heading"><div><span class="eyebrow">HOMEPAGE VIDEO</span><h2>Watch Corporate</h2></div></div>
+    <p class="hint">This video opens from the “Watch Corporate Film” button in the homepage hero.</p>
+    <div class="fields">
+      <label class="image-field">Corporate film video
+        <input type="file" accept="video/mp4,video/webm,video/quicktime,.mov" (change)="selectCorporateVideo($event)" />
+        @if (selectedCorporateVideo(); as file) { <span class="hint">Selected: {{ file.name }}</span> }
+        <span class="asset-path"><strong>Saved video path:</strong> {{ corporateVideoPath() || 'Not set' }}</span>
+        @if (selectedCorporateVideo() || corporateVideoPath()) {
+          <video class="preview" [src]="previewUrl('corporate_video', corporateVideoPath() || undefined)" controls playsinline></video>
+        }
+      </label>
+    </div>
+    <button class="save-button" type="button" (click)="saveCorporateVideo()" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save Watch Corporate video' }}</button>
+  </section>
+</div>

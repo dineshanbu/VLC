@@ -1,0 +1,45 @@
+<section class="about-vic" id="about-vic">
+  <img class="about-vic__brand-mark" src="v-floating-mark-transparent.webp" alt="" aria-hidden="true" />
+  <div class="about-vic__container">
+
+    <div class="about-vic__grid">
+
+      <!-- Left Content Column -->
+      <div class="about-vic__content">
+        <!-- Eyebrow label with horizontal accent line -->
+        <div class="about-vic__eyebrow-wrapper">
+          <span class="about-vic__eyebrow section-eyebrow">{{ 'home.about.eyebrow' | sectionHeading:'ABOUT VIC':'عن الشركة' }}</span>
+        </div>
+
+        @if (true) {
+          <h2 class="about-vic__heading">
+            {{ 'home.about.line1' | sectionHeading:'Driven by Science.':'مدفوعون بالعلم.' }}<br>
+            {{ 'home.about.line2' | sectionHeading:'Inspired by Humanity.':'ملهمون بالإنسانية.' }}
+          </h2>
+        }
+
+        <p class="about-vic__desc">
+          {{ description }}
+        </p>
+
+        <div class="about-vic__action">
+          <a routerLink="/about" class="about-vic__btn">
+            <span>{{ translationService.translate('aboutVic.btn') }}</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Media Column with curved organic mask & floating badge -->
+      <div class="about-vic__media-wrapper">
+        <div class="about-vic__curved-media">
+          <img class="about-vic__image" [src]="imageUrl" [alt]="headingLine1 + ' ' + headingLine2" loading="lazy" />
+          <button class="about-vic__play-button" type="button" (click)="watchVideo.emit(videoUrl)" [attr.aria-label]="isRtl ? 'تشغيل فيلم الشركة' : 'Play About VIC video'">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9 6 9 6-9 6V6Z" /></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
