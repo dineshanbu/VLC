@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExecutiveTeamService } from '../../../core/services/executive-team.service';
 import { ExecutiveTeamHero, ExecutiveTeamMember } from '../../../core/models/executive-team.model';
@@ -64,7 +64,7 @@ const defaultCommitteeMembers: CommitteeMember[] = [
   templateUrl: './executive-team.html',
   styleUrls: ['../about/about.css', '../public-theme.css', './executive-team.css']
 })
-export class ExecutiveTeamComponent implements OnInit {
+export class ExecutiveTeamComponent implements OnInit, OnDestroy {
   private readonly teamService = inject(ExecutiveTeamService);
   readonly translationService = inject(TranslationService);
   readonly leaders = signal<ExecutiveTeamMember[]>([]);
@@ -102,6 +102,7 @@ export class ExecutiveTeamComponent implements OnInit {
       next: response => {
         this.leaders.set(response.success ? response.members : []);
         this.isLoading.set(false);
+        this.startAutoCarousel();
       },
       error: () => {
         this.leaders.set([]);
@@ -218,29 +219,64 @@ export class ExecutiveTeamComponent implements OnInit {
   openLeaderProfile(leader: ExecutiveTeamMember): void { this.selectedLeader.set(leader); }
   closeLeaderProfile(): void { this.selectedLeader.set(null); }
 
+  private autoSlideInterval: any = null;
+
+  startAutoCarousel(): void {
+    if (typeof window === 'undefined') return;
+    this.stopAutoCarousel();
+    this.autoSlideInterval = setInterval(() => {
+      const viewport = this.teamCarousel?.nativeElement;
+      if (!viewport || viewport.scrollWidth <= viewport.clientWidth + 10) return;
+      this.scrollTeam(1);
+    }, 4500);
+  }
+
+  stopAutoCarousel(): void {
+    if (this.autoSlideInterval) {
+      clearInterval(this.autoSlideInterval);
+      this.autoSlideInterval = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoCarousel();
+  }
+
   scrollTeam(direction: number): void {
-    const viewport = this.teamCarousel?.nativeElement;
-    const card = viewport?.querySelector<HTMLElement>('.executive-team-card');
-    if (!viewport || !card) return;
-    const gap = Number.parseFloat(getComputedStyle(viewport).columnGap || '0') || 0;
-    viewport.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: 'smooth' });
+    const total = this.teamLeaders.length;
+    if (total <= 1) return;
+    let next = this.teamSlide() + direction;
+    if (next >= total) next = 0;
+    if (next < 0) next = total - 1;
+    this.goToTeamSlide(next);
   }
 
   goToTeamSlide(index: number): void {
     const viewport = this.teamCarousel?.nativeElement;
-    const card = viewport?.querySelector<HTMLElement>('.executive-team-card');
-    if (!viewport || !card) return;
-    const gap = Number.parseFloat(getComputedStyle(viewport).columnGap || '0') || 0;
-    viewport.scrollTo({ left: index * (card.offsetWidth + gap), behavior: 'smooth' });
+    const cards = viewport?.querySelectorAll<HTMLElement>('.executive-team-card');
+    if (!viewport || !cards || !cards[index]) return;
+    cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
     this.teamSlide.set(index);
   }
 
   onTeamCarouselScroll(): void {
     const viewport = this.teamCarousel?.nativeElement;
-    const card = viewport?.querySelector<HTMLElement>('.executive-team-card');
-    if (!viewport || !card) return;
-    const gap = Number.parseFloat(getComputedStyle(viewport).columnGap || '0') || 0;
-    this.teamSlide.set(Math.round(viewport.scrollLeft / (card.offsetWidth + gap)));
+    const cards = viewport?.querySelectorAll<HTMLElement>('.executive-team-card');
+    if (!viewport || !cards || cards.length === 0) return;
+    const viewportRect = viewport.getBoundingClientRect();
+    const viewportCenter = viewportRect.left + viewportRect.width / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    cards.forEach((card, idx) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - viewportCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = idx;
+      }
+    });
+    this.teamSlide.set(closestIndex);
   }
 
   @HostListener('document:keydown.escape')

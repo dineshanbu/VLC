@@ -104,7 +104,9 @@
             <h2>{{ 'executive.team.title' | sectionHeading:'Executive Leadership Team':'فريق القيادة التنفيذية' }}</h2>
         <p>{{ 'executive.team.description' | sectionHeading:pageCopy().teamDescription:'قادة ذوو خبرة يشرفون على التصنيع والجودة والعمليات والتميز التجاري واستراتيجية الشركة.' }}</p>
       </div>
-      <div class="executive-team-carousel-wrap" *ngIf="teamLeaders.length">
+      <div class="executive-team-carousel-wrap" *ngIf="teamLeaders.length"
+           (mouseenter)="stopAutoCarousel()" (mouseleave)="startAutoCarousel()"
+           (touchstart)="stopAutoCarousel()" (touchend)="startAutoCarousel()">
         <button type="button" class="executive-carousel-arrow executive-carousel-arrow--prev" aria-label="Previous leaders" (click)="scrollTeam(-1)">‹</button>
         <div class="executive-team-grid" #teamCarousel (scroll)="onTeamCarouselScroll()">
         @for (leader of teamLeaders; track leader.id || leader.name) {

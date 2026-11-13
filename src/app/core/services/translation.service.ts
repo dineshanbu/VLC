@@ -516,7 +516,7 @@ export class TranslationService {
       'products.btn.viewDetails': 'عرض التفاصيل',
       'products.btn.downloadBrochure': 'تحميل الكتيب التعريفي',
       'products.btn.introductionToCsl': 'تعريف عن CSL',
-      'products.btn.cslFacility': 'منشأة CSL',
+      'products.btn.cslFacility': 'CSL مصانع',
       'products.btn.aboutCsl': 'نبذة عن CSL',
       'products.video.notConfigured': 'لم يتم تحميل هذا الفيديو بعد.',
       'products.resources.heading': 'الموارد والتحميلات',
