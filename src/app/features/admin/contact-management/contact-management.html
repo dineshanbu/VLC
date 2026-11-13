@@ -37,26 +37,27 @@
         <label>Description (English)<textarea name="contact-hero-description" rows="3" [(ngModel)]="pageSettings.hero_description"></textarea></label><label>Description (Arabic)<textarea name="contact-hero-description-ar" rows="3" dir="rtl" [(ngModel)]="pageSettings.hero_description_ar"></textarea></label>
         <label class="contact-page-editor__wide">Email<input name="contact-hero-email" type="email" [(ngModel)]="pageSettings.hero_email"></label>
         
-        <div class="admin-multi-phone contact-page-editor__wide">
+        <!-- English Multi-Phone Section -->
+        <div class="admin-multi-phone">
           <div class="admin-multi-phone__header">
-            <span class="admin-multi-phone__title">Phone Numbers (Hero Banner)</span>
-            <button type="button" class="btn btn-sm btn-outline admin-multi-phone__add-btn" (click)="addHeroPhone()">
+            <span class="admin-multi-phone__title">Phone Numbers (English Banner)</span>
+            <button type="button" class="btn btn-sm btn-outline admin-multi-phone__add-btn" (click)="addHeroPhone('en')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Phone Number
+              Add Number
             </button>
           </div>
           <p class="admin-multi-phone__hint">
-            You can add multiple phone numbers. On the website banner, they will appear separated by " / " and each number will be individually clickable so callers connect directly to that number.
+            Shown on English contact page. Multiple numbers display with " / " and each is clickable.
           </p>
           <div class="admin-multi-phone__list">
-            @for (phone of heroPhoneList; track $index; let i = $index) {
+            @for (phone of heroPhoneListEn; track $index; let i = $index) {
               <div class="admin-multi-phone__item">
                 <span class="admin-multi-phone__badge">#{{ i + 1 }}</span>
                 <input
                   type="tel"
                   class="admin-multi-phone__input"
-                  [name]="'hero-phone-' + i"
-                  [(ngModel)]="heroPhoneList[i]"
+                  [name]="'hero-phone-en-' + i"
+                  [(ngModel)]="heroPhoneListEn[i]"
                   (ngModelChange)="syncHeroPhonesToSettings()"
                   placeholder="+966 11 491 7984"
                   dir="ltr"
@@ -64,19 +65,72 @@
                 <button
                   type="button"
                   class="admin-multi-phone__remove-btn"
-                  (click)="removeHeroPhone(i)"
-                  [disabled]="heroPhoneList.length === 1"
+                  (click)="removeHeroPhone(i, 'en')"
                   title="Remove this phone number"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
               </div>
             }
+            @if (heroPhoneListEn.length === 0) {
+              <div class="admin-multi-phone__empty">
+                <span>No English phone numbers configured. Call button will be hidden.</span>
+              </div>
+            }
           </div>
-          @if (heroPhoneListPreview) {
+          @if (heroPhoneListPreviewEn) {
             <div class="admin-multi-phone__preview">
-              <span class="admin-multi-phone__preview-label">Live Display on Website:</span>
-              <strong dir="ltr">{{ heroPhoneListPreview }}</strong>
+              <span class="admin-multi-phone__preview-label">Live Preview (EN):</span>
+              <strong dir="ltr">{{ heroPhoneListPreviewEn }}</strong>
+            </div>
+          }
+        </div>
+
+        <!-- Saudi / Arabic Multi-Phone Section -->
+        <div class="admin-multi-phone">
+          <div class="admin-multi-phone__header">
+            <span class="admin-multi-phone__title">Phone Numbers (Saudi / Arabic Banner)</span>
+            <button type="button" class="btn btn-sm btn-outline admin-multi-phone__add-btn" (click)="addHeroPhone('ar')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Number
+            </button>
+          </div>
+          <p class="admin-multi-phone__hint">
+            Shown on Saudi/Arabic contact page. Multiple numbers display with " / " and each is clickable.
+          </p>
+          <div class="admin-multi-phone__list">
+            @for (phone of heroPhoneListAr; track $index; let i = $index) {
+              <div class="admin-multi-phone__item">
+                <span class="admin-multi-phone__badge">#{{ i + 1 }}</span>
+                <input
+                  type="tel"
+                  class="admin-multi-phone__input"
+                  [name]="'hero-phone-ar-' + i"
+                  [(ngModel)]="heroPhoneListAr[i]"
+                  (ngModelChange)="syncHeroPhonesToSettings()"
+                  placeholder="+966 11 491 7984"
+                  dir="ltr"
+                />
+                <button
+                  type="button"
+                  class="admin-multi-phone__remove-btn"
+                  (click)="removeHeroPhone(i, 'ar')"
+                  title="Remove this phone number"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            }
+            @if (heroPhoneListAr.length === 0) {
+              <div class="admin-multi-phone__empty">
+                <span>No Saudi/Arabic phone numbers configured. Call button will be hidden in Arabic view.</span>
+              </div>
+            }
+          </div>
+          @if (heroPhoneListPreviewAr) {
+            <div class="admin-multi-phone__preview">
+              <span class="admin-multi-phone__preview-label">Live Preview (AR):</span>
+              <strong dir="ltr">{{ heroPhoneListPreviewAr }}</strong>
             </div>
           }
         </div>

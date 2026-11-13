@@ -11,7 +11,7 @@ const PREVIOUS_SHORT_OFFICE_MAP_URL = 'https://maps.app.goo.gl/3CUKTyr1EzHr7JSG7
 export interface ContactPageSettings {
   hero_eyebrow: string; hero_eyebrow_ar: string; hero_title: string; hero_title_ar: string;
   hero_title_accent: string; hero_title_accent_ar: string; hero_description: string; hero_description_ar: string;
-  hero_email: string; hero_phone: string; hero_image: string; hero_image_ar?: string;
+  hero_email: string; hero_phone: string; hero_phone_ar?: string; hero_image: string; hero_image_ar?: string;
   form_eyebrow: string; form_eyebrow_ar: string; form_title: string; form_title_ar: string;
   success_title: string; success_title_ar: string; success_text: string; success_text_ar: string;
   security_note: string; security_note_ar: string;
@@ -30,7 +30,7 @@ export const DEFAULT_CONTACT_PAGE_SETTINGS: ContactPageSettings = {
   hero_title_accent: "Let's Create Impact.", hero_title_accent_ar: 'لنصنع أثراً معاً.',
   hero_description: "We are always open to conversations, collaborations, and opportunities to advance global health together. Reach out to our team — we'd love to hear from you.",
   hero_description_ar: 'نحن نرحب دائمًا بالحوار والتعاون والفرص المشتركة للنهوض بالصحة العالمية معًا. تواصل مع فريقنا - يسعدنا أن نسمع منك.',
-  hero_email: 'admin@vaccine.com.sa', hero_phone: '+966 11 491 7984', hero_image: 'banner_for_all2.webp', hero_image_ar: 'banner_for_all2.webp',
+  hero_email: 'admin@vaccine.com.sa', hero_phone: '+966 11 491 7984', hero_phone_ar: '+966 11 491 7984', hero_image: 'banner_for_all2.webp', hero_image_ar: 'banner_for_all2.webp',
   form_eyebrow: 'SEND US A MESSAGE', form_eyebrow_ar: 'أرسل لنا رسالة', form_title: 'How can we help you?', form_title_ar: 'كيف يمكننا مساعدتك؟',
   success_title: 'Message Sent Successfully', success_title_ar: 'تم إرسال الرسالة بنجاح',
   success_text: 'Our team has received your message and will respond within one business day.', success_text_ar: 'لقد استلم فريقنا رسالتك وسنرد عليك خلال يوم عمل واحد.',

@@ -49,39 +49,63 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
   facilityImageFile: File | null = null;
   facilityImagePreview: string | null = null;
 
-  // Multiple hero phone numbers management
-  heroPhoneList: string[] = [''];
+  // Multiple hero phone numbers management (English & Saudi / Arabic)
+  heroPhoneListEn: string[] = [];
+  heroPhoneListAr: string[] = [];
 
   initHeroPhones(): void {
-    const raw = this.pageSettings.hero_phone || '';
-    const parsed = raw.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
-    this.heroPhoneList = parsed.length > 0 ? parsed : [''];
+    const rawEn = this.pageSettings.hero_phone || '';
+    const parsedEn = rawEn.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
+    this.heroPhoneListEn = parsedEn.length > 0 ? parsedEn : [''];
+
+    const rawAr = this.pageSettings.hero_phone_ar !== undefined
+      ? this.pageSettings.hero_phone_ar
+      : (this.pageSettings.hero_phone || '');
+    const parsedAr = rawAr.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
+    this.heroPhoneListAr = parsedAr.length > 0 ? parsedAr : [''];
   }
 
-  addHeroPhone(): void {
-    this.heroPhoneList.push('');
+  addHeroPhone(lang: 'en' | 'ar'): void {
+    if (lang === 'en') {
+      this.heroPhoneListEn.push('');
+    } else {
+      this.heroPhoneListAr.push('');
+    }
     this.syncHeroPhonesToSettings();
   }
 
-  removeHeroPhone(index: number): void {
-    if (this.heroPhoneList.length > 1) {
-      this.heroPhoneList.splice(index, 1);
-      this.syncHeroPhonesToSettings();
+  removeHeroPhone(index: number, lang: 'en' | 'ar'): void {
+    if (lang === 'en') {
+      this.heroPhoneListEn.splice(index, 1);
+    } else {
+      this.heroPhoneListAr.splice(index, 1);
     }
+    this.syncHeroPhonesToSettings();
   }
 
-  updateHeroPhone(index: number, val: string): void {
-    this.heroPhoneList[index] = val;
+  updateHeroPhone(index: number, val: string, lang: 'en' | 'ar'): void {
+    if (lang === 'en') {
+      this.heroPhoneListEn[index] = val;
+    } else {
+      this.heroPhoneListAr[index] = val;
+    }
     this.syncHeroPhonesToSettings();
   }
 
   syncHeroPhonesToSettings(): void {
-    const filtered = this.heroPhoneList.map(p => p.trim()).filter(Boolean);
-    this.pageSettings.hero_phone = filtered.join(' / ');
+    const filteredEn = this.heroPhoneListEn.map(p => p.trim()).filter(Boolean);
+    this.pageSettings.hero_phone = filteredEn.join(' / ');
+
+    const filteredAr = this.heroPhoneListAr.map(p => p.trim()).filter(Boolean);
+    this.pageSettings.hero_phone_ar = filteredAr.join(' / ');
   }
 
-  get heroPhoneListPreview(): string {
-    return this.heroPhoneList.map(p => p.trim()).filter(Boolean).join(' / ');
+  get heroPhoneListPreviewEn(): string {
+    return this.heroPhoneListEn.map(p => p.trim()).filter(Boolean).join(' / ');
+  }
+
+  get heroPhoneListPreviewAr(): string {
+    return this.heroPhoneListAr.map(p => p.trim()).filter(Boolean).join(' / ');
   }
 
   ngOnInit(): void {

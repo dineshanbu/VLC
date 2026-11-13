@@ -67,7 +67,13 @@ export class ContactComponent implements OnDestroy {
   get isRtl(): boolean { return this.translationService.isRtl(); }
 
   get heroPhones(): { raw: string; tel: string }[] {
-    const raw = this.pageSettings().hero_phone || '';
+    const isArabic = this.translationService.currentLang() === 'ar';
+    const settings = this.pageSettings();
+    const raw = isArabic
+      ? (settings.hero_phone_ar !== undefined && settings.hero_phone_ar !== null
+          ? settings.hero_phone_ar
+          : (settings.hero_phone || ''))
+      : (settings.hero_phone || '');
     if (!raw.trim()) return [];
     const parts = raw.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
     return parts.map(p => ({
