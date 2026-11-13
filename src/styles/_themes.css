@@ -104,7 +104,13 @@
 :root[data-theme='dark'] .modal-content,
 :root[data-theme='dark'] .profile-dropdown-menu,
 :root[data-theme='dark'] .data-table-wrapper,
-:root[data-theme='dark'] .table-container {
+:root[data-theme='dark'] .table-container,
+:root[data-theme='dark'] .contact-page-editor,
+:root[data-theme='dark'] .careers-page-editor,
+:root[data-theme='dark'] .product-header-card,
+:root[data-theme='dark'] .filters-bar,
+:root[data-theme='dark'] .inbox-card,
+:root[data-theme='dark'] .admin-multi-phone {
   background-color: var(--color-surface-elevated) !important;
   border-color: var(--color-border) !important;
   color: var(--color-text-primary) !important;
@@ -116,7 +122,13 @@
 :root[data-theme='dark'] .modal-content *,
 :root[data-theme='dark'] .profile-dropdown-menu *,
 :root[data-theme='dark'] .data-table-wrapper *,
-:root[data-theme='dark'] .table-container * {
+:root[data-theme='dark'] .table-container *,
+:root[data-theme='dark'] .contact-page-editor *,
+:root[data-theme='dark'] .careers-page-editor *,
+:root[data-theme='dark'] .product-header-card *,
+:root[data-theme='dark'] .filters-bar *,
+:root[data-theme='dark'] .inbox-card *,
+:root[data-theme='dark'] .admin-multi-phone * {
   border-color: var(--color-border);
 }
 

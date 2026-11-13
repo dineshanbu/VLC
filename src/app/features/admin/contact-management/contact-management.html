@@ -29,9 +29,9 @@
     <div class="contact-page-editor__header"><div><span>PUBLIC PAGE CONTENT</span><h2>Contact Page Content</h2><p>Manage the Contact page banner, message section, and office details.</p></div><button class="btn btn-primary" type="button" (click)="savePageSettings()" [disabled]="pageContentLoading() || pageContentSaving()">{{ pageContentSaving() ? 'Saving…' : 'Save page content' }}</button></div>
     @if (pageContentLoading()) { <p>Loading Contact page content…</p> } @else {
       <form class="contact-page-editor__form" (ngSubmit)="savePageSettings()">
-        <div class="field-managed-notice" style="grid-column: 1 / -1; background: #e6f6f7; border: 1px solid #b2e4e8; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #086a75; display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+        <div class="field-managed-notice">
           <span>ℹ️</span>
-          <span><strong>All Section Eyebrows &amp; Headings</strong> are managed exclusively in <a routerLink="/admin/section-headings" style="color: #086a75; font-weight: 700; text-decoration: underline;">Section Title Studio</a>.</span>
+          <span><strong>All Section Eyebrows &amp; Headings</strong> are managed exclusively in <a routerLink="/admin/section-headings">Section Title Studio</a>.</span>
         </div>
         <h3>Hero banner</h3>
         <label>Description (English)<textarea name="contact-hero-description" rows="3" [(ngModel)]="pageSettings.hero_description"></textarea></label><label>Description (Arabic)<textarea name="contact-hero-description-ar" rows="3" dir="rtl" [(ngModel)]="pageSettings.hero_description_ar"></textarea></label>

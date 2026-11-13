@@ -436,11 +436,34 @@
 }
 
 /* ==========================================================================
+   FIELD MANAGED NOTICE
+   ========================================================================== */
+.field-managed-notice {
+  grid-column: 1 / -1;
+  background: rgba(0, 201, 167, 0.12);
+  border: 1px solid rgba(0, 201, 167, 0.35);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #00E5C9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.field-managed-notice a {
+  color: #00E5C9;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
    MULTI-PHONE NUMBERS ADMIN EDITOR
    ========================================================================== */
 .admin-multi-phone {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--color-surface-alt, #062b45);
+  border: 1px solid var(--color-border, #16445d);
   border-radius: 10px;
   padding: 16px;
   display: flex;
@@ -458,7 +481,7 @@
 .admin-multi-phone__title {
   font-size: 14px;
   font-weight: 700;
-  color: #123251;
+  color: var(--color-text-primary, #f2fdff);
 }
 
 .admin-multi-phone__add-btn {
@@ -470,20 +493,20 @@
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
-  background: #ffffff;
-  color: #00836e;
+  background: rgba(0, 201, 167, 0.12);
+  color: #00E5C9;
   border: 1px solid #00C9A7;
   transition: all 0.15s ease;
 }
 
 .admin-multi-phone__add-btn:hover {
-  background: #e6f9f5;
-  color: #006051;
+  background: rgba(0, 201, 167, 0.25);
+  color: #ffffff;
 }
 
 .admin-multi-phone__hint {
   font-size: 12.5px;
-  color: #64748b;
+  color: var(--color-text-secondary, #94a3b8);
   margin: 0;
   line-height: 1.45;
 }
@@ -503,7 +526,7 @@
 .admin-multi-phone__badge {
   font-size: 12px;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--color-text-muted, #64748b);
   width: 24px;
   text-align: center;
 }
@@ -511,18 +534,18 @@
 .admin-multi-phone__input {
   flex: 1;
   padding: 9px 12px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--color-border, #24627c);
   border-radius: 8px;
   font-size: 14px;
-  color: #123251;
-  background: #ffffff;
+  color: var(--color-text-primary, #f2fdff);
+  background: var(--color-surface-elevated, #07314e);
   transition: border-color 0.15s;
 }
 
 .admin-multi-phone__input:focus {
   outline: none;
   border-color: #00C9A7;
-  box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.2);
 }
 
 .admin-multi-phone__remove-btn {
@@ -531,9 +554,9 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid #fecaca;
-  background: #ffffff;
-  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s;
@@ -541,16 +564,17 @@
 }
 
 .admin-multi-phone__remove-btn:hover:not(:disabled) {
-  background: #fee2e2;
-  color: #b91c1c;
-  border-color: #fca5a5;
+  background: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  border-color: #ef4444;
 }
 
 .admin-multi-phone__remove-btn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
-  border-color: #e2e8f0;
-  color: #94a3b8;
+  border-color: var(--color-border, #16445d);
+  color: #64748b;
+  background: transparent;
 }
 
 .admin-multi-phone__preview {
@@ -558,15 +582,75 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: #ffffff;
+  background: var(--color-surface-elevated, #07314e);
   border: 1px dashed #00C9A7;
   border-radius: 6px;
   font-size: 13px;
-  color: #086a75;
+  color: #00E5C9;
 }
 
 .admin-multi-phone__preview-label {
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-text-secondary, #94a3b8);
   font-size: 12px;
+}
+
+.admin-multi-phone__preview strong {
+  color: var(--color-text-primary, #f2fdff);
+}
+
+/* ==========================================================================
+   DARK THEME OVERRIDES FOR CONTACT MANAGEMENT
+   ========================================================================== */
+:host-context(:root[data-theme='dark']) .contact-page-editor {
+  background: #032239 !important;
+  border-color: #16445d !important;
+  color: #f2fdff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+:host-context(:root[data-theme='dark']) .contact-page-editor__header h2,
+:host-context(:root[data-theme='dark']) .contact-page-editor__form h3,
+:host-context(:root[data-theme='dark']) .contact-page-editor__form label {
+  color: #f2fdff !important;
+  border-color: #16445d !important;
+}
+
+:host-context(:root[data-theme='dark']) .contact-page-editor__form input,
+:host-context(:root[data-theme='dark']) .contact-page-editor__form textarea {
+  background: #07314e !important;
+  color: #f2fdff !important;
+  border-color: #24627c !important;
+}
+
+:host-context(:root[data-theme='dark']) .filters-bar,
+:host-context(:root[data-theme='dark']) .table-container,
+:host-context(:root[data-theme='dark']) .modal-card,
+:host-context(:root[data-theme='dark']) .sender-detail-card,
+:host-context(:root[data-theme='dark']) .message-content-box {
+  background: #032239 !important;
+  border-color: #16445d !important;
+  color: #f2fdff !important;
+}
+
+:host-context(:root[data-theme='dark']) .search-input-box,
+:host-context(:root[data-theme='dark']) .select-control {
+  background: #07314e !important;
+  border-color: #24627c !important;
+  color: #f2fdff !important;
+}
+
+:host-context(:root[data-theme='dark']) .data-table thead th {
+  background: #062b45 !important;
+  border-color: #16445d !important;
+  color: #94a3b8 !important;
+}
+
+:host-context(:root[data-theme='dark']) .data-table tbody td {
+  border-color: #16445d !important;
+  color: #f2fdff !important;
+}
+
+:host-context(:root[data-theme='dark']) .data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
 }
