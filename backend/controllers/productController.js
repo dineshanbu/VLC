@@ -476,7 +476,11 @@ exports.getPageSettings = async (req, res, next) => {
         csl_partner_title: settings.csl_partner_title !== undefined && settings.csl_partner_title !== null ? settings.csl_partner_title : defaultProductsPageSettings.csl_partner_title,
         csl_partner_title_ar: settings.csl_partner_title_ar !== undefined && settings.csl_partner_title_ar !== null ? settings.csl_partner_title_ar : defaultProductsPageSettings.csl_partner_title_ar,
         csl_partner_description: settings.csl_partner_description !== undefined && settings.csl_partner_description !== null ? settings.csl_partner_description : defaultProductsPageSettings.csl_partner_description,
-        csl_partner_description_ar: settings.csl_partner_description_ar !== undefined && settings.csl_partner_description_ar !== null ? settings.csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar
+        csl_partner_description_ar: settings.csl_partner_description_ar !== undefined && settings.csl_partner_description_ar !== null ? settings.csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar,
+        csl_btn_about_en: settings.csl_btn_about_en !== undefined && settings.csl_btn_about_en !== null ? settings.csl_btn_about_en : defaultProductsPageSettings.csl_btn_about_en,
+        csl_btn_about_ar: settings.csl_btn_about_ar !== undefined && settings.csl_btn_about_ar !== null ? settings.csl_btn_about_ar : defaultProductsPageSettings.csl_btn_about_ar,
+        csl_btn_facility_en: settings.csl_btn_facility_en !== undefined && settings.csl_btn_facility_en !== null ? settings.csl_btn_facility_en : defaultProductsPageSettings.csl_btn_facility_en,
+        csl_btn_facility_ar: settings.csl_btn_facility_ar !== undefined && settings.csl_btn_facility_ar !== null ? settings.csl_btn_facility_ar : defaultProductsPageSettings.csl_btn_facility_ar
       }
     });
   } catch (error) {
@@ -507,6 +511,10 @@ exports.updatePageSettings = async (req, res, next) => {
     const csl_partner_title_ar = body.csl_partner_title_ar;
     const csl_partner_description = body.csl_partner_description;
     const csl_partner_description_ar = body.csl_partner_description_ar;
+    const csl_btn_about_en = body.csl_btn_about_en;
+    const csl_btn_about_ar = body.csl_btn_about_ar;
+    const csl_btn_facility_en = body.csl_btn_facility_en;
+    const csl_btn_facility_ar = body.csl_btn_facility_ar;
 
     let parsedResources = body.page_resources;
     if (parsedResources !== undefined) {
@@ -539,9 +547,10 @@ exports.updatePageSettings = async (req, res, next) => {
           cta_description, cta_description_ar,
           cta_btn_text, cta_btn_text_ar,
           cta_link, page_resources, pipeline_content, pipeline_image, pipeline_video, csl_intro_video, csl_about_video,
-          csl_logo, csl_partner_title, csl_partner_title_ar, csl_partner_description, csl_partner_description_ar
+          csl_logo, csl_partner_title, csl_partner_title_ar, csl_partner_description, csl_partner_description_ar,
+          csl_btn_about_en, csl_btn_about_ar, csl_btn_facility_en, csl_btn_facility_ar
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `, [
         body.hero_badge || 'OUR PRODUCTS',
         body.hero_badge_ar || 'منتجاتنا',
@@ -577,7 +586,11 @@ exports.updatePageSettings = async (req, res, next) => {
         csl_partner_title !== undefined ? csl_partner_title : defaultProductsPageSettings.csl_partner_title,
         csl_partner_title_ar !== undefined ? csl_partner_title_ar : defaultProductsPageSettings.csl_partner_title_ar,
         csl_partner_description !== undefined ? csl_partner_description : defaultProductsPageSettings.csl_partner_description,
-        csl_partner_description_ar !== undefined ? csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar
+        csl_partner_description_ar !== undefined ? csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar,
+        csl_btn_about_en !== undefined ? csl_btn_about_en : defaultProductsPageSettings.csl_btn_about_en,
+        csl_btn_about_ar !== undefined ? csl_btn_about_ar : defaultProductsPageSettings.csl_btn_about_ar,
+        csl_btn_facility_en !== undefined ? csl_btn_facility_en : defaultProductsPageSettings.csl_btn_facility_en,
+        csl_btn_facility_ar !== undefined ? csl_btn_facility_ar : defaultProductsPageSettings.csl_btn_facility_ar
       ]);
     } else {
       const current = existing[0];
@@ -618,7 +631,11 @@ exports.updatePageSettings = async (req, res, next) => {
           csl_partner_title = ?,
           csl_partner_title_ar = ?,
           csl_partner_description = ?,
-          csl_partner_description_ar = ?
+          csl_partner_description_ar = ?,
+          csl_btn_about_en = ?,
+          csl_btn_about_ar = ?,
+          csl_btn_facility_en = ?,
+          csl_btn_facility_ar = ?
         WHERE id = ?
       `, [
         body.hero_badge !== undefined ? body.hero_badge : current.hero_badge,
@@ -659,6 +676,10 @@ exports.updatePageSettings = async (req, res, next) => {
         csl_partner_title_ar !== undefined ? csl_partner_title_ar : current.csl_partner_title_ar,
         csl_partner_description !== undefined ? csl_partner_description : current.csl_partner_description,
         csl_partner_description_ar !== undefined ? csl_partner_description_ar : current.csl_partner_description_ar,
+        csl_btn_about_en !== undefined ? csl_btn_about_en : current.csl_btn_about_en,
+        csl_btn_about_ar !== undefined ? csl_btn_about_ar : current.csl_btn_about_ar,
+        csl_btn_facility_en !== undefined ? csl_btn_facility_en : current.csl_btn_facility_en,
+        csl_btn_facility_ar !== undefined ? csl_btn_facility_ar : current.csl_btn_facility_ar,
         current.id
       ]);
     }
@@ -682,7 +703,11 @@ exports.updatePageSettings = async (req, res, next) => {
         csl_partner_title: updated.csl_partner_title !== undefined && updated.csl_partner_title !== null ? updated.csl_partner_title : defaultProductsPageSettings.csl_partner_title,
         csl_partner_title_ar: updated.csl_partner_title_ar !== undefined && updated.csl_partner_title_ar !== null ? updated.csl_partner_title_ar : defaultProductsPageSettings.csl_partner_title_ar,
         csl_partner_description: updated.csl_partner_description !== undefined && updated.csl_partner_description !== null ? updated.csl_partner_description : defaultProductsPageSettings.csl_partner_description,
-        csl_partner_description_ar: updated.csl_partner_description_ar !== undefined && updated.csl_partner_description_ar !== null ? updated.csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar
+        csl_partner_description_ar: updated.csl_partner_description_ar !== undefined && updated.csl_partner_description_ar !== null ? updated.csl_partner_description_ar : defaultProductsPageSettings.csl_partner_description_ar,
+        csl_btn_about_en: updated.csl_btn_about_en !== undefined && updated.csl_btn_about_en !== null ? updated.csl_btn_about_en : defaultProductsPageSettings.csl_btn_about_en,
+        csl_btn_about_ar: updated.csl_btn_about_ar !== undefined && updated.csl_btn_about_ar !== null ? updated.csl_btn_about_ar : defaultProductsPageSettings.csl_btn_about_ar,
+        csl_btn_facility_en: updated.csl_btn_facility_en !== undefined && updated.csl_btn_facility_en !== null ? updated.csl_btn_facility_en : defaultProductsPageSettings.csl_btn_facility_en,
+        csl_btn_facility_ar: updated.csl_btn_facility_ar !== undefined && updated.csl_btn_facility_ar !== null ? updated.csl_btn_facility_ar : defaultProductsPageSettings.csl_btn_facility_ar
       }
     });
   } catch (error) {

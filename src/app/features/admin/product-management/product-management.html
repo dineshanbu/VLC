@@ -709,6 +709,27 @@
           <label>Partner Description (Arabic)</label>
           <textarea [(ngModel)]="cslPartnerDescriptionAr" name="cslPartnerDescriptionAr" rows="3" placeholder="e.g. شريك نقل التقنية للتوطين…" dir="rtl"></textarea>
         </div>
+        <hr style="border:none;border-top:1px solid rgba(0,203,213,.25);margin:8px 0 20px;" />
+        <div class="panel-header" style="padding:0;margin-bottom:16px;">
+          <h3 class="panel-title" style="font-size:1rem;">CSL Seqirus Button Labels</h3>
+          <p class="panel-subtitle" style="margin-top:4px;">Controls the text on the "About CSL" and "CSL Facility" buttons on Home &amp; Products pages. Leave empty to show no text.</p>
+        </div>
+        <div class="form-group">
+          <label>Button Label 1 — About CSL (English)</label>
+          <input type="text" [(ngModel)]="cslBtnAboutEn" name="cslBtnAboutEn" placeholder="e.g. About CSL" />
+        </div>
+        <div class="form-group">
+          <label>Button Label 1 — About CSL (Arabic / Saudi)</label>
+          <input type="text" [(ngModel)]="cslBtnAboutAr" name="cslBtnAboutAr" placeholder="e.g. مصانع CSL" dir="rtl" />
+        </div>
+        <div class="form-group">
+          <label>Button Label 2 — CSL Facility (English)</label>
+          <input type="text" [(ngModel)]="cslBtnFacilityEn" name="cslBtnFacilityEn" placeholder="e.g. CSL Facility" />
+        </div>
+        <div class="form-group">
+          <label>Button Label 2 — CSL Facility (Arabic / Saudi)</label>
+          <input type="text" [(ngModel)]="cslBtnFacilityAr" name="cslBtnFacilityAr" placeholder="e.g. CSL مصانع" dir="rtl" />
+        </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" [disabled]="isSaving()">{{ isSaving() ? 'Saving…' : 'Save CSL Videos & Partner Settings' }}</button>
         </div>
@@ -751,6 +772,13 @@
         <div class="pipeline-image-preview" style="color:#e3f1f5;">{{ cslPartnerDescription || '—' }}</div>
         <label>Description (AR)</label>
         <div class="pipeline-image-preview" style="color:#e3f1f5;direction:rtl;">{{ cslPartnerDescriptionAr || '—' }}</div>
+        <div class="panel-header" style="margin-top:20px;padding:0;margin-bottom:12px;">
+          <h3 class="panel-title" style="font-size:1rem;">Button Labels Preview</h3>
+        </div>
+        <label>Button 1 — About CSL (EN / AR)</label>
+        <div class="pipeline-image-preview" style="color:#11d8e2;">{{ cslBtnAboutEn || '—' }} / {{ cslBtnAboutAr || '—' }}</div>
+        <label>Button 2 — CSL Facility (EN / AR)</label>
+        <div class="pipeline-image-preview" style="color:#11d8e2;">{{ cslBtnFacilityEn || '—' }} / {{ cslBtnFacilityAr || '—' }}</div>
       </aside>
     </div>
   </div>

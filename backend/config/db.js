@@ -683,6 +683,18 @@ async function createTables(db) {
       if (!pageSettingsCols.includes('csl_partner_description_ar')) {
         await db.query('ALTER TABLE products_page_settings ADD COLUMN csl_partner_description_ar TEXT DEFAULT NULL');
       }
+      if (!pageSettingsCols.includes('csl_btn_about_en')) {
+        await db.query('ALTER TABLE products_page_settings ADD COLUMN csl_btn_about_en VARCHAR(255) DEFAULT NULL');
+      }
+      if (!pageSettingsCols.includes('csl_btn_about_ar')) {
+        await db.query('ALTER TABLE products_page_settings ADD COLUMN csl_btn_about_ar VARCHAR(255) DEFAULT NULL');
+      }
+      if (!pageSettingsCols.includes('csl_btn_facility_en')) {
+        await db.query('ALTER TABLE products_page_settings ADD COLUMN csl_btn_facility_en VARCHAR(255) DEFAULT NULL');
+      }
+      if (!pageSettingsCols.includes('csl_btn_facility_ar')) {
+        await db.query('ALTER TABLE products_page_settings ADD COLUMN csl_btn_facility_ar VARCHAR(255) DEFAULT NULL');
+      }
       // Ensure indication_items dynamic fields exist
       try {
         const [prodColsRaw] = await db.query("SHOW COLUMNS FROM products");
@@ -2321,6 +2333,10 @@ const defaultProductsPageSettings = {
   csl_partner_title_ar: 'شريك نقل التقنية',
   csl_partner_description: 'Technology transfer partner for full localization of seasonal influenza and pandemic response.',
   csl_partner_description_ar: 'شريك نقل التقنية للتوطين الكامل للقاح الإنفلونزا الموسمية والاستجابة للأوبئة.',
+  csl_btn_about_en: 'About CSL',
+  csl_btn_about_ar: 'مصانع CSL',
+  csl_btn_facility_en: 'CSL Facility',
+  csl_btn_facility_ar: 'CSL مصانع',
   page_resources: [
     { name: 'Product Information', name_ar: 'معلومات المنتج الدوائي', type: 'PDF', size: '1.2 MB', icon: 'document' },
     { name: 'Prescribing Information', name_ar: 'دليل الوصفات الطبية المعتمد', type: 'PDF', size: '1.5 MB', icon: 'prescribing' },

@@ -64,6 +64,26 @@ export class HomeShowcaseComponent implements OnInit {
     return val !== undefined && val !== null ? val : (isAr ? 'شريك نقل التقنية للتوطين الكامل للقاح الإنفلونزا الموسمية والاستجابة للأوبئة.' : 'Technology transfer partner for full localization of seasonal influenza and pandemic response.');
   }
 
+  get cslBtnAboutLabel(): string {
+    const s = this.pageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      const val = isAr ? s.csl_btn_about_ar : s.csl_btn_about_en;
+      if (val !== undefined && val !== null) return val;
+    }
+    return isAr ? 'مصانع CSL' : 'About CSL';
+  }
+
+  get cslBtnFacilityLabel(): string {
+    const s = this.pageSettings();
+    const isAr = this.translationService.isRtl();
+    if (s) {
+      const val = isAr ? s.csl_btn_facility_ar : s.csl_btn_facility_en;
+      if (val !== undefined && val !== null) return val;
+    }
+    return isAr ? 'CSL مصانع' : 'CSL Facility';
+  }
+
   readonly productName = computed(() => {
     const product = this.product();
     return this.translationService.isRtl() && product?.name_ar ? product.name_ar : product?.name || '';

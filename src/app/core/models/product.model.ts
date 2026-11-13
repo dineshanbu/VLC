@@ -113,6 +113,10 @@ export interface ProductPageSettings {
   csl_partner_title_ar?: string | null;
   csl_partner_description?: string | null;
   csl_partner_description_ar?: string | null;
+  csl_btn_about_en?: string | null;
+  csl_btn_about_ar?: string | null;
+  csl_btn_facility_en?: string | null;
+  csl_btn_facility_ar?: string | null;
   updated_at?: string;
 }
 
