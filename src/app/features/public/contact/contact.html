@@ -140,7 +140,7 @@
             {{ isRtl ? 'شكراً لك، ' : 'Thank you, ' }}<strong>{{ contactForm.fullName }}</strong>. {{ isRtl ? pageSettings().success_text_ar : pageSettings().success_text }}
           </p>
           <button type="button" class="contact-reset-btn" (click)="resetContactForm()">
-            Send Another Message
+            {{ isRtl ? 'إرسال رسالة أخرى' : 'Send Another Message' }}
           </button>
         </div>
 
@@ -235,11 +235,7 @@
               [disabled]="isSubmitting()"
               aria-label="Send contact message"
             >
-              <span>{{ isSubmitting() ? 'Sending...' : 'Send Message' }}</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
+              <span>{{ isSubmitting() ? (isRtl ? 'جاري الإرسال...' : 'Sending...') : (isRtl ? 'إرسال الرسالة' : 'Send Message') }}</span>
             </button>
 
             <!-- Security Footnote -->
