@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -23,13 +23,17 @@ export interface ContactMessageForm {
   templateUrl: './contact.html',
   styleUrls: ['./contact.css', '../public-theme.css', '../mobile-hero.css']
 })
-export class ContactComponent {
+export class ContactComponent implements OnDestroy {
   public translationService = inject(TranslationService);
   private contactService = inject(ContactService);
   pageSettings = signal<ContactPageSettings>({ ...DEFAULT_CONTACT_PAGE_SETTINGS });
   heroSettingsLoaded = false;
 
   constructor() {
+    this.loadPageSettings();
+  }
+
+  private loadPageSettings(): void {
     this.contactService.getPageSettings().subscribe({
       next: response => {
         if (response.success && response.settings) {
@@ -50,6 +54,15 @@ export class ContactComponent {
       }
     });
   }
+
+  @HostListener('window:storage', ['$event'])
+  onStorageChange(event: StorageEvent): void {
+    if (event.key === 'vic_contact_page_updated') {
+      this.loadPageSettings();
+    }
+  }
+
+  ngOnDestroy(): void {}
 
   get isRtl(): boolean { return this.translationService.isRtl(); }
 
