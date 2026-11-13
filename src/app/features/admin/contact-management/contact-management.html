@@ -149,7 +149,11 @@
         <label class="contact-page-editor__wide">Head Office image<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="onLocationImageChange($event, 'office')"></label>
         <app-media-image-picker (selected)="selectLocationImage('office', $event)" />
         <div class="contact-page-editor__preview"><span>Head Office image preview</span><img [src]="locationImageUrl('office')" alt="Head Office location preview"><small>Saved path: {{ pageSettings.office_image }}</small></div>
-        <label>Map directions URL<input name="contact-map-url" type="url" [(ngModel)]="pageSettings.office_map_url"></label><label>Office phone<input name="contact-office-phone" type="tel" [(ngModel)]="pageSettings.office_phone"></label>
+        <label>Map directions URL<input name="contact-map-url" type="url" [(ngModel)]="pageSettings.office_map_url"></label>
+        <label>Office phone (Linked to Hero Banner)
+          <input name="contact-office-phone" type="text" [value]="heroPhoneListPreviewEn || 'Configured via Hero Banner Phone Numbers'" disabled style="opacity: 0.65; cursor: not-allowed; background: var(--color-surface-alt, #062b45);">
+          <small style="font-size: 11px; color: var(--color-text-muted, #94a3b8); margin-top: 2px;">Synchronized automatically with Hero Banner phone numbers</small>
+        </label>
 
         <h3>VIC manufacturing facility</h3>
         <label>Location label (English)<input name="contact-facility-eyebrow" [(ngModel)]="pageSettings.facility_eyebrow"></label><label>Location label (Arabic / Saudi)<input name="contact-facility-eyebrow-ar" dir="rtl" [(ngModel)]="pageSettings.facility_eyebrow_ar"></label>

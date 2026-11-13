@@ -286,7 +286,16 @@
             </div>
             <h3 class="contact-loc-card__title">{{ 'contact.office.title' | sectionHeading:'Our Office':'مكتبنا' }}</h3>
             <p class="contact-loc-card__p">{{ isRtl ? pageSettings().office_address_ar : pageSettings().office_address }}</p>
-            <a [href]="'tel:' + pageSettings().office_phone.replaceAll(' ', '')" class="contact-loc-card__link">{{ pageSettings().office_phone }}</a>
+            @if (heroPhones.length > 0) {
+              <div class="contact-loc-card__phones" dir="ltr" style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-top: 2px;">
+                @for (item of heroPhones; track item.raw; let isLast = $last) {
+                  <a [href]="'tel:' + item.tel" class="contact-loc-card__link" style="display: inline;" [attr.aria-label]="'Call ' + item.raw">{{ item.raw }}</a>
+                  @if (!isLast) {
+                    <span style="opacity: 0.6; user-select: none; margin: 0 4px; font-size: 0.75rem; color: var(--color-text-secondary);">/</span>
+                  }
+                }
+              </div>
+            }
           </div>
 
           <!-- General Inquiries -->

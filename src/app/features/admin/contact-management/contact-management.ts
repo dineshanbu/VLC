@@ -95,6 +95,7 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
   syncHeroPhonesToSettings(): void {
     const filteredEn = this.heroPhoneListEn.map(p => p.trim()).filter(Boolean);
     this.pageSettings.hero_phone = filteredEn.join(' / ');
+    this.pageSettings.office_phone = this.pageSettings.hero_phone;
 
     const filteredAr = this.heroPhoneListAr.map(p => p.trim()).filter(Boolean);
     this.pageSettings.hero_phone_ar = filteredAr.join(' / ');
