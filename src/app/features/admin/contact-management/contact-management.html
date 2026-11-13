@@ -35,7 +35,51 @@
         </div>
         <h3>Hero banner</h3>
         <label>Description (English)<textarea name="contact-hero-description" rows="3" [(ngModel)]="pageSettings.hero_description"></textarea></label><label>Description (Arabic)<textarea name="contact-hero-description-ar" rows="3" dir="rtl" [(ngModel)]="pageSettings.hero_description_ar"></textarea></label>
-        <label>Email<input name="contact-hero-email" type="email" [(ngModel)]="pageSettings.hero_email"></label><label>Phone<input name="contact-hero-phone" type="tel" [(ngModel)]="pageSettings.hero_phone"></label>
+        <label class="contact-page-editor__wide">Email<input name="contact-hero-email" type="email" [(ngModel)]="pageSettings.hero_email"></label>
+        
+        <div class="admin-multi-phone contact-page-editor__wide">
+          <div class="admin-multi-phone__header">
+            <span class="admin-multi-phone__title">Phone Numbers (Hero Banner)</span>
+            <button type="button" class="btn btn-sm btn-outline admin-multi-phone__add-btn" (click)="addHeroPhone()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Phone Number
+            </button>
+          </div>
+          <p class="admin-multi-phone__hint">
+            You can add multiple phone numbers. On the website banner, they will appear separated by " / " and each number will be individually clickable so callers connect directly to that number.
+          </p>
+          <div class="admin-multi-phone__list">
+            @for (phone of heroPhoneList; track $index; let i = $index) {
+              <div class="admin-multi-phone__item">
+                <span class="admin-multi-phone__badge">#{{ i + 1 }}</span>
+                <input
+                  type="tel"
+                  class="admin-multi-phone__input"
+                  [name]="'hero-phone-' + i"
+                  [(ngModel)]="heroPhoneList[i]"
+                  (ngModelChange)="syncHeroPhonesToSettings()"
+                  placeholder="+966 11 491 7984"
+                  dir="ltr"
+                />
+                <button
+                  type="button"
+                  class="admin-multi-phone__remove-btn"
+                  (click)="removeHeroPhone(i)"
+                  [disabled]="heroPhoneList.length === 1"
+                  title="Remove this phone number"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            }
+          </div>
+          @if (heroPhoneListPreview) {
+            <div class="admin-multi-phone__preview">
+              <span class="admin-multi-phone__preview-label">Live Display on Website:</span>
+              <strong dir="ltr">{{ heroPhoneListPreview }}</strong>
+            </div>
+          }
+        </div>
         <label class="contact-page-editor__wide">Banner image (English)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="onHeroImageChange($event, 'en')"></label>
         <app-media-image-picker (selected)="selectHeroImageFromLibrary('en', $event)" />
         <div class="contact-page-editor__preview"><span>English banner preview</span><img [src]="heroImageUrl('en')" alt="Contact page English banner preview"><small>Saved path: {{ pageSettings.hero_image }}</small></div>

@@ -49,6 +49,41 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
   facilityImageFile: File | null = null;
   facilityImagePreview: string | null = null;
 
+  // Multiple hero phone numbers management
+  heroPhoneList: string[] = [''];
+
+  initHeroPhones(): void {
+    const raw = this.pageSettings.hero_phone || '';
+    const parsed = raw.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
+    this.heroPhoneList = parsed.length > 0 ? parsed : [''];
+  }
+
+  addHeroPhone(): void {
+    this.heroPhoneList.push('');
+    this.syncHeroPhonesToSettings();
+  }
+
+  removeHeroPhone(index: number): void {
+    if (this.heroPhoneList.length > 1) {
+      this.heroPhoneList.splice(index, 1);
+      this.syncHeroPhonesToSettings();
+    }
+  }
+
+  updateHeroPhone(index: number, val: string): void {
+    this.heroPhoneList[index] = val;
+    this.syncHeroPhonesToSettings();
+  }
+
+  syncHeroPhonesToSettings(): void {
+    const filtered = this.heroPhoneList.map(p => p.trim()).filter(Boolean);
+    this.pageSettings.hero_phone = filtered.join(' / ');
+  }
+
+  get heroPhoneListPreview(): string {
+    return this.heroPhoneList.map(p => p.trim()).filter(Boolean).join(' / ');
+  }
+
   ngOnInit(): void {
     this.loadInquiries();
     this.loadPageSettings();
@@ -57,8 +92,16 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
   loadPageSettings(): void {
     this.pageContentLoading.set(true);
     this.contactService.getPageSettings().subscribe({
-      next: response => { this.pageSettings = { ...DEFAULT_CONTACT_PAGE_SETTINGS, ...response.settings }; this.pageContentLoading.set(false); },
-      error: () => { this.pageContentError.set('Could not load Contact page content.'); this.pageContentLoading.set(false); }
+      next: response => {
+        this.pageSettings = { ...DEFAULT_CONTACT_PAGE_SETTINGS, ...response.settings };
+        this.initHeroPhones();
+        this.pageContentLoading.set(false);
+      },
+      error: () => {
+        this.initHeroPhones();
+        this.pageContentError.set('Could not load Contact page content.');
+        this.pageContentLoading.set(false);
+      }
     });
   }
 
@@ -130,6 +173,7 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
   }
 
   savePageSettings(): void {
+    this.syncHeroPhonesToSettings();
     this.pageContentSaving.set(true); this.pageContentError.set(''); this.pageContentSuccess.set('');
     const data = new FormData(); data.append('settings_json', JSON.stringify(this.pageSettings));
     if (this.heroImageFile) data.append('hero_image', this.heroImageFile);
@@ -138,7 +182,9 @@ export class ContactManagementComponent implements OnInit, OnDestroy {
     if (this.facilityImageFile) data.append('facility_image', this.facilityImageFile);
     this.contactService.updatePageSettings(data).subscribe({
       next: response => {
-        this.pageSettings = { ...DEFAULT_CONTACT_PAGE_SETTINGS, ...response.settings }; this.heroImageFile = null; this.heroImageFileAr = null;
+        this.pageSettings = { ...DEFAULT_CONTACT_PAGE_SETTINGS, ...response.settings };
+        this.initHeroPhones();
+        this.heroImageFile = null; this.heroImageFileAr = null;
         if (this.heroImagePreview) URL.revokeObjectURL(this.heroImagePreview);
         if (this.heroImagePreviewAr) URL.revokeObjectURL(this.heroImagePreviewAr);
         if (this.officeImagePreview) URL.revokeObjectURL(this.officeImagePreview);

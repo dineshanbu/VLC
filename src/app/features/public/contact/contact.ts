@@ -66,6 +66,16 @@ export class ContactComponent implements OnDestroy {
 
   get isRtl(): boolean { return this.translationService.isRtl(); }
 
+  get heroPhones(): { raw: string; tel: string }[] {
+    const raw = this.pageSettings().hero_phone || '';
+    if (!raw.trim()) return [];
+    const parts = raw.split(/[/,;]+/).map(p => p.trim()).filter(Boolean);
+    return parts.map(p => ({
+      raw: p,
+      tel: p.replace(/[^\d+]/g, '')
+    }));
+  }
+
   resolveImg(path: string | undefined | null, fallback = 'home_banner.webp'): string {
     if (!path || !path.trim()) path = fallback;
     const resolved = resolveImageUrl(path, fallback);
