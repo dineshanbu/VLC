@@ -249,6 +249,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
   cslPartnerTitleAr = 'شريك نقل التقنية';
   cslPartnerDescription = 'Technology transfer partner for full localization of seasonal influenza and pandemic response.';
   cslPartnerDescriptionAr = 'شريك نقل التقنية للتوطين الكامل للقاح الإنفلونزا الموسمية والاستجابة للأوبئة.';
+  cslBtnAboutEn = 'About CSL';
+  cslBtnAboutAr = 'مصانع CSL';
+  cslBtnFacilityEn = 'CSL Facility';
+  cslBtnFacilityAr = 'CSL مصانع';
   get pipelinePreviewPillars(): string[] {
     return this.pipelinePillarIndexes
       .map(index => this.pipelineForm[`pillar${index}`] || '')
@@ -363,6 +367,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
           this.cslPartnerTitleAr = s.csl_partner_title_ar != null ? s.csl_partner_title_ar : 'شريك نقل التقنية';
           this.cslPartnerDescription = s.csl_partner_description != null ? s.csl_partner_description : 'Technology transfer partner for full localization of seasonal influenza and pandemic response.';
           this.cslPartnerDescriptionAr = s.csl_partner_description_ar != null ? s.csl_partner_description_ar : 'شريك نقل التقنية للتوطين الكامل للقاح الإنفلونزا الموسمية والاستجابة للأوبئة.';
+          this.cslBtnAboutEn = s.csl_btn_about_en != null ? s.csl_btn_about_en : 'About CSL';
+          this.cslBtnAboutAr = s.csl_btn_about_ar != null ? s.csl_btn_about_ar : 'مصانع CSL';
+          this.cslBtnFacilityEn = s.csl_btn_facility_en != null ? s.csl_btn_facility_en : 'CSL Facility';
+          this.cslBtnFacilityAr = s.csl_btn_facility_ar != null ? s.csl_btn_facility_ar : 'CSL مصانع';
 
           this.pageResources.set(s.page_resources || []);
         }
@@ -513,6 +521,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     formData.append('csl_partner_title_ar', this.cslPartnerTitleAr ?? '');
     formData.append('csl_partner_description', this.cslPartnerDescription ?? '');
     formData.append('csl_partner_description_ar', this.cslPartnerDescriptionAr ?? '');
+    formData.append('csl_btn_about_en', this.cslBtnAboutEn ?? '');
+    formData.append('csl_btn_about_ar', this.cslBtnAboutAr ?? '');
+    formData.append('csl_btn_facility_en', this.cslBtnFacilityEn ?? '');
+    formData.append('csl_btn_facility_ar', this.cslBtnFacilityAr ?? '');
 
     this.productService.updatePageSettings(formData).subscribe({
       next: res => {
@@ -526,6 +538,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
           this.cslPartnerTitleAr = res.settings.csl_partner_title_ar !== undefined && res.settings.csl_partner_title_ar !== null ? res.settings.csl_partner_title_ar : '';
           this.cslPartnerDescription = res.settings.csl_partner_description !== undefined && res.settings.csl_partner_description !== null ? res.settings.csl_partner_description : '';
           this.cslPartnerDescriptionAr = res.settings.csl_partner_description_ar !== undefined && res.settings.csl_partner_description_ar !== null ? res.settings.csl_partner_description_ar : '';
+          this.cslBtnAboutEn = res.settings.csl_btn_about_en !== undefined && res.settings.csl_btn_about_en !== null ? res.settings.csl_btn_about_en : '';
+          this.cslBtnAboutAr = res.settings.csl_btn_about_ar !== undefined && res.settings.csl_btn_about_ar !== null ? res.settings.csl_btn_about_ar : '';
+          this.cslBtnFacilityEn = res.settings.csl_btn_facility_en !== undefined && res.settings.csl_btn_facility_en !== null ? res.settings.csl_btn_facility_en : '';
+          this.cslBtnFacilityAr = res.settings.csl_btn_facility_ar !== undefined && res.settings.csl_btn_facility_ar !== null ? res.settings.csl_btn_facility_ar : '';
           this.cslIntroVideoFile = null;
           this.cslAboutVideoFile = null;
           this.cslLogoFile = null;
