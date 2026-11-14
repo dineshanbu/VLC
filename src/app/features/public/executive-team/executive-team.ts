@@ -227,8 +227,14 @@ export class ExecutiveTeamComponent implements OnInit, OnDestroy {
     this.autoSlideInterval = setInterval(() => {
       const viewport = this.teamCarousel?.nativeElement;
       if (!viewport || viewport.scrollWidth <= viewport.clientWidth + 10) return;
+      if (this.isCommitteeModalOpen() || this.selectedLeader()) return;
+
+      const rect = viewport.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+
       this.scrollTeam(1);
-    }, 4500);
+    }, 5000);
   }
 
   stopAutoCarousel(): void {
@@ -255,7 +261,15 @@ export class ExecutiveTeamComponent implements OnInit, OnDestroy {
     const viewport = this.teamCarousel?.nativeElement;
     const cards = viewport?.querySelectorAll<HTMLElement>('.executive-team-card');
     if (!viewport || !cards || !cards[index]) return;
-    cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+
+    const targetCard = cards[index];
+    const cardRect = targetCard.getBoundingClientRect();
+    const viewportRect = viewport.getBoundingClientRect();
+    const deltaX = cardRect.left - viewportRect.left;
+
+    if (Math.abs(deltaX) > 1) {
+      viewport.scrollBy({ left: deltaX, behavior: 'smooth' });
+    }
     this.teamSlide.set(index);
   }
 
