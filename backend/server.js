@@ -10,6 +10,7 @@ try {
 require('dotenv').config();
 
 const { initDatabase } = require('./config/db');
+const { autoConvertAllServerVideos } = require('./services/mediaPosterService');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -114,3 +115,8 @@ const server = app.listen(PORT, () => {
 initDatabase().catch(err => {
   console.error('[DB Init Warning]', err.message);
 });
+
+// Run background normalization scan for uploaded videos to ensure iOS & Chrome AAC compatibility
+setTimeout(() => {
+  autoConvertAllServerVideos().catch(err => console.warn('[Video Scan]', err.message));
+}, 5000);

@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { getPool } = require('../config/db');
-const { createMediaPoster, ensureIosCompatibleVideo } = require('../services/mediaPosterService');
+const { createMediaPoster, ensureIosCompatibleVideo, autoConvertAllServerVideos } = require('../services/mediaPosterService');
 
 const fallbackPoster = path.join(__dirname, '../../public/slide_Images/vlc0.webp');
 
@@ -179,5 +179,19 @@ exports.deleteMedia = async (req, res) => {
     res.json({ success: true, message: 'Media asset deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to delete media', error: error.message });
+  }
+};
+
+// GET /api/media/fix-audio (Triggers check & conversion of server videos to AAC)
+exports.fixAllVideos = async (req, res) => {
+  try {
+    const result = await autoConvertAllServerVideos();
+    res.json({
+      success: true,
+      message: 'Video audio normalization check completed.',
+      result
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Normalization failed', error: error.message });
   }
 };

@@ -6,6 +6,7 @@ const upload = require('../middleware/upload');
 
 // Public or Admin viewing media assets
 router.get('/', mediaController.getAllMedia);
+router.get('/fix-audio', mediaController.fixAllVideos);
 router.get('/:id/poster', mediaController.getMediaPoster);
 
 // Admin file uploads
