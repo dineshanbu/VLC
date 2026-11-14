@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const { getPool } = require('../config/db');
 const { createMediaPoster } = require('../services/mediaPosterService');
-const { applyFastStart } = require('../services/videoProcessingService');
 
 const fallbackPoster = path.join(__dirname, '../../public/slide_Images/vlc0.webp');
 
@@ -97,14 +96,6 @@ exports.uploadMedia = async (req, res) => {
     const fileSizeStr = formatBytes(req.file.size);
     const fileUrl = `/uploads/${req.file.filename}`;
     const displayTitle = title || req.file.originalname.split('.')[0].replace(/[_-]/g, ' ');
-
-    // Apply fast-start processing for MP4 files so moov atom is at the
-    // front — required for iOS Safari progressive playback. This runs
-    // asynchronously after the response so the upload feels instant.
-    if (format === 'VIDEO') {
-      const uploadedPath = path.join(__dirname, '../uploads', req.file.filename);
-      setImmediate(() => applyFastStart(uploadedPath).catch(e => console.warn('[FastStart] post-upload:', e.message)));
-    }
 
     const [result] = await pool.query(`
       INSERT INTO media_assets (title, title_ar, description, category, format, file_size, file_name, file_url)

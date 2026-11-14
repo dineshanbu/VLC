@@ -10,7 +10,6 @@ try {
 require('dotenv').config();
 
 const { initDatabase } = require('./config/db');
-const { processExistingUploads } = require('./services/videoProcessingService');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -64,62 +63,8 @@ if (morgan) {
 const apiRouter = express.Router();
 
 // Static uploads directory (served on /uploads and /api/uploads)
-// Use a custom streaming handler for video files so Safari / iOS receives
-// proper HTTP 206 Partial Content responses (Range request support).
-function serveWithRangeSupport(uploadsRoot) {
-  return (req, res, next) => {
-    const safeName = path.basename(req.path);
-    const filePath = path.join(uploadsRoot, safeName);
-    const ext = path.extname(safeName).toLowerCase();
-    const isVideo = ['.mp4', '.webm', '.mov', '.ogg'].includes(ext);
-
-    if (!isVideo) return next(); // let express.static handle images/pdfs
-
-    fs.stat(filePath, (err, stat) => {
-      if (err || !stat.isFile()) return next();
-
-      const fileSize = stat.size;
-      const rangeHeader = req.headers['range'];
-
-      const mimeMap = { '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.ogg': 'video/ogg' };
-      const contentType = mimeMap[ext] || 'video/mp4';
-
-      if (rangeHeader) {
-        // Parse "bytes=start-end"
-        const parts = rangeHeader.replace(/bytes=/, '').split('-');
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-        const chunkSize = end - start + 1;
-
-        const headers = {
-          'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-          'Accept-Ranges': 'bytes',
-          'Content-Length': chunkSize,
-          'Content-Type': contentType,
-          'Cache-Control': 'public, max-age=86400',
-        };
-        res.writeHead(206, headers);
-        fs.createReadStream(filePath, { start, end }).pipe(res);
-      } else {
-        // Full file request — still advertise Range support
-        const headers = {
-          'Content-Length': fileSize,
-          'Content-Type': contentType,
-          'Accept-Ranges': 'bytes',
-          'Cache-Control': 'public, max-age=86400',
-        };
-        res.writeHead(200, headers);
-        fs.createReadStream(filePath).pipe(res);
-      }
-    });
-  };
-}
-
-const uploadsDir = path.join(__dirname, 'uploads');
-app.use('/uploads', serveWithRangeSupport(uploadsDir));
-app.use('/uploads', express.static(uploadsDir));
-apiRouter.use('/uploads', serveWithRangeSupport(uploadsDir));
-apiRouter.use('/uploads', express.static(uploadsDir));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+apiRouter.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check
 apiRouter.get('/health', (req, res) => {
@@ -169,11 +114,3 @@ const server = app.listen(PORT, () => {
 initDatabase().catch(err => {
   console.error('[DB Init Warning]', err.message);
 });
-
-// After DB init, run fast-start processing on existing MP4 uploads
-// (background task — does not block server startup)
-setTimeout(() => {
-  processExistingUploads(path.join(__dirname, 'uploads')).catch(e =>
-    console.warn('[FastStart] Startup scan error:', e.message)
-  );
-}, 5000);
