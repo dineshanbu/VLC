@@ -44,6 +44,16 @@ vic.zip
 backend/node_modules/
 backend/uploads/*
 !backend/uploads/.gitkeep
+!backend/uploads/1794311813799-515068194-1.mp4
+!backend/uploads/1794311833286-883226001-2.mp4
+!backend/uploads/1794311848921-310646079-3.mp4
+!backend/uploads/1794311867773-13594590-4.mp4
+!backend/uploads/1794311885025-444610624-5.mp4
+!backend/uploads/1794311910336-425386681-6.mp4
+!backend/uploads/1794311935020-420938786-7.mp4
+!backend/uploads/1794311954052-881549704-8.mp4
+!backend/uploads/1794311977670-941608486-9.mp4
+!backend/uploads/1794311997921-403723415-10.mp4
 
 # System files
 .DS_Store
