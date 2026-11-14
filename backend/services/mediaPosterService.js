@@ -37,4 +37,35 @@ async function createMediaPoster(fileName) {
   }
 }
 
-module.exports = { createMediaPoster, posterFileName };
+async function ensureIosCompatibleVideo(fileName) {
+  const safeName = path.basename(fileName);
+  const ext = path.extname(safeName).toLowerCase();
+  if (ext !== '.mp4') return;
+  const source = path.join(uploadsDir, safeName);
+  if (!fs.existsSync(source)) return;
+
+  const target = source + '.ios.tmp.mp4';
+  try {
+    await execFileAsync(process.env.FFMPEG_PATH || 'ffmpeg', [
+      '-hide_banner', '-loglevel', 'error',
+      '-i', source,
+      '-c:v', 'copy',
+      '-c:a', 'aac',
+      '-b:a', '192k',
+      '-movflags', '+faststart',
+      '-y', target
+    ], { windowsHide: true, timeout: 60000, maxBuffer: 1024 * 1024 });
+
+    if (fs.existsSync(target) && fs.statSync(target).size > 1000) {
+      await fs.promises.unlink(source);
+      await fs.promises.rename(target, source);
+    }
+  } catch (err) {
+    console.warn('[Video Normalization] Skip or failed:', err.message);
+    if (fs.existsSync(target)) {
+      try { await fs.promises.unlink(target); } catch (_) {}
+    }
+  }
+}
+
+module.exports = { createMediaPoster, posterFileName, ensureIosCompatibleVideo };

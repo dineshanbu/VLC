@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { getPool } = require('../config/db');
-const { createMediaPoster } = require('../services/mediaPosterService');
+const { createMediaPoster, ensureIosCompatibleVideo } = require('../services/mediaPosterService');
 
 const fallbackPoster = path.join(__dirname, '../../public/slide_Images/vlc0.webp');
 
@@ -110,6 +110,10 @@ exports.uploadMedia = async (req, res) => {
       req.file.filename,
       fileUrl
     ]);
+
+    if (format === 'VIDEO') {
+      ensureIosCompatibleVideo(req.file.filename).catch(() => {});
+    }
 
     res.status(201).json({
       success: true,

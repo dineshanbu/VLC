@@ -111,30 +111,6 @@ export class VideoMediaGalleryComponent implements OnInit {
     return resolveImageUrl('/slide_Images/vlc0.webp');
   }
 
-  seekToPreviewFrame(event: Event): void {
-    const video = event.currentTarget as HTMLVideoElement | null;
-    if (!video) return;
-    // iOS Safari sometimes reports duration=Infinity or 0 on first loadedmetadata.
-    // Guard: only seek if we have a valid finite duration.
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
-    const previewTime = Math.min(1, video.duration / 2);
-    if (video.currentTime < previewTime) {
-      try { video.currentTime = previewTime; } catch {}
-    } else {
-      this.showVideoFrame(event);
-    }
-  }
-
-  showVideoFrame(event: Event): void {
-    const video = event.currentTarget as HTMLVideoElement | null;
-    // Keep the poster until a representative frame near the start is decoded.
-    // On iOS, readyState may be HAVE_METADATA (1) but not HAVE_CURRENT_DATA (2)
-    // after a seek — only remove poster when we actually have pixel data.
-    if (video && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      video.removeAttribute('poster');
-    }
-  }
-
   private get hasMobileCarousel(): boolean {
     return this.glassHeader || this.mobileAutoplay;
   }

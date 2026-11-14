@@ -30,7 +30,7 @@
       <div class="video-media__grid" [class.video-media__grid--mobile-carousel]="useMobileCarousel" (touchstart)="onMobileTouchStart($event)" (touchend)="onMobileTouchEnd($event)">
         @for (item of visibleVideos(); track item.id ?? item.file_url) {
           <article class="video-media__card">
-            <video class="video-media__player" controls playsinline preload="metadata" [poster]="posterUrl(item)" [src]="videoUrl(item.file_url)" (loadedmetadata)="seekToPreviewFrame($event)" (seeked)="showVideoFrame($event)" [attr.aria-label]="displayTitle(item)">
+            <video class="video-media__player" controls playsinline preload="metadata" [poster]="posterUrl(item)" [src]="videoUrl(item.file_url)" [attr.aria-label]="displayTitle(item)">
               Your browser does not support video playback.
             </video>
             <h3 class="video-media__card-title" [attr.dir]="isArabicText(displayTitle(item)) ? 'rtl' : 'ltr'">{{ displayTitle(item) }}</h3>
