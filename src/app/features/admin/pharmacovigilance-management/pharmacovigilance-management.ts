@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { PharmacovigilancePageSettings, PharmacovigilanceReport, PharmacovigilanceService } from '../../../core/services/pharmacovigilance.service';
+import { DEFAULT_PHARMACOVIGILANCE_CONTACTS, PharmacovigilancePageSettings, PharmacovigilanceReport, PharmacovigilanceService } from '../../../core/services/pharmacovigilance.service';
 import { resolveImageUrl } from '../../../core/utils/image-url.util';
 import { MediaImagePickerComponent } from '../../../shared/components/media-image-picker/media-image-picker';
 
@@ -11,7 +11,8 @@ export class PharmacovigilanceManagementComponent implements OnInit {
   private service = inject(PharmacovigilanceService);
   reports = signal<PharmacovigilanceReport[]>([]); isLoading = signal(true); search = signal(''); status = signal('All'); selected = signal<PharmacovigilanceReport | null>(null); notes = signal('');
   isDeletingReport = signal(false); reportActionMessage = signal(''); reportActionError = signal('');
-  pageSettings: PharmacovigilancePageSettings = {} as PharmacovigilancePageSettings;
+  pageSettings: PharmacovigilancePageSettings = { ...DEFAULT_PHARMACOVIGILANCE_CONTACTS } as PharmacovigilancePageSettings;
+  private savedPageSettings: Partial<PharmacovigilancePageSettings> = {};
   pageContentLoading = signal(true); pageContentSaving = signal(false); pageContentError = signal(''); pageContentSuccess = signal('');
   heroImageFile: File | null = null; heroImagePreview: string | null = null;
   heroImageFileAr: File | null = null; heroImagePreviewAr: string | null = null;
@@ -19,10 +20,18 @@ export class PharmacovigilanceManagementComponent implements OnInit {
   loadPageSettings() {
     this.pageContentLoading.set(true);
     this.service.getPageSettings().subscribe({
-      next: response => { if (response.success) this.pageSettings = response.settings; this.pageContentLoading.set(false); },
+      next: response => {
+        if (response.success) this.applySavedPageSettings(response.settings);
+        this.pageContentLoading.set(false);
+      },
       error: () => { this.pageContentError.set('Could not load Pharmacovigilance page content.'); this.pageContentLoading.set(false); }
     });
   }
+  private applySavedPageSettings(settings: PharmacovigilancePageSettings): void {
+    this.pageSettings = { ...DEFAULT_PHARMACOVIGILANCE_CONTACTS, ...settings };
+    this.savedPageSettings = { ...this.pageSettings };
+  }
+
   onHeroImageChange(event: Event, language: 'en' | 'ar') {
     const file = (event.target as HTMLInputElement).files?.[0] || null;
     if (!file) return;
@@ -55,17 +64,41 @@ export class PharmacovigilanceManagementComponent implements OnInit {
       : (this.heroImagePreview || resolveImageUrl(this.pageSettings.hero_image, 'banner_for_all2.webp'));
   }
   savePageSettings() {
+    if (this.pageContentLoading() || this.pageContentSaving()) return;
+
     this.pageContentSaving.set(true); this.pageContentError.set(''); this.pageContentSuccess.set('');
     const data = new FormData();
-    data.append('settings_json', JSON.stringify(this.pageSettings));
+    const changes = (Object.keys(this.pageSettings) as (keyof PharmacovigilancePageSettings)[])
+      .filter(field => this.pageSettings[field] !== this.savedPageSettings[field]);
+    const submitted = Object.fromEntries(changes.map(field => [field, this.pageSettings[field]]));
+    data.append('settings_json', JSON.stringify(submitted));
     if (this.heroImageFile) data.append('hero_image', this.heroImageFile);
     if (this.heroImageFileAr) data.append('hero_image_ar', this.heroImageFileAr);
     this.service.updatePageSettings(data).subscribe({
       next: response => {
-        this.pageSettings = response.settings; this.heroImageFile = null; this.heroImageFileAr = null;
+        this.pageContentSaving.set(false);
+        const saved = response.settings;
+        if (!response.success || !saved) {
+          this.pageContentError.set('Could not confirm the save. Your edits are still in the form.');
+          return;
+        }
+
+        const unconfirmedTextFields = changes.filter(field =>
+          field !== 'hero_image' && field !== 'hero_image_ar' && saved[field] !== submitted[field]
+        );
+        if (unconfirmedTextFields.length) {
+          const fields = unconfirmedTextFields.map(field =>
+            field.replace(/_ar$/, ' (Saudi / Arabic)').replaceAll('_', ' ').replace(/^ppv /, 'PPV ')
+          );
+          this.pageContentError.set(`Could not confirm the save for ${fields.join(', ')}. Your edits are still in the form.`);
+          return;
+        }
+
+        this.applySavedPageSettings(saved);
+        this.heroImageFile = null; this.heroImageFileAr = null;
         if (this.heroImagePreview) URL.revokeObjectURL(this.heroImagePreview);
         if (this.heroImagePreviewAr) URL.revokeObjectURL(this.heroImagePreviewAr);
-        this.heroImagePreview = null; this.heroImagePreviewAr = null; this.pageContentSaving.set(false);
+        this.heroImagePreview = null; this.heroImagePreviewAr = null;
         this.pageContentSuccess.set('Pharmacovigilance page content saved.');
       },
       error: error => { this.pageContentSaving.set(false); this.pageContentError.set(error.error?.message || 'Could not save Pharmacovigilance page content.'); }

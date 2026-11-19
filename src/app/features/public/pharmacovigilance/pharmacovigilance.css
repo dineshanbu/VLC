@@ -129,12 +129,15 @@
 /* Channels Grid */
 .pv-channels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(20px, 2.5vw, 32px);
-  margin-bottom: 32px;
+  max-width: 740px;
+  margin: 0 auto 32px;
 }
 
 .pv-channel-card {
+  aspect-ratio: 1;
+  justify-content: center;
   background: var(--color-surface);
   border: 1px solid #d5edf4;
   border-radius: 18px;
@@ -186,17 +189,20 @@
 .pv-channel-body {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   width: 100%;
 }
 
-.pv-channel-tag {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-secondary);
-  margin-bottom: 6px;
+.pv-channel-details {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pv-channel-extension {
+  display: inline-block;
+  margin-inline-start: 6px;
 }
 
 .pv-channel-name {
@@ -214,9 +220,8 @@
   color: var(--color-text-primary);
   text-decoration: none;
   display: inline-block;
-  margin-bottom: 10px;
   transition: color 0.18s ease;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .pv-channel-link:hover {
@@ -230,13 +235,6 @@
 .pv-channel-link--email:hover {
   color: #005f6b;
   text-decoration: underline;
-}
-
-.pv-channel-note {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: #6a7698;
-  margin: auto 0 0 0;
 }
 
 /* Callout Box */
@@ -557,6 +555,11 @@
    5. RESPONSIVE BREAKPOINTS
    ==================================================== */
 @media (max-width: 767px) {
+  .pv-channels-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 354px;
+  }
+
   .pv-channels-section {
     padding: 40px 0;
   }

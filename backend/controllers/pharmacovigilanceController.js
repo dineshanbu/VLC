@@ -17,6 +17,10 @@ const defaultPageSettings = {
   phone1_note: 'Immediate pharmacovigilance telephone reception', phone1_note_ar: 'خدمة تلقي البلاغات الفورية',
   phone2_title: 'Secondary Safety Line', phone2_title_ar: 'خط الطوارئ', phone2_number: '+966 55 175 0051',
   phone2_note: 'Available for urgent safety and medical inquiries', phone2_note_ar: 'متاح للبلاغات والاستفسارات الطبية',
+  ppv_title: 'PPV', ppv_title_ar: 'مسؤول اليقظة الدوائية',
+  ppv_mobile: '+966 558927904', ppv_mobile_ar: '+966 558927904', ppv_telephone: '011 491 7984', ppv_telephone_ar: '011 491 7984', ppv_extension: '105', ppv_extension_ar: '105', ppv_email: 'Narmeen.pv@vaccine.com.sa', ppv_email_ar: 'Narmeen.pv@vaccine.com.sa',
+  deputy_title: 'Deputy', deputy_title_ar: 'نائب مسؤول اليقظة الدوائية',
+  deputy_mobile: '+966 570062533', deputy_mobile_ar: '+966 570062533', deputy_telephone: '011 491 7984', deputy_telephone_ar: '011 491 7984', deputy_extension: '134', deputy_extension_ar: '134', deputy_email: 'Afaf.pv@vaccine.com.sa', deputy_email_ar: 'Afaf.pv@vaccine.com.sa',
   form_prompt: 'or Use the reporting form published in this page below to submit your report directly.',
   form_prompt_ar: 'أو استخدام نموذج الإبلاغ المنشور في هذه الصفحة أدناه لإرسال التقرير مباشرة.',
   form_eyebrow: 'ADVERSE EVENT REPORT FORM', form_eyebrow_ar: 'نموذج الإبلاغ عن الأعراض الجانبية',
@@ -70,6 +74,7 @@ exports.getPageSettings = async (_req, res) => {
     }
     const settings = { ...defaultPageSettings, ...stored };
     settings.hero_image_ar = stored.hero_image_ar || settings.hero_image;
+    res.set('Cache-Control', 'no-store');
     res.json({ success: true, settings });
   } catch (error) { res.status(500).json({ success: false, message: 'Failed to fetch Pharmacovigilance page content.' }); }
 };

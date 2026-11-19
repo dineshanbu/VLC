@@ -5,7 +5,30 @@
   <section class="pv-page-editor">
     <div class="pv-page-editor__header"><div><span>PUBLIC PAGE CONTENT</span><h2>Pharmacovigilance Page Settings</h2><p>Edit the public banner, reporting channels, and safety report sections.</p></div><button type="button" class="btn btn-primary" (click)="savePageSettings()" [disabled]="pageContentLoading() || pageContentSaving()">{{ pageContentSaving() ? 'Saving…' : 'Save page content' }}</button></div>
     @if (pageContentLoading()) { <p class="pv-page-editor__loading">Loading page content…</p> } @else {
-      <form class="pv-page-editor__form" (ngSubmit)="savePageSettings()">
+      <form class="pv-page-editor__form" [attr.inert]="pageContentSaving() ? '' : null" (ngSubmit)="savePageSettings()">
+        <h3>PPV contact details</h3>
+        <label>PPV title (English)<input name="pv-ppv-title" type="text" [(ngModel)]="pageSettings.ppv_title" /></label>
+        <label>PPV title (Saudi / Arabic)<input name="pv-ppv-title_ar" type="text" dir="rtl" [(ngModel)]="pageSettings.ppv_title_ar" /></label>
+        <label>PPV mobile (English)<input name="pv-ppv-mobile" type="tel" [(ngModel)]="pageSettings.ppv_mobile" /></label>
+        <label>PPV mobile (Saudi / Arabic)<input name="pv-ppv-mobile-ar" type="tel" [(ngModel)]="pageSettings.ppv_mobile_ar" /></label>
+        <label>PPV telephone (English)<input name="pv-ppv-telephone" type="tel" [(ngModel)]="pageSettings.ppv_telephone" /></label>
+        <label>PPV telephone (Saudi / Arabic)<input name="pv-ppv-telephone-ar" type="tel" [(ngModel)]="pageSettings.ppv_telephone_ar" /></label>
+        <label>PPV extension (English)<input name="pv-ppv-extension" type="tel" [(ngModel)]="pageSettings.ppv_extension" /></label>
+        <label>PPV extension (Saudi / Arabic)<input name="pv-ppv-extension-ar" type="tel" [(ngModel)]="pageSettings.ppv_extension_ar" /></label>
+        <label>PPV email (English)<input name="pv-ppv-email" type="email" [(ngModel)]="pageSettings.ppv_email" /></label>
+        <label>PPV email (Saudi / Arabic)<input name="pv-ppv-email-ar" type="email" [(ngModel)]="pageSettings.ppv_email_ar" /></label>
+        <h3>Deputy contact details</h3>
+        <label>Deputy title (English)<input name="pv-deputy-title" type="text" [(ngModel)]="pageSettings.deputy_title" /></label>
+        <label>Deputy title (Saudi / Arabic)<input name="pv-deputy-title_ar" type="text" dir="rtl" [(ngModel)]="pageSettings.deputy_title_ar" /></label>
+        <label>Deputy mobile (English)<input name="pv-deputy-mobile" type="tel" [(ngModel)]="pageSettings.deputy_mobile" /></label>
+        <label>Deputy mobile (Saudi / Arabic)<input name="pv-deputy-mobile-ar" type="tel" [(ngModel)]="pageSettings.deputy_mobile_ar" /></label>
+        <label>Deputy telephone (English)<input name="pv-deputy-telephone" type="tel" [(ngModel)]="pageSettings.deputy_telephone" /></label>
+        <label>Deputy telephone (Saudi / Arabic)<input name="pv-deputy-telephone-ar" type="tel" [(ngModel)]="pageSettings.deputy_telephone_ar" /></label>
+        <label>Deputy extension (English)<input name="pv-deputy-extension" type="tel" [(ngModel)]="pageSettings.deputy_extension" /></label>
+        <label>Deputy extension (Saudi / Arabic)<input name="pv-deputy-extension-ar" type="tel" [(ngModel)]="pageSettings.deputy_extension_ar" /></label>
+        <label>Deputy email (English)<input name="pv-deputy-email" type="email" [(ngModel)]="pageSettings.deputy_email" /></label>
+        <label>Deputy email (Saudi / Arabic)<input name="pv-deputy-email-ar" type="email" [(ngModel)]="pageSettings.deputy_email_ar" /></label>
+
         <h3>Hero banner</h3>
         <div class="pv-page-editor__wide" style="background: rgba(13, 138, 138, 0.08); border: 1px solid rgba(13, 138, 138, 0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
           <p style="margin: 0; font-size: 13px; color: #0d8a8a; font-weight: 500;">
@@ -33,20 +56,6 @@
         </div>
         <label>Description (English)<textarea name="pv-channels-intro" rows="3" [(ngModel)]="pageSettings.channels_intro"></textarea></label>
         <label>Description (Arabic)<textarea name="pv-channels-intro-ar" rows="3" dir="rtl" [(ngModel)]="pageSettings.channels_intro_ar"></textarea></label>
-        <label>Email label<input name="pv-email-title" [(ngModel)]="pageSettings.email_title" /></label>
-        <label>Email address<input name="pv-email-address" type="email" [(ngModel)]="pageSettings.email_address" /></label>
-        <label>Email note (English)<textarea name="pv-email-note" rows="2" [(ngModel)]="pageSettings.email_note"></textarea></label>
-        <label>Email note (Arabic)<textarea name="pv-email-note-ar" rows="2" dir="rtl" [(ngModel)]="pageSettings.email_note_ar"></textarea></label>
-        <label>Phone 1 title (English)<input name="pv-phone1-title" [(ngModel)]="pageSettings.phone1_title" /></label>
-        <label>Phone 1 title (Arabic)<input name="pv-phone1-title-ar" dir="rtl" [(ngModel)]="pageSettings.phone1_title_ar" /></label>
-        <label>Phone 1 number<input name="pv-phone1-number" type="tel" [(ngModel)]="pageSettings.phone1_number" /></label>
-        <label>Phone 1 note (English)<textarea name="pv-phone1-note" rows="2" [(ngModel)]="pageSettings.phone1_note"></textarea></label>
-        <label>Phone 1 note (Arabic)<textarea name="pv-phone1-note-ar" rows="2" dir="rtl" [(ngModel)]="pageSettings.phone1_note_ar"></textarea></label>
-        <label>Phone 2 title (English)<input name="pv-phone2-title" [(ngModel)]="pageSettings.phone2_title" /></label>
-        <label>Phone 2 title (Arabic)<input name="pv-phone2-title-ar" dir="rtl" [(ngModel)]="pageSettings.phone2_title_ar" /></label>
-        <label>Phone 2 number<input name="pv-phone2-number" type="tel" [(ngModel)]="pageSettings.phone2_number" /></label>
-        <label>Phone 2 note (English)<textarea name="pv-phone2-note" rows="2" [(ngModel)]="pageSettings.phone2_note"></textarea></label>
-        <label>Phone 2 note (Arabic)<textarea name="pv-phone2-note-ar" rows="2" dir="rtl" [(ngModel)]="pageSettings.phone2_note_ar"></textarea></label>
         <label class="pv-page-editor__wide">Form prompt (English)<textarea name="pv-form-prompt" rows="2" [(ngModel)]="pageSettings.form_prompt"></textarea></label>
         <label class="pv-page-editor__wide">Form prompt (Arabic)<textarea name="pv-form-prompt-ar" rows="2" dir="rtl" [(ngModel)]="pageSettings.form_prompt_ar"></textarea></label>
 

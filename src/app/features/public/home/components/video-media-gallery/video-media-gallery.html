@@ -29,7 +29,7 @@
       }
       <div class="video-media__grid" [class.video-media__grid--mobile-carousel]="useMobileCarousel" (touchstart)="onMobileTouchStart($event)" (touchend)="onMobileTouchEnd($event)">
         @for (item of visibleVideos(); track item.id ?? item.file_url) {
-          <article class="video-media__card">
+          <article class="video-media__card" [class.video-media__card--enter-next]="useMobileCarousel && slideDirection() === 'next'" [class.video-media__card--enter-previous]="useMobileCarousel && slideDirection() === 'previous'">
             <video class="video-media__player" controls playsinline preload="metadata" [poster]="posterUrl(item)" [src]="videoUrl(item.file_url)" [attr.aria-label]="displayTitle(item)">
               Your browser does not support video playback.
             </video>
@@ -48,10 +48,12 @@
       </div>
 
       @if (useMobileCarousel && videos().length > 1) {
-        <nav class="video-media__mobile-dots" aria-label="Media carousel pages">
-          @for (video of videos(); track video.id ?? video.file_url; let index = $index) {
-            <button type="button" [class.is-active]="index === currentPage() - 1" [attr.aria-label]="'Show media video ' + (index + 1)" [attr.aria-current]="index === currentPage() - 1 ? 'true' : null" (click)="goToPage(index + 1)"></button>
-          }
+        <nav class="video-media__mobile-controls" aria-label="Media carousel controls">
+          <div class="video-media__mobile-dots" aria-label="Media carousel pages">
+            @for (video of videos(); track video.id ?? video.file_url; let index = $index) {
+              <button type="button" [class.is-active]="index === currentPage() - 1" [attr.aria-label]="'Show media video ' + (index + 1)" [attr.aria-current]="index === currentPage() - 1 ? 'true' : null" (click)="goToPage(index + 1)"></button>
+            }
+          </div>
         </nav>
       }
 

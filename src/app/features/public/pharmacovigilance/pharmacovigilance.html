@@ -113,67 +113,54 @@
       </p>
     </div>
 
-    <!-- 3 Reporting Channel Cards -->
     <div class="pv-channels-grid">
+      @for (role of ['ppv', 'deputy']; track role) {
+        @let settings = pageSettings();
+        @let rtl = translationService.isRtl();
+        @let title = role === 'ppv' ? (rtl ? settings.ppv_title_ar : settings.ppv_title) : (rtl ? settings.deputy_title_ar : settings.deputy_title);
+        @let mobile = (role === 'ppv' ? (rtl ? settings.ppv_mobile_ar : settings.ppv_mobile) : (rtl ? settings.deputy_mobile_ar : settings.deputy_mobile)).trim();
+        @let telephone = (role === 'ppv' ? (rtl ? settings.ppv_telephone_ar : settings.ppv_telephone) : (rtl ? settings.deputy_telephone_ar : settings.deputy_telephone)).trim();
+        @let extension = (role === 'ppv' ? (rtl ? settings.ppv_extension_ar : settings.ppv_extension) : (rtl ? settings.deputy_extension_ar : settings.deputy_extension)).trim();
+        @let email = (role === 'ppv' ? (rtl ? settings.ppv_email_ar : settings.ppv_email) : (rtl ? settings.deputy_email_ar : settings.deputy_email)).trim();
 
-      <!-- Email Channel Card -->
-      <div class="pv-channel-card pv-channel-card--email">
-        <div class="pv-channel-icon-wrapper" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-          </svg>
+        <div class="pv-channel-card">
+          <div class="pv-channel-icon-wrapper" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <div class="pv-channel-body">
+            @if (title.trim()) {
+              <h3 class="pv-channel-name">{{ title }}</h3>
+            }
+            <ul class="pv-channel-details">
+              @if (mobile) {
+                <li>
+                  {{ rtl ? 'الجوال' : 'Mobile' }}:
+                  <a [href]="phoneHref(mobile)" class="pv-channel-link" dir="ltr">{{ mobile }}</a>
+                </li>
+              }
+              @if (telephone || extension) {
+                <li>
+                  @if (telephone) {
+                    {{ rtl ? 'الهاتف' : 'Telephone' }}:
+                    <a [href]="phoneHref(telephone)" class="pv-channel-link" dir="ltr">{{ telephone }}</a>
+                  }
+                  @if (extension) {
+                    <span class="pv-channel-extension">{{ rtl ? 'تحويلة' : 'Ext' }}: <bdi>{{ extension }}</bdi></span>
+                  }
+                </li>
+              }
+              @if (email) {
+                <li>
+                  {{ rtl ? 'البريد الإلكتروني' : 'Email' }}:
+                  <a [href]="'mailto:' + email" class="pv-channel-link pv-channel-link--email" dir="ltr">{{ email }}</a>
+                </li>
+              }
+            </ul>
+          </div>
         </div>
-        <div class="pv-channel-body">
-          <span class="pv-channel-tag">{{ translationService.isRtl() ? pageSettings().email_title_ar : 'Official Email' }}</span>
-          <h3 class="pv-channel-name">{{ translationService.isRtl() ? pageSettings().email_title_ar : pageSettings().email_title }}</h3>
-          <a [href]="'mailto:' + pageSettings().email_address" class="pv-channel-link pv-channel-link--email" [attr.aria-label]="'Send email to ' + pageSettings().email_address">
-            {{ pageSettings().email_address }}
-          </a>
-          <p class="pv-channel-note">
-            {{ translationService.isRtl() ? pageSettings().email_note_ar : pageSettings().email_note }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Phone Channel Card 1 -->
-      <div class="pv-channel-card pv-channel-card--phone">
-        <div class="pv-channel-icon-wrapper" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-        </div>
-        <div class="pv-channel-body">
-          <span class="pv-channel-tag">{{ translationService.isRtl() ? 'جوال رقم' : 'Contact Phone 1' }}</span>
-          <h3 class="pv-channel-name">{{ translationService.isRtl() ? pageSettings().phone1_title_ar : pageSettings().phone1_title }}</h3>
-          <a [href]="phoneHref(pageSettings().phone1_number)" class="pv-channel-link" dir="ltr" [attr.aria-label]="'Call ' + pageSettings().phone1_number">
-            {{ pageSettings().phone1_number }}
-          </a>
-          <p class="pv-channel-note">
-            {{ translationService.isRtl() ? pageSettings().phone1_note_ar : pageSettings().phone1_note }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Phone Channel Card 2 -->
-      <div class="pv-channel-card pv-channel-card--phone">
-        <div class="pv-channel-icon-wrapper" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-        </div>
-        <div class="pv-channel-body">
-          <span class="pv-channel-tag">{{ translationService.isRtl() ? 'جوال رقم' : 'Contact Phone 2' }}</span>
-          <h3 class="pv-channel-name">{{ translationService.isRtl() ? pageSettings().phone2_title_ar : pageSettings().phone2_title }}</h3>
-          <a [href]="phoneHref(pageSettings().phone2_number)" class="pv-channel-link" dir="ltr" [attr.aria-label]="'Call ' + pageSettings().phone2_number">
-            {{ pageSettings().phone2_number }}
-          </a>
-          <p class="pv-channel-note">
-            {{ translationService.isRtl() ? pageSettings().phone2_note_ar : pageSettings().phone2_note }}
-          </p>
-        </div>
-      </div>
-
+      }
     </div>
 
     <!-- Alternative Instruction Callout -->

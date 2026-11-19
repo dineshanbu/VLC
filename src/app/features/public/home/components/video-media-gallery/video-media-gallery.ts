@@ -8,13 +8,6 @@ import { environment } from '../../../../../../environments/environment';
 import { TranslationService } from '../../../../../core/services/translation.service';
 import { SectionHeadingPipe } from '../../../../../shared/pipes/section-heading.pipe';
 
-const normalizedMediaVideos = new Set([
-  '1791444632910-683184310-csl-visit.mp4',
-  '1791446505108-13585028-vaccination-forum.mp4',
-  '1791446514589-129970616-mbc-interview.mp4',
-  '1791446855526-221530362-VIC_sep_2026.mp4'.toLowerCase()
-]);
-
 const packagedMediaPosterStems = new Set([
   '1791444632910-683184310-csl-visit',
   '1791444632910-683184310-csl-visit-audio',
@@ -24,7 +17,17 @@ const packagedMediaPosterStems = new Set([
   '1791446514589-129970616-MBC-Interview-audio',
   '1791446855526-221530362-VIC_sep_2026',
   '1791446855526-221530362-VIC_sep_2026-audio',
-  '1792934924528-908211553-Uhlmann'
+  '1792934924528-908211553-Uhlmann',
+  '1794311813799-515068194-1',
+  '1794311833286-883226001-2',
+  '1794311848921-310646079-3',
+  '1794311867773-13594590-4',
+  '1794311885025-444610624-5',
+  '1794311910336-425386681-6',
+  '1794311935020-420938786-7',
+  '1794311954052-881549704-8',
+  '1794311977670-941608486-9',
+  '1794311997921-403723415-10'
 ]);
 
 @Component({
@@ -49,6 +52,7 @@ export class VideoMediaGalleryComponent implements OnInit {
   readonly loading = signal(true);
   readonly loadFailed = signal(false);
   readonly currentPage = signal(1);
+  readonly slideDirection = signal<'next' | 'previous'>('next');
   @Input() pageSize = 4;
   readonly pageCount = computed(() => Math.max(1, Math.ceil(this.videos().length / this.pageSize)));
   readonly visibleVideos = computed(() => {
@@ -93,11 +97,10 @@ export class VideoMediaGalleryComponent implements OnInit {
   }
 
   videoUrl(path: string): string {
-    const fileName = path.split(/[?#]/, 1)[0].split('/').pop()?.toLowerCase();
-    const resolved = resolveImageUrl(path);
-    return fileName && normalizedMediaVideos.has(fileName)
-      ? resolved.replace(/\.mp4(?=([?#]|$))/i, '-audio.mp4')
-      : resolved;
+    // Play the media record's server URL directly. The backend normalizes MP4
+    // audio in place, so switching to a separately named companion file can
+    // serve a stale or incomplete variant on non-iOS browsers.
+    return resolveImageUrl(path);
   }
 
   posterUrl(item: MediaItem): string {
@@ -119,20 +122,29 @@ export class VideoMediaGalleryComponent implements OnInit {
     return this.hasMobileCarousel && typeof window !== 'undefined' && window.innerWidth <= 600;
   }
 
-  goToPage(page: number): void {
+  goToPage(page: number, direction?: 'next' | 'previous'): void {
     const maxPage = this.useMobileCarousel ? this.videos().length : this.pageCount();
-    this.currentPage.set(Math.min(Math.max(page, 1), maxPage));
+    const nextPage = Math.min(Math.max(page, 1), maxPage);
+    if (nextPage !== this.currentPage()) {
+      this.slideDirection.set(direction || (nextPage > this.currentPage() ? 'next' : 'previous'));
+      this.currentPage.set(nextPage);
+    }
   }
 
   previousPage(): void {
-    this.goToPage(this.currentPage() <= 1 ? this.videos().length : this.currentPage() - 1);
+    this.goToPage(this.currentPage() <= 1 ? this.videos().length : this.currentPage() - 1, 'previous');
   }
 
   nextPage(): void {
-    this.goToPage(this.currentPage() >= this.videos().length ? 1 : this.currentPage() + 1);
+    this.goToPage(this.currentPage() >= this.videos().length ? 1 : this.currentPage() + 1, 'next');
   }
 
   onMobileTouchStart(event: TouchEvent): void {
+    const target = event.target;
+    if (target instanceof Element && target.closest('video')) {
+      this.touchStartX = null;
+      return;
+    }
     this.touchStartX = event.changedTouches[0]?.clientX ?? null;
   }
 

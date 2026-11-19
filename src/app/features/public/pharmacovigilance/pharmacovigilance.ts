@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { PharmacovigilancePageSettings, PharmacovigilanceService } from '../../../core/services/pharmacovigilance.service';
+import { DEFAULT_PHARMACOVIGILANCE_CONTACTS, PharmacovigilancePageSettings, PharmacovigilanceService } from '../../../core/services/pharmacovigilance.service';
 import { TranslationService } from '../../../core/services/translation.service';
 import { resolveImageUrl } from '../../../core/utils/image-url.util';
 import { SectionHeadingPipe } from '../../../shared/pipes/section-heading.pipe';
@@ -41,9 +41,7 @@ export class PharmacovigilanceComponent implements OnInit {
     channels_title: 'Direct Reporting Channels', channels_title_ar: 'قنوات الإبلاغ المباشرة',
     channels_intro: 'To report any safety concerns in Saudi Arabia, contact us via: (Please use one of the below reporting channels):',
     channels_intro_ar: 'للإبلاغ عن أي مخاوف أو بلاغات تتعلق بالسلامة داخل المملكة العربية السعودية، يُرجى التواصل معنا عبر إحدى القنوات التالية:',
-    email_title: 'Email', email_title_ar: 'البريد الإلكتروني', email_address: 'mpv@mesned.com', email_note: 'Dedicated adverse event monitoring inbox', email_note_ar: 'البريد المخصص لاستقبال بلاغات الأعراض الجانبية',
-    phone1_title: 'Primary Safety Line', phone1_title_ar: 'الخط المباشر', phone1_number: '+966 50 554 5754', phone1_note: 'Immediate pharmacovigilance telephone reception', phone1_note_ar: 'خدمة تلقي البلاغات الفورية',
-    phone2_title: 'Secondary Safety Line', phone2_title_ar: 'خط الطوارئ', phone2_number: '+966 55 175 0051', phone2_note: 'Available for urgent safety and medical inquiries', phone2_note_ar: 'متاح للبلاغات والاستفسارات الطبية',
+    ...DEFAULT_PHARMACOVIGILANCE_CONTACTS,
     form_prompt: 'or Use the reporting form published in this page below to submit your report directly.', form_prompt_ar: 'أو استخدام نموذج الإبلاغ المنشور في هذه الصفحة أدناه لإرسال التقرير مباشرة.',
     form_eyebrow: 'ADVERSE EVENT REPORT FORM', form_eyebrow_ar: 'نموذج الإبلاغ عن الأعراض الجانبية',
     form_title: 'Please fill out the Reporting form below.', form_title_ar: 'يرجى ملء نموذج الإبلاغ أدناه.',

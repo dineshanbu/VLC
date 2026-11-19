@@ -50,11 +50,52 @@ async function createMediaPoster(fileName) {
   }
 }
 
+async function hasFastStart(filePath) {
+  const file = await fs.promises.open(filePath, 'r');
+  try {
+    const { size: fileSize } = await file.stat();
+    let offset = 0;
+    let moovOffset = -1;
+    let mdatOffset = -1;
+    const header = Buffer.alloc(16);
+
+    while (offset + 8 <= fileSize) {
+      const { bytesRead } = await file.read(header, 0, header.length, offset);
+      if (bytesRead < 8) break;
+
+      const size32 = header.readUInt32BE(0);
+      const type = header.toString('ascii', 4, 8);
+      let atomSize = size32;
+      let headerSize = 8;
+
+      if (size32 === 1) {
+        if (bytesRead < 16) break;
+        const largeSize = header.readBigUInt64BE(8);
+        if (largeSize > BigInt(Number.MAX_SAFE_INTEGER)) break;
+        atomSize = Number(largeSize);
+        headerSize = 16;
+      } else if (size32 === 0) {
+        atomSize = fileSize - offset;
+      }
+
+      if (atomSize < headerSize || offset + atomSize > fileSize) break;
+      if (type === 'moov') moovOffset = offset;
+      if (type === 'mdat') mdatOffset = offset;
+      if (moovOffset >= 0 && mdatOffset >= 0) break;
+      offset += atomSize;
+    }
+
+    return moovOffset >= 0 && mdatOffset >= 0 && moovOffset < mdatOffset;
+  } finally {
+    await file.close();
+  }
+}
+
 /**
  * Ensures a video file has an AAC audio stream and MP4 faststart (+faststart)
  * so it plays with sound across all devices (Windows Chrome, Mac Safari, iPhone iOS, Android).
- * If audio is already AAC, it returns false (skipped).
- * If audio is MP3 or non-AAC, it re-encodes audio to AAC in-place (video stream is copied untouched).
+ * AAC audio is copied unchanged; other audio codecs are converted. Videos with
+ * AAC but a trailing moov atom are remuxed so iOS can start playback promptly.
  */
 async function ensureIosCompatibleVideo(fileName) {
   const safeName = path.basename(fileName);
@@ -76,8 +117,13 @@ async function ensureIosCompatibleVideo(fileName) {
     audioCodec = stdout.trim().toLowerCase();
   } catch (_) {}
 
-  // If already AAC, skip re-encoding
-  if (audioCodec === 'aac') {
+  let fastStart = false;
+  try {
+    fastStart = await hasFastStart(source);
+  } catch (_) {}
+
+  // Skip only when both the audio codec and MP4 layout are already compatible.
+  if (audioCodec === 'aac' && fastStart) {
     return false;
   }
 
@@ -87,8 +133,7 @@ async function ensureIosCompatibleVideo(fileName) {
       '-hide_banner', '-loglevel', 'error',
       '-i', source,
       '-c:v', 'copy',
-      '-c:a', 'aac',
-      '-b:a', '192k',
+      ...(audioCodec === 'aac' ? ['-c:a', 'copy'] : ['-c:a', 'aac', '-b:a', '192k']),
       '-movflags', '+faststart',
       '-y', target
     ], { windowsHide: true, timeout: 120000, maxBuffer: 4 * 1024 * 1024 });
@@ -96,7 +141,7 @@ async function ensureIosCompatibleVideo(fileName) {
     if (fs.existsSync(target) && fs.statSync(target).size > 1000) {
       await fs.promises.unlink(source);
       await fs.promises.rename(target, source);
-      console.log(`[Video Normalization] Converted ${safeName} (${audioCodec || 'none'} -> aac)`);
+      console.log(`[Video Normalization] Processed ${safeName} (audio: ${audioCodec || 'none'}${fastStart ? '' : ', faststart added'})`);
       return true;
     }
   } catch (err) {
