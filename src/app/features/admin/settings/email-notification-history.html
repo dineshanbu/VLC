@@ -1,0 +1,48 @@
+<section class="email-history" aria-label="Email history">
+  <div class="email-actions">
+    <label>
+      Status
+      <select class="form-control" [value]="filter()" [disabled]="loading()" (change)="load(1, $any($event.target).value)">
+        <option value="all">All statuses</option>
+        <option value="accepted">Accepted by mail server</option>
+        <option value="pending">Pending</option>
+        <option value="expired">Retries ended</option>
+      </select>
+    </label>
+    <button type="button" class="btn btn-outline" [disabled]="loading()" (click)="load(page())">Refresh history</button>
+    @if (loading()) { <span role="status">Loading email history</span> }
+  </div>
+  @if (error()) { <p role="alert">{{ error() }}</p> }
+  @if (items().length) {
+    <div class="email-history-scroll" tabindex="0" aria-label="Email history table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Recipient</th><th scope="col">Report</th><th scope="col">Subject</th>
+            <th scope="col">Status</th><th scope="col">Attempts</th><th scope="col">Accepted or first attempted</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr>
+              <td>{{ item.recipient ?? 'Unavailable' }}</td><td>#{{ item.reportId }}</td>
+              <td>{{ item.subject ?? 'Unavailable' }}</td>
+              <td><span class="email-state" [attr.data-status]="item.status">{{ statusLabel[item.status] }}</span></td>
+              <td>{{ item.attempts }}</td>
+              <td>{{ ((item.sentAt ?? item.firstAttemptAt) | date:'medium') ?? 'Awaiting first attempt' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else if (!loading() && !error()) {
+    <p>No email notifications on this page.</p>
+  }
+  @if (page() > 1 || hasMore()) {
+    <nav class="email-actions" aria-label="History pages">
+      <button type="button" class="btn btn-outline" [disabled]="loading() || page() === 1" (click)="load(page() - 1)">Previous</button>
+      <span>Page {{ page() }}</span>
+      <button type="button" class="btn btn-outline" [disabled]="loading() || !hasMore()" (click)="load(page() + 1)">Next</button>
+    </nav>
+  }
+</section>

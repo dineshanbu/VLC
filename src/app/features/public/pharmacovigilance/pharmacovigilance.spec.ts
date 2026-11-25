@@ -31,6 +31,17 @@ describe('PharmacovigilanceComponent form changes', () => {
 
   afterEach(() => fixture?.destroy());
 
+  it('links both reporting contacts to the dialer using international numbers', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('.pv-channel-link--phone'));
+
+    expect(links.map(link => link.getAttribute('href'))).toEqual([
+      'tel:+966558927904', 'tel:+966114917984',
+      'tel:+966570062533', 'tel:+966114917984'
+    ]);
+    expect(links[1]?.textContent?.trim()).toBe('011 491 7984');
+  });
+
   it('shows patient name, removes the reporter optional note and uses a text date input without required fields', () => {
     const element = fixture.nativeElement as HTMLElement;
     const dateInput = element.querySelector<HTMLInputElement>('#expirationDate');

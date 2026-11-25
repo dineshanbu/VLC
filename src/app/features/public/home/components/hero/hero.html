@@ -25,7 +25,9 @@
 
     <div class="hero__banner-content">
       <div class="hero__banner-logo-crop" aria-label="Vaccine" [style.width.px]="branding.logoDimensions('home_banner_logo').width" [style.height.px]="branding.logoDimensions('home_banner_logo').height">
-        <img class="hero__banner-logo" [src]="branding.logo('home_banner_logo')" alt="Vaccine" />
+        @if (branding.logosReady()) {
+          <img class="hero__banner-logo" [src]="branding.logo('home_banner_logo')" alt="Vaccine" />
+        }
       </div>
       <span class="hero__banner-divider" aria-hidden="true"></span>
       <div class="hero__banner-copy">

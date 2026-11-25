@@ -92,4 +92,8 @@
 
   </div>
 
+  @if (currentUser()?.role === 'Super Admin' || currentUser()?.role === 'Admin') {
+    <app-email-notifications />
+  }
+
 </div>

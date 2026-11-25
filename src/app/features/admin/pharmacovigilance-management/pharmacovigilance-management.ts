@@ -10,7 +10,8 @@ import { MediaImagePickerComponent } from '../../../shared/components/media-imag
 export class PharmacovigilanceManagementComponent implements OnInit {
   private service = inject(PharmacovigilanceService);
   reports = signal<PharmacovigilanceReport[]>([]); isLoading = signal(true); search = signal(''); status = signal('All'); selected = signal<PharmacovigilanceReport | null>(null); notes = signal('');
-  isDeletingReport = signal(false); reportActionMessage = signal(''); reportActionError = signal('');
+  isDeletingReport = signal(false); isSavingReport = signal(false);
+  reportActionMessage = signal(''); reportActionError = signal('');
   pageSettings: PharmacovigilancePageSettings = { ...DEFAULT_PHARMACOVIGILANCE_CONTACTS } as PharmacovigilancePageSettings;
   private savedPageSettings: Partial<PharmacovigilancePageSettings> = {};
   pageContentLoading = signal(true); pageContentSaving = signal(false); pageContentError = signal(''); pageContentSuccess = signal('');
@@ -107,7 +108,32 @@ export class PharmacovigilanceManagementComponent implements OnInit {
   loadReports() { this.isLoading.set(true); this.service.getReports({ search: this.search(), status: this.status() }).subscribe({ next: r => { this.reports.set(r.reports || []); this.isLoading.set(false); }, error: () => this.isLoading.set(false) }); }
   open(report: PharmacovigilanceReport) { this.selected.set(report); this.notes.set(report.notes || ''); this.reportActionMessage.set(''); this.reportActionError.set(''); }
   close() { this.selected.set(null); }
-  save(status?: PharmacovigilanceReport['status']) { const report = this.selected(); if (!report?.id) return; this.service.updateReport(report.id, { status: status || report.status, notes: this.notes() }).subscribe(() => { report.status = status || report.status; report.notes = this.notes(); this.loadReports(); }); }
+  save(status?: PharmacovigilanceReport['status']): void {
+    const report = this.selected();
+    if (!report?.id || this.isSavingReport() || this.isDeletingReport()) return;
+    const update = { status: status ?? report.status, notes: this.notes() };
+    this.isSavingReport.set(true);
+    this.reportActionError.set('');
+    this.reportActionMessage.set('');
+    this.service.updateReport(report.id, update).subscribe({
+      next: response => {
+        this.isSavingReport.set(false);
+        if (!response.success) {
+          this.reportActionError.set(response.message || 'Could not update the safety report.');
+          return;
+        }
+        Object.assign(report, update);
+        if (status === undefined && this.selected() === report) this.close();
+        this.reportActionMessage.set(response.emailQueued ? 'Safety report updated. Email notification queued.' : response.message);
+        this.loadReports();
+      },
+      error: error => {
+        this.isSavingReport.set(false);
+        this.selected.update(current => current === report ? { ...report } : current);
+        this.reportActionError.set(error.error?.message || 'Could not update the safety report.');
+      }
+    });
+  }
   deleteSelectedReport(): void {
     const report = this.selected();
     if (!report?.id || this.isDeletingReport() || !window.confirm('Permanently delete this safety report? This cannot be undone.')) return;

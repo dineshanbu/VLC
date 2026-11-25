@@ -202,7 +202,17 @@
 
 .pv-channel-extension {
   display: inline-block;
-  margin-inline-start: 6px;
+  margin-inline-start: 0.75rem;
+}
+
+.pv-channel-details .pv-channel-extension,
+.pv-channel-details .pv-channel-extension bdi {
+  color: #595959;
+}
+
+:host-context([data-theme='dark']) .pv-channel-details .pv-channel-extension,
+:host-context([data-theme='dark']) .pv-channel-details .pv-channel-extension bdi {
+  color: #c4c4c4;
 }
 
 .pv-channel-name {
@@ -226,6 +236,11 @@
 
 .pv-channel-link:hover {
   color: var(--color-secondary);
+}
+
+.pv-channel-link--phone {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .pv-channel-link--email {

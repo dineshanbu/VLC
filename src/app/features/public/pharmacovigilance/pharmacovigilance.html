@@ -137,14 +137,14 @@
               @if (mobile) {
                 <li>
                   {{ rtl ? 'الجوال' : 'Mobile' }}:
-                  <a [href]="phoneHref(mobile)" class="pv-channel-link" dir="ltr">{{ mobile }}</a>
+                  <a [href]="phoneHref(mobile)" class="pv-channel-link pv-channel-link--phone" dir="ltr">{{ mobile }}</a>
                 </li>
               }
               @if (telephone || extension) {
                 <li>
                   @if (telephone) {
                     {{ rtl ? 'الهاتف' : 'Telephone' }}:
-                    <a [href]="phoneHref(telephone)" class="pv-channel-link" dir="ltr">{{ telephone }}</a>
+                    <a [href]="phoneHref(telephone)" class="pv-channel-link pv-channel-link--phone" dir="ltr">{{ telephone }}</a>
                   }
                   @if (extension) {
                     <span class="pv-channel-extension">{{ rtl ? 'تحويلة' : 'Ext' }}: <bdi>{{ extension }}</bdi></span>

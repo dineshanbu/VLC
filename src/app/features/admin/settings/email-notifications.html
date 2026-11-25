@@ -1,0 +1,154 @@
+<section class="settings-card">
+  <div class="card-header">
+    <h2 class="card-title">Email Templates & Notifications</h2>
+  </div>
+  <div class="card-body">
+    <nav class="email-sections" aria-label="Email notifications">
+      <button type="button" class="btn btn-outline" [attr.aria-pressed]="section() === 'settings'" (click)="section.set('settings')">Settings</button>
+      <button type="button" class="btn btn-outline" [attr.aria-pressed]="section() === 'history'" (click)="section.set('history')">Email History</button>
+    </nav>
+    @if (section() === 'history') {
+      <app-email-notification-history />
+    } @else {
+    @if (loading()) { <p role="status">Loading email settings…</p> }
+    @if (error()) { <p class="alert alert-danger" role="alert">{{ error() }}</p> }
+    @if (error() && !settings && !loading()) {
+      <button type="button" class="btn btn-outline" (click)="load()">Retry</button>
+    }
+    @if (status()) { <p class="alert alert-success" role="status">{{ status() }}</p> }
+    @if (settings; as config) {
+      <section class="email-delivery" aria-label="Email delivery status">
+        @if (deliveryStatus?.transportAvailable === false) {
+          <p class="alert alert-danger" role="status">
+            Mail delivery is paused. For local PHP mail, start the relay configured in php.ini (usually localhost:25) and refresh.
+          </p>
+        }
+        @if (!deliveryConfigured) {
+          <p class="alert alert-danger" role="status">
+            Email sending is paused.
+            @if (deliveryStatus?.missingSettings?.length) {
+              Configure {{ deliveryStatus?.missingSettings?.join(' and ') }} on the backend.
+            } @else {
+              Configure the required mail settings on the backend.
+            }
+          </p>
+        }
+        @if (deliveryStatus?.queue; as queue) {
+          <dl class="email-queue" aria-live="polite">
+            <div><dt>Pending</dt><dd>{{ queue.pending }}</dd></div>
+            <div><dt>Accepted by mail server</dt><dd>{{ queue.accepted }}</dd></div>
+            <div><dt>Retries ended</dt><dd>{{ queue.expired }}</dd></div>
+          </dl>
+        } @else if (deliveryStatus) {
+          <p class="email-hint">Email queue status is unavailable.</p>
+        }
+        @if (deliveryError()) { <p class="email-hint" role="alert">{{ deliveryError() }}</p> }
+        <button type="button" class="btn btn-outline" [disabled]="refreshingDelivery()" (click)="refreshDelivery()">
+          {{ refreshingDelivery() ? 'Refreshing…' : 'Refresh delivery status' }}
+        </button>
+      </section>
+      <form #emailForm="ngForm" (ngSubmit)="save()">
+        <fieldset class="email-fields" [disabled]="saving()">
+          <legend>Pharmacovigilance Safety Report</legend>
+          <label class="email-checkbox">
+            <input type="checkbox" name="enabled" [(ngModel)]="config.pharmacovigilance.enabled" />
+            Email a notification when a report is submitted or updated
+          </label>
+          <div class="form-grid">
+            <label class="form-group">
+              <span class="form-label">Notification recipients</span>
+              <textarea class="form-control" name="recipient" required rows="3" maxlength="5100"
+                aria-describedby="email-recipient-help" [(ngModel)]="config.pharmacovigilance.recipient"></textarea>
+              <span class="email-hint" id="email-recipient-help">Enter up to 20 addresses, one per line.</span>
+            </label>
+            <label class="form-group">
+              <span class="form-label">Template for this form</span>
+              <select class="form-control" name="formTemplate" [(ngModel)]="config.pharmacovigilance.templateId">
+                @for (item of config.templates; track item.id) {
+                  <option [value]="item.id">{{ item.name }}</option>
+                }
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="email-fields" [disabled]="saving()">
+          <legend>Template editor</legend>
+          <div class="template-toolbar">
+            <label class="form-group">
+              <span class="form-label">Template to edit</span>
+              <select #templatePicker class="form-control" name="editingTemplate" [ngModel]="editingId" (ngModelChange)="selectTemplate($event)">
+                @for (item of config.templates; track item.id) {
+                  <option [value]="item.id">{{ item.name }}</option>
+                }
+              </select>
+            </label>
+            <div class="email-actions">
+              <button type="button" class="btn btn-outline" (click)="addTemplate()" [disabled]="config.templates.length >= 20">Create template</button>
+              @if (config.templates.length > 1) {
+                <button type="button" class="btn btn-outline remove-template" (click)="removeTemplate(); templatePicker.focus()">Remove template</button>
+              }
+            </div>
+          </div>
+          @if (template; as item) {
+            <div class="template-layout">
+              <div class="template-controls">
+                <label class="form-group">
+                  <span class="form-label">Template name</span>
+                  <input class="form-control" name="templateName" required maxlength="100" [(ngModel)]="item.name" />
+                </label>
+                <label class="email-checkbox logo-option">
+                  <input type="checkbox" name="showLogo" [ngModel]="item.showLogo" (ngModelChange)="item.showLogo = $event; showPreview()" />
+                  Include VIC company logo
+                </label>
+                <details class="template-options">
+                  <summary>Report fields <span>{{ item.fields.length }} selected</span></summary>
+                  <div class="report-field-list">
+                    @for (field of fields; track field.key) {
+                      <label class="email-checkbox">
+                        <input type="checkbox" [checked]="item.fields.includes(field.key)" (change)="setField(field.key, $any($event.target).checked)" />
+                        {{ field.label }}
+                      </label>
+                    }
+                  </div>
+                </details>
+                <label class="form-group">
+                  <span class="form-label">Email HTML</span>
+                  <textarea class="form-control email-html" name="html" required maxlength="110000" rows="17" [ngModel]="item.html" (ngModelChange)="item.html = $event; showPreview()" spellcheck="false" aria-describedby="email-placeholders"></textarea>
+                </label>
+                <details class="template-options" id="email-placeholders">
+                  <summary>HTML placeholders</summary>
+                  <dl class="email-placeholders">
+                    <dt><code>{{ fieldsPlaceholder }}</code></dt><dd>Selected report fields</dd>
+                    <dt><code>{{ eventPlaceholder }}</code></dt><dd>Submission or update message</dd>
+                    <dt><code>{{ logoPlaceholder }}</code></dt><dd>VIC company logo</dd>
+                    <dt><code>{{ linkPlaceholder }}</code></dt><dd>Admin button when the admin report link is selected</dd>
+                  </dl>
+                </details>
+              </div>
+              <div class="template-preview">
+                <div class="preview-header">
+                  <span class="form-label">Email preview · Sample data</span>
+                  <strong>{{ item.subject }}</strong>
+                </div>
+                <iframe sandbox title="Email template preview" referrerpolicy="no-referrer" [srcdoc]="preview()"></iframe>
+              </div>
+            </div>
+          }
+        </fieldset>
+
+        <div class="email-save">
+          <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid || !templatesValid || saving()">
+            {{ saving() ? 'Saving…' : 'Save email settings' }}
+          </button>
+          @if (!templatesValid) {
+            <span class="email-hint">Every template needs a name and HTML body.</span>
+          } @else {
+            <span class="email-hint">Template additions and removals apply after you save.</span>
+          }
+        </div>
+      </form>
+    }
+    }
+  </div>
+</section>

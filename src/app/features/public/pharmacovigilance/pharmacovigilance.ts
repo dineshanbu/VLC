@@ -87,7 +87,11 @@ export class PharmacovigilanceComponent implements OnInit {
   }
 
   phoneHref(number: string): string {
-    return `tel:${number.replace(/[^+\d]/g, '')}`;
+    const dialNumber = number.replace(/[^+\d]/g, '');
+    if (/^0[1-9]\d{8}$/.test(dialNumber)) {
+      return `tel:+966${dialNumber.slice(1)}`;
+    }
+    return `tel:${dialNumber.replace(/^00/, '+')}`;
   }
 
   readonly occupations = [

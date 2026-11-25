@@ -78,8 +78,8 @@
       </form>
     }
   </section>
-  @if (reportActionMessage()) { <div class="pv-content-alert pv-content-alert--success" role="status">{{ reportActionMessage() }}</div> }
-  @if (reportActionError()) { <div class="pv-content-alert pv-content-alert--error" role="alert">{{ reportActionError() }}</div> }
+  @if (!selected() && reportActionMessage()) { <div class="pv-content-alert pv-content-alert--success" role="status">{{ reportActionMessage() }}</div> }
+  @if (!selected() && reportActionError()) { <div class="pv-content-alert pv-content-alert--error" role="alert">{{ reportActionError() }}</div> }
   <div class="filters-bar"><div class="search-input-box"><input [ngModel]="search()" (ngModelChange)="search.set($event); loadReports()" placeholder="Search reporter, patient, product, description..." /></div><select class="select-control" [ngModel]="status()" (ngModelChange)="status.set($event); loadReports()"><option value="All">All Reports</option><option value="New">New</option><option value="Under Review">Under Review</option><option value="Follow-up Required">Follow-up Required</option><option value="Closed">Closed</option></select></div>
   <div class="data-card">@if (isLoading()) { <div class="loading-state"><div class="spinner-large"></div><p>Loading safety reports...</p></div> } @else if (!reports().length) { <div class="empty-state"><h3>No safety reports yet</h3><p>New Pharmacovigilance form reports will appear here.</p></div> } @else { <div class="table-responsive"><table class="data-table"><thead><tr><th>Reporter</th><th>Patient</th><th>Product</th><th>Batch Number</th><th>Expiration Date</th><th>Event Summary</th><th>Status</th><th>Received</th></tr></thead><tbody>@for (report of reports(); track report.id) { <tr class="clickable-row" (click)="open(report)"><td><div class="sender-info"><span class="sender-name">{{ report.reporter_name || 'Not provided' }}</span><span class="sender-email">{{ report.email || report.contact_number }}</span></div></td><td>{{ report.patient_name || 'Not provided' }}</td><td>{{ report.product_name }}</td><td>{{ report.batch_number || '—' }}</td><td>{{ report.expiration_date ? (report.expiration_date | date:'mediumDate') : '—' }}</td><td class="message-snippet">{{ report.side_effect_description }}</td><td><span class="status-badge">{{ report.status }}</span></td><td>{{ report.created_at | date:'short' }}</td></tr> }</tbody></table></div> }</div>
   @if (selected(); as report) {
@@ -106,12 +106,14 @@
             </div>
             <div class="notes-section">
               <span class="section-label">Confidential follow-up notes</span>
-              <textarea class="form-control" rows="3" [ngModel]="notes()" (ngModelChange)="notes.set($event)"></textarea>
+              <textarea class="form-control" rows="3" [ngModel]="notes()" (ngModelChange)="notes.set($event)" [disabled]="isSavingReport() || isDeletingReport()"></textarea>
             </div>
+            @if (reportActionMessage()) { <div class="pv-content-alert pv-content-alert--success" role="status">{{ reportActionMessage() }}</div> }
+            @if (reportActionError()) { <div class="pv-content-alert pv-content-alert--error" role="alert">{{ reportActionError() }}</div> }
             <div class="status-manage-bar">
-              <select class="select-control" [ngModel]="report.status" (ngModelChange)="save($event)"><option>New</option><option>Under Review</option><option>Follow-up Required</option><option>Closed</option></select>
-              <button class="btn btn-primary" (click)="save()">Save Notes</button>
-              <button class="btn btn-danger" type="button" (click)="deleteSelectedReport()" [disabled]="isDeletingReport()">{{ isDeletingReport() ? 'Deleting…' : 'Delete Report' }}</button>
+              <select class="select-control" [ngModel]="report.status" (ngModelChange)="save($event)" [disabled]="isSavingReport() || isDeletingReport()"><option>New</option><option>Under Review</option><option>Follow-up Required</option><option>Closed</option></select>
+              <button class="btn btn-primary" (click)="save()" [disabled]="isSavingReport() || isDeletingReport()">Save Notes</button>
+              <button class="btn btn-danger" type="button" (click)="deleteSelectedReport()" [disabled]="isDeletingReport() || isSavingReport()">{{ isDeletingReport() ? 'Deleting…' : 'Delete Report' }}</button>
             </div>
           </div>
         </div>

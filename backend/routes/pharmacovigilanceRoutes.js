@@ -3,6 +3,9 @@ const controller = require('../controllers/pharmacovigilanceController');
 const { verifyToken, requireRole } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 router.get('/settings', controller.getPageSettings);
+router.get('/email-notifications', verifyToken, requireRole('Super Admin', 'Admin'), controller.getEmailNotifications);
+router.put('/email-notifications', verifyToken, requireRole('Super Admin', 'Admin'), controller.updateEmailNotifications);
+router.get('/email-notifications/history', verifyToken, requireRole('Super Admin', 'Admin'), controller.getEmailHistory);
 router.post('/', controller.submitReport);
 router.get('/', verifyToken, controller.getReports);
 router.put('/settings', verifyToken, requireRole('Super Admin', 'Admin', 'Editor'), upload.fields([

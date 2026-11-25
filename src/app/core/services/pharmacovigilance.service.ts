@@ -48,7 +48,7 @@ export class PharmacovigilanceService {
     return this.http.get<{ success: boolean; count: number; reports: PharmacovigilanceReport[] }>(this.url, { params });
   }
   updateReport(id: number, data: Partial<PharmacovigilanceReport>) {
-    return this.http.put<{ success: boolean }>(`${this.url}/${id}`, data);
+    return this.http.put<{ success: boolean; message: string; emailQueued: boolean }>(`${this.url}/${id}`, data);
   }
   deleteReport(id: number) {
     return this.http.delete<{ success: boolean; message: string }>(`${this.url}/${id}`);

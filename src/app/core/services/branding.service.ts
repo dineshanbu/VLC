@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, finalize, of, tap } from 'rxjs';
+import { Observable, finalize, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { resolveImageUrl } from '../utils/image-url.util';
 
@@ -93,7 +93,9 @@ export class BrandingService {
     home_banner_logo: { ...DEFAULT_DIMENSIONS.home_banner_logo }
   });
   readonly isLoading = signal(false);
+  readonly logosReady = signal(false);
   readonly footerSettings = signal<FooterSiteSettings>(copyFooterSettings());
+  private logoRequest?: Observable<BrandingSettingsResponse>;
   private loaded = false;
   private footerLoaded = false;
 
@@ -126,11 +128,12 @@ export class BrandingService {
   }
 
   loadSettings(force = false): Observable<BrandingSettingsResponse> {
+    if (this.logoRequest) return this.logoRequest;
     if (this.loaded && !force) {
       return of({ success: true, logos: this.logos(), dimensions: this.dimensions() });
     }
     this.isLoading.set(true);
-    return this.http.get<BrandingSettingsResponse>(this.endpoint).pipe(
+    this.logoRequest = this.http.get<BrandingSettingsResponse>(this.endpoint).pipe(
       tap(response => {
         this.logos.set({ ...DEFAULT_LOGOS, ...response.logos });
         this.dimensions.set({
@@ -140,8 +143,14 @@ export class BrandingService {
         });
         this.loaded = true;
       }),
-      finalize(() => this.isLoading.set(false))
+      finalize(() => {
+        this.logoRequest = undefined;
+        this.isLoading.set(false);
+        this.logosReady.set(true);
+      }),
+      shareReplay(1)
     );
+    return this.logoRequest;
   }
 
   save(formData: FormData) {
@@ -160,6 +169,7 @@ export class BrandingService {
       home_banner_logo: { ...DEFAULT_DIMENSIONS.home_banner_logo, ...dimensions.home_banner_logo }
     });
     this.loaded = true;
+    this.logosReady.set(true);
   }
 
   logoDimensions(key: SiteLogoKey): { width: number; height: number } {

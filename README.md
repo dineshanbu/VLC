@@ -13,6 +13,15 @@ If the API reports a database connection error, confirm MySQL is running, that t
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.34.
 
+## Pharmacovigilance email delivery
+
+Use Node.js 20 or later and install the backend dependencies. Set `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`, and `EMAIL_FROM` for each backend instance. SMTP defaults to port 465 with implicit TLS. Set `SMTP_PORT=587` if your mail provider specifies STARTTLS on port 587. Restart the backend after changing the configuration.
+
+- **Gmail** uses `smtp.gmail.com`, the full Gmail address as the username and sender, and a [Google App Password](https://myaccount.google.com/apppasswords) after enabling [2-Step Verification](https://support.google.com/accounts/answer/185839).
+- **cPanel mailbox** uses the outgoing server and SMTP port shown under **Email Accounts → Connect Devices → Secure SSL/TLS Settings**, plus the full mailbox address and its password.
+
+In **Admin → Settings → Email Templates & Notifications**, enter the notification recipients, one address per line. **Email History** lists the individual queue entries for that environment. An accepted status records that the sending mail server accepted the message. Inbox delivery can be checked in the recipient mailbox or in the mail provider's logs.
+
 ## Development server
 
 To start a local development server, run:

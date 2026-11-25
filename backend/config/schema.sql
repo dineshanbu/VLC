@@ -140,6 +140,22 @@ CREATE TABLE IF NOT EXISTS pharmacovigilance_reports (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS email_notification_settings (
+  id TINYINT UNSIGNED PRIMARY KEY,
+  settings_json LONGTEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS pharmacovigilance_email_outbox (
+  id CHAR(36) PRIMARY KEY,
+  report_id INT NOT NULL,
+  payload_json LONGTEXT NOT NULL,
+  attempts TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  next_attempt_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  first_attempt_at DATETIME NULL,
+  sent_at DATETIME NULL,
+  INDEX ix_pending (sent_at, next_attempt_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Editable public Pharmacovigilance page content (JSON avoids wide-row limits)
 CREATE TABLE IF NOT EXISTS pharmacovigilance_page_settings (
   id TINYINT UNSIGNED PRIMARY KEY,

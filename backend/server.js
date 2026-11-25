@@ -7,10 +7,11 @@ try {
 } catch (e) {
   // morgan optional in production
 }
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { initDatabase } = require('./config/db');
 const { autoConvertAllServerVideos } = require('./services/mediaPosterService');
+const { deliverPending } = require('./services/safetyReportNotifications');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -112,9 +113,11 @@ const server = app.listen(PORT, () => {
   console.log(`=========================================`);
 });
 
-initDatabase().catch(err => {
+initDatabase().then(deliverPending).catch(err => {
   console.error('[DB Init Warning]', err.message);
 });
+
+setInterval(deliverPending, 30000).unref();
 
 // Run background normalization scan for uploaded videos to ensure iOS & Chrome AAC compatibility
 setTimeout(() => {

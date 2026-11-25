@@ -99,6 +99,10 @@
   transition: height var(--transition-base);
 }
 
+.navbar__logo-placeholder {
+  aspect-ratio: 4;
+}
+
 /* Admin live preview: render this same navbar in-flow instead of fixed to the viewport. */
 :host-context(.landing-header-preview__scene) .navbar.navbar--logo-preview {
   position: relative;

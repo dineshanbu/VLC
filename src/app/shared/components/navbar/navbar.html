@@ -2,8 +2,12 @@
   <div class="navbar__container">
 
     <!-- Brand Logo (Compact & Refined) -->
-    <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
-      <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+    <a routerLink="/" class="navbar__logo" aria-label="Vaccine Industrial Company" (click)="closeMobileMenu()">
+      @if (logoPreviewMode || branding.logosReady()) {
+        <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+      } @else {
+        <span class="navbar__logo-img navbar__logo-placeholder" aria-hidden="true"></span>
+      }
     </a>
 
     <!-- Desktop Nav Links (Centered, Refined Typography) -->
@@ -105,8 +109,12 @@
 
       <!-- Mobile Header -->
       <div class="mobile-menu__header">
-        <a routerLink="/" class="navbar__logo" (click)="closeMobileMenu()">
-          <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+        <a routerLink="/" class="navbar__logo" aria-label="Vaccine Industrial Company" (click)="closeMobileMenu()">
+          @if (logoPreviewMode || branding.logosReady()) {
+            <img [src]="logoPreviewMode ? logoPreviewSrc : branding.logo('header_logo')" alt="Vaccine Industrial Company" class="navbar__logo-img" />
+          } @else {
+            <span class="navbar__logo-img navbar__logo-placeholder" aria-hidden="true"></span>
+          }
         </a>
         <button class="mobile-menu__close" (click)="closeMobileMenu()" aria-label="Close menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

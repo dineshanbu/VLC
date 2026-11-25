@@ -1,4 +1,5 @@
 const { getPool } = require('../config/db');
+const notifications = require('../services/safetyReportNotifications');
 
 const defaultPageSettings = {
   hero_eyebrow: 'Patient Safety', hero_eyebrow_ar: 'سلامة المرضى',
@@ -117,14 +118,75 @@ exports.submitReport = async (req, res) => {
     }
     const pool = getPool();
     await ensureReportFormColumns(pool);
-    const [result] = await pool.query(
-      `INSERT INTO pharmacovigilance_reports (reporter_name, patient_name, contact_number, email, product_name, batch_number, expiration_date, occupation, side_effect_description, other_info)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [reporterName?.trim() || null, patientName?.trim() || null, contactNumber.trim(), email?.trim() || null, productName.trim(), batchNumber?.trim() || null, normalizedExpiration || null, occupation || null, sideEffectDescription.trim(), otherInfo?.trim() || null]
-    );
-    res.status(201).json({ success: true, message: 'Safety report submitted successfully.', reportId: result.insertId });
+    const connection = await pool.getConnection();
+    let reportId;
+    try {
+      await connection.beginTransaction();
+      const [result] = await connection.query(
+        `INSERT INTO pharmacovigilance_reports (reporter_name, patient_name, contact_number, email, product_name, batch_number, expiration_date, occupation, side_effect_description, other_info)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [reporterName?.trim() || null, patientName?.trim() || null, contactNumber.trim(), email?.trim() || null, productName.trim(), batchNumber?.trim() || null, normalizedExpiration || null, occupation || null, sideEffectDescription.trim(), otherInfo?.trim() || null]
+      );
+      reportId = result.insertId;
+      await notifications.enqueue(connection, reportId, 'submitted');
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    res.status(201).json({ success: true, message: 'Safety report submitted successfully.', reportId });
+    void notifications.deliverPending();
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to submit safety report.' });
+  }
+};
+
+exports.getEmailNotifications = async (_req, res) => {
+  try {
+    const pool = getPool();
+    const settings = await notifications.readSettings(pool);
+    const deliveryStatus = await notifications.getDeliveryStatus(pool);
+    res.set('Cache-Control', 'no-store');
+    res.json({ settings, fields: notifications.fields, deliveryConfigured: deliveryStatus.missingSettings.length === 0, deliveryStatus });
+  } catch (error) {
+    console.error('[Email notification settings load]', error.code || error.name);
+    if (error.code === 'ER_NO_SUCH_TABLE') {
+      return res.status(503).json({ message: 'Email settings storage is unavailable. Apply the latest database schema and retry.' });
+    }
+    res.status(500).json({ message: 'Could not load email notification settings.' });
+  }
+};
+
+exports.updateEmailNotifications = async (req, res) => {
+  const settings = notifications.validateSettings(req.body);
+  if (!settings) {
+    return res.status(400).json({ message: 'Enter up to 20 valid recipient addresses, select a template, and check the template names, HTML and selected fields.' });
+  }
+  try {
+    await getPool().query(`INSERT INTO email_notification_settings (id, settings_json) VALUES (1, ?)
+      ON DUPLICATE KEY UPDATE settings_json = VALUES(settings_json)`, [JSON.stringify(settings)]);
+    res.json({ settings, fields: notifications.fields, deliveryConfigured: notifications.deliveryConfigured() });
+  } catch (error) {
+    console.error('[Email notification settings save]', error.code || error.name);
+    res.status(500).json({ message: 'Could not save email notification settings.' });
+  }
+};
+
+exports.getEmailHistory = async (req, res) => {
+  const page = Number(req.query.page ?? 1);
+  const status = req.query.status ?? 'all';
+  if (!Number.isSafeInteger(page) || page < 1 || page > 10000 || !['all', 'accepted', 'pending', 'expired'].includes(status)) {
+    return res.status(400).json({ message: 'Invalid email history page or status.' });
+  }
+  try {
+    const history = await notifications.getEmailHistory(getPool(), page, status);
+    res.set('Cache-Control', 'no-store');
+    res.json(history);
+  } catch (error) {
+    console.error('[Safety report email history]', error.code || error.name);
+    res.status(500).json({ message: 'Could not load email history.' });
   }
 };
 
@@ -146,9 +208,33 @@ exports.getReports = async (req, res) => {
 exports.updateReport = async (req, res) => {
   try {
     const { status, notes } = req.body;
-    const [result] = await getPool().query('UPDATE pharmacovigilance_reports SET status = COALESCE(?, status), notes = COALESCE(?, notes) WHERE id = ?', [status ?? null, notes ?? null, req.params.id]);
-    if (!result.affectedRows) return res.status(404).json({ success: false, message: 'Report not found.' });
-    res.json({ success: true, message: 'Safety report updated.' });
+    const connection = await getPool().getConnection();
+    let emailQueued = false;
+    try {
+      await connection.beginTransaction();
+      const [[report]] = await connection.query(
+        'SELECT status, notes FROM pharmacovigilance_reports WHERE id = ? FOR UPDATE', [req.params.id]
+      );
+      if (!report) {
+        await connection.rollback();
+        return res.status(404).json({ success: false, message: 'Report not found.' });
+      }
+      if ((status ?? report.status) !== report.status || (notes ?? report.notes ?? '') !== (report.notes ?? '')) {
+        await connection.query(
+          'UPDATE pharmacovigilance_reports SET status = COALESCE(?, status), notes = COALESCE(?, notes) WHERE id = ?',
+          [status ?? null, notes ?? null, req.params.id]
+        );
+        emailQueued = await notifications.enqueue(connection, req.params.id, 'updated');
+      }
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+    res.json({ success: true, message: 'Safety report updated.', emailQueued });
+    if (emailQueued) void notifications.deliverPending();
   } catch (error) { res.status(500).json({ success: false, message: 'Failed to update safety report.' }); }
 };
 
